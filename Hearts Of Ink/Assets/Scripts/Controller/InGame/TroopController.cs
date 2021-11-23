@@ -88,8 +88,6 @@ public class TroopController : MonoBehaviour
         Debug.Log("On click: " + this);
     }
 
-    OnTrigger
-
     private void UpdateTroopModel()
     {
         int lastTroopQuantity = troopModel.Units;
