@@ -34,9 +34,13 @@ namespace Assets.Scripts.Utils
             HttpResponseMessage response = null;
             HttpContent content;
             string json = string.Empty;
+            long start;
+            long end;
+            TimeSpan difference;
 
             try
             {
+                start = DateTime.Now.Ticks;
                 client.BaseAddress = new Uri(ApiConfig.NETCoreServerUrl);
 
                 if (requestBody != null)
@@ -67,6 +71,9 @@ namespace Assets.Scripts.Utils
                 memoryStream = new MemoryStream();
                 await response.Content.CopyToAsync(memoryStream);
                 memoryStream.Position = 0;
+                end = DateTime.Now.Ticks;
+                difference = TimeSpan.FromTicks(end - start);
+                Debug.Log("Start: " + start + " End: " + end + " Difference: " + difference);
                 serverResponse = (HOIResponseModel<S>)receiveSerializer.ReadObject(memoryStream);
 
                 LogServerResponse(serverResponse);

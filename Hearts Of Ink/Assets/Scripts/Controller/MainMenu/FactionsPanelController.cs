@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Data;
-using Assets.Scripts.Data.MapModels;
+using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.Utils;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,8 @@ public class FactionsPanelController : MonoBehaviour
 {
     private const int PlayerOwnerValue = 0;
     private MapModel mapModel;
+    private GlobalInfo globalInfo;
     private List<Dropdown> factions;
-    private BonusData bonusData;
     public int spacing;
     public Text description;
     public Text bonus;
@@ -20,23 +20,24 @@ public class FactionsPanelController : MonoBehaviour
     private void Start()
     {
         factions = new List<Dropdown>();
-        bonusData = new BonusData(Rawgen.Literals.LiteralsFactory.Language.es_ES);
         LoadMap();
     }
 
     public void LoadMap()
     {
-        string filePath = Application.streamingAssetsPath + "/MapDefinitions/0_Cartarena.json";
+        string mapPath = Application.streamingAssetsPath + "/MapDefinitions/0_Cartarena_v0_3_0.json";
+        string globalInfoPath = Application.streamingAssetsPath + "/MapDefinitions/_GlobalInfo.json";
 
-        mapModel = JsonCustomUtils<MapModel>.ReadObjectFromFile(filePath);
-        
-        foreach (MapFactionModel faction in mapModel.Factions)
+        mapModel = JsonCustomUtils<MapModel>.ReadObjectFromFile(mapPath);
+        globalInfo = JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
+
+        foreach (MapPlayerModel player in mapModel.Players)
         {
-            LoadFactionLine(faction);
+            LoadFactionLine(player);
         }
     }
 
-    public void LoadFactionLine(MapFactionModel faction)
+    public void LoadFactionLine(MapPlayerModel player)
     {
         string prefabPath = "Prefabs/fileFactionSingleplayer";
         Transform newObject;
@@ -44,27 +45,29 @@ public class FactionsPanelController : MonoBehaviour
         Dropdown cbFaction;
         Text txtFaction;
         Image btnColorFaction;
+        GlobalInfoFaction faction;
 
+        faction = globalInfo.Factions.Find(item => item.Id == player.FactionId);
         position = new Vector3(0, -50);
         position.y -= spacing * factions.Count;
         newObject = ((GameObject) Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
-        newObject.name = "factionLine" + faction.Name + "_" + faction.Id;
+        newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + player.MapSocketId;
         newObject.SetParent(this.transform, false);
 
         cbFaction = newObject.Find("cbFaction").GetComponent<Dropdown>();
         txtFaction = newObject.Find("txtFaction").GetComponent<Text>();
         btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
 
-        cbFaction.value = faction.DefaultOwner;
+        cbFaction.value = player.IaId;
         cbFaction.onValueChanged.AddListener(delegate { OnValueChange(cbFaction); });
-        txtFaction.text = faction.Name;
-        btnColorFaction.color = FactionColors.GetColorByFaction((Faction.Id) faction.Id);
+        txtFaction.text = faction.Names[0].Value;
+        btnColorFaction.color = FactionColors.GetColorByString(player.Color);
 
         factions.Add(cbFaction);
 
-        if (faction.DefaultOwner == PlayerOwnerValue)
+        if (player.IaId == PlayerOwnerValue)
         {
-            ChangeFactionDescriptions(cbFaction);
+            ChangeFactionDescriptions(cbFaction, faction);
         }
     }
 
@@ -72,23 +75,18 @@ public class FactionsPanelController : MonoBehaviour
     {
         if (comboOrder.value == 0)
         {
+            GlobalInfoFaction globalInfoFaction = globalInfo.Factions.Find(faction => faction.Id == comboOrder.value);
+
             QuitOtherPlayers(comboOrder);
-            ChangeFactionDescriptions(comboOrder);
+            ChangeFactionDescriptions(comboOrder, globalInfoFaction);
         }
     }
 
-    private void ChangeFactionDescriptions(Dropdown comboOrder)
+    private void ChangeFactionDescriptions(Dropdown comboOrder, GlobalInfoFaction faction)
     {
-        int comboFactionId = Convert.ToInt32(comboOrder.transform.parent.gameObject.name.Split('_')[1]);
-
-        foreach (MapFactionModel faction in mapModel.Factions)
-        {
-            if (faction.Id == comboFactionId)
-            {
-                description.text = faction.Descriptions[0].Description;
-                bonus.text = bonusData.GetBonusLiteralById((BonusData.Id) faction.BonusCode);
-            }
-        }
+        // TODO: Pinta a posible bugaso
+        //int comboFactionId = Convert.ToInt32(comboOrder.transform.parent.gameObject.name.Split('_')[1]);
+        description.text = faction.Descriptions[0].Value;
     }
 
     private void QuitOtherPlayers(Dropdown comboOrder)

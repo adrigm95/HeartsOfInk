@@ -12,10 +12,10 @@ public class StatisticsController : MonoBehaviour
     {
         factionsStatistics = new List<FactionStatistics>();
 
-        factionsStatistics.Add(new FactionStatistics(Faction.Id.GOVERNMENT));
-        factionsStatistics.Add(new FactionStatistics(Faction.Id.NOMADS));
-        factionsStatistics.Add(new FactionStatistics(Faction.Id.REBELS));
-        factionsStatistics.Add(new FactionStatistics(Faction.Id.VUKIS));
+        //factionsStatistics.Add(new FactionStatistics(Faction.Id.GOVERNMENT));
+        //factionsStatistics.Add(new FactionStatistics(Faction.Id.NOMADS));
+        //factionsStatistics.Add(new FactionStatistics(Faction.Id.REBELS));
+        //factionsStatistics.Add(new FactionStatistics(Faction.Id.VUKIS));
 
         DontDestroyOnLoad(gameObject);
     }
@@ -26,20 +26,20 @@ public class StatisticsController : MonoBehaviour
         
     }
 
-    public FactionStatistics GetFaction(Faction.Id factionId)
+    public FactionStatistics GetFaction(Player factionId)
     {
-        return factionsStatistics.Find(item => item.FactionId == factionId);
+        return factionsStatistics.Find(item => item.Player == factionId);
     }
 
     public void ReportArmyDefeated(TroopController destroyed, TroopController destroyer)
     {
-        Faction.Id destroyedFaction = destroyed.troopModel.FactionId;
-        Faction.Id destroyerFaction = destroyer.troopModel.FactionId;
+        Player destroyedFaction = destroyed.troopModel.Player;
+        Player destroyerFaction = destroyer.troopModel.Player;
 
         foreach (FactionStatistics factionStatistics in factionsStatistics)
         {
-            if (factionStatistics.FactionId == destroyedFaction ||
-                factionStatistics.FactionId == destroyerFaction)
+            if (factionStatistics.Player == destroyedFaction ||
+                factionStatistics.Player == destroyerFaction)
             {
                 factionStatistics.ReportArmyDefeated(destroyedFaction);
             }

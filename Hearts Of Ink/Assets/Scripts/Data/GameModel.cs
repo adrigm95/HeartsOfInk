@@ -7,18 +7,16 @@ namespace Assets.Scripts.Data
     /// </summary>
     public class GameModel
     {
-        private List<Faction> Factions;
-        public string MapDefinitionPath;
+        public enum GameType { Single, MultiplayerClient, MultiplayerHost}
+
+        public List<Player> Players { get; set;}
+        public string MapDefinitionPath { get; set; }
+        public GameType Gametype { get; set; }
 
         public GameModel(string mapDefinitionPath)
         {
-            Factions = new List<Faction>();
+            Players = new List<Player>();
             MapDefinitionPath = mapDefinitionPath;
-        }
-
-        public void AddFaction(Faction faction)
-        {
-            Factions.Add(faction);
         }
     }
 }

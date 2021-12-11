@@ -1,4 +1,6 @@
-﻿using Rawgen.Literals;
+﻿using Assets.Scripts.Data;
+using Rawgen.Literals;
+using System;
 
 public class BonusLiterals : LiteralsFactory
 {
@@ -25,6 +27,25 @@ public class BonusLiterals : LiteralsFactory
         }
 
         return singleton;
+    }
+
+    public string GetBonusLiteralById(Bonus.Id bonusId)
+    {
+        switch (bonusId)
+        {
+            case Bonus.Id.MoreUnitsAtStart:
+                return MoreUnitsAtStart;
+            case Bonus.Id.None:
+                return string.Empty;
+            case Bonus.Id.Recruitment:
+                return BonusRecruitment;
+            case Bonus.Id.Combat:
+                return BonusCombat;
+            case Bonus.Id.Speed:
+                return BonusSpeed;
+            default:
+                throw new Exception("Unexpected bonus id");
+        };
     }
 
     private void BuildBonusCombat()

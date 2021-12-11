@@ -2,10 +2,7 @@
 {
     public class PlayerPrefsData
     {
-        public const string GametypeKey = "GameType";
-        public const string GametypeDefault = "Default";
-        public const string GametypeSingle = "Single";
-        public const string GametypeMultiplayer = "Multiplayer";
+        public const string GameModelKey = "GameModelKey";
 
         public const string IsVictoryKey = "IsVictoryKey";
         public const string VictoryKey = "VictoryKey";

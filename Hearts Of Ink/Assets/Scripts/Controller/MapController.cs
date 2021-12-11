@@ -18,7 +18,7 @@ public class MapController : MonoBehaviour
 
     void OnMouseDown()
     {
-        globalLogic.ClickReceivedFromMap(this);
+        globalLogic.ClickReceivedFromMap();
     }
 
     /*void IPointerClickHandler.OnPointerClick(PointerEventData eventData)

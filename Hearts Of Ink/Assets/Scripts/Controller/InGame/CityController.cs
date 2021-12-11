@@ -6,21 +6,20 @@ using UnityEngine;
 
 public class CityController : MonoBehaviour
 {
-    private SpriteRenderer spriteRenderer;
-    private GameObject troopsCanvas;
+    private SpriteRenderer SpriteRenderer;
     private GlobalLogicController globalLogic;
     private List<TroopController> troopsInZone;
     private float recruitmentProgress = 0;
-    public Faction.Id Owner;
+    public Player Owner;
     public bool IsCapital;
 
     // Start is called before the first frame update
     void Start()
     {
-        troopsCanvas = FindObjectsOfType<Canvas>().Where(item => item.name == "TroopsCanvas").First().gameObject;
         globalLogic = FindObjectOfType<GlobalLogicController>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
         troopsInZone = new List<TroopController>();
+        UpdateOwner();
     }
 
     // Update is called once per frame
@@ -70,21 +69,21 @@ public class CityController : MonoBehaviour
     {
         if (troopsInZone.Count == 1)
         {
-            if (troopsInZone[0].troopModel.FactionId != Owner)
+            if (troopsInZone[0].troopModel.Player != Owner)
             {
-                ChangeOwner(troopsInZone[0].troopModel.FactionId);
+                ChangeOwner(troopsInZone[0].troopModel.Player);
             }
         }
         else if (troopsInZone.Count < 0)
         {
             bool ownerPresent = false;
-            Dictionary<Faction.Id, float> unitsInCombat = new Dictionary<Faction.Id, float>();
+            Dictionary<string, float> unitsInCombat = new Dictionary<string, float>();
 
             foreach (TroopController troopController in troopsInZone)
             {
-                Faction.Id troopFaction = troopController.troopModel.FactionId;
+                string troopFaction = troopController.troopModel.Player.Name;
 
-                if (troopFaction == Owner)
+                if (troopFaction == Owner.Name)
                 {
                     ownerPresent = true;
                     break;
@@ -102,15 +101,15 @@ public class CityController : MonoBehaviour
             if (!ownerPresent)
             {
                 unitsInCombat.OrderByDescending(item => item.Value);
-                ChangeOwner(unitsInCombat.First().Key);
+                ChangeOwner(globalLogic.gameModel.Players.First(player => player.Name == unitsInCombat.First().Key));
             }
         }
     }
 
-    private void ChangeOwner(Faction.Id newOwner)
+    private void ChangeOwner(Player newOwner)
     {
         Owner = newOwner;
-        spriteRenderer.color = FactionColors.GetColorByFaction(Owner);
+        SpriteRenderer.color = Owner.Color;
         recruitmentProgress = 0;
     }
 
@@ -118,9 +117,7 @@ public class CityController : MonoBehaviour
     {
         const int CompanySize = 80;
         const float recruitmentSpeed = 0.5f;
-        string troopName;
         float capitalBonus = 1;
-        UnityEngine.Object newObject;
 
         if (IsCapital)
         {
@@ -131,11 +128,7 @@ public class CityController : MonoBehaviour
 
         if (recruitmentProgress > CompanySize)
         {
-            troopName = "Prefabs/" + Faction.GetFactionById(Owner) + "Troop";
-            newObject = Instantiate(Resources.Load(troopName), transform.position, transform.rotation, troopsCanvas.transform);
-            newObject.name += globalLogic.unitsCounter;
-
-            globalLogic.unitsCounter++;
+            globalLogic.InstantiateTroop(CompanySize, this.transform.position, Owner);
             recruitmentProgress = 0;
         }
     }

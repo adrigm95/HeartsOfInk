@@ -18,27 +18,40 @@ public class StartGameController : MonoBehaviour
 
     public void StartGame()
     {
-        GameModel gameModel = new GameModel(string.Empty);
-
-        PlayerPrefs.SetString(PlayerPrefsData.GametypeKey, PlayerPrefsData.GametypeSingle);
-
-        AddFactionIaId(gameModel);
+        GameModel gameModel = new GameModel(Application.streamingAssetsPath + "/MapDefinitions/0_Cartarena_v0_3_0.json");
+        gameModel.Gametype = GameModel.GameType.Single;
+        
+        GetPlayerOptions(gameModel);
         sceneChangeController.ChangeScene(transform);
+        PlayerPrefs.SetString(PlayerPrefsData.GameModelKey, JsonUtility.ToJson(gameModel, false));
     }
 
-    private void AddFactionIaId(GameModel gameModel)
+    private void GetPlayerOptions(GameModel gameModel)
     {
         foreach (Transform holderChild in factionDropdownsHolder)
         {
             if (holderChild.name.StartsWith(GlobalConstants.FactionLineStart))
             {
-                Faction faction = new Faction();
-                string factionId = holderChild.name.Split('_')[1];
+                Player player = new Player();
+                string[] holderNameSplitted = holderChild.name.Split('_');
+                string factionId = holderNameSplitted[1];
+                string mapSocketId = holderNameSplitted[2];
                 Dropdown iaSelector = holderChild.GetComponentInChildren<Dropdown>();
 
-                faction.FactionId = (Faction.Id) (Convert.ToInt32(factionId));
+                player.Faction.Id = Convert.ToInt32(factionId);
+                player.MapSocketId = Convert.ToByte(mapSocketId);
+                player.IaId = (Player.IA)(Convert.ToInt32(iaSelector.value));
+                if (player.IaId == Player.IA.PLAYER)
+                {
+                    player.Name = "Player";
+                }
+                else
+                {
+                    // Todo: Indicar nombre obtenido en el mapa.
+                    player.Name = factionId;
+                }
 
-                PlayerPrefs.SetInt(factionId, iaSelector.value);
+                gameModel.Players.Add(player);
             }
         }
     }

@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts.Data;
+using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.Data.Literals;
+using Assets.Scripts.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,43 +15,50 @@ public class GlobalLogicController : MonoBehaviour
     /// Contador que se utiliza para que las unidades clonadas no tengan el mismo nombre.
     /// </summary>
     [NonSerialized]
-    public int unitsCounter;
+    public int troopsCounter;
+
+    [NonSerialized]
+    public GameModel gameModel;
 
     public List<CityController> cities;
     public List<AILogic> aiLogics;
     public float GameSpeed;
     public SelectionModel selection;
     public UnitAnimation unitAnimation;
-    public Faction playerFaction;
+    public Player thisPcPlayer;
     public CameraController cameraController;
     public StatisticsController statisticsController;
     public SceneChangeController sceneChangeController;
+    public GameObject troopsCanvas;
+    public GameObject citiesCanvas;
     public GameObject pausePanel;
     public GameObject emptyTargetsHolder;
     public bool Pause { get; set; }
 
     private void Awake()
     {
-        string gametype;
+        string gameModelJson;
 
         aiLogics = new List<AILogic>();
         selection = new SelectionModel();
+        //troopsCanvas = FindObjectsOfType<Canvas>().Where(item => item.name == "TroopsCanvas").First().gameObject;
         cities = FindObjectsOfType<CityController>().ToList();
         cameraController = FindObjectOfType<CameraController>();
         statisticsController = FindObjectOfType<StatisticsController>();
         sceneChangeController = FindObjectOfType<SceneChangeController>();
 
-        gametype = PlayerPrefs.GetString(PlayerPrefsData.GametypeKey, PlayerPrefsData.GametypeDefault);
-        AwakeFactionsManagement(gametype);
+        gameModelJson = PlayerPrefs.GetString(PlayerPrefsData.GameModelKey);
+        gameModel = JsonUtility.FromJson<GameModel>(gameModelJson);
+        if (gameModel == null || gameModel.Players == null)
+        {
+            gameModel = GetMockedGameModel();
+        }
 
-        unitsCounter = 0;
+        AwakeIA();
+        AwakeMap();
+
+        troopsCounter = 0;
         SetPauseState(false);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame
@@ -59,6 +68,122 @@ public class GlobalLogicController : MonoBehaviour
         TimeManagement();
         UpdateUnitAnimation();
         CheckVictoryConditions();
+    }
+
+    private GameModel GetMockedGameModel()
+    {
+        GameModel gameModel = new GameModel(Application.streamingAssetsPath + "/MapDefinitions/0_Cartarena_v0_3_0.json");
+        gameModel.Gametype = GameModel.GameType.Single;
+
+        for (int index = 0; index < 4; index++)
+        {
+            Player player = new Player();
+            string factionId = Convert.ToString(index);
+            player.Faction.Id = Convert.ToInt32(factionId);
+            player.MapSocketId = Convert.ToByte(index);
+            player.Faction.Bonus = new Bonus(Rawgen.Literals.LiteralsFactory.Language.es, Bonus.Id.None);
+
+            switch (index)
+            {
+                case 0:
+                    player.IaId = Player.IA.PLAYER;
+                    player.Name = "Player";
+                    player.Color = new Color(255, 0, 46);
+                    break;
+                case 1:
+                    player.IaId = Player.IA.IA;
+                    player.Name = "Cisneros";
+                    player.Color = new Color(88, 212, 255);
+                    break;
+                case 2:
+                    player.IaId = Player.IA.IA;
+                    player.Name = "Djambo";
+                    player.Color = new Color(0, 234, 61);
+                    break;
+                case 3:
+                    player.IaId = Player.IA.NEUTRAL;
+                    player.Name = "Hamraoui";
+                    player.Color = new Color(255, 223, 0);
+                    break;
+            }
+
+            gameModel.Players.Add(player);
+        }
+
+        return gameModel;
+    }
+
+    private void AwakeIA()
+    {
+        foreach (Player player in gameModel.Players)
+        {
+            switch (player.IaId)
+            {
+                case Player.IA.IA:
+                    aiLogics.Add(new AILogic(player, this));
+                    break;
+                case Player.IA.PLAYER:
+                    thisPcPlayer = player;
+                    break;
+            }
+        }
+    }
+
+    private void AwakeMap()
+    {
+        string mapPath = Application.streamingAssetsPath + "/MapDefinitions/0_Cartarena_v0_3_0.json";
+        string globalInfoPath = Application.streamingAssetsPath + "/MapDefinitions/_GlobalInfo.json";
+        MapModel mapModel = JsonCustomUtils<MapModel>.ReadObjectFromFile(mapPath);
+        //GlobalInfo globalInfo = JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
+
+        foreach (MapCityModel city in mapModel.Cities)
+        {
+            Player troopOwner = gameModel.Players.First(item => item.MapSocketId == city.MapSocketId);
+            InstantiateCity(city, troopOwner);
+        }
+
+        foreach (MapTroopModel troop in mapModel.Troops)
+        {
+            Player troopOwner = gameModel.Players.First(item => item.MapSocketId == troop.MapSocketId);
+            InstantiateTroop(troop.Units, VectorUtils.FloatVectorToVector3(troop.Position), troopOwner);
+        }
+    }
+
+    public void InstantiateCity(MapCityModel cityModel, Player cityOwner)
+    {
+        CityController newObject;
+        string prefabName = cityModel.Type == 0 ? "Prefabs/Capital" : "Prefabs/CityPrefab";
+
+
+        newObject = ((GameObject)Instantiate(
+            Resources.Load(prefabName),
+            VectorUtils.FloatVectorToVector3(cityModel.Position),
+            citiesCanvas.transform.rotation,
+            citiesCanvas.transform)
+            ).GetComponent<CityController>();
+        newObject.name = cityModel.Name;
+    }
+
+    public void InstantiateTroop(int units, Vector3 position, Player troopOwner)
+    {
+        TroopController newObject;
+
+        if (troopOwner.Faction.Bonus.BonusId == Bonus.Id.Recruitment)
+        {
+            units += 10;
+        }
+
+        newObject = ((GameObject) Instantiate(
+            Resources.Load("Prefabs/Troop"), 
+            position, 
+            troopsCanvas.transform.rotation, 
+            troopsCanvas.transform)
+            ).GetComponent<TroopController>();
+        newObject.name += troopsCounter;
+        newObject.troopModel = new TroopModel(troopOwner);
+        newObject.troopModel.Units = units;
+
+        troopsCounter++;
     }
 
     private void TimeManagement()
@@ -76,7 +201,7 @@ public class GlobalLogicController : MonoBehaviour
     private void CheckVictoryConditions()
     {
         bool isGameFinished = true;
-        Faction.Id firstOwner = cities[0].Owner;
+        Player firstOwner = cities[0].Owner;
 
         foreach (CityController city in cities)
         {
@@ -91,45 +216,6 @@ public class GlobalLogicController : MonoBehaviour
         {
             sceneChangeController.ChangeScene(Scenes.Endgame);
             statisticsController.ReportGameEnd(cities);
-        }
-    }
-
-    private void AwakeFactionsManagement(string gametype)
-    {
-        playerFaction = new Faction();
-
-        switch (gametype)
-        {
-            case PlayerPrefsData.GametypeDefault:
-                aiLogics.Add(new AILogic(Faction.Id.NOMADS, this));
-                aiLogics.Add(new AILogic(Faction.Id.VUKIS, this));
-                aiLogics.Add(new AILogic(Faction.Id.GOVERNMENT, this));
-
-                playerFaction.FactionId = Faction.Id.REBELS;
-                break;
-            case PlayerPrefsData.GametypeSingle:
-                AwakeFactionManagement(Faction.Id.GOVERNMENT);
-                AwakeFactionManagement(Faction.Id.REBELS);
-                AwakeFactionManagement(Faction.Id.VUKIS);
-                AwakeFactionManagement(Faction.Id.NOMADS);
-                break;
-        }
-    }
-
-    private void AwakeFactionManagement(Faction.Id factionId)
-    {
-        string factionIdStr = Convert.ToString((int) factionId);
-        Faction.IA managementKey = (Faction.IA) PlayerPrefs.GetInt(factionIdStr, 1);
-
-        switch (managementKey)
-        {
-            case Faction.IA.PLAYER:
-                playerFaction.FactionId = factionId;
-                PlayerPrefs.SetInt(PlayerPrefsData.PlayerFactionIdKey, Convert.ToInt32(factionId));
-                break;
-            case Faction.IA.IA:
-                aiLogics.Add(new AILogic(factionId, this));
-                break;
         }
     }
 
@@ -183,7 +269,7 @@ public class GlobalLogicController : MonoBehaviour
     {
         if (!selection.HaveObjectSelected)
         {
-            if (newSelection.troopModel.FactionId == playerFaction.FactionId)
+            if (newSelection.troopModel.Player == thisPcPlayer)
             {
                 selection.ChangeSelection(newSelection.gameObject, typeof(TroopController));
                 Debug.Log("TroopSelected: " + newSelection);
@@ -220,7 +306,7 @@ public class GlobalLogicController : MonoBehaviour
         }
     }
 
-    public void ClickReceivedFromMap(MapController newSelection)
+    public void ClickReceivedFromMap()
     {
         if (selection.HaveObjectSelected)
         {

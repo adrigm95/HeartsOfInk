@@ -29,12 +29,10 @@ public class TroopController : MonoBehaviour
         globalLogic = FindObjectOfType<GlobalLogicController>();
         soundEffectsController = FindObjectOfType<SoundEffectsController>();
         circleCollider = GetComponent<CircleCollider2D>();
-
-        troopModel = new TroopModel(this.name);
-        troopModel.Units = Convert.ToInt32(unitsText.text.ToString());
-
-        aiLogic = globalLogic.aiLogics.Find(item => item.FactionId == troopModel.FactionId);
+        aiLogic = globalLogic.aiLogics.Find(item => item.Player == troopModel.Player);
+        unitsText.SetText(troopModel.Units.ToString());
         UpdateColliderSize();
+        unitsText.color = troopModel.Player.Color;
     }
 
     // Update is called once per frame
@@ -61,7 +59,7 @@ public class TroopController : MonoBehaviour
 
         if (enemyController != null)
         {
-            if (enemyController.troopModel.FactionId != troopModel.FactionId)
+            if (enemyController.troopModel.Player != troopModel.Player)
             {
                 troopModel.InCombat = true;
                 enemyController.troopModel.InCombat = true;
@@ -169,7 +167,7 @@ public class TroopController : MonoBehaviour
                     troopModel.SetTarget(null, globalLogic);
                 }
 
-                bonusSpeed = troopModel.FactionId == Faction.Id.NOMADS ? 1.2f : 1f;
+                bonusSpeed = troopModel.Player.Faction.Bonus.BonusId == Bonus.Id.Speed ? 1.2f : 1f;
                 movement = direction * (Time.deltaTime * 100) * troopModel.Speed * BaseSpeed * globalLogic.GameSpeed * bonusSpeed;
 
                 this.transform.Translate(movement.x, movement.y, 0);
@@ -204,12 +202,6 @@ public class TroopController : MonoBehaviour
 
                 target = combatingEnemys.OrderByDescending(enemy => enemy.troopModel.Units).First();
                 results = combatLogic.Combat(this, target);
-
-                if (results.DefensorRemainingUnits == 1 ||
-                    results.AttackerRemainingUnits == 1)
-                {
-                    Debug.Log("Interruption point log line");
-                }
 
                 if (results.DefensorRemainingUnits <= 0)
                 {

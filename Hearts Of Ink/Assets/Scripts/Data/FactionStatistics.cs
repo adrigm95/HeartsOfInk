@@ -8,7 +8,7 @@ namespace Assets.Scripts.Data
 {
     public class FactionStatistics
     {
-        public Faction.Id FactionId { get; private set; }
+        public Player Player { get; private set; }
         public int OwnUnitsLost { get; private set; }
         public int EnemyUnitsDistroyed { get; private set; }
         public int MaxUnits { get; private set; }
@@ -20,9 +20,9 @@ namespace Assets.Scripts.Data
         public int MaxCities { get; private set; }
         public int CitiesAtEnd { get; private set; }
 
-        public FactionStatistics(Faction.Id faction)
+        public FactionStatistics(Player player)
         {
-            FactionId = faction;
+            Player = player;
             OwnUnitsLost = 0;
             EnemyUnitsDistroyed = 0;
             MaxUnits = 0;
@@ -41,9 +41,9 @@ namespace Assets.Scripts.Data
             EnemyUnitsDistroyed += unitsDistroyed;
         }
 
-        public void ReportArmyDefeated(Faction.Id armyDefeated)
+        public void ReportArmyDefeated(Player armyDefeated)
         {
-            if (FactionId == armyDefeated)
+            if (Player == armyDefeated)
             {
                 OwnArmysLost++;
             }
@@ -53,13 +53,13 @@ namespace Assets.Scripts.Data
             }
         } 
 
-        public void ReportCityConquered(Faction.Id conqueror, Faction.Id conquered)
+        public void ReportCityConquered(Player conqueror, Player conquered)
         {
-            if (FactionId == conquered)
+            if (Player == conquered)
             {
                 OwnCitiesLost++;
             }
-            else if (FactionId == conqueror)
+            else if (Player == conqueror)
             {
                 EnemyCitiesConquered++;
             }
@@ -99,7 +99,7 @@ namespace Assets.Scripts.Data
 
             foreach (CityController city in cities)
             {
-                if (city.Owner == FactionId)
+                if (city.Owner == Player)
                 {
                     CitiesAtEnd++;
                 }

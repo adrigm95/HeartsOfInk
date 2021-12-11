@@ -37,7 +37,7 @@ public class CreateGameController : MonoBehaviour
             name = gameNameText.text
         };
 
-        response = await wsCaller.GenericWebServiceCaller(Method.POST, "api/CreateGame", newGame);
+        response = await wsCaller.GenericWebServiceCaller(Method.POST, "api/Game", newGame);
 
         if (response.internalResultCode == InternalStatusCodes.OKCode)
         {

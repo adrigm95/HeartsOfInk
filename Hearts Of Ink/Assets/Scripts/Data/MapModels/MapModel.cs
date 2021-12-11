@@ -1,8 +1,5 @@
-﻿using Assets.Scripts.Data.MapModels;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Assets.Scripts.Data
 {
@@ -19,6 +16,10 @@ namespace Assets.Scripts.Data
         /// </summary>
         public string SpritePath { get; set; }
 
-        public List<MapFactionModel> Factions { get; set; }
+        public List<MapPlayerModel> Players { get; set; }
+
+        public List<MapCityModel> Cities { get; set; }
+
+        public List<MapTroopModel> Troops { get; set; }
     }
 }

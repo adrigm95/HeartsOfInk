@@ -31,7 +31,7 @@ public class GlobalEndgameController : MonoBehaviour
 
     private void SetResultTitle()
     {
-        FactionStatistics playerFactionStatistics;
+        /*FactionStatistics playerFactionStatistics;
         int playerFactionId = PlayerPrefs.GetInt(PlayerPrefsData.PlayerFactionIdKey, 1);
 
         playerFactionStatistics = statisticsController.GetFaction((Faction.Id)playerFactionId);
@@ -43,7 +43,7 @@ public class GlobalEndgameController : MonoBehaviour
         else
         {
             resultTitle.text = "Victoria";
-        }
+        }*/
     }
 
     public void GoBackToMenu()

@@ -1,6 +1,5 @@
 ﻿using Assets.Scripts.Data;
 using Rawgen.Math.Logic.Utils;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,11 +7,11 @@ using UnityEngine;
 public class AILogic
 {
     private GlobalLogicController globalLogic;
-    public Faction.Id FactionId { get; set; }
+    public Player Player { get; }
 
-    public AILogic(Faction.Id factionId, GlobalLogicController globalLogicController)
+    public AILogic(Player player, GlobalLogicController globalLogicController)
     {
-        FactionId = factionId;
+        this.Player = player;
         globalLogic = globalLogicController;
     }
 
@@ -26,7 +25,7 @@ public class AILogic
         {
             CityController cityController = troopModel.Target.GetComponent<CityController>();
 
-            if (cityController != null && cityController.Owner == troopModel.FactionId)
+            if (cityController != null && cityController.Owner == troopModel.Player)
             {
                 troopModel.SetTarget(GetAttackTarget(troopModel), globalLogic);
             }
@@ -44,7 +43,7 @@ public class AILogic
         {
             CityController cityController = cities[index].GetComponent<CityController>();
 
-            if (cityController.Owner != FactionId)
+            if (cityController.Owner != Player)
             {
                 distances.Add(index, MathUtils.ExperimentalDistance(currentPos.x, currentPos.y, cities[index].transform.position.x, cities[index].transform.position.y));
             }
