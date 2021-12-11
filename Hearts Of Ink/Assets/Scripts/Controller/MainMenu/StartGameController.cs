@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts.Data;
+using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.Data.Literals;
+using Assets.Scripts.Utils;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ public class StartGameController : MonoBehaviour
 {
     private SceneChangeController sceneChangeController;
     public Transform factionDropdownsHolder;
+    public GameOptionsController gameOptionsController;
 
     private void Start()
     {
@@ -23,11 +26,14 @@ public class StartGameController : MonoBehaviour
         
         GetPlayerOptions(gameModel);
         sceneChangeController.ChangeScene(transform);
-        PlayerPrefs.SetString(PlayerPrefsData.GameModelKey, JsonUtility.ToJson(gameModel, false));
+        gameOptionsController.gameModel = gameModel;
     }
 
     private void GetPlayerOptions(GameModel gameModel)
     {
+        string globalInfoPath = Application.streamingAssetsPath + "/MapDefinitions/_GlobalInfo.json";
+        GlobalInfo globalInfo = JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
+
         foreach (Transform holderChild in factionDropdownsHolder)
         {
             if (holderChild.name.StartsWith(GlobalConstants.FactionLineStart))
@@ -36,11 +42,15 @@ public class StartGameController : MonoBehaviour
                 string[] holderNameSplitted = holderChild.name.Split('_');
                 string factionId = holderNameSplitted[1];
                 string mapSocketId = holderNameSplitted[2];
+                Image btnColorFaction = holderChild.Find("btnColorFaction").GetComponent<Image>();
                 Dropdown iaSelector = holderChild.GetComponentInChildren<Dropdown>();
 
                 player.Faction.Id = Convert.ToInt32(factionId);
+                player.Faction.Bonus = new Bonus(Rawgen.Literals.LiteralsFactory.Language.es, 
+                    (Bonus.Id) globalInfo.Factions.Find(item => item.Id == player.Faction.Id).BonusId);
                 player.MapSocketId = Convert.ToByte(mapSocketId);
                 player.IaId = (Player.IA)(Convert.ToInt32(iaSelector.value));
+                player.Color = btnColorFaction.color;
                 if (player.IaId == Player.IA.PLAYER)
                 {
                     player.Name = "Player";

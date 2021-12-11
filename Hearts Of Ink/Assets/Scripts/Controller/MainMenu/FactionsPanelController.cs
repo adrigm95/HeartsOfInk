@@ -61,7 +61,7 @@ public class FactionsPanelController : MonoBehaviour
         cbFaction.value = player.IaId;
         cbFaction.onValueChanged.AddListener(delegate { OnValueChange(cbFaction); });
         txtFaction.text = faction.Names[0].Value;
-        btnColorFaction.color = FactionColors.GetColorByString(player.Color);
+        btnColorFaction.color = ColorUtils.GetColorByString(player.Color);
 
         factions.Add(cbFaction);
 

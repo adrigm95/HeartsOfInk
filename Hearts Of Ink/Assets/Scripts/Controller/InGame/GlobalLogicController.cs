@@ -29,6 +29,7 @@ public class GlobalLogicController : MonoBehaviour
     public CameraController cameraController;
     public StatisticsController statisticsController;
     public SceneChangeController sceneChangeController;
+    public GameOptionsController gameOptionsHolder;
     public GameObject troopsCanvas;
     public GameObject citiesCanvas;
     public GameObject pausePanel;
@@ -42,20 +43,24 @@ public class GlobalLogicController : MonoBehaviour
         aiLogics = new List<AILogic>();
         selection = new SelectionModel();
         //troopsCanvas = FindObjectsOfType<Canvas>().Where(item => item.name == "TroopsCanvas").First().gameObject;
-        cities = FindObjectsOfType<CityController>().ToList();
         cameraController = FindObjectOfType<CameraController>();
         statisticsController = FindObjectOfType<StatisticsController>();
         sceneChangeController = FindObjectOfType<SceneChangeController>();
+        gameOptionsHolder = FindObjectOfType<GameOptionsController>();
 
-        gameModelJson = PlayerPrefs.GetString(PlayerPrefsData.GameModelKey);
-        gameModel = JsonUtility.FromJson<GameModel>(gameModelJson);
-        if (gameModel == null || gameModel.Players == null)
+        if (gameOptionsHolder == null)
         {
+            Debug.LogWarning("Load mocked game");
             gameModel = GetMockedGameModel();
+        }
+        else
+        {
+            gameModel = gameOptionsHolder.gameModel;
         }
 
         AwakeIA();
         AwakeMap();
+        cities = FindObjectsOfType<CityController>().ToList();
 
         troopsCounter = 0;
         SetPauseState(false);
@@ -88,22 +93,22 @@ public class GlobalLogicController : MonoBehaviour
                 case 0:
                     player.IaId = Player.IA.PLAYER;
                     player.Name = "Player";
-                    player.Color = new Color(255, 0, 46);
+                    player.Color = ColorUtils.BuildColorBase256(255, 0, 46);
                     break;
                 case 1:
                     player.IaId = Player.IA.IA;
                     player.Name = "Cisneros";
-                    player.Color = new Color(88, 212, 255);
+                    player.Color = ColorUtils.BuildColorBase256(88, 212, 255);
                     break;
                 case 2:
                     player.IaId = Player.IA.IA;
                     player.Name = "Djambo";
-                    player.Color = new Color(0, 234, 61);
+                    player.Color = ColorUtils.BuildColorBase256(0, 234, 61);
                     break;
                 case 3:
                     player.IaId = Player.IA.NEUTRAL;
                     player.Name = "Hamraoui";
-                    player.Color = new Color(255, 223, 0);
+                    player.Color = ColorUtils.BuildColorBase256(255, 223, 0);
                     break;
             }
 
@@ -134,7 +139,6 @@ public class GlobalLogicController : MonoBehaviour
         string mapPath = Application.streamingAssetsPath + "/MapDefinitions/0_Cartarena_v0_3_0.json";
         string globalInfoPath = Application.streamingAssetsPath + "/MapDefinitions/_GlobalInfo.json";
         MapModel mapModel = JsonCustomUtils<MapModel>.ReadObjectFromFile(mapPath);
-        //GlobalInfo globalInfo = JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
 
         foreach (MapCityModel city in mapModel.Cities)
         {
@@ -162,6 +166,7 @@ public class GlobalLogicController : MonoBehaviour
             citiesCanvas.transform)
             ).GetComponent<CityController>();
         newObject.name = cityModel.Name;
+        newObject.Owner = cityOwner;
     }
 
     public void InstantiateTroop(int units, Vector3 position, Player troopOwner)

@@ -19,7 +19,7 @@ public class CityController : MonoBehaviour
         globalLogic = FindObjectOfType<GlobalLogicController>();
         SpriteRenderer = GetComponent<SpriteRenderer>();
         troopsInZone = new List<TroopController>();
-        UpdateOwner();
+        SpriteRenderer.color = Owner.Color;
     }
 
     // Update is called once per frame

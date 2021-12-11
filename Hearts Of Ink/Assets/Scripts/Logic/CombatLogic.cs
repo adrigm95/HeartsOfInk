@@ -21,8 +21,8 @@ namespace Assets.Scripts.Logic
             int bonusAttacker;
             int bonusDefensor;
 
-            bonusAttacker = attacker.troopModel.Player.Faction.Bonus.BonusId == Bonus.Id.Combat ? 10 : 0;
-            bonusDefensor = defensor.troopModel.Player.Faction.Bonus.BonusId == Bonus.Id.Combat ? 10 : 0;
+            bonusAttacker = attacker.troopModel.Player.Faction.Bonus.BonusId == Bonus.Id.Combat ? 15 : 0;
+            bonusDefensor = defensor.troopModel.Player.Faction.Bonus.BonusId == Bonus.Id.Combat ? 15 : 0;
             defensorLosses = attacker.troopModel.Units / (RandomUtils.Next(MinDefense, MaxDefense) + bonusDefensor) + 1;
             attackerLosses = defensor.troopModel.Units / (RandomUtils.Next(MinDefense, MaxDefense) + bonusAttacker) + 1;
 

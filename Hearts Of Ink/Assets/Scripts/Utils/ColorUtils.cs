@@ -20,5 +20,12 @@ namespace Assets.Scripts.Utils
         {
             return new Color(r / 255, g / 255, b / 255);
         }
+
+        public static Color GetColorByString(string color)
+        {
+            string[] splittedString = color.Split(',');
+
+            return BuildColorBase256(float.Parse(splittedString[0]), float.Parse(splittedString[1]), float.Parse(splittedString[2]));
+        }
     }
 }

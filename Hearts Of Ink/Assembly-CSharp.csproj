@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\Controller\CameraController.cs" />
     <Compile Include="Assets\Scripts\Controller\Endgame\EndgameLineController.cs" />
     <Compile Include="Assets\Scripts\Controller\Endgame\GlobalEndgameController.cs" />
+    <Compile Include="Assets\Scripts\Controller\GameOptionsController.cs" />
     <Compile Include="Assets\Scripts\Controller\Generic\MusicController.cs" />
     <Compile Include="Assets\Scripts\Controller\Generic\SceneChangeController.cs" />
     <Compile Include="Assets\Scripts\Controller\Generic\SoundEffectsController.cs" />
@@ -90,7 +91,6 @@
     <Compile Include="Assets\Scripts\Data\Constants\GlobalConstants.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\PlayerPrefsData.cs" />
     <Compile Include="Assets\Scripts\Data\Faction.cs" />
-    <Compile Include="Assets\Scripts\Data\FactionColors.cs" />
     <Compile Include="Assets\Scripts\Data\FactionStatistics.cs" />
     <Compile Include="Assets\Scripts\Data\GameModel.cs" />
     <Compile Include="Assets\Scripts\Data\GlobalInfo\GlobalInfo.cs" />
