@@ -8,8 +8,8 @@ using UnityEngine.UI;
 
 public class CreateGameController : MonoBehaviour
 {
-    private GamesListController gamesListPanel;
     private ConfigGameController configGameController;
+    public GamesListController gamesListPanel;
     public Button btnCreateGame;
     public Text gameNameText;
     public Text creatorNick;
@@ -17,7 +17,6 @@ public class CreateGameController : MonoBehaviour
 
     void Start()
     {
-        gamesListPanel = FindObjectOfType<GamesListController>();
         configGameController = configGamePanel.GetComponent<ConfigGameController>();
     }
 
@@ -41,6 +40,7 @@ public class CreateGameController : MonoBehaviour
 
         if (response.internalResultCode == InternalStatusCodes.OKCode)
         {
+            configGameController.gameObject.SetActive(true);
             configGameController.GameCreatedByHost(response.serviceResponse);
             gamesListPanel.AddGameToPanel(response.serviceResponse, true);
             EnableDisableCreateGame(false);

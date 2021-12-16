@@ -9,12 +9,12 @@ public class GamesListController : MonoBehaviour
     const string ItemPrefab = "Prefabs/PublicGameItem";
     const int lineSpacing = 25;
 
-    private Vector2 nextItemPosition;
+    public Vector2 nextItemPosition;
 
     // Start is called before the first frame update
     void Start()
     {
-        nextItemPosition = new Vector2(10, 0);
+        //nextItemPosition = new Vector2(10, 0);
         LoadGames();
     }
 

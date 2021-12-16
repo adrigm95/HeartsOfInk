@@ -8,9 +8,10 @@ namespace Assets.Scripts.Data.Constants
 {
     class ApiConfig
     {
-        //public const string NETCoreServerUrl = "https://localhost:44383/";
+        //public const string NETCoreServerUrl = "https://localhost:44383/"; //61794
+        public const string NETCoreServerUrl = "http://localhost:61794/";
 
         // DEV
-        public const string NETCoreServerUrl = "http://79.116.20.248:81/";
+        //public const string NETCoreServerUrl = "http://79.116.20.248:81/";
     }
 }
