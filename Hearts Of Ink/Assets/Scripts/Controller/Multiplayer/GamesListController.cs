@@ -8,13 +8,18 @@ public class GamesListController : MonoBehaviour
 {
     const string ItemPrefab = "Prefabs/PublicGameItem";
     const int lineSpacing = 25;
+    private float width;
+    private RectTransform rectTransform;
 
     public Vector2 nextItemPosition;
+    public float MinifiedSize;
+    public float OneGreatAndFreeSize;
 
     // Start is called before the first frame update
     void Start()
     {
-        //nextItemPosition = new Vector2(10, 0);
+        rectTransform = transform.GetComponent<RectTransform>();
+        width = rectTransform.sizeDelta.x;
         LoadGames();
     }
 
@@ -22,6 +27,23 @@ public class GamesListController : MonoBehaviour
     void Update()
     {
         
+    }
+
+    /// <summary>
+    /// Hace que el listado reduzca su altura.
+    /// </summary>
+    public void Minify()
+    {
+        //TODO: https://forum.unity.com/threads/setting-top-and-bottom-on-a-recttransform.265415/
+    }
+
+    /// <summary>
+    /// Hace que el listado aumente su altura.
+    /// </summary>
+    public void MakeListGreatAgain()
+    {
+        //TODO: https://forum.unity.com/threads/setting-top-and-bottom-on-a-recttransform.265415/
+        //rectTransform.sizeDelta = new Vector2(width, SizeOpen);
     }
 
     private void CleanList()

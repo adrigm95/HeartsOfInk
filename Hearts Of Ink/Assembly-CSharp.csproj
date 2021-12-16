@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\Controller\Multiplayer\CreateGameController.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\DropdownController.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\GamesListController.cs" />
+    <Compile Include="Assets\Scripts\Controller\Multiplayer\SubMenuPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\StatisticsController.cs" />
     <Compile Include="Assets\Scripts\Controller\UIAnimator.cs" />
     <Compile Include="Assets\Scripts\Data\AxisData.cs" />
