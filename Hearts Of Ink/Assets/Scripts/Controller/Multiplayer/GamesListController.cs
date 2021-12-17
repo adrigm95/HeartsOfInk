@@ -10,14 +10,17 @@ public class GamesListController : MonoBehaviour
     const int lineSpacing = 25;
     private float width;
     private RectTransform rectTransform;
+    private GameItemController gameItemSelected;
 
     public Vector2 nextItemPosition;
     public float MinifiedSize;
     public float OneGreatAndFreeSize;
+    public ConfigGameController configGameController;
 
     // Start is called before the first frame update
     void Start()
     {
+        gameItemSelected = null;
         rectTransform = transform.GetComponent<RectTransform>();
         width = rectTransform.sizeDelta.x;
         LoadGames();
@@ -78,6 +81,7 @@ public class GamesListController : MonoBehaviour
 
     public void AddGameToPanel(BasicGameInfo game, bool isSelected)
     {
+        GameItemController gameItem;
         GameObject newGameText;
         RectTransform rectTransform;
         Text text;
@@ -87,6 +91,7 @@ public class GamesListController : MonoBehaviour
         rectTransform = newGameText.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = nextItemPosition;
         text = newGameText.GetComponent<Text>();
+        gameItem = newGameText.GetComponent<GameItemController>();
         nextItemPosition.y -= lineSpacing;
 
         text.text = PanelUtils.GetGameName(game);
@@ -94,12 +99,39 @@ public class GamesListController : MonoBehaviour
 
         if (isSelected)
         {
-            SetGameAsSelected(newGameText);
+            SetGameAsSelected(gameItem);
         }
     }
 
-    public void SetGameAsSelected(GameObject item)
+    public void SetGameAsSelected(GameItemController gameItem)
     {
-        const string color = "027AAA";
+        Text text;
+
+        text = gameItem.gameObject.GetComponent<Text>();
+        text.fontStyle = FontStyle.Bold;
+
+        gameItemSelected = gameItem;
+    }
+
+    public async void RequestEntryGame()
+    {
+        WebServiceCaller<RequestEntryModel, BasicGameInfo> wsCaller = new WebServiceCaller<RequestEntryModel, BasicGameInfo>();
+        HOIResponseModel<BasicGameInfo> response;
+        RequestEntryModel requestEntryModel = new RequestEntryModel();
+
+        requestEntryModel.gameKey = gameItemSelected.gameObject.name;
+        requestEntryModel.isPublic = true;
+        requestEntryModel.playerName = "PacoPepe";
+
+        response = await wsCaller.GenericWebServiceCaller(Method.POST, "api/RequestEntry", requestEntryModel);
+
+        if (response.internalResultCode == InternalStatusCodes.OKCode)
+        {
+            configGameController.gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("[RequestEntryGame] Unexpected result code: " + response.internalResultCode);
+        }
     }
 }

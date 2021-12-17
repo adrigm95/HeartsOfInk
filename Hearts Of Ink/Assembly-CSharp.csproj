@@ -81,6 +81,7 @@
     <Compile Include="Assets\Scripts\Controller\Multiplayer\ConfigGameController.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\CreateGameController.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\DropdownController.cs" />
+    <Compile Include="Assets\Scripts\Controller\Multiplayer\GameItemController.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\GamesListController.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\SubMenuPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\StatisticsController.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Assets\Scripts\Data\ServerModels\CreateGameModel.cs" />
     <Compile Include="Assets\Scripts\Data\ServerModels\HOIResponseModel.cs" />
     <Compile Include="Assets\Scripts\Data\ServerModels\InternalStatusCodes.cs" />
+    <Compile Include="Assets\Scripts\Data\ServerModels\RequestEntryModel.cs" />
     <Compile Include="Assets\Scripts\Data\TroopModel.cs" />
     <Compile Include="Assets\Scripts\Data\UnitAnimation.cs" />
     <Compile Include="Assets\Scripts\Logic\AILogic.cs" />
