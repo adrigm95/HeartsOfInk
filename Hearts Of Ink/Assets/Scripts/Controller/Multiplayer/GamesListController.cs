@@ -16,6 +16,7 @@ public class GamesListController : MonoBehaviour
     public float MinifiedSize;
     public float OneGreatAndFreeSize;
     public ConfigGameController configGameController;
+    public InfoPanelController infoPanelController;
 
     // Start is called before the first frame update
     void Start()
@@ -64,9 +65,14 @@ public class GamesListController : MonoBehaviour
 
         response = await wsCaller.GenericWebServiceCaller(Method.GET, "api/PublicGames", null);
 
-        if (response.internalResultCode == InternalStatusCodes.OKCode)
+        switch (response.internalResultCode)
         {
-            PopulateList(response);
+            case InternalStatusCodes.OKCode:
+                PopulateList(response);
+                break;
+            case InternalStatusCodes.KOConnectionCode:
+                infoPanelController.DisplayMessage("Connection error", "Error when try to connect to server.");
+                break;
         }
     }
 

@@ -821,7 +821,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0006621203, y: 0.0010073641}
+  m_AnchoredPosition: {x: -0.000028006625, y: -0.000028034712}
   m_SizeDelta: {x: -323.00003, y: 500}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1131040821
@@ -1129,10 +1129,10 @@ RectTransform:
   m_Father: {fileID: 1978174321}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 10, y: 0}
-  m_SizeDelta: {x: 600, y: 600}
+  m_SizeDelta: {x: 600, y: -200}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1659211186
 MonoBehaviour:
@@ -1177,14 +1177,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.105882354, g: 0.105882354, b: 0.105882354, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 50e3bcfef41119448b352ca5af5f87b7, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1236,7 +1236,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 40, y: 0}
-  m_SizeDelta: {x: 300, y: 1200}
+  m_SizeDelta: {x: 400, y: 1200}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1801411497
 MonoBehaviour:
@@ -1251,7 +1251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1271,33 +1271,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\n\nHearts of ink\r\n\r\nA game developed by Rawgen Games\r\n\r\nProgramming\t\nAdri\xE1n
-    Garc\xEDa Mari\xF1o\r\n\nMultiplayer\nAndr\xE9s Balanza Cant\xF3\t\r\nAdri\xE1n
-    Garc\xEDa Mari\xF1o\r\nLuisa Cebrian Mendui\xF1a\n\r\nArtist\r\nAdri\xE1n Garc\xEDa
-    Mari\xF1o\r\n\r\nProduction\r\nAdri\xE1n Garc\xEDa Mari\xF1o\r\n\r\nTools\r\nRawgen
-    Studio\r\nUnity 2019\r - Unity Technologies\nOpen.NAT - Lucas Ontivero and contributors\n\r\nAssets\r\nKenney
-    (www.kenney.nl)\r\n\r\nMusic\r\nTribal Affair - SYBS\r\nEyes of Glory - Aakash
-    Gandhi\r\nDestination unknown - Ugonna Onyekwe\r\nThunderstorm - Hanu Dixit\r\nSahara
-    Rains - Hanu Dixit\r\nLondon Fog - Quincas Moreira\r\nThe New Order - Aaron Kenny\r\nThe
-    Bronx is Burning - Doug Maxwell/Media Right Productions\r\nThunder Chant - E's
-    Jammy Jams\r\nCalcutta Sunset - E's Jammy Jams\r\n\nTypographies\nNicone - Vernon
-    Adams (vern@newtypography.co.uk) (SIL Open Font License)\n\r\nSound\r\nAdri\xE1n
-    Garc\xEDa Mari\xF1o\r\n\r\nSpecial Thanks\r\nIrene Alberola\nJavier Bardisa\nMarina
-    Boluda\nAdri\xE1n Corbal\xE1n\r\nEzequiel Matesanz\r\nFlavia de Paula\n\nTools
-    licenses\n\nOpen.NAT license (MIT)\n\nSite: https://github.com/lontivero/Open.Nat\n\nCopyright
-    (C) 2006 Alan McGovern\nCopyright (C) 2007 Ben Motmans\nCopyright (C) 2014 Lucas
-    Ontivero\n\nPermission is hereby granted, free of charge, to any person obtaining
-    a copy\nof this software and associated documentation files (the \"Software\"),
-    to deal\nin the Software without restriction, including without limitation the
-    rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or
-    sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished
-    to do so, subject to the following conditions:\n\nThe above copyright notice
-    and this permission notice shall be included in\nall copies or substantial portions
-    of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY
-    KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS
-    FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS
-    OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER
-    IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n\n\n\n\n"
+    Garc\xEDa Mari\xF1o\r\nLuis Cebrian Mendui\xF1a\n\nMultiplayer\nAndr\xE9s Balanza
+    Cant\xF3\t\r\nAdri\xE1n Garc\xEDa Mari\xF1o\r\nLuis Cebrian Mendui\xF1a\n\r\nArtist\r\nAdri\xE1n
+    Garc\xEDa Mari\xF1o\r\n\r\nProduction\r\nAdri\xE1n Garc\xEDa Mari\xF1o\r\n\r\nTools\r\nRawgen
+    Studio\r\nUnity 2019\r - Unity Technologies\n\r\nAssets\r\nKenney (www.kenney.nl)\r\n\r\nMusic\r\nTribal
+    Affair - SYBS\r\nEyes of Glory - Aakash Gandhi\r\nDestination unknown - Ugonna
+    Onyekwe\r\nThunderstorm - Hanu Dixit\r\nSahara Rains - Hanu Dixit\r\nLondon Fog
+    - Quincas Moreira\r\nThe New Order - Aaron Kenny\r\nThe Bronx is Burning - Doug
+    Maxwell/Media Right Productions\r\nThunder Chant - E's Jammy Jams\r\nCalcutta
+    Sunset - E's Jammy Jams\r\n\nTypographies\nNicone - Vernon Adams (vern@newtypography.co.uk)
+    (SIL Open Font License)\n\r\nSound\r\nAdri\xE1n Garc\xEDa Mari\xF1o\r\n\r\nSpecial
+    Thanks\r\nIrene Alberola\nJavier Bardisa\nMarina Boluda\nAdri\xE1n Corbal\xE1n\r\nEzequiel
+    Matesanz\r\nFlavia de Paula\n\n\n\n"
 --- !u!222 &1801411498
 CanvasRenderer:
   m_ObjectHideFlags: 0

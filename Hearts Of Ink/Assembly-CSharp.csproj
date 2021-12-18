@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\Controller\InGame\CityController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\GlobalLogicController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TroopController.cs" />
+    <Compile Include="Assets\Scripts\Controller\InfoPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\MainMenu\FactionsPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\MainMenu\StartGameController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapController.cs" />
