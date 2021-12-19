@@ -10,7 +10,7 @@ namespace Assets.Scripts.Logic
 {
     public class CombatLogic
     {
-        const int MinDefense = 40;
+        const int MinDefense = 60;
         const int MaxDefense = 80;
 
         public CombatResults Combat(TroopController attacker, TroopController defensor)

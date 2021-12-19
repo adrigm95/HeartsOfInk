@@ -34,15 +34,13 @@ public class GlobalLogicController : MonoBehaviour
     public GameObject citiesCanvas;
     public GameObject pausePanel;
     public GameObject emptyTargetsHolder;
+    public GameObject pauseItem;
     public bool Pause { get; set; }
 
     private void Awake()
     {
-        string gameModelJson;
-
         aiLogics = new List<AILogic>();
         selection = new SelectionModel();
-        //troopsCanvas = FindObjectsOfType<Canvas>().Where(item => item.name == "TroopsCanvas").First().gameObject;
         cameraController = FindObjectOfType<CameraController>();
         statisticsController = FindObjectOfType<StatisticsController>();
         sceneChangeController = FindObjectOfType<SceneChangeController>();
@@ -63,7 +61,7 @@ public class GlobalLogicController : MonoBehaviour
         cities = FindObjectsOfType<CityController>().ToList();
 
         troopsCounter = 0;
-        SetPauseState(false);
+        SetPauseState(false, null);
     }
 
     // Update is called once per frame
@@ -231,7 +229,11 @@ public class GlobalLogicController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SetPauseState(!Pause);
+            SetPauseState(!Pause, KeyCode.Escape);
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            SetPauseState(!Pause, KeyCode.E);
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
@@ -252,10 +254,24 @@ public class GlobalLogicController : MonoBehaviour
         }
     }
 
-    public void SetPauseState(bool pauseState)
+    public void SetPauseState(bool pauseState, KeyCode? initializer)
     {
         Pause = pauseState;
-        pausePanel.SetActive(Pause);
+        pauseItem.SetActive(Pause);
+
+        switch (initializer)
+        {
+            case KeyCode.Escape:
+                pausePanel.SetActive(Pause);
+                break;
+            case KeyCode.E:
+            case null:
+                // No hay que hacer nada en estos caso.
+                break;
+            default:
+                Debug.LogWarning("Unexpected pause estate initializer: " + initializer);
+                break;
+        }
     }
 
     /// <summary>

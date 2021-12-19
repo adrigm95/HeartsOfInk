@@ -74,6 +74,7 @@
     <Compile Include="Assets\Scripts\Controller\InGame\CityController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\GlobalLogicController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TroopController.cs" />
+    <Compile Include="Assets\Scripts\Controller\InGame\TutorialController.cs" />
     <Compile Include="Assets\Scripts\Controller\InfoPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\MainMenu\FactionsPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\MainMenu\StartGameController.cs" />
@@ -114,6 +115,8 @@
     <Compile Include="Assets\Scripts\Data\ServerModels\InternalStatusCodes.cs" />
     <Compile Include="Assets\Scripts\Data\ServerModels\RequestEntryModel.cs" />
     <Compile Include="Assets\Scripts\Data\TroopModel.cs" />
+    <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialModel.cs" />
+    <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialStep.cs" />
     <Compile Include="Assets\Scripts\Data\UnitAnimation.cs" />
     <Compile Include="Assets\Scripts\Logic\AILogic.cs" />
     <Compile Include="Assets\Scripts\Logic\CombatLogic.cs" />
