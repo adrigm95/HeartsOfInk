@@ -9,5 +9,6 @@ namespace Assets.Scripts.Data.GlobalInfo
     public class GlobalInfo
     {
         public List<GlobalInfoFaction> Factions { get; set; }
+        public List<GlobalInfoBonus> Bonus { get; set; }
     }
 }

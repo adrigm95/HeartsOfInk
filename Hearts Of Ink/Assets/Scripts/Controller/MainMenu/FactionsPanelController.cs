@@ -3,7 +3,6 @@ using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.Utils;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,8 +13,8 @@ public class FactionsPanelController : MonoBehaviour
     private GlobalInfo globalInfo;
     private List<Dropdown> factions;
     public int spacing;
-    public Text description;
-    public Text bonus;
+    public Text factionDescription;
+    public Text bonusDescription;
 
     private void Start()
     {
@@ -67,7 +66,7 @@ public class FactionsPanelController : MonoBehaviour
 
         if (player.IaId == PlayerOwnerValue)
         {
-            ChangeFactionDescriptions(cbFaction, faction);
+            ChangeFactionDescriptions(faction);
         }
     }
 
@@ -75,18 +74,19 @@ public class FactionsPanelController : MonoBehaviour
     {
         if (comboOrder.value == 0)
         {
-            GlobalInfoFaction globalInfoFaction = globalInfo.Factions.Find(faction => faction.Id == comboOrder.value);
+            int comboFactionId = Convert.ToInt32(comboOrder.transform.parent.gameObject.name.Split('_')[1]);
+            GlobalInfoFaction globalInfoFaction = globalInfo.Factions.Find(faction => faction.Id == comboFactionId);
 
             QuitOtherPlayers(comboOrder);
-            ChangeFactionDescriptions(comboOrder, globalInfoFaction);
+            ChangeFactionDescriptions(globalInfoFaction);
         }
     }
 
-    private void ChangeFactionDescriptions(Dropdown comboOrder, GlobalInfoFaction faction)
+    private void ChangeFactionDescriptions(GlobalInfoFaction faction)
     {
-        // TODO: Pinta a posible bugaso
-        //int comboFactionId = Convert.ToInt32(comboOrder.transform.parent.gameObject.name.Split('_')[1]);
-        description.text = faction.Descriptions[0].Value;
+        Debug.Log("New faction:" + faction.Names[0].Value);
+        factionDescription.text = faction.Descriptions[0].Value;
+        bonusDescription.text = globalInfo.Bonus.Find(bonus => bonus.Id == faction.BonusId).Descriptions[0].Value;
     }
 
     private void QuitOtherPlayers(Dropdown comboOrder)

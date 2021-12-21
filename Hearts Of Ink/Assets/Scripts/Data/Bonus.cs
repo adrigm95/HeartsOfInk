@@ -1,5 +1,4 @@
-﻿using System;
-using Rawgen.Literals;
+﻿using Rawgen.Literals;
 
 namespace Assets.Scripts.Data
 {

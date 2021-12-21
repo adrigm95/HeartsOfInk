@@ -98,6 +98,7 @@
     <Compile Include="Assets\Scripts\Data\FactionStatistics.cs" />
     <Compile Include="Assets\Scripts\Data\GameModel.cs" />
     <Compile Include="Assets\Scripts\Data\GlobalInfo\GlobalInfo.cs" />
+    <Compile Include="Assets\Scripts\Data\GlobalInfo\GlobalInfoBonus.cs" />
     <Compile Include="Assets\Scripts\Data\GlobalInfo\GlobalInfoFaction.cs" />
     <Compile Include="Assets\Scripts\Data\Literals\BonusLiterals.cs" />
     <Compile Include="Assets\Scripts\Data\Literals\EndgameLiterals.cs" />

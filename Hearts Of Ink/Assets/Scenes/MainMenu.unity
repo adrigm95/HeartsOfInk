@@ -824,8 +824,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spacing: 35
-  description: {fileID: 1923877715}
-  bonus: {fileID: 1574561985}
+  factionDescription: {fileID: 1923877715}
+  bonusDescription: {fileID: 1574561985}
 --- !u!1 &741012065
 GameObject:
   m_ObjectHideFlags: 0
