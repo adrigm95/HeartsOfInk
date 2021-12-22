@@ -45,7 +45,10 @@ public class AILogic
 
             if (cityController.Owner != Player)
             {
-                distances.Add(index, MathUtils.ExperimentalDistance(currentPos.x, currentPos.y, cities[index].transform.position.x, cities[index].transform.position.y));
+                if (Player.Alliance == 0 || Player.Alliance != cityController.Owner.Alliance)
+                {
+                    distances.Add(index, MathUtils.ExperimentalDistance(currentPos.x, currentPos.y, cities[index].transform.position.x, cities[index].transform.position.y));
+                }
             }
         }
 

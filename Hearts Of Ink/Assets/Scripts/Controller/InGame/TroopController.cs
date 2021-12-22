@@ -61,10 +61,13 @@ public class TroopController : MonoBehaviour
         {
             if (enemyController.troopModel.Player != troopModel.Player)
             {
-                troopModel.InCombat = true;
-                enemyController.troopModel.InCombat = true;
-                combatingEnemys.Add(enemyController);
-                soundEffectsController.PlayBattleSound();
+                if (troopModel.Player.Alliance == Player.NoAlliance || enemyController.troopModel.Player.Alliance != troopModel.Player.Alliance)
+                {
+                    troopModel.InCombat = true;
+                    enemyController.troopModel.InCombat = true;
+                    combatingEnemys.Add(enemyController);
+                    soundEffectsController.PlayBattleSound();
+                }
             }
             else if (enemyController.troopModel.Units < troopModel.Units ||
                  (enemyController.troopModel.Units == troopModel.Units 

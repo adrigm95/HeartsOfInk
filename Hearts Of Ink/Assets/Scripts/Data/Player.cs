@@ -4,6 +4,7 @@ namespace Assets.Scripts.Data
 {
     public class Player
     {
+        public const byte NoAlliance = 0;
         public enum IA { PLAYER = 0, IA = 1, NEUTRAL = 2, OTHER_PLAYER = 3}
 
         public Faction Faction { get; set; }
@@ -16,9 +17,15 @@ namespace Assets.Scripts.Data
         public Color Color { get; set; }
         public byte MapSocketId { get; set; }
 
+        /// <summary>
+        /// Indica el número de alianza al que pertenece el jugador.
+        /// </summary>
+        public byte Alliance { get; set; }
+
         public Player()
         {
             Faction = new Faction();
+            Alliance = NoAlliance;
         }
     }
 }

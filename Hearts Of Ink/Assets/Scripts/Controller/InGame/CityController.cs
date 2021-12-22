@@ -71,7 +71,10 @@ public class CityController : MonoBehaviour
         {
             if (troopsInZone[0].troopModel.Player != Owner)
             {
-                ChangeOwner(troopsInZone[0].troopModel.Player);
+                if (Owner.Alliance == Player.NoAlliance || troopsInZone[0].troopModel.Player.Alliance != Owner.Alliance)
+                {
+                    ChangeOwner(troopsInZone[0].troopModel.Player);
+                }
             }
         }
         else if (troopsInZone.Count < 0)

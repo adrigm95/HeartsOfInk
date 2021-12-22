@@ -92,6 +92,7 @@ public class GlobalLogicController : MonoBehaviour
                     player.IaId = Player.IA.PLAYER;
                     player.Name = "Player";
                     player.Color = ColorUtils.BuildColorBase256(255, 0, 46);
+                    player.Alliance = 1;
                     break;
                 case 1:
                     player.IaId = Player.IA.IA;
@@ -102,6 +103,7 @@ public class GlobalLogicController : MonoBehaviour
                     player.IaId = Player.IA.IA;
                     player.Name = "Djambo";
                     player.Color = ColorUtils.BuildColorBase256(0, 234, 61);
+                    player.Alliance = 1;
                     break;
                 case 3:
                     player.IaId = Player.IA.NEUTRAL;
