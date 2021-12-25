@@ -43,6 +43,7 @@ public class StartGameController : MonoBehaviour
                 string factionId = holderNameSplitted[1];
                 string mapSocketId = holderNameSplitted[2];
                 Image btnColorFaction = holderChild.Find("btnColorFaction").GetComponent<Image>();
+                Text txtBtnAlliance = holderChild.Find("btnAlliance").Find("txtBtnAlliance").GetComponent<Text>();
                 Dropdown iaSelector = holderChild.GetComponentInChildren<Dropdown>();
 
                 player.Faction.Id = Convert.ToInt32(factionId);
@@ -51,6 +52,8 @@ public class StartGameController : MonoBehaviour
                 player.MapSocketId = Convert.ToByte(mapSocketId);
                 player.IaId = (Player.IA)(Convert.ToInt32(iaSelector.value));
                 player.Color = btnColorFaction.color;
+                player.Alliance = string.IsNullOrEmpty(txtBtnAlliance.text) ? (byte) 0 : Convert.ToByte(txtBtnAlliance.text);
+                
                 if (player.IaId == Player.IA.PLAYER)
                 {
                     player.Name = "Player";
