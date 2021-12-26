@@ -12,9 +12,9 @@ namespace Assets.Scripts.Data.Constants
         //public const string NETCoreServerUrl = "https://localhost:44383/"; //61794
 
         // Local
-        //public const string NETCoreServerUrl = "http://localhost:61794/";
+        public const string NETCoreServerUrl = "http://localhost:61794/";
 
         // DEV
-        public const string NETCoreServerUrl = "http://86.127.235.51:81/";
+        //public const string NETCoreServerUrl = "http://86.127.235.51:81/";
     }
 }

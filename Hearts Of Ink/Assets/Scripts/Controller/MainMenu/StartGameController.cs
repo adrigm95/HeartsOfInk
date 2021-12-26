@@ -2,6 +2,7 @@
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.Data.Literals;
 using Assets.Scripts.Utils;
+using NETCoreServer.Models.GameModel;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -47,11 +48,10 @@ public class StartGameController : MonoBehaviour
                 Dropdown iaSelector = holderChild.GetComponentInChildren<Dropdown>();
 
                 player.Faction.Id = Convert.ToInt32(factionId);
-                player.Faction.Bonus = new Bonus(Rawgen.Literals.LiteralsFactory.Language.es, 
-                    (Bonus.Id) globalInfo.Factions.Find(item => item.Id == player.Faction.Id).BonusId);
+                player.Faction.Bonus = new Bonus((Bonus.Id) globalInfo.Factions.Find(item => item.Id == player.Faction.Id).BonusId);
                 player.MapSocketId = Convert.ToByte(mapSocketId);
                 player.IaId = (Player.IA)(Convert.ToInt32(iaSelector.value));
-                player.Color = btnColorFaction.color;
+                player.Color = ColorUtils.GetStringByColor(btnColorFaction.color);
                 player.Alliance = string.IsNullOrEmpty(txtBtnAlliance.text) ? (byte) 0 : Convert.ToByte(txtBtnAlliance.text);
                 
                 if (player.IaId == Player.IA.PLAYER)

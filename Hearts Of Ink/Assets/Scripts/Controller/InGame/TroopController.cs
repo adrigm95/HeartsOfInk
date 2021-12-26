@@ -6,6 +6,8 @@ using System;
 using System.Linq;
 using TMPro;
 using Assets.Scripts.Logic;
+using Assets.Scripts.Utils;
+using NETCoreServer.Models.GameModel;
 
 public class TroopController : MonoBehaviour
 {
@@ -32,7 +34,7 @@ public class TroopController : MonoBehaviour
         aiLogic = globalLogic.aiLogics.Find(item => item.Player == troopModel.Player);
         unitsText.SetText(troopModel.Units.ToString());
         UpdateColliderSize();
-        unitsText.color = troopModel.Player.Color;
+        unitsText.color = ColorUtils.GetColorByString(troopModel.Player.Color);
     }
 
     // Update is called once per frame

@@ -4313,9 +4313,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09f143e1d71f4aa4fb34f559a10ea4dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startFactionLines: -50
   spacing: 35
-  description: {fileID: 5135278582474188539}
-  bonus: {fileID: 5135278582095824233}
+  factionDescription: {fileID: 5135278582474188539}
+  bonusDescription: {fileID: 5135278582095824233}
 --- !u!1 &5135278583460072849
 GameObject:
   m_ObjectHideFlags: 0

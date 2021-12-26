@@ -2,6 +2,7 @@
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.Data.Literals;
 using Assets.Scripts.Utils;
+using NETCoreServer.Models.GameModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,31 +85,31 @@ public class GlobalLogicController : MonoBehaviour
             string factionId = Convert.ToString(index);
             player.Faction.Id = Convert.ToInt32(factionId);
             player.MapSocketId = Convert.ToByte(index);
-            player.Faction.Bonus = new Bonus(Rawgen.Literals.LiteralsFactory.Language.es, Bonus.Id.None);
+            player.Faction.Bonus = new Bonus(Bonus.Id.None);
 
             switch (index)
             {
                 case 0:
                     player.IaId = Player.IA.PLAYER;
                     player.Name = "Player";
-                    player.Color = ColorUtils.BuildColorBase256(255, 0, 46);
+                    player.Color = "255,0,46";
                     player.Alliance = 1;
                     break;
                 case 1:
                     player.IaId = Player.IA.IA;
                     player.Name = "Cisneros";
-                    player.Color = ColorUtils.BuildColorBase256(88, 212, 255);
+                    player.Color = "88,212,255";
                     break;
                 case 2:
                     player.IaId = Player.IA.IA;
                     player.Name = "Djambo";
-                    player.Color = ColorUtils.BuildColorBase256(0, 234, 61);
+                    player.Color = "0,234,61";
                     player.Alliance = 1;
                     break;
                 case 3:
                     player.IaId = Player.IA.NEUTRAL;
                     player.Name = "Hamraoui";
-                    player.Color = ColorUtils.BuildColorBase256(255, 223, 0);
+                    player.Color = "255,223,0";
                     break;
             }
 

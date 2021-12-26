@@ -12,6 +12,7 @@ public class FactionsPanelController : MonoBehaviour
     private MapModel mapModel;
     private GlobalInfo globalInfo;
     private List<Dropdown> factions;
+    public int startFactionLines;
     public int spacing;
     public Text factionDescription;
     public Text bonusDescription;
@@ -47,7 +48,7 @@ public class FactionsPanelController : MonoBehaviour
         GlobalInfoFaction faction;
 
         faction = globalInfo.Factions.Find(item => item.Id == player.FactionId);
-        position = new Vector3(0, -50);
+        position = new Vector3(0, startFactionLines);
         position.y -= spacing * factions.Count;
         newObject = ((GameObject) Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
         newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + player.MapSocketId;

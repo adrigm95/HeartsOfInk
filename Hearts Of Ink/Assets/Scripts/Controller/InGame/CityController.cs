@@ -1,4 +1,6 @@
 ﻿using Assets.Scripts.Data;
+using Assets.Scripts.Utils;
+using NETCoreServer.Models.GameModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +21,7 @@ public class CityController : MonoBehaviour
         globalLogic = FindObjectOfType<GlobalLogicController>();
         SpriteRenderer = GetComponent<SpriteRenderer>();
         troopsInZone = new List<TroopController>();
-        SpriteRenderer.color = Owner.Color;
+        SpriteRenderer.color = ColorUtils.GetColorByString(Owner.Color);
     }
 
     // Update is called once per frame
@@ -112,7 +114,7 @@ public class CityController : MonoBehaviour
     private void ChangeOwner(Player newOwner)
     {
         Owner = newOwner;
-        SpriteRenderer.color = Owner.Color;
+        SpriteRenderer.color = ColorUtils.GetColorByString(Owner.Color);
         recruitmentProgress = 0;
     }
 

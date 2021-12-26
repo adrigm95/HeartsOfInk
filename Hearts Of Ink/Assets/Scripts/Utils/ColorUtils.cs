@@ -27,5 +27,10 @@ namespace Assets.Scripts.Utils
 
             return BuildColorBase256(float.Parse(splittedString[0]), float.Parse(splittedString[1]), float.Parse(splittedString[2]));
         }
+
+        public static string GetStringByColor(Color color)
+        {
+            return Convert.ToString(color.r * 255) + "," + Convert.ToString(color.g * 255) + "," + Convert.ToString(color.b * 255);
+        }
     }
 }
