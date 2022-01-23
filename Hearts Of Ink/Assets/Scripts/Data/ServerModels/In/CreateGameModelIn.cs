@@ -13,6 +13,6 @@ namespace NETCoreServer.Models.In
         public string name { get; set; }
         public bool isPublic { get; set; }
         public string playerName { get; set; }
-        public string mapPath { get; set; }
+        public string mapName { get; set; }
     }
 }

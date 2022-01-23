@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Data;
 using Assets.Scripts.Data.GlobalInfo;
+using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
 using System;
 using System.Collections.Generic;
@@ -25,11 +26,8 @@ public class FactionsPanelController : MonoBehaviour
 
     public void LoadMap()
     {
-        string mapPath = Application.streamingAssetsPath + "/MapDefinitions/0_Cartarena_v0_3_0.json";
-        string globalInfoPath = Application.streamingAssetsPath + "/MapDefinitions/_GlobalInfo.json";
-
-        mapModel = JsonCustomUtils<MapModel>.ReadObjectFromFile(mapPath);
-        globalInfo = JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
+        mapModel = MapDAC.LoadMapInfo("0_Cartarena_v0_3_0");
+        globalInfo = MapDAC.LoadGlobalMapInfo();
 
         foreach (MapPlayerModel player in mapModel.Players)
         {

@@ -12,7 +12,7 @@ namespace NETCoreServer.Models
         public string name { get; set; }
         public string gameKey { get; set; }
         public byte playersInside { get; set; }
-        public string mapDefinitionPath { get; set; }
+        public string mapName { get; set; }
         public short ping { get; set; }
         public bool isPublic { get; set; }
 
@@ -23,7 +23,7 @@ namespace NETCoreServer.Models
                 name = createGameModelIn.name,
                 gameKey = createGameModelOut.gameKey,
                 playersInside = 1,
-                mapDefinitionPath = createGameModelIn.mapPath,
+                mapName = createGameModelIn.mapName,
                 isPublic = createGameModelIn.isPublic
             };
         }

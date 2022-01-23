@@ -123,6 +123,8 @@
     <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialModel.cs" />
     <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialStep.cs" />
     <Compile Include="Assets\Scripts\Data\UnitAnimation.cs" />
+    <Compile Include="Assets\Scripts\DataAccess\MapDAC.cs" />
+    <Compile Include="Assets\Scripts\DataAccess\WebServiceCaller.cs" />
     <Compile Include="Assets\Scripts\Logic\AILogic.cs" />
     <Compile Include="Assets\Scripts\Logic\CombatLogic.cs" />
     <Compile Include="Assets\Scripts\Rawgen\FPSMetrics.cs" />
@@ -136,7 +138,6 @@
     <Compile Include="Assets\Scripts\Utils\PanelUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\RandomManagement.cs" />
     <Compile Include="Assets\Scripts\Utils\VectorUtils.cs" />
-    <Compile Include="Assets\Scripts\Utils\WebServiceCaller.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />

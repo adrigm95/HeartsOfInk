@@ -10,13 +10,13 @@ namespace NETCoreServer.Models
         public enum GameType { Single, MultiplayerClient, MultiplayerHost}
 
         public List<Player> Players { get; set;}
-        public string MapDefinitionPath { get; set; }
+        public string MapName { get; set; }
         public GameType Gametype { get; set; }
 
-        public GameModel(string mapDefinitionPath)
+        public GameModel(string mapName)
         {
             Players = new List<Player>();
-            MapDefinitionPath = mapDefinitionPath;
+            MapName = mapName;
         }
     }
 }

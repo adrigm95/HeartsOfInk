@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Data;
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.Data.Literals;
+using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
 using NETCoreServer.Models;
 using System;
@@ -76,7 +77,7 @@ public class GlobalLogicController : MonoBehaviour
 
     private GameModel GetMockedGameModel()
     {
-        GameModel gameModel = new GameModel(Application.streamingAssetsPath + "/MapDefinitions/0_Cartarena_v0_3_0.json");
+        GameModel gameModel = new GameModel("0_Cartarena_v0_3_0");
         gameModel.Gametype = GameModel.GameType.Single;
 
         for (int index = 0; index < 4; index++)
@@ -137,9 +138,7 @@ public class GlobalLogicController : MonoBehaviour
 
     private void AwakeMap()
     {
-        string mapPath = Application.streamingAssetsPath + "/MapDefinitions/0_Cartarena_v0_3_0.json";
-        string globalInfoPath = Application.streamingAssetsPath + "/MapDefinitions/_GlobalInfo.json";
-        MapModel mapModel = JsonCustomUtils<MapModel>.ReadObjectFromFile(mapPath);
+        MapModel mapModel = MapDAC.LoadMapInfo("0_Cartarena_v0_3_0");
 
         foreach (MapCityModel city in mapModel.Cities)
         {

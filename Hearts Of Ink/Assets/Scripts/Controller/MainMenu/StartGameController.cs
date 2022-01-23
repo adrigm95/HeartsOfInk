@@ -1,11 +1,8 @@
 ﻿using Assets.Scripts.Data;
 using Assets.Scripts.Data.GlobalInfo;
-using Assets.Scripts.Data.Literals;
 using Assets.Scripts.Utils;
 using NETCoreServer.Models;
-using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,7 +19,7 @@ public class StartGameController : MonoBehaviour
 
     public void StartGame()
     {
-        GameModel gameModel = new GameModel(Application.streamingAssetsPath + "/MapDefinitions/0_Cartarena_v0_3_0.json");
+        GameModel gameModel = new GameModel("0_Cartarena_v0_3_0");
         gameModel.Gametype = GameModel.GameType.Single;
         
         GetPlayerOptions(gameModel);

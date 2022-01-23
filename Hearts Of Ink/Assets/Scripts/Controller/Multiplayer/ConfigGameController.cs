@@ -1,9 +1,7 @@
 ﻿using Assets.Scripts.Data.ServerModels.Constants;
-using Assets.Scripts.Utils;
+using Assets.Scripts.DataAccess;
 using NETCoreServer.Models;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ConfigGameController : MonoBehaviour

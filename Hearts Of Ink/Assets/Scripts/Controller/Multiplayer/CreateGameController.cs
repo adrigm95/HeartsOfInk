@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Data.ServerModels.Constants;
-using Assets.Scripts.Utils;
+using Assets.Scripts.DataAccess;
 using NETCoreServer.Models;
 using NETCoreServer.Models.In;
 using NETCoreServer.Models.Out;
@@ -35,7 +35,7 @@ public class CreateGameController : MonoBehaviour
         {
             isPublic = !checkIsPrivate.isOn,
             name = gameNameText.text,
-            mapPath = "TODO",
+            mapName = "TODO",
             playerName = creatorNick.text
         };
 
