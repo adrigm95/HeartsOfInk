@@ -2,7 +2,7 @@
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.Data.Literals;
 using Assets.Scripts.Utils;
-using NETCoreServer.Models.GameModel;
+using NETCoreServer.Models;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

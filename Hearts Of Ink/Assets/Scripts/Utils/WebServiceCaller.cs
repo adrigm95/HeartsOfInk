@@ -15,13 +15,23 @@ namespace Assets.Scripts.Utils
 {
     public enum Method { GET, PUT, POST, DELETE }
 
+    public class WebServiceCaller<S>
+    {
+        public async Task<HOIResponseModel<S>> GenericWebServiceCaller(Method method, string targetRequest)
+        {
+            WebServiceCaller<object, S> webServiceCaller = new WebServiceCaller<object, S>();
+
+            return await webServiceCaller.GenericWebServiceCaller(method, targetRequest, null);
+        }
+    }
+
     public class WebServiceCaller<T, S>
     {
         DataContractJsonSerializer sendSerializer = new DataContractJsonSerializer(typeof(T));
         DataContractJsonSerializer receiveSerializer = new DataContractJsonSerializer(typeof(HOIResponseModel<S>));
 
         /// <summary>
-        /// 
+        /// Método genérico para llamadas a API.
         /// </summary>
         /// <param name="requestBody"> Request body to serialize as json. </param>
         /// <param name="targetRequest"> Value like "api/Home/GetData". </param>

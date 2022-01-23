@@ -7,7 +7,7 @@ using System.Linq;
 using TMPro;
 using Assets.Scripts.Logic;
 using Assets.Scripts.Utils;
-using NETCoreServer.Models.GameModel;
+using NETCoreServer.Models;
 
 public class TroopController : MonoBehaviour
 {

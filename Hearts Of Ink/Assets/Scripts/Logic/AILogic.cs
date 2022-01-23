@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Data;
-using NETCoreServer.Models.GameModel;
+using NETCoreServer.Models;
 using Rawgen.Math.Logic.Utils;
 using System.Collections.Generic;
 using System.Linq;

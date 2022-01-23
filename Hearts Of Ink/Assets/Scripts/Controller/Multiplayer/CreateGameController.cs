@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.Utils;
+﻿using Assets.Scripts.Data.ServerModels.Constants;
+using Assets.Scripts.Utils;
 using NETCoreServer.Models;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using NETCoreServer.Models.In;
+using NETCoreServer.Models.Out;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,9 +11,10 @@ public class CreateGameController : MonoBehaviour
     private ConfigGameController configGameController;
     public GamesListController gamesListPanel;
     public Button btnCreateGame;
-    public Text gameNameText;
-    public Text creatorNick;
+    public InputField gameNameText;
+    public InputField creatorNick;
     public GameObject configGamePanel;
+    public Toggle checkIsPrivate;
 
     void Start()
     {
@@ -27,22 +28,26 @@ public class CreateGameController : MonoBehaviour
 
     public async void CreateGame()
     {
-        WebServiceCaller<CreateGameModel, BasicGameInfo> wsCaller = new WebServiceCaller<CreateGameModel, BasicGameInfo>();
-        HOIResponseModel<BasicGameInfo> response;
+        WebServiceCaller<CreateGameModelIn, CreateGameModelOut> wsCaller = new WebServiceCaller<CreateGameModelIn, CreateGameModelOut>();
+        HOIResponseModel<CreateGameModelOut> response;
 
-        CreateGameModel newGame = new CreateGameModel
+        CreateGameModelIn newGame = new CreateGameModelIn
         {
-            isPublic = true,
-            name = gameNameText.text
+            isPublic = !checkIsPrivate.isOn,
+            name = gameNameText.text,
+            mapPath = "TODO",
+            playerName = creatorNick.text
         };
 
-        response = await wsCaller.GenericWebServiceCaller(Method.POST, "api/Game", newGame);
+        response = await wsCaller.GenericWebServiceCaller(Method.POST, LobbyHOIControllers.CreateGame, newGame);
 
         if (response.internalResultCode == InternalStatusCodes.OKCode)
         {
+            BasicGameInfo basicGameInfo = BasicGameInfo.FromCreateGameService(newGame, response.serviceResponse);
+
             configGameController.gameObject.SetActive(true);
-            configGameController.GameCreatedByHost(response.serviceResponse);
-            gamesListPanel.AddGameToPanel(response.serviceResponse, true);
+            configGameController.GameCreatedByHost(response.serviceResponse.gameKey);
+            gamesListPanel.AddGameToPanel(basicGameInfo, true);
             EnableDisableCreateGame(false);
             configGamePanel.SetActive(true);
             AddPlayerToDropdowns();

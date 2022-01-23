@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NETCoreServer.Models.GameModel
+namespace NETCoreServer.Models
 {
     /// <summary>
     /// Valores de configuración de la partida.

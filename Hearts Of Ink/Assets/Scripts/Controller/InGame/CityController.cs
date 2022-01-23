@@ -1,6 +1,6 @@
 ﻿using Assets.Scripts.Data;
 using Assets.Scripts.Utils;
-using NETCoreServer.Models.GameModel;
+using NETCoreServer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

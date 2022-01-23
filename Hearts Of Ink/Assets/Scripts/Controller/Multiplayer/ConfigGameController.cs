@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Utils;
+﻿using Assets.Scripts.Data.ServerModels.Constants;
+using Assets.Scripts.Utils;
 using NETCoreServer.Models;
 using System;
 using System.Collections;
@@ -22,7 +23,7 @@ public class ConfigGameController : MonoBehaviour
     /// </summary>
     private float lastAdviceToServer;
 
-    private BasicGameInfo basicGameInfo;
+    private string gameKey;
 
     // Start is called before the first frame update
     void Start()
@@ -43,9 +44,9 @@ public class ConfigGameController : MonoBehaviour
         }
     }
 
-    public void GameCreatedByHost(BasicGameInfo newGame)
+    public void GameCreatedByHost(string gameKey)
     {
-        basicGameInfo = newGame;
+        this.gameKey = gameKey;
     }
 
     public async void NotifyActive()
@@ -55,11 +56,11 @@ public class ConfigGameController : MonoBehaviour
 
         try
         {
-            response = await wsCaller.GenericWebServiceCaller(Method.POST, "api/NotifyActive", basicGameInfo.gameKey);
+            response = await wsCaller.GenericWebServiceCaller(Method.POST, LobbyHOIControllers.NotifyActive, gameKey);
 
             if (!response.serviceResponse)
             {
-                Debug.LogWarning("Server response false on 'NotifyActive' service call.");
+                Debug.LogWarning("Server response false on " + LobbyHOIControllers.NotifyActive + " service call.");
             }
         }
         catch (Exception ex)

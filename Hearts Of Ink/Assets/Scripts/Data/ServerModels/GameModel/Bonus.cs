@@ -1,4 +1,4 @@
-﻿namespace NETCoreServer.Models.GameModel
+﻿namespace NETCoreServer.Models
 {
     public class Bonus
     {

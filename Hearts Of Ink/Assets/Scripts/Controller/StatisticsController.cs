@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Data;
-using NETCoreServer.Models.GameModel;
+using NETCoreServer.Models;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

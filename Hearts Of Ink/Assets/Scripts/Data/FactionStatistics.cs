@@ -1,4 +1,4 @@
-﻿using NETCoreServer.Models.GameModel;
+﻿using NETCoreServer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

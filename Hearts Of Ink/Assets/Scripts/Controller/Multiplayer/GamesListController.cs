@@ -1,5 +1,8 @@
-﻿using Assets.Scripts.Utils;
+﻿using Assets.Scripts.Data.ServerModels.Constants;
+using Assets.Scripts.Utils;
 using NETCoreServer.Models;
+using NETCoreServer.Models.In;
+using NETCoreServer.Models.Out;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -60,10 +63,10 @@ public class GamesListController : MonoBehaviour
 
     private async void LoadGames()
     {
-        WebServiceCaller<CreateGameModel, List<BasicGameInfo>> wsCaller = new WebServiceCaller<CreateGameModel, List<BasicGameInfo>>();
+        WebServiceCaller<List<BasicGameInfo>> wsCaller = new WebServiceCaller<List<BasicGameInfo>>();
         HOIResponseModel<List<BasicGameInfo>> response;
 
-        response = await wsCaller.GenericWebServiceCaller(Method.GET, "api/PublicGames", null);
+        response = await wsCaller.GenericWebServiceCaller(Method.GET, LobbyHOIControllers.PublicGames);
 
         switch (response.internalResultCode)
         {
@@ -121,15 +124,15 @@ public class GamesListController : MonoBehaviour
 
     public async void RequestEntryGame()
     {
-        WebServiceCaller<RequestEntryModel, BasicGameInfo> wsCaller = new WebServiceCaller<RequestEntryModel, BasicGameInfo>();
-        HOIResponseModel<BasicGameInfo> response;
-        RequestEntryModel requestEntryModel = new RequestEntryModel();
+        WebServiceCaller<RequestEntryModelIn, RequestEntryModelOut> wsCaller = new WebServiceCaller<RequestEntryModelIn, RequestEntryModelOut>();
+        HOIResponseModel<RequestEntryModelOut> response;
+        RequestEntryModelIn requestEntryModel = new RequestEntryModelIn();
 
         requestEntryModel.gameKey = gameItemSelected.gameObject.name;
         requestEntryModel.isPublic = true;
         requestEntryModel.playerName = "PacoPepe";
 
-        response = await wsCaller.GenericWebServiceCaller(Method.POST, "api/RequestEntry", requestEntryModel);
+        response = await wsCaller.GenericWebServiceCaller(Method.POST, LobbyHOIControllers.RequestEntry, requestEntryModel);
 
         if (response.internalResultCode == InternalStatusCodes.OKCode)
         {
