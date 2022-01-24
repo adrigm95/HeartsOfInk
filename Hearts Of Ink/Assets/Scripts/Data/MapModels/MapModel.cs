@@ -12,9 +12,30 @@ namespace Assets.Scripts.Data
         public short MapId { get; set; }
 
         /// <summary>
+        /// Nombre del fichero de definición del mapa. No contiene la extensión (.json).
+        /// </summary>
+        public string DefinitionName { get; set; }
+
+        /// <summary>
+        /// Nombre de mapa a mostrar. 
+        /// </summary>
+        [Obsolete("Modificar cuando llegue la US de multiidioma")]
+        public string DisplayName { get; set; }
+
+        /// <summary>
         /// Ruta relativa a la carpeta de StreamingAssets
         /// </summary>
         public string SpritePath { get; set; }
+
+        /// <summary>
+        /// Indica si la configuración de mapa cargada se puede utilizar para partidas multijugador.
+        /// </summary>
+        public bool AvailableForMultiplayer { get; set; }
+
+        /// <summary>
+        /// Indica si la configuración de mapa cargada se puede utilizar para partidas singleplayer.
+        /// </summary>
+        public bool AvailableForSingleplayer { get; set; }
 
         public List<MapPlayerModel> Players { get; set; }
 

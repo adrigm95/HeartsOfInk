@@ -1,17 +1,21 @@
-﻿using Assets.Scripts.Data.ServerModels.Constants;
+﻿using Assets.Scripts.Data;
+using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
 using NETCoreServer.Models;
 using NETCoreServer.Models.In;
 using NETCoreServer.Models.Out;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CreateGameController : MonoBehaviour
 {
+    private List<MapModel> availableMaps;
     private ConfigGameController configGameController;
     public GamesListController gamesListPanel;
     public Button btnCreateGame;
     public InputField gameNameText;
+    public Dropdown cbMaps;
     public InputField creatorNick;
     public GameObject configGamePanel;
     public Toggle checkIsPrivate;
@@ -19,6 +23,9 @@ public class CreateGameController : MonoBehaviour
     void Start()
     {
         configGameController = configGamePanel.GetComponent<ConfigGameController>();
+        availableMaps = MapDAC.GetAvailableMaps(true);
+        availableMaps.ForEach(map => cbMaps.options.Add(new Dropdown.OptionData(map.DisplayName)));
+        cbMaps.RefreshShownValue();
     }
 
     private void Update()
@@ -35,7 +42,7 @@ public class CreateGameController : MonoBehaviour
         {
             isPublic = !checkIsPrivate.isOn,
             name = gameNameText.text,
-            mapName = "TODO",
+            mapName = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).DefinitionName,
             playerName = creatorNick.text
         };
 

@@ -828,6 +828,7 @@ MonoBehaviour:
   spacing: 35
   factionDescription: {fileID: 1923877715}
   bonusDescription: {fileID: 1574561985}
+  cbMaps: {fileID: 819022080}
 --- !u!1 &741012065
 GameObject:
   m_ObjectHideFlags: 0
@@ -1258,13 +1259,7 @@ MonoBehaviour:
   m_ItemImage: {fileID: 0}
   m_Value: 0
   m_Options:
-    m_Options:
-    - m_Text: Option A
-      m_Image: {fileID: 0}
-    - m_Text: Option B
-      m_Image: {fileID: 0}
-    - m_Text: Option C
-      m_Image: {fileID: 0}
+    m_Options: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

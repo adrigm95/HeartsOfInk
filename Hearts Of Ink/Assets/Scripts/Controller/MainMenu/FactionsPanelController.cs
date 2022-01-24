@@ -13,20 +13,27 @@ public class FactionsPanelController : MonoBehaviour
     private MapModel mapModel;
     private GlobalInfo globalInfo;
     private List<Dropdown> factions;
+    private List<MapModel> availableMaps;
     public int startFactionLines;
     public int spacing;
     public Text factionDescription;
     public Text bonusDescription;
+    public Dropdown cbMaps;
 
     private void Start()
     {
         factions = new List<Dropdown>();
+        availableMaps = MapDAC.GetAvailableMaps(false);
+        availableMaps.ForEach(map => cbMaps.options.Add(new Dropdown.OptionData(map.DisplayName)));
+        cbMaps.RefreshShownValue();
         LoadMap();
     }
 
     public void LoadMap()
     {
-        mapModel = MapDAC.LoadMapInfo("0_Cartarena_v0_3_0");
+        //"0_Cartarena_v0_3_0";
+        Debug.Log("ItemText: " + cbMaps.itemText.text);
+        mapModel = MapDAC.LoadMapInfo(availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).DefinitionName);
         globalInfo = MapDAC.LoadGlobalMapInfo();
 
         foreach (MapPlayerModel player in mapModel.Players)
