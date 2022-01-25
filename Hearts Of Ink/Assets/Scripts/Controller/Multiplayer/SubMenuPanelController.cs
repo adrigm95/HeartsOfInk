@@ -4,8 +4,20 @@ using UnityEngine;
 
 public class SubMenuPanelController : MonoBehaviour
 {
+    public enum SubMenuPanels { PublicGames = 0, JoinGame = 1, CreateGame = 2}
+
     private float width;
     private RectTransform rectTransform;
+    private GameObject activePanel;
+
+    [SerializeField]
+    private GameObject publicGames;
+
+    [SerializeField]
+    private GameObject joinGame;
+
+    [SerializeField]
+    private GameObject createGame;
 
     public GamesListController gamesList;
     public GameObject options;
@@ -23,6 +35,41 @@ public class SubMenuPanelController : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void ActivatePanel(int subMenuPanel)
+    {
+        switch ((SubMenuPanels) subMenuPanel)
+        {
+            case SubMenuPanels.PublicGames:
+                ActivatePanel(publicGames);
+                break;
+            case SubMenuPanels.JoinGame:
+                ActivatePanel(joinGame);
+                break;
+            case SubMenuPanels.CreateGame:
+                ActivatePanel(createGame);
+                break;
+            default:
+                Debug.LogError("[Activate Panel] Unexpected panel: " + subMenuPanel);
+                break;
+        }
+    }
+
+    private void ActivatePanel(GameObject panelObject)
+    {
+        if (activePanel == null)
+        {
+            ToggleVisibility();
+            activePanel = panelObject;
+            panelObject.SetActive(true);
+        }
+        else if (activePanel != panelObject)
+        {
+            activePanel.SetActive(false);
+            activePanel = panelObject;
+            panelObject.SetActive(true);
+        }
     }
 
     public void ToggleVisibility()

@@ -12,6 +12,8 @@ public class CreateGameController : MonoBehaviour
 {
     private List<MapModel> availableMaps;
     private ConfigGameController configGameController;
+    [SerializeField]
+    private InfoPanelController infoPanelController;
     public GamesListController gamesListPanel;
     public Button btnCreateGame;
     public InputField gameNameText;
@@ -58,6 +60,10 @@ public class CreateGameController : MonoBehaviour
             EnableDisableCreateGame(false);
             configGamePanel.SetActive(true);
             AddPlayerToDropdowns();
+        }
+        else
+        {
+            infoPanelController.DisplayMessage("Unexpected error", "Unexpected error on join game: " + response.internalResultCode);
         }
     }
 

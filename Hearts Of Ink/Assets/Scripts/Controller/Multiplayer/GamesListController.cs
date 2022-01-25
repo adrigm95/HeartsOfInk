@@ -7,6 +7,7 @@ using NETCoreServer.Models.Out;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class GamesListController : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class GamesListController : MonoBehaviour
     public Vector2 nextItemPosition;
     public float MinifiedSize;
     public float OneGreatAndFreeSize;
-    public ConfigGameController configGameController;
+    public JoinGameController joinGameController;
     public InfoPanelController infoPanelController;
 
     // Start is called before the first frame update
@@ -125,23 +126,6 @@ public class GamesListController : MonoBehaviour
 
     public async void RequestEntryGame()
     {
-        WebServiceCaller<RequestEntryModelIn, RequestEntryModelOut> wsCaller = new WebServiceCaller<RequestEntryModelIn, RequestEntryModelOut>();
-        HOIResponseModel<RequestEntryModelOut> response;
-        RequestEntryModelIn requestEntryModel = new RequestEntryModelIn();
-
-        requestEntryModel.gameKey = gameItemSelected.gameObject.name;
-        requestEntryModel.isPublic = true;
-        requestEntryModel.playerName = "PacoPepe";
-
-        response = await wsCaller.GenericWebServiceCaller(Method.POST, LobbyHOIControllers.RequestEntry, requestEntryModel);
-
-        if (response.internalResultCode == InternalStatusCodes.OKCode)
-        {
-            configGameController.gameObject.SetActive(true);
-        }
-        else
-        {
-            Debug.LogWarning("[RequestEntryGame] Unexpected result code: " + response.internalResultCode);
-        }
+        await Task.Run(() => joinGameController.RequestEntryGame(gameItemSelected.gameObject.name, true));
     }
 }

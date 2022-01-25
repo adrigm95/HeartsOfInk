@@ -13,7 +13,7 @@ public class InfoPanelController : MonoBehaviour
     {
         this.tutorialController = tutorialController;
         this.closeOnAccept = closeOnAccept;
-        DisplayMessage(title, content);
+        DisplayMsg(title, content);
     }
 
     public void DisplayDecision(TutorialController tutorialController, string title, string content, bool closeOnAccept)
@@ -21,10 +21,22 @@ public class InfoPanelController : MonoBehaviour
         this.tutorialController = tutorialController;
         this.closeOnAccept = closeOnAccept;
         cancel.gameObject.SetActive(true);
-        DisplayMessage(title, content);
+        DisplayMsg(title, content);
+    }
+
+    public void DisplayMessage(string title, string content, bool closeOnAccept)
+    {
+        this.closeOnAccept = closeOnAccept;
+        DisplayMsg(title, content);
     }
 
     public void DisplayMessage(string title, string content)
+    {
+        closeOnAccept = true;
+        DisplayMsg(title, content);
+    }
+
+    private void DisplayMsg(string title, string content)
     {
         txtTitle.text = title;
         txtContent.text = content;
