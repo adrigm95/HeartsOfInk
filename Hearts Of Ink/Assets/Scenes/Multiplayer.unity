@@ -6583,7 +6583,6 @@ GameObject:
   - component: {fileID: 5135278583319347479}
   - component: {fileID: 5135278583319347561}
   - component: {fileID: 5135278583319347560}
-  - component: {fileID: 5135278583319347562}
   - component: {fileID: 5135278583319347480}
   m_Layer: 5
   m_Name: configGamePanel
@@ -6615,7 +6614,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -10, y: 0}
-  m_SizeDelta: {x: 300, y: -200}
+  m_SizeDelta: {x: 350, y: -200}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &5135278583319347479
 MonoBehaviour:
@@ -6643,6 +6642,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b787d18b53f2984faefa4c5720c0736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startLines: -45
+  spacing: 35
+  factionDescription: {fileID: 5135278582474188539}
+  bonusDescription: {fileID: 5135278582095824233}
 --- !u!114 &5135278583319347560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6680,23 +6683,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5135278583319347477}
   m_CullTransparentMesh: 0
---- !u!114 &5135278583319347562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5135278583319347477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09f143e1d71f4aa4fb34f559a10ea4dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startFactionLines: -50
-  spacing: 35
-  factionDescription: {fileID: 5135278582474188539}
-  bonusDescription: {fileID: 5135278582095824233}
-  cbMaps: {fileID: 0}
 --- !u!1 &5135278583460072849
 GameObject:
   m_ObjectHideFlags: 0

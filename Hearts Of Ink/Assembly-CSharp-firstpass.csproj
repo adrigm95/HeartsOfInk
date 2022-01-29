@@ -254,6 +254,9 @@
     <Reference Include="ASCUtility">
       <HintPath>D:/Adrian/Repositorios/HeartsOfInk/Hearts Of Ink/Assets/Plugins/Rawgen/Libraries/ASCUtility.dll</HintPath>
     </Reference>
+    <Reference Include="LobbyHOIServer.Models">
+      <HintPath>D:/Adrian/Repositorios/HeartsOfInk/Hearts Of Ink/Assets/Plugins/Rawgen/Libraries/LobbyHOIServer.Models.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>D:/Adrian/Repositorios/HeartsOfInk/Hearts Of Ink/Assets/Plugins/Rawgen/Libraries/Newtonsoft.Json.dll</HintPath>
     </Reference>

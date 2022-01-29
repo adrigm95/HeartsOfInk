@@ -35,7 +35,7 @@ public class GamesListController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //TODO: Recargar la lista cada cierto tiempo.
     }
 
     /// <summary>
@@ -55,6 +55,9 @@ public class GamesListController : MonoBehaviour
         //rectTransform.sizeDelta = new Vector2(width, SizeOpen);
     }
 
+    /// <summary>
+    /// Necesario para recargar la lista (Si todavia no tiene referencias es porque es a futuro, NO BORRAR).
+    /// </summary>
     private void CleanList()
     {
         foreach (Transform child in transform)

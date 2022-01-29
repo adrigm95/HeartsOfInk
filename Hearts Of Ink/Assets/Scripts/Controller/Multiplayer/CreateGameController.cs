@@ -54,9 +54,7 @@ public class CreateGameController : MonoBehaviour
         {
             BasicGameInfo basicGameInfo = BasicGameInfo.FromCreateGameService(newGame, response.serviceResponse);
 
-            configGameController.gameObject.SetActive(true);
-            configGameController.GameCreatedByHost(response.serviceResponse.gameKey);
-            gamesListPanel.AddGameToPanel(basicGameInfo, true);
+            configGameController.GameCreatedByHost(response.serviceResponse.gameKey, newGame.mapName);
             EnableDisableCreateGame(false);
             configGamePanel.SetActive(true);
             AddPlayerToDropdowns();

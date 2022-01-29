@@ -108,18 +108,6 @@
     <Compile Include="Assets\Scripts\Data\MapModels\MapPlayerModel.cs" />
     <Compile Include="Assets\Scripts\Data\MapModels\MapTroopModel.cs" />
     <Compile Include="Assets\Scripts\Data\SelectionModel.cs" />
-    <Compile Include="Assets\Scripts\Data\ServerModels\BasicGameInfo.cs" />
-    <Compile Include="Assets\Scripts\Data\ServerModels\Constants\InternalStatusCodes.cs" />
-    <Compile Include="Assets\Scripts\Data\ServerModels\Constants\LobbyHOIControllers.cs" />
-    <Compile Include="Assets\Scripts\Data\ServerModels\GameModel\Bonus.cs" />
-    <Compile Include="Assets\Scripts\Data\ServerModels\GameModel\Faction.cs" />
-    <Compile Include="Assets\Scripts\Data\ServerModels\GameModel\GameModel.cs" />
-    <Compile Include="Assets\Scripts\Data\ServerModels\GameModel\Player.cs" />
-    <Compile Include="Assets\Scripts\Data\ServerModels\HOIResponseModel.cs" />
-    <Compile Include="Assets\Scripts\Data\ServerModels\In\CreateGameModelIn.cs" />
-    <Compile Include="Assets\Scripts\Data\ServerModels\In\RequestEntryModelIn.cs" />
-    <Compile Include="Assets\Scripts\Data\ServerModels\Out\CreateGameModelOut.cs" />
-    <Compile Include="Assets\Scripts\Data\ServerModels\Out\RequestEntryModelOut.cs" />
     <Compile Include="Assets\Scripts\Data\TroopModel.cs" />
     <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialModel.cs" />
     <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialStep.cs" />
@@ -383,6 +371,9 @@
     </Reference>
     <Reference Include="ASCUtility">
       <HintPath>D:/Adrian/Repositorios/HeartsOfInk/Hearts Of Ink/Assets/Plugins/Rawgen/Libraries/ASCUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="LobbyHOIServer.Models">
+      <HintPath>D:/Adrian/Repositorios/HeartsOfInk/Hearts Of Ink/Assets/Plugins/Rawgen/Libraries/LobbyHOIServer.Models.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>D:/Adrian/Repositorios/HeartsOfInk/Hearts Of Ink/Assets/Plugins/Rawgen/Libraries/Newtonsoft.Json.dll</HintPath>

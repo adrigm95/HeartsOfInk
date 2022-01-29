@@ -20,17 +20,25 @@ namespace Assets.Scripts.DataAccess
             MapModel result;
             string mapPath;
 
-            if (mapName.EndsWith(".json"))
+            try
             {
-                mapPath = mapName;
-            }
-            else
-            {
-                mapPath = Application.streamingAssetsPath + "/MapDefinitions/" + mapName + ".json";
-            }
+                if (mapName.EndsWith(".json"))
+                {
+                    mapPath = mapName;
+                }
+                else
+                {
+                    mapPath = Application.streamingAssetsPath + "/MapDefinitions/" + mapName + ".json";
+                }
 
-            result = JsonCustomUtils<MapModel>.ReadObjectFromFile(mapPath);
-            result.DefinitionName = mapName;
+                result = JsonCustomUtils<MapModel>.ReadObjectFromFile(mapPath);
+                result.DefinitionName = mapName;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Error trying to load map '" + mapName + "': " + ex.Message);
+                throw;
+            }
 
             return result;
         }

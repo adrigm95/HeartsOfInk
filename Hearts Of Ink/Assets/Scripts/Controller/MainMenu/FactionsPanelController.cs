@@ -88,7 +88,6 @@ public class FactionsPanelController : MonoBehaviour
         }
     }
 
-
     private void ChangeFactionDescriptions(GlobalInfoFaction faction)
     {
         Debug.Log("New faction:" + faction.Names[0].Value);
