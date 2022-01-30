@@ -3,6 +3,7 @@ using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
+using LobbyHOIServer.Models.Models;
 using NETCoreServer.Models;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,7 @@ public class ConfigGameController : MonoBehaviour
     public int spacing;
     public Text factionDescription;
     public Text bonusDescription;
+    public InputField playerName;
 
     // Start is called before the first frame update
     void Start()
@@ -59,7 +61,7 @@ public class ConfigGameController : MonoBehaviour
     {
         this.gameObject.SetActive(true);
         this.gameKey = gameKey;
-        LoadMap(mapName);
+        LoadConfigGame(null, mapName);
     }
 
     public async void NotifyActive()
@@ -82,48 +84,76 @@ public class ConfigGameController : MonoBehaviour
         }
     }
 
-    public void LoadMap(string mapName)
+    public void LoadConfigGame(List<ConfigLineModel> configLines, string mapName)
     {
         mapModel = MapDAC.LoadMapInfo(mapName);
         globalInfo = MapDAC.LoadGlobalMapInfo();
         factions = new List<Dropdown>();
 
-        foreach (MapPlayerModel player in mapModel.Players)
+        if (configLines == null)
         {
-            LoadFactionLine(player);
+            configLines = LoadConfigLinesFromMap();
+            configLines[0].PlayerName = playerName.text;
+        }
+
+        //TODO: Cargar combos de facciones desde mapa.
+
+        for (int index = 0; index < configLines.Count; index++)
+        {
+            LoadFactionLine(configLines[index], index);
         }
     }
 
-    public void LoadFactionLine(MapPlayerModel player)
+    private List<ConfigLineModel> LoadConfigLinesFromMap()
+    {
+        List<ConfigLineModel> configLines = new List<ConfigLineModel>();
+
+        foreach (MapPlayerModel player in mapModel.Players)
+        {
+            configLines.Add(new ConfigLineModel()
+            {
+                Color = player.Color,
+                FactionId = player.FactionId,
+                MapSocketId = player.MapSocketId,
+                PlayerName = string.Empty,
+                PlayerType = Player.IA.PLAYER
+            });
+        }
+
+        return configLines;
+    }
+
+    public void LoadFactionLine(ConfigLineModel configLine, int index)
     {
         string prefabPath = "Prefabs/fileFactionMultiplayer";
         Transform newObject;
         Vector3 position;
-        Dropdown cbFaction;
+        Dropdown cbPlayerType;
         Image btnColorFaction;
+        Text txtPlayerName;
         GlobalInfoFaction faction;
 
-        faction = globalInfo.Factions.Find(item => item.Id == player.FactionId);
+        faction = globalInfo.Factions.Find(item => item.Id == configLine.FactionId);
         position = new Vector3(0, startLines);
-        position.y -= spacing * factions.Count;
+        position.y -= spacing * index;
         newObject = ((GameObject)Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
-        newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + player.MapSocketId;
+        newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + configLine.MapSocketId;
         newObject.SetParent(this.transform, false);
 
-        cbFaction = newObject.Find("cbFaction").GetComponent<Dropdown>();
+        cbPlayerType = newObject.Find("cbPlayerType").GetComponent<Dropdown>();
         btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
 
-        cbFaction.value = player.IaId;
-        cbFaction.onValueChanged.AddListener(delegate { OnValueChange(cbFaction); });
-        btnColorFaction.color = ColorUtils.GetColorByString(player.Color);
+        cbPlayerType.value = (int) configLine.PlayerType;
+        cbPlayerType.onValueChanged.AddListener(delegate { OnValueChange(cbPlayerType); });
+        btnColorFaction.color = ColorUtils.GetColorByString(configLine.Color);
 
-        //txtPlayerName.text = faction.Names[0].Value;
-
-        factions.Add(cbFaction);
-
-        if (player.IaId == PlayerOwnerValue)
+        if (configLine.PlayerName == playerName.text)
         {
             ChangeFactionDescriptions(faction);
+            cbPlayerType.gameObject.SetActive(false);
+            txtPlayerName = newObject.Find("txtPlayerName").GetComponent<Text>();
+            txtPlayerName.text = configLine.PlayerName;
+            txtPlayerName.gameObject.SetActive(true);
         }
     }
 

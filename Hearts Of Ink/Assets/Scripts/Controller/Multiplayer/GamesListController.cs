@@ -125,10 +125,11 @@ public class GamesListController : MonoBehaviour
         text.fontStyle = FontStyle.Bold;
 
         gameItemSelected = gameItem;
+        Debug.Log("Game item selected: " + gameItemSelected.gameObject.name);
     }
 
-    public async void RequestEntryGame()
+    public void RequestEntryGame()
     {
-        await Task.Run(() => joinGameController.RequestEntryGame(gameItemSelected.gameObject.name, true));
+        joinGameController.RequestEntryGame(gameItemSelected.gameObject.name, true);
     }
 }

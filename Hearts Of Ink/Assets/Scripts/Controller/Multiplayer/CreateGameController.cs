@@ -52,9 +52,9 @@ public class CreateGameController : MonoBehaviour
 
         if (response.internalResultCode == InternalStatusCodes.OKCode)
         {
-            BasicGameInfo basicGameInfo = BasicGameInfo.FromCreateGameService(newGame, response.serviceResponse);
+            CreateGameModelOut responseModel = response.serviceResponse;
 
-            configGameController.GameCreatedByHost(response.serviceResponse.gameKey, newGame.mapName);
+            configGameController.GameCreatedByHost(responseModel.gameKey, newGame.mapName);
             EnableDisableCreateGame(false);
             configGamePanel.SetActive(true);
             AddPlayerToDropdowns();
