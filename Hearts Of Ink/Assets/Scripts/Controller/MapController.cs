@@ -1,28 +1,18 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.DataAccess;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class MapController : MonoBehaviour
 {
-    private GlobalLogicController globalLogic;
+    private SpriteRenderer spriteRenderer;
 
     void Awake()
     {
-        globalLogic = FindObjectOfType<GlobalLogicController>();
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateMap(string spritePath)
     {
-        
+        spriteRenderer.sprite = MapDAC.LoadMapSprite(spritePath);
     }
-
-    void OnMouseDown()
-    {
-        globalLogic.ClickReceivedFromMap();
-    }
-
-    /*void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
-    {
-        
-    }*/
 }

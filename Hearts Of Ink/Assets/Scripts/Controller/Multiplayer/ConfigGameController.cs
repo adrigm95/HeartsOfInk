@@ -38,6 +38,7 @@ public class ConfigGameController : MonoBehaviour
     public Text factionDescription;
     public Text bonusDescription;
     public InputField playerName;
+    public MapController mapController;
 
     // Start is called before the first frame update
     void Start()
@@ -89,6 +90,8 @@ public class ConfigGameController : MonoBehaviour
         mapModel = MapDAC.LoadMapInfo(mapName);
         globalInfo = MapDAC.LoadGlobalMapInfo();
         factions = new List<Dropdown>();
+
+        mapController.UpdateMap(mapModel.SpritePath);
 
         if (configLines == null)
         {

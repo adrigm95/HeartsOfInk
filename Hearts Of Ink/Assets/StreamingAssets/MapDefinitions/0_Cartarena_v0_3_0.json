@@ -1,7 +1,7 @@
 {
   "MapId": 0,
   "DisplayName": "Cartarena",
-  "SpritePath": "MapSprites/0_Cartarena.json",
+  "SpritePath": "MapSprites/0_Cartarena.png",
   "AvailableForMultiplayer": false,
   "AvailableForSingleplayer": true,
   "Players": [

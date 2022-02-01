@@ -14,6 +14,7 @@ public class CreateGameController : MonoBehaviour
     private ConfigGameController configGameController;
     [SerializeField]
     private InfoPanelController infoPanelController;
+    public MapController mapController;
     public GamesListController gamesListPanel;
     public Button btnCreateGame;
     public InputField gameNameText;
@@ -28,11 +29,7 @@ public class CreateGameController : MonoBehaviour
         availableMaps = MapDAC.GetAvailableMaps(true);
         availableMaps.ForEach(map => cbMaps.options.Add(new Dropdown.OptionData(map.DisplayName)));
         cbMaps.RefreshShownValue();
-    }
-
-    private void Update()
-    {
-
+        cbMaps.onValueChanged.AddListener(delegate { OnValueChange(); });
     }
 
     public async void CreateGame()
@@ -63,6 +60,11 @@ public class CreateGameController : MonoBehaviour
         {
             infoPanelController.DisplayMessage("Unexpected error", "Unexpected error on join game: " + response.internalResultCode);
         }
+    }
+
+    private void OnValueChange()
+    {
+        mapController.UpdateMap(availableMaps.Find(item => item.DisplayName == cbMaps.options[cbMaps.value].text).SpritePath);
     }
 
     public void EnableDisableCreateGame(bool enable)

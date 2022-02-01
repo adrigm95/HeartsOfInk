@@ -6959,6 +6959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoPanelController: {fileID: 829216849}
+  mapController: {fileID: 3589996446012058678}
   gamesListPanel: {fileID: 826515998}
   btnCreateGame: {fileID: 2109189093}
   gameNameText: {fileID: 451439028}
@@ -7069,7 +7070,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3589996446012058673}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a2e39ce124ab0f54b9a922e38708578d, type: 3}
   m_Name: 
@@ -7787,6 +7788,7 @@ MonoBehaviour:
   factionDescription: {fileID: 5135278582474188539}
   bonusDescription: {fileID: 5135278582095824233}
   playerName: {fileID: 1048713331}
+  mapController: {fileID: 3589996446012058678}
 --- !u!114 &5135278583319347560
 MonoBehaviour:
   m_ObjectHideFlags: 0
