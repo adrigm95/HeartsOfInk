@@ -70,6 +70,12 @@ namespace Assets.Scripts.DataAccess
                     case Method.POST:
                         response = await client.PostAsync(targetRequest, content);
                         break;
+                    case Method.PUT:
+                        response = await client.PutAsync(targetRequest, content);
+                        break;
+                    case Method.DELETE:
+                        throw new NotImplementedException("DELETE not implemented on WebServiceCaller");
+                        break;
                     case Method.GET:
                         response = await client.GetAsync(targetRequest);
                         break;
@@ -85,6 +91,21 @@ namespace Assets.Scripts.DataAccess
 
                 LogServerResponse(serverResponse);
                 LogConnectionResponse(response.StatusCode);
+            }
+            catch (NullReferenceException ex)
+            {
+                serverResponse = new HOIResponseModel<S>();
+
+                if (response == null)
+                {
+                    serverResponse.internalResultCode = InternalStatusCodes.KOBadResponse;
+                    Debug.LogError("Error on client WebServiceCaller: server response cannot be empty.");
+                }
+                else
+                {
+                    serverResponse.internalResultCode = InternalStatusCodes.KOConnectionCode;
+                    Debug.LogError("Error on client WebServiceCaller: unexpected null reference " + ex);
+                }
             }
             catch (Exception ex)
             {

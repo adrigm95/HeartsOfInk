@@ -4,6 +4,7 @@ using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
 using LobbyHOIServer.Models.Models;
+using LobbyHOIServer.Models.Models.In;
 using NETCoreServer.Models;
 using System;
 using System.Collections.Generic;
@@ -28,13 +29,11 @@ public class ConfigGameController : MonoBehaviour
     private float lastAdviceToServer;
 
     private const int PlayerOwnerValue = 0;
-    private string gameKey;
-
     private MapModel mapModel;
     private GlobalInfo globalInfo;
-    private List<Dropdown> factions;
     public int startLines;
     public int spacing;
+    public Text txtGamekey;
     public Text factionDescription;
     public Text bonusDescription;
     public InputField playerName;
@@ -43,6 +42,7 @@ public class ConfigGameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
     }
 
     // Update is called once per frame
@@ -61,7 +61,7 @@ public class ConfigGameController : MonoBehaviour
     public void GameCreatedByHost(string gameKey, string mapName)
     {
         this.gameObject.SetActive(true);
-        this.gameKey = gameKey;
+        this.txtGamekey.text = gameKey;
         LoadConfigGame(null, mapName);
     }
 
@@ -72,7 +72,7 @@ public class ConfigGameController : MonoBehaviour
 
         try
         {
-            response = await wsCaller.GenericWebServiceCaller(Method.POST, LobbyHOIControllers.NotifyActive, gameKey);
+            response = await wsCaller.GenericWebServiceCaller(Method.POST, LobbyHOIControllers.NotifyActive, txtGamekey.text);
 
             if (!response.serviceResponse)
             {
@@ -89,7 +89,6 @@ public class ConfigGameController : MonoBehaviour
     {
         mapModel = MapDAC.LoadMapInfo(mapName);
         globalInfo = MapDAC.LoadGlobalMapInfo();
-        factions = new List<Dropdown>();
 
         mapController.UpdateMap(mapModel.SpritePath);
 
@@ -98,8 +97,6 @@ public class ConfigGameController : MonoBehaviour
             configLines = LoadConfigLinesFromMap();
             configLines[0].PlayerName = playerName.text;
         }
-
-        //TODO: Cargar combos de facciones desde mapa.
 
         for (int index = 0; index < configLines.Count; index++)
         {
@@ -126,6 +123,30 @@ public class ConfigGameController : MonoBehaviour
         return configLines;
     }
 
+    private void LoadFactionsCombo(Dropdown cbFactions)
+    {
+        globalInfo.Factions.ForEach(faction => cbFactions.options.Add(new Dropdown.OptionData(faction.Names[0].Value)));
+        cbFactions.RefreshShownValue();
+        cbFactions.onValueChanged.AddListener(delegate { OnChangeConfigLine(cbFactions.transform.parent); });
+    }
+
+    private async void OnChangeConfigLine(Transform factionLine)
+    {
+        WebServiceCaller<ConfigLineIn, bool> webServiceCaller = new WebServiceCaller<ConfigLineIn, bool>();
+        ConfigLineIn configLineIn = new ConfigLineIn();
+        Dropdown cbFaction = factionLine.Find("cbFaction").GetComponent<Dropdown>();
+        HOIResponseModel<bool> response;
+
+        configLineIn.gameKey = txtGamekey.text;
+        configLineIn.configLineModel = new ConfigLineModel()
+        {
+            FactionId = globalInfo.Factions.Find(item =>
+                item.Names[0].Value == cbFaction.options[cbFaction.value].text).Id
+        };
+
+        response = await webServiceCaller.GenericWebServiceCaller(Method.PUT, LobbyHOIControllers.ConfigLine, configLineIn);
+    }
+
     public void LoadFactionLine(ConfigLineModel configLine, int index)
     {
         string prefabPath = "Prefabs/fileFactionMultiplayer";
@@ -143,14 +164,14 @@ public class ConfigGameController : MonoBehaviour
         newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + configLine.MapSocketId;
         newObject.SetParent(this.transform, false);
 
+        LoadFactionsCombo(newObject.Find("cbFaction").GetComponent<Dropdown>());
         cbPlayerType = newObject.Find("cbPlayerType").GetComponent<Dropdown>();
-        btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
-
         cbPlayerType.value = (int) configLine.PlayerType;
         cbPlayerType.onValueChanged.AddListener(delegate { OnValueChange(cbPlayerType); });
+        btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
         btnColorFaction.color = ColorUtils.GetColorByString(configLine.Color);
 
-        if (configLine.PlayerName == playerName.text)
+        if (!string.IsNullOrEmpty(configLine.PlayerName))
         {
             ChangeFactionDescriptions(faction);
             cbPlayerType.gameObject.SetActive(false);
