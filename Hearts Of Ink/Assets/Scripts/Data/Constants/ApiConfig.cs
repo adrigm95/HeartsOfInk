@@ -15,6 +15,6 @@ namespace Assets.Scripts.Data.Constants
         public const string NETCoreServerUrl = "http://localhost:61794/";
 
         // DEV
-        //public const string NETCoreServerUrl = "http://86.127.235.51:81/";
+        //public const string NETCoreServerUrl = "http://79.116.7.124:81/";
     }
 }

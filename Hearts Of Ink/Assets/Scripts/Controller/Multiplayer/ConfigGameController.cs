@@ -40,6 +40,7 @@ public class ConfigGameController : MonoBehaviour
     public Text bonusDescription;
     public InputField playerName;
     public MapController mapController;
+    public SignalRController signalRController;
 
     // Start is called before the first frame update
     void Start()
@@ -91,7 +92,7 @@ public class ConfigGameController : MonoBehaviour
     {
         mapModel = MapDAC.LoadMapInfo(mapId);
         globalInfo = MapDAC.LoadGlobalMapInfo();
-
+        signalRController.SuscribeToGameConfig(this.txtGamekey.text);
         mapController.UpdateMap(mapModel.SpritePath);
 
         if (configLines == null)
