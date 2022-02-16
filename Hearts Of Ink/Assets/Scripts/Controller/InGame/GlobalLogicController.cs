@@ -77,7 +77,7 @@ public class GlobalLogicController : MonoBehaviour
 
     private GameModel GetMockedGameModel()
     {
-        GameModel gameModel = new GameModel("0_Cartarena_v0_3_0");
+        GameModel gameModel = new GameModel(0);
         gameModel.Gametype = GameModel.GameType.Single;
 
         for (int index = 0; index < 4; index++)

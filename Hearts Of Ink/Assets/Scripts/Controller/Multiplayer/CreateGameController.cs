@@ -41,7 +41,7 @@ public class CreateGameController : MonoBehaviour
         {
             isPublic = !checkIsPrivate.isOn,
             name = gameNameText.text,
-            mapName = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).DefinitionName,
+            mapId = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).MapId,
             playerName = creatorNick.text
         };
 
@@ -51,7 +51,7 @@ public class CreateGameController : MonoBehaviour
         {
             CreateGameModelOut responseModel = response.serviceResponse;
 
-            configGameController.GameCreatedByHost(responseModel.gameKey, newGame.mapName);
+            configGameController.GameCreatedByHost(responseModel.gameKey, newGame.mapId);
             EnableDisableCreateGame(false);
             configGamePanel.SetActive(true);
             AddPlayerToDropdowns();

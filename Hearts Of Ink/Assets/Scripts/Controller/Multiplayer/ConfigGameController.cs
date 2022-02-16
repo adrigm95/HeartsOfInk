@@ -28,7 +28,9 @@ public class ConfigGameController : MonoBehaviour
     /// </summary>
     private float lastAdviceToServer;
 
-    private const int PlayerOwnerValue = 0;
+    private bool isGameHost;
+    private int ownLine;
+    private List<ConfigLineModel> _configLinesState;
     private MapModel mapModel;
     private GlobalInfo globalInfo;
     public int startLines;
@@ -58,11 +60,11 @@ public class ConfigGameController : MonoBehaviour
         }
     }
 
-    public void GameCreatedByHost(string gameKey, string mapName)
+    public void GameCreatedByHost(string gameKey, short mapId)
     {
         this.gameObject.SetActive(true);
         this.txtGamekey.text = gameKey;
-        LoadConfigGame(null, mapName);
+        LoadConfigGame(null, mapId, true);
     }
 
     public async void NotifyActive()
@@ -85,9 +87,9 @@ public class ConfigGameController : MonoBehaviour
         }
     }
 
-    public void LoadConfigGame(List<ConfigLineModel> configLines, string mapName)
+    public void LoadConfigGame(List<ConfigLineModel> configLines, short mapId, bool isGameHost)
     {
-        mapModel = MapDAC.LoadMapInfo(mapName);
+        mapModel = MapDAC.LoadMapInfo(mapId);
         globalInfo = MapDAC.LoadGlobalMapInfo();
 
         mapController.UpdateMap(mapModel.SpritePath);
@@ -98,10 +100,17 @@ public class ConfigGameController : MonoBehaviour
             configLines[0].PlayerName = playerName.text;
         }
 
+        ownLine = configLines.Find(item => item.PlayerName == playerName.text).MapSocketId;
+
         for (int index = 0; index < configLines.Count; index++)
         {
-            LoadFactionLine(configLines[index], index);
+            bool lineEnabled = isGameHost || ownLine == configLines[index].MapSocketId;
+
+            LoadFactionLine(configLines[index], index, lineEnabled);
         }
+
+        this.isGameHost = isGameHost;        
+        _configLinesState = configLines;
     }
 
     private List<ConfigLineModel> LoadConfigLinesFromMap()
@@ -123,11 +132,19 @@ public class ConfigGameController : MonoBehaviour
         return configLines;
     }
 
-    private void LoadFactionsCombo(Dropdown cbFactions)
+    private void LoadFactionsCombo(Dropdown cbFactions, bool isEnabled)
     {
         globalInfo.Factions.ForEach(faction => cbFactions.options.Add(new Dropdown.OptionData(faction.Names[0].Value)));
         cbFactions.RefreshShownValue();
-        cbFactions.onValueChanged.AddListener(delegate { OnChangeConfigLine(cbFactions.transform.parent); });
+
+        if (isEnabled)
+        {
+            cbFactions.onValueChanged.AddListener(delegate { OnChangeConfigLine(cbFactions.transform.parent); });
+        }
+        else
+        {
+            cbFactions.enabled = false;
+        }
     }
 
     private async void OnChangeConfigLine(Transform factionLine)
@@ -136,18 +153,24 @@ public class ConfigGameController : MonoBehaviour
         ConfigLineIn configLineIn = new ConfigLineIn();
         Dropdown cbFaction = factionLine.Find("cbFaction").GetComponent<Dropdown>();
         HOIResponseModel<bool> response;
+        string[] splittedName = factionLine.name.Split('_');
+        int mapSocketId = Convert.ToInt32(splittedName[2]);
+        ConfigLineModel configLine = _configLinesState.Find(item => item.MapSocketId == mapSocketId);
 
-        configLineIn.gameKey = txtGamekey.text;
-        configLineIn.configLineModel = new ConfigLineModel()
+        if (isGameHost || configLine.MapSocketId == ownLine)
         {
-            FactionId = globalInfo.Factions.Find(item =>
-                item.Names[0].Value == cbFaction.options[cbFaction.value].text).Id
-        };
+            configLineIn.gameKey = txtGamekey.text;
+            configLineIn.configLineModel = new ConfigLineModel()
+            {
+                FactionId = globalInfo.Factions.Find(item =>
+                    item.Names[0].Value == cbFaction.options[cbFaction.value].text).Id
+            };
 
-        response = await webServiceCaller.GenericWebServiceCaller(Method.PUT, LobbyHOIControllers.ConfigLine, configLineIn);
+            response = await webServiceCaller.GenericWebServiceCaller(Method.PUT, LobbyHOIControllers.ConfigLine, configLineIn);
+        }
     }
 
-    public void LoadFactionLine(ConfigLineModel configLine, int index)
+    public void LoadFactionLine(ConfigLineModel configLine, int index, bool isEnabled)
     {
         string prefabPath = "Prefabs/fileFactionMultiplayer";
         Transform newObject;
@@ -156,28 +179,49 @@ public class ConfigGameController : MonoBehaviour
         Image btnColorFaction;
         Text txtPlayerName;
         GlobalInfoFaction faction;
+        Button btnAlliance;
 
-        faction = globalInfo.Factions.Find(item => item.Id == configLine.FactionId);
-        position = new Vector3(0, startLines);
-        position.y -= spacing * index;
-        newObject = ((GameObject)Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
-        newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + configLine.MapSocketId;
-        newObject.SetParent(this.transform, false);
-
-        LoadFactionsCombo(newObject.Find("cbFaction").GetComponent<Dropdown>());
-        cbPlayerType = newObject.Find("cbPlayerType").GetComponent<Dropdown>();
-        cbPlayerType.value = (int) configLine.PlayerType;
-        cbPlayerType.onValueChanged.AddListener(delegate { OnValueChange(cbPlayerType); });
-        btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
-        btnColorFaction.color = ColorUtils.GetColorByString(configLine.Color);
-
-        if (!string.IsNullOrEmpty(configLine.PlayerName))
+        try
         {
-            ChangeFactionDescriptions(faction);
-            cbPlayerType.gameObject.SetActive(false);
-            txtPlayerName = newObject.Find("txtPlayerName").GetComponent<Text>();
-            txtPlayerName.text = configLine.PlayerName;
-            txtPlayerName.gameObject.SetActive(true);
+            faction = globalInfo.Factions.Find(item => item.Id == configLine.FactionId);
+            position = new Vector3(0, startLines);
+            position.y -= spacing * index;
+            newObject = ((GameObject)Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
+            newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + configLine.MapSocketId;
+            newObject.SetParent(this.transform, false);
+
+            LoadFactionsCombo(newObject.Find("cbFaction").GetComponent<Dropdown>(), isEnabled);
+            cbPlayerType = newObject.Find("cbPlayerType").GetComponent<Dropdown>();
+            btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
+            btnAlliance = newObject.Find("btnAlliance").GetComponent<Button>();
+            cbPlayerType.value = (int)configLine.PlayerType;
+
+            if (isEnabled)
+            {
+                cbPlayerType.onValueChanged.AddListener(delegate { OnValueChange(cbPlayerType); });
+            }
+            else
+            {
+                cbPlayerType.enabled = false;
+                btnColorFaction.enabled = false;
+                btnAlliance.enabled = false;
+            }
+
+            btnColorFaction.color = ColorUtils.GetColorByString(configLine.Color);
+
+            if (!string.IsNullOrEmpty(configLine.PlayerName))
+            {
+                ChangeFactionDescriptions(faction);
+                cbPlayerType.gameObject.SetActive(false);
+                txtPlayerName = newObject.Find("txtPlayerName").GetComponent<Text>();
+                txtPlayerName.text = configLine.PlayerName;
+                txtPlayerName.gameObject.SetActive(true);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogException(ex);
+            throw;
         }
     }
 

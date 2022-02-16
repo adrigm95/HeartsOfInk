@@ -15,6 +15,13 @@ namespace Assets.Scripts.DataAccess
     {
         private const string GlobalInfoFile = "/_GlobalInfo.json";
 
+        public static MapModel LoadMapInfo(short mapId)
+        {
+            List<MapModel> availableMaps = GetAvailableMaps();
+
+            return availableMaps.Find(map => map.MapId == mapId);
+        }
+
         public static MapModel LoadMapInfo(string mapName)
         {
             MapModel result;
@@ -50,7 +57,7 @@ namespace Assets.Scripts.DataAccess
             return JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
         }
 
-        public static List<MapModel> GetAvailableMaps(bool isForMultiplayer)
+        private static List<MapModel> GetAvailableMaps()
         {
             string directory = Application.streamingAssetsPath + "/MapDefinitions";
             string[] files = Directory.GetFiles(directory, "*.json");
@@ -60,6 +67,13 @@ namespace Assets.Scripts.DataAccess
             {
                 mapModels.Add(LoadMapInfo(file));
             }
+
+            return mapModels;
+        }
+
+        public static List<MapModel> GetAvailableMaps(bool isForMultiplayer)
+        {
+            List<MapModel> mapModels = GetAvailableMaps();
 
             if (isForMultiplayer)
             {
