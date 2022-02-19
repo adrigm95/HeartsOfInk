@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Microsoft.AspNetCore.SignalR.Client;
 using Assets.Scripts.Data.Constants;
 using LobbyHOIServer.Models.Models.In;
+using LobbyHOIServer.Models.Models;
 
 public class ConfigLinesUpdater
 {
@@ -19,12 +20,12 @@ public class ConfigLinesUpdater
     public static ConfigLinesUpdater Instance => _singletonReference.Value;
 
     // Other Variables
-    private Dictionary<byte, ConfigLineIn> receivedConfigLines;
+    private Dictionary<byte, ConfigLineModel> receivedConfigLines;
     private LobbyHOIHub signalRController;
 
     private ConfigLinesUpdater()
     {
-        receivedConfigLines = new Dictionary<byte, ConfigLineIn>();
+        receivedConfigLines = new Dictionary<byte, ConfigLineModel>();
     }
 
     /// <summary>
@@ -34,7 +35,7 @@ public class ConfigLinesUpdater
     /// <param name="signalRController"></param>
     public void SusbcribeReceiver(LobbyHOIHub signalRController, HubConnection connection)
     {
-        connection.On<ConfigLineIn>(ReceiverKey, (receivedObject) =>
+        connection.On<ConfigLineModel>(ReceiverKey, (receivedObject) =>
         {
             ReceiveConfigLine(receivedObject);
         });
@@ -46,14 +47,13 @@ public class ConfigLinesUpdater
     /// 
     /// </summary>
     /// <param name="configLine"> ConfigLine updated.</param>
-    /// <param name="room"> Gamekey.</param>
-    public async void SendConfigLine(ConfigLineIn configLine, string room)
+    public async void SendConfigLine(ConfigLineIn configLine)
     {
         HubConnection connection = await signalRController.GetConnection();
 
         try
         {
-            await connection.InvokeAsync(SenderKey, configLine, room);
+            await connection.InvokeAsync(SenderKey, configLine);
         }
         catch (Exception ex)
         {
@@ -61,8 +61,8 @@ public class ConfigLinesUpdater
         }
     }
 
-    public async void ReceiveConfigLine(ConfigLineIn configLine)
+    public async void ReceiveConfigLine(ConfigLineModel configLine)
     {
-        receivedConfigLines.Add(configLine.configLineModel.MapSocketId, configLine);
+        receivedConfigLines.Add(configLine.MapSocketId, configLine);
     }
 }

@@ -62,7 +62,6 @@ public class ConfigGameController : MonoBehaviour
 
     public void GameCreatedByHost(string gameKey, short mapId)
     {
-        this.gameObject.SetActive(true);
         this.txtGamekey.text = gameKey;
         LoadConfigGame(null, mapId, true);
     }
@@ -89,6 +88,7 @@ public class ConfigGameController : MonoBehaviour
 
     public void LoadConfigGame(List<ConfigLineModel> configLines, short mapId, bool isGameHost)
     {
+        this.gameObject.SetActive(true);
         mapModel = MapDAC.LoadMapInfo(mapId);
         globalInfo = MapDAC.LoadGlobalMapInfo();
         LobbyHOIHub.Instance.SuscribeToRoom(txtGamekey.text);
@@ -98,6 +98,7 @@ public class ConfigGameController : MonoBehaviour
         {
             configLines = LoadConfigLinesFromMap();
             configLines[0].PlayerName = playerName.text;
+            Debug.Log("ConfigLines received empty, this is ok if are creating game.");
         }
 
         ownLine = configLines.Find(item => item.PlayerName == playerName.text).MapSocketId;
@@ -166,7 +167,7 @@ public class ConfigGameController : MonoBehaviour
                     item.Names[0].Value == cbFaction.options[cbFaction.value].text).Id
             };
 
-            response = await webServiceCaller.GenericWebServiceCaller(Method.PUT, LobbyHOIControllers.ConfigLine, configLineIn);
+            ConfigLinesUpdater.Instance.SendConfigLine(configLineIn);
         }
     }
 

@@ -215,6 +215,7 @@ MonoBehaviour:
   configGameController: {fileID: 5135278583319347480}
   infoPanelController: {fileID: 829216849}
   inpGameKey: {fileID: 615145041}
+  playerName: {fileID: 1048713331}
 --- !u!1 &29259175
 GameObject:
   m_ObjectHideFlags: 0
@@ -7951,7 +7952,6 @@ MonoBehaviour:
   bonusDescription: {fileID: 5135278582095824233}
   playerName: {fileID: 1048713331}
   mapController: {fileID: 3589996446012058678}
-  signalRController: {fileID: 0}
 --- !u!114 &5135278583319347560
 MonoBehaviour:
   m_ObjectHideFlags: 0
