@@ -3,6 +3,7 @@ using Assets.Scripts.DataAccess;
 using NETCoreServer.Models;
 using NETCoreServer.Models.In;
 using NETCoreServer.Models.Out;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 

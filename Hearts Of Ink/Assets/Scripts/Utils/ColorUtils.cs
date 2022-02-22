@@ -23,9 +23,17 @@ namespace Assets.Scripts.Utils
 
         public static Color GetColorByString(string color)
         {
-            string[] splittedString = color.Split(',');
+            try
+            {
+                string[] splittedString = color.Split(',');
 
-            return BuildColorBase256(float.Parse(splittedString[0]), float.Parse(splittedString[1]), float.Parse(splittedString[2]));
+                return BuildColorBase256(float.Parse(splittedString[0]), float.Parse(splittedString[1]), float.Parse(splittedString[2]));
+            }
+            catch (NullReferenceException)
+            {
+                Debug.LogWarning("Received empty color in GetColorByString, returning 100;100;100");
+                return BuildColorBase256(100f, 100f, 100f);
+            }
         }
 
         public static string GetStringByColor(Color color)

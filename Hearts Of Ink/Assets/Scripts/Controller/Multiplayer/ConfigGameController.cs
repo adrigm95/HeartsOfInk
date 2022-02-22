@@ -126,7 +126,7 @@ public class ConfigGameController : MonoBehaviour
                 FactionId = player.FactionId,
                 MapSocketId = player.MapSocketId,
                 PlayerName = string.Empty,
-                PlayerType = Player.IA.PLAYER
+                PlayerType = (int) Player.IA.PLAYER
             });
         }
 

@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Data.Constants;
 using NETCoreServer.Models;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Net.Http;
@@ -24,8 +25,8 @@ namespace Assets.Scripts.DataAccess
 
     public class WebServiceCaller<T, S>
     {
+        // Sustituir por JsonConvert a futuro, da problemas con objetos complejos.
         DataContractJsonSerializer sendSerializer = new DataContractJsonSerializer(typeof(T));
-        DataContractJsonSerializer receiveSerializer = new DataContractJsonSerializer(typeof(HOIResponseModel<S>));
 
         /// <summary>
         /// Método genérico para llamadas a API.
@@ -81,13 +82,10 @@ namespace Assets.Scripts.DataAccess
                         break;
                 }
 
-                memoryStream = new MemoryStream();
-                await response.Content.CopyToAsync(memoryStream);
-                memoryStream.Position = 0;
+                serverResponse = JsonConvert.DeserializeObject<HOIResponseModel<S>>(await response.Content.ReadAsStringAsync());
                 end = DateTime.Now.Ticks;
                 difference = TimeSpan.FromTicks(end - start);
                 Debug.Log("Start: " + start + " End: " + end + " Difference: " + difference);
-                serverResponse = (HOIResponseModel<S>)receiveSerializer.ReadObject(memoryStream);
 
                 LogServerResponse(serverResponse);
                 LogConnectionResponse(response.StatusCode);
