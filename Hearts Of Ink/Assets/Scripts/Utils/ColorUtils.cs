@@ -31,7 +31,7 @@ namespace Assets.Scripts.Utils
             }
             catch (NullReferenceException)
             {
-                Debug.LogWarning("Received empty color in GetColorByString, returning 100;100;100");
+                Debug.LogWarning("Received empty color in GetColorByString, returning 100,100,100");
                 return BuildColorBase256(100f, 100f, 100f);
             }
         }
@@ -39,6 +39,33 @@ namespace Assets.Scripts.Utils
         public static string GetStringByColor(Color color)
         {
             return Convert.ToString(color.r * 255) + "," + Convert.ToString(color.g * 255) + "," + Convert.ToString(color.b * 255);
+        }
+
+        public static Color NextColor(Color currentColor, List<string> availableColors)
+        {
+            string currentAsString = GetStringByColor(currentColor);
+            int currentIndex = availableColors.FindIndex(item => item == currentAsString);
+            int nextIndex = currentIndex + 1;
+
+            try
+            {
+                if (currentIndex == -1 || nextIndex == availableColors.Count)
+                {
+                    Debug.Log($"Next color is first color in list {availableColors[0]}");
+                    return GetColorByString(availableColors[0]);
+                }
+                else
+                {
+                    Debug.Log($"Next color: {availableColors[nextIndex]}");
+                    return GetColorByString(availableColors[nextIndex]);
+                }
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Debug.LogError($"Error out of range, values: 'nextIndex' -> {nextIndex}; 'currentIndex' -> + {currentIndex}; availableColors -> {availableColors.Count}");
+                Debug.LogException(ex);
+                throw;
+            }
         }
     }
 }

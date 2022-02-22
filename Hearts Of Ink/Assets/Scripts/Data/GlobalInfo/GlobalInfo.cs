@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Assets.Scripts.Data.GlobalInfo
 {
@@ -10,5 +6,11 @@ namespace Assets.Scripts.Data.GlobalInfo
     {
         public List<GlobalInfoFaction> Factions { get; set; }
         public List<GlobalInfoBonus> Bonus { get; set; }
+        public List<string> AvailableColors { get; set; }
+
+        public override string ToString()
+        {
+            return "{ 'Factions':" + Factions + ", 'Bonus':" + Bonus + ", 'AvailableColors': " + AvailableColors + " }";
+        }
     }
 }

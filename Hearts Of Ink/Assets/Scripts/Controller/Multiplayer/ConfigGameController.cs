@@ -177,7 +177,8 @@ public class ConfigGameController : MonoBehaviour
         Transform newObject;
         Vector3 position;
         Dropdown cbPlayerType;
-        Image btnColorFaction;
+        Image colorFactionImage;
+        Button btnColorFaction;
         Text txtPlayerName;
         GlobalInfoFaction faction;
         Button btnAlliance;
@@ -193,13 +194,15 @@ public class ConfigGameController : MonoBehaviour
 
             LoadFactionsCombo(newObject.Find("cbFaction").GetComponent<Dropdown>(), isEnabled);
             cbPlayerType = newObject.Find("cbPlayerType").GetComponent<Dropdown>();
-            btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
+            colorFactionImage = newObject.Find("btnColorFaction").GetComponent<Image>();
+            btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Button>();
             btnAlliance = newObject.Find("btnAlliance").GetComponent<Button>();
             cbPlayerType.value = (int)configLine.PlayerType;
 
             if (isEnabled)
             {
-                cbPlayerType.onValueChanged.AddListener(delegate { OnValueChange(cbPlayerType); });
+                cbPlayerType.onValueChanged.AddListener(delegate { OnValueChange_Faction(cbPlayerType); });
+                btnColorFaction.onClick.AddListener(delegate { OnClick_PlayerColor(colorFactionImage); });
             }
             else
             {
@@ -208,7 +211,7 @@ public class ConfigGameController : MonoBehaviour
                 btnAlliance.enabled = false;
             }
 
-            btnColorFaction.color = ColorUtils.GetColorByString(configLine.Color);
+            colorFactionImage.color = ColorUtils.GetColorByString(configLine.Color);
 
             if (!string.IsNullOrEmpty(configLine.PlayerName))
             {
@@ -226,7 +229,7 @@ public class ConfigGameController : MonoBehaviour
         }
     }
 
-    public void OnValueChange(Dropdown comboOrder)
+    public void OnValueChange_Faction(Dropdown comboOrder)
     {
         if (comboOrder.value == 0)
         {
@@ -235,6 +238,13 @@ public class ConfigGameController : MonoBehaviour
 
             ChangeFactionDescriptions(globalInfoFaction);
         }
+    }
+
+    public void OnClick_PlayerColor(Image colorImage)
+    {
+        Debug.Log($"Color changed for image {colorImage.name}; color: {colorImage.color}");
+        Debug.Log($"Current global info {globalInfo}");
+        colorImage.color = ColorUtils.NextColor(colorImage.color, globalInfo.AvailableColors);
     }
 
     private void ChangeFactionDescriptions(GlobalInfoFaction faction)
