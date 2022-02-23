@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Assets.Scripts.Data.Constants;
 using LobbyHOIServer.Models.Models.In;
 using LobbyHOIServer.Models.Models;
+using System.Linq;
 
 public class ConfigLinesUpdater
 {
@@ -64,5 +65,13 @@ public class ConfigLinesUpdater
     public async void ReceiveConfigLine(ConfigLineModel configLine)
     {
         receivedConfigLines.Add(configLine.MapSocketId, configLine);
+    }
+
+    public List<ConfigLineModel> GetReceivedConfigLines()
+    {
+        List<ConfigLineModel> listToReturn = receivedConfigLines.Values.ToList();
+
+        receivedConfigLines.Clear();
+        return listToReturn;
     }
 }

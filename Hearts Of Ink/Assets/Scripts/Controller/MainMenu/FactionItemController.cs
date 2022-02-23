@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class FactionItemController : MonoBehaviour
 {
+    public ConfigGameController configGameController;
     public Text txtAlliance;
 
     public void OnAllianceChange()
@@ -29,6 +30,11 @@ public class FactionItemController : MonoBehaviour
             default:
                 Debug.LogWarning("Unexpected value for txtAlliance: " + txtAlliance.text);
                 break;
+        }
+
+        if (configGameController != null)
+        {
+            configGameController.OnChangeConfigLine(txtAlliance.transform.parent.transform.parent);
         }
     }
 }

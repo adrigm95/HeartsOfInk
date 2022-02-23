@@ -60,7 +60,7 @@ public class JoinGameController : MonoBehaviour
             switch (response.internalResultCode)
             {
                 case InternalStatusCodes.OKCode:
-                    configGameController.LoadConfigGame(response.serviceResponse.ConfigLines, response.serviceResponse.MapId, false);
+                    configGameController.LoadConfigGame(response.serviceResponse.ConfigLines, gamekey, response.serviceResponse.MapId, false);
                     break;
                 case InternalStatusCodes.GameNotFind:
                     infoPanelController.DisplayMessage("Invalid gamekey", "No game find for the introduced gamekey");

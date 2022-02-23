@@ -52,6 +52,8 @@ public class ConfigGameController : MonoBehaviour
     {
         if (activeGameCreated)
         {
+            UpdateConfigLines();
+
             if (Time.time > lastAdviceToServer + timeToNotifyActive)
             {
                 NotifyActive();
@@ -60,10 +62,22 @@ public class ConfigGameController : MonoBehaviour
         }
     }
 
+    private void UpdateConfigLines()
+    {
+        foreach (ConfigLineModel factionLine in ConfigLinesUpdater.Instance.GetReceivedConfigLines())
+        {
+            /*Dropdown cbFaction = factionLine.Find("cbFaction").GetComponent<Dropdown>();
+            Dropdown cbPlayerType = factionLine.Find("cbPlayerType").GetComponent<Dropdown>();
+            Image colorFactionImage = factionLine.Find("btnColorFaction").GetComponent<Image>();
+            Button btnColorFaction = factionLine.Find("btnColorFaction").GetComponent<Button>();
+            Text txtAlliance = factionLine.Find("txtBtnAlliance").GetComponentInChildren<Text>();*/
+            Debug.Log($"Updating config line {factionLine.MapSocketId} for player {factionLine.PlayerName}");
+        }
+    }
+
     public void GameCreatedByHost(string gameKey, short mapId)
     {
-        this.txtGamekey.text = gameKey;
-        LoadConfigGame(null, mapId, true);
+        LoadConfigGame(null, gameKey, mapId, true);
     }
 
     public async void NotifyActive()
@@ -86,8 +100,9 @@ public class ConfigGameController : MonoBehaviour
         }
     }
 
-    public void LoadConfigGame(List<ConfigLineModel> configLines, short mapId, bool isGameHost)
+    public void LoadConfigGame(List<ConfigLineModel> configLines, string gameKey, short mapId, bool isGameHost)
     {
+        this.txtGamekey.text = gameKey;
         this.gameObject.SetActive(true);
         mapModel = MapDAC.LoadMapInfo(mapId);
         globalInfo = MapDAC.LoadGlobalMapInfo();
@@ -148,24 +163,29 @@ public class ConfigGameController : MonoBehaviour
         }
     }
 
-    private async void OnChangeConfigLine(Transform factionLine)
+    public void OnChangeConfigLine(Transform factionLine)
     {
-        WebServiceCaller<ConfigLineIn, bool> webServiceCaller = new WebServiceCaller<ConfigLineIn, bool>();
         ConfigLineIn configLineIn = new ConfigLineIn();
         Dropdown cbFaction = factionLine.Find("cbFaction").GetComponent<Dropdown>();
-        HOIResponseModel<bool> response;
+        Dropdown cbPlayerType = factionLine.Find("cbPlayerType").GetComponent<Dropdown>();
+        Image colorFactionImage = factionLine.Find("btnColorFaction").GetComponent<Image>();
+        Button btnColorFaction = factionLine.Find("btnColorFaction").GetComponent<Button>();
+        Text txtAlliance = factionLine.Find("btnAlliance").GetComponentInChildren<Text>();
+
         string[] splittedName = factionLine.name.Split('_');
         int mapSocketId = Convert.ToInt32(splittedName[2]);
         ConfigLineModel configLine = _configLinesState.Find(item => item.MapSocketId == mapSocketId);
 
         if (isGameHost || configLine.MapSocketId == ownLine)
         {
+            configLine.FactionId = globalInfo.Factions.Find(item =>
+                    item.Names[0].Value == cbFaction.options[cbFaction.value].text).Id;
+            configLine.Alliance = Convert.ToByte(txtAlliance.text);
+            configLine.Color = ColorUtils.GetStringByColor(colorFactionImage.color);
+            configLine.PlayerType = (Player.IA)cbPlayerType.value;
+
+            configLineIn.configLineModel = configLine;
             configLineIn.gameKey = txtGamekey.text;
-            configLineIn.configLineModel = new ConfigLineModel()
-            {
-                FactionId = globalInfo.Factions.Find(item =>
-                    item.Names[0].Value == cbFaction.options[cbFaction.value].text).Id
-            };
 
             ConfigLinesUpdater.Instance.SendConfigLine(configLineIn);
         }
@@ -182,6 +202,7 @@ public class ConfigGameController : MonoBehaviour
         Text txtPlayerName;
         GlobalInfoFaction faction;
         Button btnAlliance;
+        FactionItemController factionItemController;
 
         try
         {
@@ -197,6 +218,9 @@ public class ConfigGameController : MonoBehaviour
             colorFactionImage = newObject.Find("btnColorFaction").GetComponent<Image>();
             btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Button>();
             btnAlliance = newObject.Find("btnAlliance").GetComponent<Button>();
+            factionItemController = newObject.GetComponent<FactionItemController>();
+            factionItemController.configGameController = this;
+
             cbPlayerType.value = (int)configLine.PlayerType;
 
             if (isEnabled)
@@ -245,6 +269,7 @@ public class ConfigGameController : MonoBehaviour
         Debug.Log($"Color changed for image {colorImage.name}; color: {colorImage.color}");
         Debug.Log($"Current global info {globalInfo}");
         colorImage.color = ColorUtils.NextColor(colorImage.color, globalInfo.AvailableColors);
+        OnChangeConfigLine(colorImage.transform.parent);
     }
 
     private void ChangeFactionDescriptions(GlobalInfoFaction faction)

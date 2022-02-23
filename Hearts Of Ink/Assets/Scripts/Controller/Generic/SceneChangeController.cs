@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneChangeController : MonoBehaviour
 {
+    public Transform multiplayerButton;
     public Transform creditsButton;
     public Transform mainMenuButton;
     public Transform exitToMenuButton;
@@ -14,7 +15,8 @@ public class SceneChangeController : MonoBehaviour
         MainMenu = 0,
         InGameScene = 1,
         Credits = 2,
-        Endgame = 3
+        Endgame = 3,
+        Multiplayer = 4,
     }
 
     public void ChangeScene(Transform orderButton)
@@ -31,6 +33,10 @@ public class SceneChangeController : MonoBehaviour
         else if (AreEquals(orderButton, startGame))
         {
             SceneManager.LoadScene(Convert.ToInt32(Scenes.InGameScene));
+        }
+        else if (AreEquals(orderButton, multiplayerButton))
+        {
+            SceneManager.LoadScene(Convert.ToInt32(Scenes.Multiplayer));
         }
         else
         {
