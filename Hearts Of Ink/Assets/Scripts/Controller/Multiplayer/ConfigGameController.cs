@@ -19,11 +19,6 @@ public class ConfigGameController : MonoBehaviour
     private const float timeToNotifyActive = 300;
 
     /// <summary>
-    /// Indica si actualmente hay una partida creada por el jugador local en fase de configuración.
-    /// </summary>
-    private bool activeGameCreated;
-
-    /// <summary>
     /// Momento en que se comunica con el server por última vez, expresado en segundos desde el inicio de la partida.
     /// </summary>
     private float lastAdviceToServer;
@@ -50,7 +45,7 @@ public class ConfigGameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (activeGameCreated)
+        if (this.gameObject.activeInHierarchy)
         {
             UpdateConfigLines();
 
@@ -64,14 +59,52 @@ public class ConfigGameController : MonoBehaviour
 
     private void UpdateConfigLines()
     {
-        foreach (ConfigLineModel factionLine in ConfigLinesUpdater.Instance.GetReceivedConfigLines())
+        foreach (ConfigLineModel configLine in ConfigLinesUpdater.Instance.GetReceivedConfigLines())
         {
-            /*Dropdown cbFaction = factionLine.Find("cbFaction").GetComponent<Dropdown>();
-            Dropdown cbPlayerType = factionLine.Find("cbPlayerType").GetComponent<Dropdown>();
-            Image colorFactionImage = factionLine.Find("btnColorFaction").GetComponent<Image>();
-            Button btnColorFaction = factionLine.Find("btnColorFaction").GetComponent<Button>();
-            Text txtAlliance = factionLine.Find("txtBtnAlliance").GetComponentInChildren<Text>();*/
-            Debug.Log($"Updating config line {factionLine.MapSocketId} for player {factionLine.PlayerName}");
+            string prefabPath = "Prefabs/fileFactionMultiplayer";
+            Transform newObject;
+            Vector3 position;
+            Dropdown cbPlayerType;
+            Image colorFactionImage;
+            Button btnColorFaction;
+            Text txtPlayerName;
+            GlobalInfoFaction faction;
+            Button btnAlliance;
+            FactionItemController factionItemController;
+
+            try
+            {
+                faction = globalInfo.Factions.Find(item => item.Id == configLine.FactionId);
+
+                string ObjetName = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + configLine.MapSocketId;
+
+                newObject = GameObject.Find(ObjetName).transform;
+                cbPlayerType = newObject.Find("cbPlayerType").GetComponent<Dropdown>();
+                colorFactionImage = newObject.Find("btnColorFaction").GetComponent<Image>();
+                btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Button>();
+                btnAlliance = newObject.Find("btnAlliance").GetComponent<Button>();
+                factionItemController = newObject.GetComponent<FactionItemController>();
+                factionItemController.configGameController = this;
+                cbPlayerType.value = (int)configLine.PlayerType;
+
+
+
+                colorFactionImage.color = ColorUtils.GetColorByString(configLine.Color);
+
+                /*  if (!string.IsNullOrEmpty(configLine.PlayerName))
+                   {
+                       ChangeFactionDescriptions(faction);
+                //       cbPlayerType.gameObject.SetActive(false);
+                       txtPlayerName = newObject.Find("txtPlayerName").GetComponent<Text>();
+                       txtPlayerName.text = configLine.PlayerName;
+                       txtPlayerName.gameObject.SetActive(true);
+                   }*/
+            }
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+                throw;
+            }
         }
     }
 
@@ -203,6 +236,8 @@ public class ConfigGameController : MonoBehaviour
         GlobalInfoFaction faction;
         Button btnAlliance;
         FactionItemController factionItemController;
+
+        Debug.Log("LoadFactionLine - Start");
 
         try
         {

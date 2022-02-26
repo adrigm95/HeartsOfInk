@@ -1023,6 +1023,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00137d52e3d0eb148827b4649eda1830, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  multiplayerButton: {fileID: 0}
   creditsButton: {fileID: 0}
   mainMenuButton: {fileID: 0}
   exitToMenuButton: {fileID: 11228807}
@@ -1719,6 +1720,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2e39ce124ab0f54b9a922e38708578d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalLogic: {fileID: 1199824672}
 --- !u!1 &1120863596
 GameObject:
   m_ObjectHideFlags: 0

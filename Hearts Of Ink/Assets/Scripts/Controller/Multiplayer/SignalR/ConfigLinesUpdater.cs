@@ -38,7 +38,7 @@ public class ConfigLinesUpdater
     {
         connection.On<ConfigLineModel>(ReceiverKey, (receivedObject) =>
         {
-            ReceiveConfigLine(receivedObject);
+            receivedConfigLines.Add(receivedObject.MapSocketId, receivedObject);
         });
 
         this.signalRController = signalRController;
@@ -60,11 +60,6 @@ public class ConfigLinesUpdater
         {
             Debug.LogException(ex);
         }
-    }
-
-    public async void ReceiveConfigLine(ConfigLineModel configLine)
-    {
-        receivedConfigLines.Add(configLine.MapSocketId, configLine);
     }
 
     public List<ConfigLineModel> GetReceivedConfigLines()

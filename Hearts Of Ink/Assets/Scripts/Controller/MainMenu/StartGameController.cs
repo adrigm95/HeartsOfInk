@@ -29,7 +29,7 @@ public class StartGameController : MonoBehaviour
 
     private void GetPlayerOptions(GameModel gameModel)
     {
-        string globalInfoPath = Application.streamingAssetsPath + "/MapDefinitions/_GlobalInfo.json";
+        string globalInfoPath = Application.streamingAssetsPath + "/_GlobalInfo.json";
         GlobalInfo globalInfo = JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
 
         foreach (Transform holderChild in factionDropdownsHolder)
