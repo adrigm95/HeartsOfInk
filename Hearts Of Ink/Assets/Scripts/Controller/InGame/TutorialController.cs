@@ -14,11 +14,16 @@ public class TutorialController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+    }
+
+    public void DisplayTutorial()
+    {
         TutorialStep tutorialStep;
         string tutorialPath = Application.streamingAssetsPath + "/tutorial.json";
-        tutorialModel = JsonCustomUtils<TutorialModel>.ReadObjectFromFile(tutorialPath);
 
         step = 0;
+        tutorialModel = JsonCustomUtils<TutorialModel>.ReadObjectFromFile(tutorialPath);
         tutorialStep = tutorialModel.Steps[step];
         globalLogic.SetPauseState(tutorialStep.PauseGame, null);
         infoPanelController.DisplayDecision(this, tutorialStep.Title[0].Value, tutorialStep.Content[0].Value, false);

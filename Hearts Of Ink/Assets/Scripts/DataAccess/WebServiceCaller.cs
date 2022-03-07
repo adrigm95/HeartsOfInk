@@ -15,11 +15,11 @@ namespace Assets.Scripts.DataAccess
 
     public class WebServiceCaller<S>
     {
-        public async Task<HOIResponseModel<S>> GenericWebServiceCaller(Method method, string targetRequest)
+        public async Task<HOIResponseModel<S>> GenericWebServiceCaller(string baseAdress, Method method, string targetRequest)
         {
             WebServiceCaller<object, S> webServiceCaller = new WebServiceCaller<object, S>();
 
-            return await webServiceCaller.GenericWebServiceCaller(method, targetRequest, null);
+            return await webServiceCaller.GenericWebServiceCaller(baseAdress, method, targetRequest, null);
         }
     }
 
@@ -33,7 +33,7 @@ namespace Assets.Scripts.DataAccess
         /// </summary>
         /// <param name="requestBody"> Request body to serialize as json. </param>
         /// <param name="targetRequest"> Value like "api/Home/GetData". </param>
-        public async Task<HOIResponseModel<S>> GenericWebServiceCaller(Method method, string targetRequest, object requestBody)
+        public async Task<HOIResponseModel<S>> GenericWebServiceCaller(string baseAdress, Method method, string targetRequest, object requestBody)
         {
             HttpClient client = new HttpClient();
             MemoryStream memoryStream;
@@ -49,7 +49,7 @@ namespace Assets.Scripts.DataAccess
             try
             {
                 start = DateTime.Now.Ticks;
-                client.BaseAddress = new Uri(ApiConfig.NETCoreServerUrl);
+                client.BaseAddress = new Uri(baseAdress);
 
                 if (requestBody != null)
                 {

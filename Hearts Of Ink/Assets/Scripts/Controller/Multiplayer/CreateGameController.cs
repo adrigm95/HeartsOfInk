@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Data;
+using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
 using NETCoreServer.Models;
@@ -45,7 +46,7 @@ public class CreateGameController : MonoBehaviour
             playerName = creatorNick.text
         };
 
-        response = await wsCaller.GenericWebServiceCaller(Method.POST, LobbyHOIControllers.CreateGame, newGame);
+        response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.POST, LobbyHOIControllers.CreateGame, newGame);
 
         if (response.internalResultCode == InternalStatusCodes.OKCode)
         {

@@ -32,6 +32,7 @@ public class GlobalLogicController : MonoBehaviour
     public StatisticsController statisticsController;
     public SceneChangeController sceneChangeController;
     public GameOptionsController gameOptionsHolder;
+    public TutorialController tutorialController;
     public GameObject troopsCanvas;
     public GameObject citiesCanvas;
     public GameObject pausePanel;
@@ -63,7 +64,16 @@ public class GlobalLogicController : MonoBehaviour
         cities = FindObjectsOfType<CityController>().ToList();
 
         troopsCounter = 0;
-        SetPauseState(false, null);
+        //SetPauseState(false, null);
+
+        if (gameModel.Gametype == GameModel.GameType.Single)
+        {
+            tutorialController.DisplayTutorial();
+        }
+        else
+        {
+            //TODO: Mostrar pantalla de waiting for players y llamar a ingame mediante SignalR para indicar que este cliente está listo
+        }
     }
 
     // Update is called once per frame

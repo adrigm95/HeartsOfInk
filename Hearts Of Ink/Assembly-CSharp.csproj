@@ -64,6 +64,7 @@
     <Compile Include="Assets\Scripts\Controller\InGame\GlobalLogicController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TroopController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TutorialController.cs" />
+    <Compile Include="Assets\Scripts\Controller\InGame\WaitingPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\InfoPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\MainMenu\FactionItemController.cs" />
     <Compile Include="Assets\Scripts\Controller\MainMenu\FactionsPanelController.cs" />
@@ -78,7 +79,7 @@
     <Compile Include="Assets\Scripts\Controller\Multiplayer\JoinGameController.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\LobbySignalR\ConfigLinesUpdater.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\LobbySignalR\LobbyHOIHub.cs" />
-    <Compile Include="Assets\Scripts\Controller\Multiplayer\LobbySignalR\StartGame.cs" />
+    <Compile Include="Assets\Scripts\Controller\Multiplayer\LobbySignalR\StartGameSignalR.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\SubMenuPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\StatisticsController.cs" />
     <Compile Include="Assets\Scripts\Controller\UIAnimator.cs" />

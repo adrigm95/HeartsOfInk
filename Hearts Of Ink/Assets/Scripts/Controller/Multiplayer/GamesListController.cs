@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using Assets.Scripts.Data.Constants;
 
 public class GamesListController : MonoBehaviour
 {
@@ -71,7 +72,7 @@ public class GamesListController : MonoBehaviour
         WebServiceCaller<List<BasicGameInfo>> wsCaller = new WebServiceCaller<List<BasicGameInfo>>();
         HOIResponseModel<List<BasicGameInfo>> response;
 
-        response = await wsCaller.GenericWebServiceCaller(Method.GET, LobbyHOIControllers.PublicGames);
+        response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.GET, LobbyHOIControllers.PublicGames);
 
         switch (response.internalResultCode)
         {

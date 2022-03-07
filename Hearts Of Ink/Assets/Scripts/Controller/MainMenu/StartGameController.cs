@@ -1,8 +1,11 @@
 ﻿using Assets.Scripts.Data;
+using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.GlobalInfo;
+using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
 using NETCoreServer.Models;
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,16 +18,46 @@ public class StartGameController : MonoBehaviour
     private void Start()
     {
         sceneChangeController = FindObjectOfType<SceneChangeController>();
+        StartGameSignalR.Instance.StartGameController = this;
     }
 
-    public void StartGame()
+    public async void StartGame(bool isMultiplayer)
     {
+        bool readyForChangeScene = true;
         GameModel gameModel = new GameModel(0);
-        gameModel.Gametype = GameModel.GameType.Single;
+        gameModel.Gametype = isMultiplayer ? GameModel.GameType.MultiplayerHost : GameModel.GameType.Single;
         
         GetPlayerOptions(gameModel);
-        sceneChangeController.ChangeScene(transform);
-        gameOptionsController.gameModel = gameModel;
+
+        if (isMultiplayer)
+        {
+            readyForChangeScene = await StartGameInServer(gameModel);
+        }
+
+        if (readyForChangeScene)
+        {
+            sceneChangeController.ChangeScene(transform);
+            gameOptionsController.gameModel = gameModel;
+        }
+    }
+
+    private async Task<bool> StartGameInServer(GameModel gameModel)
+    {
+        WebServiceCaller<GameModel, bool> wsCaller = new WebServiceCaller<GameModel, bool>();
+        HOIResponseModel<bool> ingameServerResponse;
+
+        ingameServerResponse = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyIngameServerUrl, Method.POST, "api/GameRoom", gameModel);
+
+        if (ingameServerResponse.serviceResponse)
+        {
+            StartGameSignalR.Instance.SendStartGame(gameModel.gameKey);
+        }
+        else
+        {
+            Debug.LogError($"Error on StartGameInServer: {ingameServerResponse.ServiceError}");
+        }
+
+        return ingameServerResponse.serviceResponse;
     }
 
     private void GetPlayerOptions(GameModel gameModel)

@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Data;
+using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
@@ -120,7 +121,7 @@ public class ConfigGameController : MonoBehaviour
 
         try
         {
-            response = await wsCaller.GenericWebServiceCaller(Method.POST, LobbyHOIControllers.NotifyActive, txtGamekey.text);
+            response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.POST, LobbyHOIControllers.NotifyActive, txtGamekey.text);
 
             if (!response.serviceResponse)
             {

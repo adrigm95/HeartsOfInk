@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Data.ServerModels.Constants;
+﻿using Assets.Scripts.Data.Constants;
+using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
 using NETCoreServer.Models;
 using NETCoreServer.Models.In;
@@ -55,7 +56,7 @@ public class JoinGameController : MonoBehaviour
         }
         else
         {
-            response = await wsCaller.GenericWebServiceCaller(Method.POST, LobbyHOIControllers.RequestEntry, requestEntryModel);
+            response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.POST, LobbyHOIControllers.RequestEntry, requestEntryModel);
 
             switch (response.internalResultCode)
             {

@@ -17,7 +17,7 @@ public class LobbyHOIHub
     private LobbyHOIHub()
     {
         connection = new HubConnectionBuilder()
-            .WithUrl(ApiConfig.NETCoreServerUrl + "signalrhoi")
+            .WithUrl(ApiConfig.LobbyHOIServerUrl + "signalrhoi")
             .Build();
         connection.Closed += async (error) =>
         {
@@ -50,7 +50,7 @@ public class LobbyHOIHub
                 {
                     Debug.Log("Setting signalR connection.ON");
                     ConfigLinesUpdater.Instance.SusbcribeReceiver(this, connection);
-                    StartGame.Instance.SusbcribeReceiver(this, connection);
+                    StartGameSignalR.Instance.SusbcribeReceiver(this, connection);
                     Debug.Log("Starting connection with signalR");
                     await connection.StartAsync();
                     return;
