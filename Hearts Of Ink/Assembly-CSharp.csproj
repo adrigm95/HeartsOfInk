@@ -79,6 +79,7 @@
     <Compile Include="Assets\Scripts\Controller\Multiplayer\JoinGameController.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\LobbySignalR\ConfigLinesUpdater.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\LobbySignalR\LobbyHOIHub.cs" />
+    <Compile Include="Assets\Scripts\Controller\Multiplayer\LobbySignalR\StartCountdownSignalR.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\LobbySignalR\StartGameSignalR.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\SubMenuPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\StatisticsController.cs" />

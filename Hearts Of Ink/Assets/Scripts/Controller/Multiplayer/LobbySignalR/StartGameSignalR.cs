@@ -57,6 +57,20 @@ public class StartGameSignalR
         }
     }
 
+    public async void SendClientReady(string room)
+    {
+        HubConnection connection = await signalRController.GetConnection();
+
+        try
+        {
+            await connection.InvokeAsync("ClientReady", room);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogException(ex);
+        }
+    }
+
     public void ReceiveStartGame()
     {
         Debug.Log("ReceiveStartGame");
