@@ -25,9 +25,6 @@ namespace Assets.Scripts.DataAccess
 
     public class WebServiceCaller<T, S>
     {
-        // Sustituir por JsonConvert a futuro, da problemas con objetos complejos.
-        DataContractJsonSerializer sendSerializer = new DataContractJsonSerializer(typeof(T));
-
         /// <summary>
         /// Método genérico para llamadas a API.
         /// </summary>
@@ -36,12 +33,11 @@ namespace Assets.Scripts.DataAccess
         public async Task<HOIResponseModel<S>> GenericWebServiceCaller(string baseAdress, Method method, string targetRequest, object requestBody)
         {
             HttpClient client = new HttpClient();
-            MemoryStream memoryStream;
-            StreamReader strReader;
             HOIResponseModel<S> serverResponse;
             HttpResponseMessage response = null;
             HttpContent content;
             string json = string.Empty;
+            string responseContent = string.Empty;
             long start;
             long end;
             TimeSpan difference;
@@ -53,13 +49,7 @@ namespace Assets.Scripts.DataAccess
 
                 if (requestBody != null)
                 {
-                    memoryStream = new MemoryStream();
-                    sendSerializer.WriteObject(memoryStream, requestBody);
-                    memoryStream.Position = 0;
-                    strReader = new StreamReader(memoryStream);
-                    json = strReader.ReadToEnd();
-                    memoryStream.Close();
-                    strReader.Close();
+                    json = JsonConvert.SerializeObject(requestBody);
 
                     Debug.Log("Sending json: " + json);
                 }
@@ -82,7 +72,8 @@ namespace Assets.Scripts.DataAccess
                         break;
                 }
 
-                serverResponse = JsonConvert.DeserializeObject<HOIResponseModel<S>>(await response.Content.ReadAsStringAsync());
+                responseContent = await response.Content.ReadAsStringAsync();
+                serverResponse = JsonConvert.DeserializeObject<HOIResponseModel<S>>(responseContent);
                 end = DateTime.Now.Ticks;
                 difference = TimeSpan.FromTicks(end - start);
                 Debug.Log("Start: " + start + " End: " + end + " Difference: " + difference);
@@ -109,7 +100,7 @@ namespace Assets.Scripts.DataAccess
             {
                 serverResponse = new HOIResponseModel<S>();
                 serverResponse.internalResultCode = InternalStatusCodes.KOConnectionCode;
-                Debug.LogError("Error on connection: " + ex);
+                Debug.LogError($"Error on connection: {ex} for response {responseContent}");
             }
 
             return serverResponse;
