@@ -6,10 +6,20 @@ using UnityEngine;
 
 public class GameOptionsController : MonoBehaviour
 {
+    private static GameOptionsController _instance;
+
     public GameModel gameModel;
 
-    private void Start()
+    private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            _instance = this;
+            DontDestroyOnLoad(this);
+        }
     }
 }

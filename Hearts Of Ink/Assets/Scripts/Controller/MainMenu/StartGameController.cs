@@ -11,12 +11,13 @@ using UnityEngine.UI;
 
 public class StartGameController : MonoBehaviour
 {
+    private GameOptionsController gameOptionsController;
     private SceneChangeController sceneChangeController;
     public Transform factionDropdownsHolder;
-    public GameOptionsController gameOptionsController;
 
     private void Start()
     {
+        gameOptionsController = FindObjectOfType<GameOptionsController>();
         sceneChangeController = FindObjectOfType<SceneChangeController>();
         StartGameSignalR.Instance.StartGameController = this;
     }
