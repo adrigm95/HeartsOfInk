@@ -62,8 +62,8 @@ public class ConfigGameController : MonoBehaviour
     {
         foreach (ConfigLineModel configLine in ConfigLinesUpdater.Instance.GetReceivedConfigLines())
         {
-            string prefabPath = "Prefabs/fileFactionMultiplayer";
-            Transform newObject;
+
+            Transform ObjectLine;
             Vector3 position;
             Dropdown cbPlayerType;
             Image colorFactionImage;
@@ -71,35 +71,27 @@ public class ConfigGameController : MonoBehaviour
             Text txtPlayerName;
             GlobalInfoFaction faction;
             Button btnAlliance;
-            FactionItemController factionItemController;
-
             try
             {
                 faction = globalInfo.Factions.Find(item => item.Id == configLine.FactionId);
-
-                string ObjetName = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + configLine.MapSocketId;
-
-                newObject = GameObject.Find(ObjetName).transform;
-                cbPlayerType = newObject.Find("cbPlayerType").GetComponent<Dropdown>();
-                colorFactionImage = newObject.Find("btnColorFaction").GetComponent<Image>();
-                btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Button>();
-                btnAlliance = newObject.Find("btnAlliance").GetComponent<Button>();
-                factionItemController = newObject.GetComponent<FactionItemController>();
-                factionItemController.configGameController = this;
-                cbPlayerType.value = (int)configLine.PlayerType;
-
-
-
+                string ObjetName = "factionLine" + "_" + configLine.MapSocketId;
+                ObjectLine = GameObject.Find(ObjetName).transform;
+                cbPlayerType = ObjectLine.Find("cbPlayerType").GetComponent<Dropdown>();
+                colorFactionImage = ObjectLine.Find("btnColorFaction").GetComponent<Image>();
+                btnColorFaction = ObjectLine.Find("btnColorFaction").GetComponent<Button>();
+                btnAlliance = ObjectLine.Find("btnAlliance").GetComponent<Button>();
+                Text txtAlliance = ObjectLine.Find("btnAlliance").GetComponentInChildren<Text>();
+                cbPlayerType.value = (int)configLine.PlayerType;              
                 colorFactionImage.color = ColorUtils.GetColorByString(configLine.Color);
-
-                /*  if (!string.IsNullOrEmpty(configLine.PlayerName))
-                   {
+                 if (!string.IsNullOrEmpty(configLine.PlayerName))
+                 {
                        ChangeFactionDescriptions(faction);
-                //       cbPlayerType.gameObject.SetActive(false);
-                       txtPlayerName = newObject.Find("txtPlayerName").GetComponent<Text>();
+                       cbPlayerType.gameObject.SetActive(false);
+                       txtPlayerName = ObjectLine.Find("txtPlayerName").GetComponent<Text>();
                        txtPlayerName.text = configLine.PlayerName;
                        txtPlayerName.gameObject.SetActive(true);
-                   }*/
+                 }
+                txtAlliance.text =  Convert.ToString(configLine.Alliance);
             }
             catch (Exception ex)
             {
@@ -207,7 +199,7 @@ public class ConfigGameController : MonoBehaviour
         Text txtAlliance = factionLine.Find("btnAlliance").GetComponentInChildren<Text>();
 
         string[] splittedName = factionLine.name.Split('_');
-        int mapSocketId = Convert.ToInt32(splittedName[2]);
+        int mapSocketId = Convert.ToInt32(splittedName[1]);
         ConfigLineModel configLine = _configLinesState.Find(item => item.MapSocketId == mapSocketId);
 
         if (isGameHost || configLine.MapSocketId == ownLine)
@@ -246,7 +238,7 @@ public class ConfigGameController : MonoBehaviour
             position = new Vector3(0, startLines);
             position.y -= spacing * index;
             newObject = ((GameObject)Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
-            newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + configLine.MapSocketId;
+            newObject.name = "factionLine" + "_" + configLine.MapSocketId;
             newObject.SetParent(this.transform, false);
 
             LoadFactionsCombo(newObject.Find("cbFaction").GetComponent<Dropdown>(), isEnabled);
@@ -293,9 +285,8 @@ public class ConfigGameController : MonoBehaviour
     {
         if (comboOrder.value == 0)
         {
-            int comboFactionId = Convert.ToInt32(comboOrder.transform.parent.gameObject.name.Split('_')[1]);
-            GlobalInfoFaction globalInfoFaction = globalInfo.Factions.Find(faction => faction.Id == comboFactionId);
-
+            string comboFactionName = comboOrder.options[comboOrder.value].text;
+            GlobalInfoFaction globalInfoFaction = globalInfo.Factions.Find(faction => faction.Names[0].Value == comboFactionName);
             ChangeFactionDescriptions(globalInfoFaction);
         }
     }
