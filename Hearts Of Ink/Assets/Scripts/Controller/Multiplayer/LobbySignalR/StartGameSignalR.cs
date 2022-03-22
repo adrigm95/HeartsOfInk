@@ -74,6 +74,6 @@ public class StartGameSignalR
     public void ReceiveStartGame()
     {
         Debug.Log("ReceiveStartGame");
-        StartGameController.StartGame(true);
+        StartGameController.StartGame(false);
     }
 }

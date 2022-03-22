@@ -8235,7 +8235,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   factionDropdownsHolder: {fileID: 5135278583319347478}
-  gameOptionsController: {fileID: 1469606218}
 --- !u!1001 &5957808286274831701
 PrefabInstance:
   m_ObjectHideFlags: 0

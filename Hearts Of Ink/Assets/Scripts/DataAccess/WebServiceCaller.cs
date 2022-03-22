@@ -65,7 +65,7 @@ namespace Assets.Scripts.DataAccess
                         response = await client.PutAsync(targetRequest, content);
                         break;
                     case Method.DELETE:
-                        throw new NotImplementedException("DELETE not implemented on WebServiceCaller");
+                        response = await client.DeleteAsync(targetRequest);
                         break;
                     case Method.GET:
                         response = await client.GetAsync(targetRequest);

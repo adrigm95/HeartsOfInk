@@ -11,26 +11,32 @@ using UnityEngine.UI;
 
 public class StartGameController : MonoBehaviour
 {
+    private ConfigGameController configGameController;
     private GameOptionsController gameOptionsController;
     private SceneChangeController sceneChangeController;
     public Transform factionDropdownsHolder;
 
     private void Start()
     {
+        configGameController = FindObjectOfType<ConfigGameController>();
         gameOptionsController = FindObjectOfType<GameOptionsController>();
         sceneChangeController = FindObjectOfType<SceneChangeController>();
         StartGameSignalR.Instance.StartGameController = this;
     }
 
-    public async void StartGame(bool isMultiplayer)
+    /// <summary>
+    /// Realiza la lógica previa al comienzo de partida.
+    /// </summary>
+    /// <param name="sendStartToServer"> Solo es true si lo llama el host al darle a comenzar partida en multiplayer.</param>
+    public async void StartGame(bool sendStartToServer)
     {
         bool readyForChangeScene = true;
         GameModel gameModel = new GameModel(0);
-        gameModel.Gametype = isMultiplayer ? GameModel.GameType.MultiplayerHost : GameModel.GameType.Single;
+        gameModel.Gametype = sendStartToServer ? GameModel.GameType.MultiplayerHost : GameModel.GameType.Single;
         
         GetPlayerOptions(gameModel);
 
-        if (isMultiplayer)
+        if (sendStartToServer)
         {
             readyForChangeScene = await StartGameInServer(gameModel);
         }
@@ -47,7 +53,8 @@ public class StartGameController : MonoBehaviour
         WebServiceCaller<GameModel, bool> wsCaller = new WebServiceCaller<GameModel, bool>();
         HOIResponseModel<bool> ingameServerResponse;
 
-        ingameServerResponse = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyIngameServerUrl, Method.POST, "api/GameRoom", gameModel);
+        gameModel.gameKey = configGameController.txtGamekey.text;
+        ingameServerResponse = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/GameRoom", gameModel);
 
         if (ingameServerResponse.serviceResponse)
         {
