@@ -26,20 +26,32 @@ public class FactionsPanelController : MonoBehaviour
         availableMaps = MapDAC.GetAvailableMaps(false);
         availableMaps.ForEach(map => cbMaps.options.Add(new Dropdown.OptionData(map.DisplayName)));
         cbMaps.RefreshShownValue();
+        cbMaps.onValueChanged.AddListener(delegate { LoadMap(); });
         LoadMap();
     }
 
     public void LoadMap()
     {
-        //"0_Cartarena_v0_3_0";
-        Debug.Log("ItemText: " + cbMaps.itemText.text);
+        Debug.Log("Loading map: " + cbMaps.itemText.text);
         mapModel = MapDAC.LoadMapInfo(availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).DefinitionName);
         globalInfo = MapDAC.LoadGlobalMapInfo();
 
+        CleanFactionLines();
         foreach (MapPlayerModel player in mapModel.Players)
         {
             LoadFactionLine(player);
         }
+        MapController.Instance.UpdateMap(mapModel.SpritePath);
+    }
+
+    private void CleanFactionLines()
+    {
+        foreach (Dropdown cbFaction in factions)
+        {
+            Destroy(cbFaction.transform.parent.gameObject);
+        }
+
+        factions.Clear();
     }
 
     public void LoadFactionLine(MapPlayerModel player)
@@ -64,7 +76,7 @@ public class FactionsPanelController : MonoBehaviour
         btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
 
         cbFaction.value = player.IaId;
-        cbFaction.onValueChanged.AddListener(delegate { OnValueChange(cbFaction); });
+        cbFaction.onValueChanged.AddListener(delegate { CbFaction_OnValueChange(cbFaction); });
         txtFaction.text = faction.Names[0].Value;
         btnColorFaction.color = ColorUtils.GetColorByString(player.Color);
 
@@ -76,7 +88,7 @@ public class FactionsPanelController : MonoBehaviour
         }
     }
 
-    public void OnValueChange(Dropdown comboOrder)
+    public void CbFaction_OnValueChange(Dropdown comboOrder)
     {
         if (comboOrder.value == 0)
         {

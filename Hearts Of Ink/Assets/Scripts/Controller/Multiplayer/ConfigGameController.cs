@@ -35,7 +35,6 @@ public class ConfigGameController : MonoBehaviour
     public Text factionDescription;
     public Text bonusDescription;
     public InputField playerName;
-    public MapController mapController;
 
     // Start is called before the first frame update
     void Start()
@@ -62,7 +61,6 @@ public class ConfigGameController : MonoBehaviour
     {
         foreach (ConfigLineModel configLine in ConfigLinesUpdater.Instance.GetReceivedConfigLines())
         {
-
             Transform ObjectLine;
             Vector3 position;
             Dropdown cbPlayerType;
@@ -71,6 +69,8 @@ public class ConfigGameController : MonoBehaviour
             Text txtPlayerName;
             GlobalInfoFaction faction;
             Button btnAlliance;
+            Text txtAlliance;
+
             try
             {
                 faction = globalInfo.Factions.Find(item => item.Id == configLine.FactionId);
@@ -80,17 +80,17 @@ public class ConfigGameController : MonoBehaviour
                 colorFactionImage = ObjectLine.Find("btnColorFaction").GetComponent<Image>();
                 btnColorFaction = ObjectLine.Find("btnColorFaction").GetComponent<Button>();
                 btnAlliance = ObjectLine.Find("btnAlliance").GetComponent<Button>();
-                Text txtAlliance = ObjectLine.Find("btnAlliance").GetComponentInChildren<Text>();
+                txtAlliance = ObjectLine.Find("btnAlliance").GetComponentInChildren<Text>();
                 cbPlayerType.value = (int)configLine.PlayerType;              
                 colorFactionImage.color = ColorUtils.GetColorByString(configLine.Color);
-                 if (!string.IsNullOrEmpty(configLine.PlayerName))
-                 {
-                       ChangeFactionDescriptions(faction);
-                       cbPlayerType.gameObject.SetActive(false);
-                       txtPlayerName = ObjectLine.Find("txtPlayerName").GetComponent<Text>();
-                       txtPlayerName.text = configLine.PlayerName;
-                       txtPlayerName.gameObject.SetActive(true);
-                 }
+                if (!string.IsNullOrEmpty(configLine.PlayerName))
+                {
+                    ChangeFactionDescriptions(faction);
+                    cbPlayerType.gameObject.SetActive(false);
+                    txtPlayerName = ObjectLine.Find("txtPlayerName").GetComponent<Text>();
+                    txtPlayerName.text = configLine.PlayerName;
+                    txtPlayerName.gameObject.SetActive(true);
+                }
                 txtAlliance.text =  Convert.ToString(configLine.Alliance);
             }
             catch (Exception ex)
@@ -133,7 +133,7 @@ public class ConfigGameController : MonoBehaviour
         mapModel = MapDAC.LoadMapInfo(mapId);
         globalInfo = MapDAC.LoadGlobalMapInfo();
         LobbyHOIHub.Instance.SuscribeToRoom(txtGamekey.text);
-        mapController.UpdateMap(mapModel.SpritePath);
+        MapController.Instance.UpdateMap(mapModel.SpritePath);
 
         if (configLines == null)
         {

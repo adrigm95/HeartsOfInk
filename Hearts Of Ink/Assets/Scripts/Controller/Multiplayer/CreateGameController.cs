@@ -15,7 +15,6 @@ public class CreateGameController : MonoBehaviour
     private ConfigGameController configGameController;
     [SerializeField]
     private InfoPanelController infoPanelController;
-    public MapController mapController;
     public GamesListController gamesListPanel;
     public Button btnCreateGame;
     public InputField gameNameText;
@@ -65,7 +64,7 @@ public class CreateGameController : MonoBehaviour
 
     private void OnValueChange()
     {
-        mapController.UpdateMap(availableMaps.Find(item => item.DisplayName == cbMaps.options[cbMaps.value].text).SpritePath);
+        MapController.Instance.UpdateMap(availableMaps.Find(item => item.DisplayName == cbMaps.options[cbMaps.value].text).SpritePath);
     }
 
     public void EnableDisableCreateGame(bool enable)

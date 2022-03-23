@@ -8,28 +8,28 @@
 	  {
 		"MapSocketId": 0,
 		"FactionId": 0,
-		"IaId": 0,
-		"Name": "Player",
+		"IaId": 2,
+		"Name": "Macu",
 		"Color": "255,0,46"
 	  },
 	  {
 		"MapSocketId": 1,
 		"FactionId": 1,
-		"IaId": 1,
-		"Name": "Cisneros",
+		"IaId": 0,
+		"Name": "Player",
 		"Color": "88,212,255"
 	  },
 	  {
 		"MapSocketId": 2,
 		"FactionId": 2,
-		"IaId": 2,
+		"IaId": 1,
 		"Name": "Djambo",
 		"Color": "0,234,61"
 	  },
 	  {
 		"MapSocketId": 3,
 		"FactionId": 3,
-		"IaId": 2,
+		"IaId": 1,
 		"Name": "Nahaoui",
 		"Color": "255,223,0"
 	  }
