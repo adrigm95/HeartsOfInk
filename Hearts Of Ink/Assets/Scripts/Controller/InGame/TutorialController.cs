@@ -33,23 +33,23 @@ public class TutorialController : MonoBehaviour
     /// Obtiene los datos del siguiente mensaje a mostrar.
     /// </summary>
     /// <returns>True si hay que mostrar otro mensaje, false si se ha llegado al final de la cadena.</returns>
-    public bool NextMessage()
+    public TutorialStep NextMessage()
     {
         TutorialStep tutorialStep;
         step++;
 
+        Debug.Log($"Displaying step {step} of {tutorialModel.Steps.Count}");
         if (step < tutorialModel.Steps.Count)
         {
             tutorialStep = tutorialModel.Steps[step];
 
             globalLogic.SetPauseState(tutorialStep.PauseGame, null);
-            infoPanelController.DisplayMessage(tutorialStep.Title[0].Value, tutorialStep.Content[0].Value);
-            return true;
+            return tutorialStep;
         }
         else
         {
             globalLogic.SetPauseState(false, null);
-            return false;
+            return null;
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Data.TutorialModels;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class InfoPanelController : MonoBehaviour
@@ -54,10 +55,19 @@ public class InfoPanelController : MonoBehaviour
         }
         else if (tutorialController != null)
         {
-            if (!tutorialController.NextMessage())
+            TutorialStep tutorialStep = tutorialController.NextMessage();
+            if (tutorialStep != null)
+            {
+                DisplayMessage(tutorialStep.Title[0].Value, tutorialStep.Content[0].Value, false);
+            }
+            else
             {
                 this.gameObject.SetActive(false);
             }
+        }
+        else
+        {
+            Debug.LogWarning("tutorialController is null on Accept");
         }
     }
 
