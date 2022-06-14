@@ -12,7 +12,7 @@ namespace Assets.Scripts.Data
         public short MapId { get; set; }
 
         /// <summary>
-        /// Nombre del fichero de definición del mapa. No contiene la extensión (.json).
+        /// Nombre del fichero de definición del mapa. No contiene la extensión (.rgmd).
         /// </summary>
         public string DefinitionName { get; set; }
 

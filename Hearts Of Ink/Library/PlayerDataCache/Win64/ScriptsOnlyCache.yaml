@@ -30,8 +30,6 @@ ScriptsOnlyBuild:
     - WaitingPanelController
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
-    - UnityEditor.Tilemaps.GridPaletteBrushes
-    - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.TileDragAndDropManager
     Unity.Rider.Editor.dll:
@@ -800,7 +798,7 @@ ScriptsOnlyBuild:
     className: RemoteTestResultSender
   - hash:
       serializedVersion: 2
-      Hash: f9725ab18a417b7e1baf3ed4008fe55d
+      Hash: c54e9940da312279250d6260652ba644
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ConfigGameController
@@ -1076,7 +1074,7 @@ ScriptsOnlyBuild:
     className: TMP_StyleSheet
   - hash:
       serializedVersion: 2
-      Hash: 95d58d71ea88d5d7f02676b6a1b40251
+      Hash: c5a2248b13512f5498d879142724d8b3
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CreateGameController

@@ -1103,6 +1103,7 @@ MonoBehaviour:
   mainMenuButton: {fileID: 0}
   exitToMenuButton: {fileID: 11228807}
   startGame: {fileID: 0}
+  mapEditorButton: {fileID: 0}
 --- !u!4 &435058241
 Transform:
   m_ObjectHideFlags: 0
@@ -2112,7 +2113,7 @@ SpriteRenderer:
   m_SortingLayerID: 1851735389
   m_SortingLayer: -2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 5ceb546ed7b98044f81badf370052040, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b4a2a51c2aadab74fb9d19f7bb14c417, type: 3}
   m_Color: {r: 0.8773585, g: 0.87257034, b: 0.84011215, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2154,7 +2155,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 11.64, y: 8.206667}
+    oldSize: {x: 12.000768, y: 8.133333}
     newSize: {x: 11.64, y: 8.206667}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

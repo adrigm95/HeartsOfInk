@@ -1,0 +1,8 @@
+{
+  "MapId": 1,
+  "DisplayName": "Chopo Islands",
+  "DefinitionName": "1_chopo-islands",
+  "SpritePath": "MapSprites/1_chopo-islands.png",
+  "AvailableForMultiplayer": true,
+  "AvailableForSingleplayer": true,
+}

@@ -20,5 +20,12 @@ namespace Assets.Scripts.Utils
 
             return readedObject;
         }
+
+        public static void SaveObjectIntoFile(T content, string path)
+        {
+            string fileContent = JsonConvert.SerializeObject(content);
+
+            File.WriteAllText(path, fileContent);
+        }
     }
 }

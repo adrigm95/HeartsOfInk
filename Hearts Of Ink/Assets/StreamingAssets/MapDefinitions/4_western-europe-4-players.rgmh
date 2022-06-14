@@ -1,0 +1,8 @@
+{
+  "MapId": 4,
+  "DisplayName": "(4) Western Europe",
+  "DefinitionName": "4_western-europe-4-players",
+  "SpritePath": "MapSprites/4_western-europe-4-players.png",
+  "AvailableForMultiplayer": true,
+  "AvailableForSingleplayer": true,
+}

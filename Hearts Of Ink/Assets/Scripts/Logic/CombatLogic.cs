@@ -19,18 +19,31 @@ namespace Assets.Scripts.Logic
             CombatResults combatResults = new CombatResults();
             int attackerLosses;
             int defensorLosses;
-            int bonusAttacker;
-            int bonusDefensor;
 
-            bonusAttacker = attacker.troopModel.Player.Faction.Bonus.BonusId == Bonus.Id.Combat ? 15 : 0;
-            bonusDefensor = defensor.troopModel.Player.Faction.Bonus.BonusId == Bonus.Id.Combat ? 15 : 0;
-            defensorLosses = attacker.troopModel.Units / (RandomUtils.Next(MinDefense, MaxDefense) + bonusDefensor) + 1;
-            attackerLosses = defensor.troopModel.Units / (RandomUtils.Next(MinDefense, MaxDefense) + bonusAttacker) + 1;
+            defensorLosses = CalculateLosses(attacker.troopModel, defensor.troopModel);
+            attackerLosses = CalculateLosses(defensor.troopModel, attacker.troopModel);
 
             combatResults.DefensorRemainingUnits = CalcRemainingUnits(defensor.troopModel.Units, defensorLosses);
             combatResults.AttackerRemainingUnits = CalcRemainingUnits(attacker.troopModel.Units, attackerLosses);
 
             return combatResults;
+        }
+
+        private int CalculateLosses(TroopModel enemyTroop, TroopModel troop)
+        {
+            Bonus.Id bonusId = troop.Player.Faction.Bonus.BonusId;
+            int yourUnits = troop.Units;
+            int combatBonus = bonusId == Bonus.Id.Combat ? 15 : 0;
+            int losses;
+
+            losses = enemyTroop.Units / (RandomUtils.Next(MinDefense, MaxDefense) + combatBonus) + 1;
+
+            if (bonusId == Bonus.Id.MoveOnCombat && (yourUnits - losses) < GlobalConstants.GuerrillaLimit)
+            {
+                losses = yourUnits;
+            }
+
+            return losses;
         }
 
         public int CalcRemainingUnits(int startUnits, int losses)

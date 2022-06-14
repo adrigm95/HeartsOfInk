@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Multiplayer.unity
     guid: 5cee063df06e45d4986e8cec327f82ad
+  - enabled: 1
+    path: Assets/Scenes/MapEditor.unity
+    guid: 59a7d3c217243104ebdf6774dcfe3f86
   m_configObjects: {}

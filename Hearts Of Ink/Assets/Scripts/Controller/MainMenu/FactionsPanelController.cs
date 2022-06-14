@@ -13,7 +13,7 @@ public class FactionsPanelController : MonoBehaviour
     private MapModel mapModel;
     private GlobalInfo globalInfo;
     private List<Dropdown> factions;
-    private List<MapModel> availableMaps;
+    private List<MapModelHeader> availableMaps;
     public int startFactionLines;
     public int spacing;
     public Text factionDescription;

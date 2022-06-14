@@ -75,6 +75,101 @@
 			  "Language": "ES-es",
 			  "Value": "Los nómadas del desierto son un conjunto de clanes muy beligerantes que existen desde antes de la llegada del imperio. Una vez que el imperio abandonó la tentativa de conquistar el desierto, establecieron fructiferas relaciones comerciales.\r\n\r\nAhora que soplan vientos de cambio ¿En que bando se posicionarán los nómadas?"
 			}]
+		},
+		{
+			"Id": 4,
+			"BonusId": 4,
+			"Names": [
+				{
+					"Language": "ES-es",
+					"Value": "España"
+				},
+				{
+					"Language": "EN",
+					"Value": "Spain"
+				}
+			],
+			"Descriptions": [
+			{
+			  "Language": "ES-es",
+			  "Value": "Reino de España"
+			}]
+		},
+		{
+			"Id": 5,
+			"BonusId": 0,
+			"Names": [
+				{
+					"Language": "ES-es",
+					"Value": "Marruecos"
+				},
+				{
+					"Language": "EN",
+					"Value": "Morroco"
+				}
+			],
+			"Descriptions": [
+			{
+			  "Language": "ES-es",
+			  "Value": "Marruecos"
+			}]
+		},
+		{
+			"Id": 6,
+			"BonusId": 2,
+			"Names": [
+				{
+					"Language": "ES-es",
+					"Value": "Tunez"
+				},
+				{
+					"Language": "EN",
+					"Value": "Tunisia"
+				}
+			],
+			"Descriptions": [
+			{
+			  "Language": "ES-es",
+			  "Value": "Tunisia"
+			}]
+		},
+		{
+			"Id": 7,
+			"BonusId": 0,
+			"Names": [
+				{
+					"Language": "ES-es",
+					"Value": "Italia"
+				},
+				{
+					"Language": "EN",
+					"Value": "Italy"
+				}
+			],
+			"Descriptions": [
+			{
+			  "Language": "ES-es",
+			  "Value": "Italia"
+			}]
+		},
+		{
+			"Id": 8,
+			"BonusId": 5,
+			"Names": [
+				{
+					"Language": "ES-es",
+					"Value": "Ciudades Libres"
+				},
+				{
+					"Language": "EN",
+					"Value": "Free States"
+				}
+			],
+			"Descriptions": [
+			{
+			  "Language": "ES-es",
+			  "Value": "Las facción de las ciudades libres es la facción que reune a las ciudades que son neutrales al inicio de la partida.\r\n\r\nEsta facción no es seleccionable por parte de los jugadores."
+			}]
 		}
 	],
 	"Bonus" : [
@@ -111,6 +206,33 @@
 				{
 					"Language": "ES-es",
 					"Value": "Comienzas con la mayor tropa de la partida."
+				}
+			] 
+		},
+		{
+			"Id": 4,
+			"Descriptions": [
+				{
+					"Language": "ES-es",
+					"Value": "Tus Guerrilleros (menos de 100 unidades) se mueven más rápido y pueden retirarse"
+				}
+			] 
+		},
+		{
+			"Id": 5,
+			"Descriptions": [
+				{
+					"Language": "ES-es",
+					"Value": "No puede reclutar unidades (Facciones neutrales)"
+				}
+			] 
+		},
+		{
+			"Id": 6,
+			"Descriptions": [
+				{
+					"Language": "ES-es",
+					"Value": "Tus tropas se pueden mover en combate, pero si bajan de 100 unidades en combate se disolverán"
 				}
 			] 
 		}

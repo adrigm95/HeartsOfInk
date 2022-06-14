@@ -13,13 +13,50 @@ namespace Assets.Scripts.DataAccess
 {
     public class MapDAC
     {
+        // RGMD = RawGen Map Definition
+        // RGMH = RawGen Map Header
+        private const string RGMDFormat = ".rgmd";
+        private const string RGMHFormat = ".rgmh";
+        private const string RGMDPattern = "*.rgmd";
+        private const string RGMHPattern = "*.rgmh";
+        private const string JsonFormat = ".json";
+        private const string JsonFormatPattern = "*.json";
         private const string GlobalInfoFile = "/_GlobalInfo.json";
+        private const string MapDefinitionsPath = "/MapDefinitions/";
+
+        public static MapModelHeader LoadMapHeader(string filename)
+        {
+            MapModelHeader result;
+            string mapPath;
+
+            try
+            {
+                if (filename.EndsWith(RGMHFormat))
+                {
+                    mapPath = filename;
+                }
+                else
+                {
+                    mapPath = Application.streamingAssetsPath + MapDefinitionsPath + filename + RGMHFormat;
+                }
+
+                result = JsonCustomUtils<MapModelHeader>.ReadObjectFromFile(mapPath);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Error trying to load header map '{filename}': {ex.Message}");
+                throw;
+            }
+
+            return result;
+        }
 
         public static MapModel LoadMapInfo(short mapId)
         {
-            List<MapModel> availableMaps = GetAvailableMaps();
+            List<MapModelHeader> availableMaps = GetAvailableMaps();
+            MapModelHeader wantedMap = availableMaps.Find(map => map.MapId == mapId);
 
-            return availableMaps.Find(map => map.MapId == mapId);
+            return LoadMapInfo(wantedMap.DefinitionName);
         }
 
         public static MapModel LoadMapInfo(string mapName)
@@ -29,13 +66,13 @@ namespace Assets.Scripts.DataAccess
 
             try
             {
-                if (mapName.EndsWith(".json"))
+                if (mapName.EndsWith(RGMDFormat))
                 {
                     mapPath = mapName;
                 }
                 else
                 {
-                    mapPath = Application.streamingAssetsPath + "/MapDefinitions/" + mapName + ".json";
+                    mapPath = Application.streamingAssetsPath + MapDefinitionsPath + mapName + RGMDFormat;
                 }
 
                 result = JsonCustomUtils<MapModel>.ReadObjectFromFile(mapPath);
@@ -43,7 +80,7 @@ namespace Assets.Scripts.DataAccess
             }
             catch (Exception ex)
             {
-                Debug.LogError("Error trying to load map '" + mapName + "': " + ex.Message);
+                Debug.LogError($"Error trying to load map '{mapName}': {ex.Message}");
                 throw;
             }
 
@@ -57,23 +94,23 @@ namespace Assets.Scripts.DataAccess
             return JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
         }
 
-        private static List<MapModel> GetAvailableMaps()
+        private static List<MapModelHeader> GetAvailableMaps()
         {
             string directory = Application.streamingAssetsPath + "/MapDefinitions";
-            string[] files = Directory.GetFiles(directory, "*.json");
-            List<MapModel> mapModels = new List<MapModel>();
+            string[] files = Directory.GetFiles(directory, RGMHPattern);
+            List<MapModelHeader> mapModels = new List<MapModelHeader>();
 
             foreach (string file in files)
             {
-                mapModels.Add(LoadMapInfo(file));
+                mapModels.Add(LoadMapHeader(file));
             }
 
             return mapModels;
         }
 
-        public static List<MapModel> GetAvailableMaps(bool isForMultiplayer)
+        public static List<MapModelHeader> GetAvailableMaps(bool isForMultiplayer)
         {
-            List<MapModel> mapModels = GetAvailableMaps();
+            List<MapModelHeader> mapModels = GetAvailableMaps();
 
             if (isForMultiplayer)
             {
@@ -103,6 +140,22 @@ namespace Assets.Scripts.DataAccess
             result = Sprite.Create(texture, rect, pivot, texture.height / 8);
 
             return result;
+        }
+
+        public static void SaveMapDefinition(MapModel mapModel)
+        {
+            string path = null;
+
+            try
+            {
+                path = Application.streamingAssetsPath + MapDefinitionsPath + mapModel.DefinitionName + RGMDFormat;
+                JsonCustomUtils<MapModel>.SaveObjectIntoFile(mapModel, path);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Error trying to saving map '{path}': {ex.Message}");
+                throw;
+            }
         }
     }
 }

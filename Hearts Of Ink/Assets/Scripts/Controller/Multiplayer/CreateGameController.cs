@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class CreateGameController : MonoBehaviour
 {
-    private List<MapModel> availableMaps;
+    private List<MapModelHeader> availableMaps;
     private ConfigGameController configGameController;
     [SerializeField]
     private InfoPanelController infoPanelController;

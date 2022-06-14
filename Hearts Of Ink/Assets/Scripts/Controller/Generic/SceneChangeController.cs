@@ -9,6 +9,7 @@ public class SceneChangeController : MonoBehaviour
     public Transform mainMenuButton;
     public Transform exitToMenuButton;
     public Transform startGame;
+    public Transform mapEditorButton;
 
     public enum Scenes
     {
@@ -17,6 +18,7 @@ public class SceneChangeController : MonoBehaviour
         Credits = 2,
         Endgame = 3,
         Multiplayer = 4,
+        MapEditor = 5,
     }
 
     public void ChangeScene(Transform orderButton)
@@ -37,6 +39,10 @@ public class SceneChangeController : MonoBehaviour
         else if (AreEquals(orderButton, multiplayerButton))
         {
             SceneManager.LoadScene(Convert.ToInt32(Scenes.Multiplayer));
+        }
+        else if (AreEquals(orderButton, mapEditorButton))
+        {
+            SceneManager.LoadScene(Convert.ToInt32(Scenes.MapEditor));
         }
         else
         {

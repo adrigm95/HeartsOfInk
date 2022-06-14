@@ -41,7 +41,7 @@ public class GlobalLogicController : MonoBehaviour
     public GameObject pauseItem;
     public bool Pause { get; set; }
 
-    private void Awake()
+    private void Start()
     {
         aiLogics = new List<AILogic>();
         selection = new SelectionModel();
@@ -150,12 +150,15 @@ public class GlobalLogicController : MonoBehaviour
 
     private void AwakeMap()
     {
-        MapModel mapModel = MapDAC.LoadMapInfo("0_Cartarena_v0_3_0");
+        MapModel mapModel = MapDAC.LoadMapInfo(gameModel.MapId);
+        MapController.Instance.UpdateMap(mapModel.SpritePath);
+        CleanTransform(citiesCanvas.transform);
+        CleanTransform(troopsCanvas.transform);
 
         foreach (MapCityModel city in mapModel.Cities)
         {
-            Player troopOwner = gameModel.Players.First(item => item.MapSocketId == city.MapSocketId);
-            InstantiateCity(city, troopOwner);
+            Player cityOwner = gameModel.Players.First(item => item.MapSocketId == city.MapSocketId);
+            InstantiateCity(city, cityOwner);
         }
 
         foreach (MapTroopModel troop in mapModel.Troops)
@@ -169,7 +172,6 @@ public class GlobalLogicController : MonoBehaviour
     {
         CityController newObject;
         string prefabName = cityModel.Type == 0 ? "Prefabs/Capital" : "Prefabs/CityPrefab";
-
 
         newObject = ((GameObject)Instantiate(
             Resources.Load(prefabName),
@@ -219,7 +221,9 @@ public class GlobalLogicController : MonoBehaviour
     {
         bool isGameFinished = true;
         Player firstOwner = cities[0].Owner;
+        byte firstOwnerAlliance = cities[0].Owner.Alliance;
 
+        //TODO: Terminar de adaptar condición de victoria a alianzas
         foreach (CityController city in cities)
         {
             if (city.Owner != firstOwner)
@@ -419,5 +423,20 @@ public class GlobalLogicController : MonoBehaviour
 
         selection.SetAsNull();
         unitAnimation = null;
+    }
+
+    private void CleanTransform(Transform cleanTransform)
+    {
+        foreach (Transform child in cleanTransform)
+        {
+            child.parent = null;
+            // Esto no funciona.
+            //Destroy(child);
+
+            // Esto si.
+            Destroy(child.gameObject);
+        }
+
+        Debug.Log($"Cleaned transform: {cleanTransform.name}");
     }
 }

@@ -11,6 +11,7 @@ using NETCoreServer.Models;
 
 public class TroopController : MonoBehaviour
 {
+    private const int GuerrillaLimit = 100;
     private const int MaxTroops = 9000;
     private TextMeshProUGUI unitsText;
     private GlobalLogicController globalLogic;
@@ -154,11 +155,10 @@ public class TroopController : MonoBehaviour
         float newY;
         float targetX;
         float targeyY;
-        float bonusSpeed;
 
         try
         {
-            if (!troopModel.InCombat)
+            if (CanMove())
             {
                 targetPosition = troopModel.Target.transform.position;
                 direction = targetPosition - new Vector2(this.transform.position.x, this.transform.position.y);
@@ -172,8 +172,7 @@ public class TroopController : MonoBehaviour
                     troopModel.SetTarget(null, globalLogic);
                 }
 
-                bonusSpeed = troopModel.Player.Faction.Bonus.BonusId == Bonus.Id.Speed ? 1.2f : 1f;
-                movement = direction * (Time.deltaTime * 100) * troopModel.Speed * BaseSpeed * globalLogic.GameSpeed * bonusSpeed;
+                movement = direction * (Time.deltaTime * 100) * troopModel.Speed * BaseSpeed * globalLogic.GameSpeed * GetBonusSpeed();
 
                 this.transform.Translate(movement.x, movement.y, 0);
 
@@ -192,6 +191,42 @@ public class TroopController : MonoBehaviour
         {
             Debug.LogError("Target Position: " + troopModel.Target.transform.position + "; Current Position: " + transform.position);
             throw;
+        }
+    }
+
+    private bool CanMove()
+    {
+        if (troopModel.InCombat)
+        {
+            switch (troopModel.Player.Faction.Bonus.BonusId)
+            {
+                case Bonus.Id.Guerrilla:
+                    return troopModel.Units < GuerrillaLimit;
+                case Bonus.Id.MoveOnCombat:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    private float GetBonusSpeed()
+    {
+        const float BonusFactor = 1.2f;
+        const float NonBonusFactor = 1f;
+
+        switch (troopModel.Player.Faction.Bonus.BonusId)
+        {
+            case Bonus.Id.Speed:
+                return BonusFactor;
+            case Bonus.Id.Guerrilla:
+                return troopModel.Units < GuerrillaLimit ? BonusFactor : NonBonusFactor;
+            default:
+                return NonBonusFactor;
         }
     }
 
