@@ -39,7 +39,10 @@ public class FactionsPanelController : MonoBehaviour
         CleanFactionLines();
         foreach (MapPlayerModel player in mapModel.Players)
         {
-            LoadFactionLine(player);
+            if (player.IsPlayable)
+            {
+                LoadFactionLine(player);
+            }
         }
         MapController.Instance.UpdateMap(mapModel.SpritePath);
     }

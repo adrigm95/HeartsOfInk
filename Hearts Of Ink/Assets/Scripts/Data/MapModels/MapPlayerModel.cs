@@ -7,5 +7,6 @@
         public int IaId { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
+        public bool IsPlayable { get; set; }
     }
 }

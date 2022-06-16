@@ -10,31 +10,36 @@
 		"FactionId": 4,
 		"IaId": 0,
 		"Name": "España",
-		"Color": "255,0,46"
+		"Color": "255,0,46",
+		"IsPlayable": true
 	}, {
 		"MapSocketId": 1,
 		"FactionId": 5,
 		"IaId": 1,
 		"Name": "Marruecos",
-		"Color": "0,153,51"
+		"Color": "0,153,51",
+		"IsPlayable": true
 	}, {
 		"MapSocketId": 2,
 		"FactionId": 6,
 		"IaId": 1,
 		"Name": "Tunez",
-		"Color": "255,204,0"
+		"Color": "255,204,0",
+		"IsPlayable": true
 	}, {
 		"MapSocketId": 3,
 		"FactionId": 7,
 		"IaId": 1,
 		"Name": "Italia",
-		"Color": "0,51,204"
+		"Color": "0,51,204",
+		"IsPlayable": true
 	}, {
 		"MapSocketId": 3,
 		"FactionId": 8,
 		"IaId": 4,
 		"Name": "Ciudades libres",
-		"Color": "255,255,255"
+		"Color": "255,255,255",
+		"IsPlayable": false
 	}],
 	"Cities": [{
 		"Name": "Bilbao",
