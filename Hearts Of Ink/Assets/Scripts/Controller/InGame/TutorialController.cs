@@ -1,7 +1,5 @@
 ﻿using Assets.Scripts.Data.TutorialModels;
 using Assets.Scripts.Utils;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TutorialController : MonoBehaviour

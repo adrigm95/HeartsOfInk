@@ -14,6 +14,8 @@ public class FactionsPanelController : MonoBehaviour
     private GlobalInfo globalInfo;
     private List<Dropdown> factions;
     private List<MapModelHeader> availableMaps;
+    [SerializeField]
+    private StartGameController startGameController;
     public int startFactionLines;
     public int spacing;
     public Text factionDescription;
@@ -33,16 +35,14 @@ public class FactionsPanelController : MonoBehaviour
     public void LoadMap()
     {
         Debug.Log("Loading map: " + cbMaps.itemText.text);
-        mapModel = MapDAC.LoadMapInfo(availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).DefinitionName);
+        mapModel = MapDAC.LoadMapInfo(GetMapDefinitionName());
+        startGameController.MapId = mapModel.MapId;
         globalInfo = MapDAC.LoadGlobalMapInfo();
 
         CleanFactionLines();
         foreach (MapPlayerModel player in mapModel.Players)
         {
-            if (player.IsPlayable)
-            {
-                LoadFactionLine(player);
-            }
+            LoadFactionLine(player);
         }
         MapController.Instance.UpdateMap(mapModel.SpritePath);
     }
@@ -55,6 +55,16 @@ public class FactionsPanelController : MonoBehaviour
         }
 
         factions.Clear();
+    }
+
+    public string GetMapDefinitionName()
+    {
+        return availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).DefinitionName;
+    }
+
+    public short GetMapDefinitionId()
+    {
+        return availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).MapId;
     }
 
     public void LoadFactionLine(MapPlayerModel player)
@@ -73,6 +83,7 @@ public class FactionsPanelController : MonoBehaviour
         newObject = ((GameObject) Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
         newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + player.MapSocketId;
         newObject.SetParent(this.transform, false);
+        newObject.gameObject.SetActive(player.IsPlayable);
 
         cbFaction = newObject.Find("cbFaction").GetComponent<Dropdown>();
         txtFaction = newObject.Find("txtFaction").GetComponent<Text>();

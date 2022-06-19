@@ -902,6 +902,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09f143e1d71f4aa4fb34f559a10ea4dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startGameController: {fileID: 745054270}
   startFactionLines: -90
   spacing: 35
   factionDescription: {fileID: 1923877715}

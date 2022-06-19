@@ -116,7 +116,7 @@ public class EditorPanelController : MonoBehaviour
                 MapSocketId = Convert.ToByte(editorCity.ownerSocketId),
                 Name = editorCity.name,
                 Position = new float[] { editorCity.transform.position.x, editorCity.transform.position.y },
-                Type = Convert.ToInt32(editorCity.isCapital)
+                Type = editorCity.isCapital ? 0 : 1
             });
         }
     }

@@ -15,6 +15,7 @@ public class StartGameController : MonoBehaviour
     private GameOptionsController gameOptionsController;
     private SceneChangeController sceneChangeController;
     public Transform factionDropdownsHolder;
+    public short MapId { get; set; }
 
     private void Start()
     {
@@ -32,6 +33,7 @@ public class StartGameController : MonoBehaviour
     {
         bool readyForChangeScene = true;
         GameModel gameModel = new GameModel(0);
+        gameModel.MapId = MapId;
         gameModel.Gametype = sendStartToServer ? GameModel.GameType.MultiplayerHost : GameModel.GameType.Single;
         
         GetPlayerOptions(gameModel);

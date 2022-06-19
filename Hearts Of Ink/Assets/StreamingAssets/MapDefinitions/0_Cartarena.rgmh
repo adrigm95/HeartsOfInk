@@ -1,6 +1,6 @@
 {
   "MapId": 0,
-  "DisplayName": "Cartarena",
+  "DisplayName": "(4) Cartarena",
   "DefinitionName": "0_Cartarena",
   "SpritePath": "MapSprites/0_Cartarena.png",
   "AvailableForMultiplayer": false,

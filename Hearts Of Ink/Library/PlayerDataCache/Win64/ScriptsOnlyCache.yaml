@@ -6,6 +6,9 @@ ScriptsOnlyBuild:
     - ConfigGameController
     - CreateGameController
     - DropdownController
+    - EditorCity
+    - EditorPanelController
+    - EditorTroop
     - EndgameLineController
     - FactionItemController
     - FactionsPanelController
@@ -30,6 +33,8 @@ ScriptsOnlyBuild:
     - WaitingPanelController
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
+    - UnityEditor.Tilemaps.GridPaletteBrushes
+    - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.TileDragAndDropManager
     Unity.Rider.Editor.dll:
@@ -88,23 +93,23 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11438}
     - Class: 114
-      Script: {instanceID: 11682}
+      Script: {instanceID: 11684}
     - Class: 114
-      Script: {instanceID: 11740}
+      Script: {instanceID: 11742}
     - Class: 114
-      Script: {instanceID: 11826}
+      Script: {instanceID: 11830}
     - Class: 114
-      Script: {instanceID: 12162}
+      Script: {instanceID: 12166}
     - Class: 114
-      Script: {instanceID: 12296}
+      Script: {instanceID: 12300}
     - Class: 114
-      Script: {instanceID: 12604}
+      Script: {instanceID: 12610}
     - Class: 114
-      Script: {instanceID: 12962}
+      Script: {instanceID: 12968}
     - Class: 114
-      Script: {instanceID: 13726}
+      Script: {instanceID: 13732}
     - Class: 114
-      Script: {instanceID: 14304}
+      Script: {instanceID: 14312}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -147,19 +152,19 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11438}
     - Class: 114
-      Script: {instanceID: 11826}
+      Script: {instanceID: 11830}
     - Class: 114
-      Script: {instanceID: 12296}
+      Script: {instanceID: 12300}
     - Class: 114
-      Script: {instanceID: 12962}
+      Script: {instanceID: 12968}
     - Class: 114
-      Script: {instanceID: 13726}
+      Script: {instanceID: 13732}
     - Class: 114
-      Script: {instanceID: 13966}
+      Script: {instanceID: 13972}
     - Class: 114
-      Script: {instanceID: 14304}
+      Script: {instanceID: 14312}
     - Class: 114
-      Script: {instanceID: 14394}
+      Script: {instanceID: 14402}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -210,31 +215,31 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11454}
     - Class: 114
-      Script: {instanceID: 11724}
+      Script: {instanceID: 11726}
     - Class: 114
-      Script: {instanceID: 11740}
+      Script: {instanceID: 11742}
     - Class: 114
-      Script: {instanceID: 11826}
+      Script: {instanceID: 11830}
     - Class: 114
-      Script: {instanceID: 12128}
+      Script: {instanceID: 12132}
     - Class: 114
-      Script: {instanceID: 12296}
+      Script: {instanceID: 12300}
     - Class: 114
-      Script: {instanceID: 12698}
+      Script: {instanceID: 12704}
     - Class: 114
-      Script: {instanceID: 12788}
+      Script: {instanceID: 12794}
     - Class: 114
-      Script: {instanceID: 12962}
+      Script: {instanceID: 12968}
     - Class: 114
-      Script: {instanceID: 13212}
+      Script: {instanceID: 13218}
     - Class: 114
-      Script: {instanceID: 13586}
+      Script: {instanceID: 13592}
     - Class: 114
-      Script: {instanceID: 13726}
+      Script: {instanceID: 13732}
     - Class: 114
-      Script: {instanceID: 14192}
+      Script: {instanceID: 14200}
     - Class: 114
-      Script: {instanceID: 14304}
+      Script: {instanceID: 14312}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -287,61 +292,148 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11438}
     - Class: 114
-      Script: {instanceID: 11682}
+      Script: {instanceID: 11684}
     - Class: 114
-      Script: {instanceID: 11718}
+      Script: {instanceID: 11720}
     - Class: 114
-      Script: {instanceID: 11734}
+      Script: {instanceID: 11736}
     - Class: 114
-      Script: {instanceID: 11740}
+      Script: {instanceID: 11742}
     - Class: 114
-      Script: {instanceID: 11826}
+      Script: {instanceID: 11744}
     - Class: 114
-      Script: {instanceID: 11980}
+      Script: {instanceID: 11830}
     - Class: 114
-      Script: {instanceID: 12162}
+      Script: {instanceID: 11984}
     - Class: 114
-      Script: {instanceID: 12212}
+      Script: {instanceID: 12166}
     - Class: 114
-      Script: {instanceID: 12296}
+      Script: {instanceID: 12216}
     - Class: 114
-      Script: {instanceID: 12346}
+      Script: {instanceID: 12300}
     - Class: 114
-      Script: {instanceID: 12604}
+      Script: {instanceID: 12350}
     - Class: 114
-      Script: {instanceID: 12778}
+      Script: {instanceID: 12610}
     - Class: 114
-      Script: {instanceID: 12876}
+      Script: {instanceID: 12784}
     - Class: 114
-      Script: {instanceID: 12962}
+      Script: {instanceID: 12882}
     - Class: 114
-      Script: {instanceID: 13326}
+      Script: {instanceID: 12968}
     - Class: 114
-      Script: {instanceID: 13344}
+      Script: {instanceID: 13332}
     - Class: 114
-      Script: {instanceID: 13628}
+      Script: {instanceID: 13350}
     - Class: 114
-      Script: {instanceID: 13726}
+      Script: {instanceID: 13634}
     - Class: 114
-      Script: {instanceID: 13818}
+      Script: {instanceID: 13732}
     - Class: 114
-      Script: {instanceID: 13966}
+      Script: {instanceID: 13824}
     - Class: 114
-      Script: {instanceID: 13980}
+      Script: {instanceID: 13972}
     - Class: 114
-      Script: {instanceID: 14144}
+      Script: {instanceID: 13986}
     - Class: 114
-      Script: {instanceID: 14192}
+      Script: {instanceID: 14100}
     - Class: 114
-      Script: {instanceID: 14198}
+      Script: {instanceID: 14152}
     - Class: 114
-      Script: {instanceID: 14204}
+      Script: {instanceID: 14200}
     - Class: 114
-      Script: {instanceID: 14218}
+      Script: {instanceID: 14206}
     - Class: 114
-      Script: {instanceID: 14282}
+      Script: {instanceID: 14212}
     - Class: 114
-      Script: {instanceID: 14304}
+      Script: {instanceID: 14226}
+    - Class: 114
+      Script: {instanceID: 14290}
+    - Class: 114
+      Script: {instanceID: 14312}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 212
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    Assets/Scenes/MapEditor.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 50
+      Script: {instanceID: 0}
+    - Class: 58
+      Script: {instanceID: 0}
+    - Class: 61
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 11406}
+    - Class: 114
+      Script: {instanceID: 11408}
+    - Class: 114
+      Script: {instanceID: 11410}
+    - Class: 114
+      Script: {instanceID: 11438}
+    - Class: 114
+      Script: {instanceID: 11478}
+    - Class: 114
+      Script: {instanceID: 11684}
+    - Class: 114
+      Script: {instanceID: 11726}
+    - Class: 114
+      Script: {instanceID: 11742}
+    - Class: 114
+      Script: {instanceID: 11744}
+    - Class: 114
+      Script: {instanceID: 11830}
+    - Class: 114
+      Script: {instanceID: 11984}
+    - Class: 114
+      Script: {instanceID: 12166}
+    - Class: 114
+      Script: {instanceID: 12300}
+    - Class: 114
+      Script: {instanceID: 12610}
+    - Class: 114
+      Script: {instanceID: 12968}
+    - Class: 114
+      Script: {instanceID: 13332}
+    - Class: 114
+      Script: {instanceID: 13634}
+    - Class: 114
+      Script: {instanceID: 13732}
+    - Class: 114
+      Script: {instanceID: 14100}
+    - Class: 114
+      Script: {instanceID: 14290}
+    - Class: 114
+      Script: {instanceID: 14312}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -390,45 +482,45 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11438}
     - Class: 114
-      Script: {instanceID: 11682}
+      Script: {instanceID: 11684}
     - Class: 114
-      Script: {instanceID: 11718}
+      Script: {instanceID: 11720}
     - Class: 114
-      Script: {instanceID: 11740}
+      Script: {instanceID: 11742}
     - Class: 114
-      Script: {instanceID: 11826}
+      Script: {instanceID: 11830}
     - Class: 114
-      Script: {instanceID: 11980}
+      Script: {instanceID: 11984}
     - Class: 114
-      Script: {instanceID: 12162}
+      Script: {instanceID: 12166}
     - Class: 114
-      Script: {instanceID: 12296}
+      Script: {instanceID: 12300}
     - Class: 114
-      Script: {instanceID: 12604}
+      Script: {instanceID: 12610}
     - Class: 114
-      Script: {instanceID: 12658}
+      Script: {instanceID: 12664}
     - Class: 114
-      Script: {instanceID: 12836}
+      Script: {instanceID: 12842}
     - Class: 114
-      Script: {instanceID: 12962}
+      Script: {instanceID: 12968}
     - Class: 114
-      Script: {instanceID: 13180}
+      Script: {instanceID: 13186}
     - Class: 114
-      Script: {instanceID: 13274}
+      Script: {instanceID: 13280}
     - Class: 114
-      Script: {instanceID: 13726}
+      Script: {instanceID: 13732}
     - Class: 114
-      Script: {instanceID: 14008}
+      Script: {instanceID: 14014}
     - Class: 114
-      Script: {instanceID: 14192}
+      Script: {instanceID: 14200}
     - Class: 114
-      Script: {instanceID: 14218}
+      Script: {instanceID: 14226}
     - Class: 114
-      Script: {instanceID: 14282}
-    - Class: 114
-      Script: {instanceID: 14296}
+      Script: {instanceID: 14290}
     - Class: 114
       Script: {instanceID: 14304}
+    - Class: 114
+      Script: {instanceID: 14312}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -484,6 +576,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TMP_SelectionCaret
+  - hash:
+      serializedVersion: 2
+      Hash: 9028db8d26254e6bd9720a651b225a72
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: EditorPanelController
   - hash:
       serializedVersion: 2
       Hash: 87ff43d2baf3385cba327d8f803a4ebb
@@ -570,6 +668,12 @@ ScriptsOnlyBuild:
     className: MapController
   - hash:
       serializedVersion: 2
+      Hash: fb3f66da17587f459829b29f435cffaa
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: EditorCity
+  - hash:
+      serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
@@ -588,7 +692,7 @@ ScriptsOnlyBuild:
     className: GridLayoutGroup
   - hash:
       serializedVersion: 2
-      Hash: ed18dbeda6dac13336a53c5f13a5a9a4
+      Hash: 75f0b6b23bb5d281e944e50da0830ae2
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: SceneChangeController
@@ -1092,6 +1196,12 @@ ScriptsOnlyBuild:
     className: FPSMetrics
   - hash:
       serializedVersion: 2
+      Hash: 33f51ad57a0aec30c200e0bd6f893d5b
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: EditorTroop
+  - hash:
+      serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: TMPro.Examples
@@ -1247,4 +1357,5 @@ ScriptsOnlyBuild:
   - Assets/Scenes/Credits.unity
   - Assets/Scenes/Endgame.unity
   - Assets/Scenes/Multiplayer.unity
+  - Assets/Scenes/MapEditor.unity
   playerPath: C:/Users/tossa/Desktop/Build HOI/Hearts Of Ink.exe

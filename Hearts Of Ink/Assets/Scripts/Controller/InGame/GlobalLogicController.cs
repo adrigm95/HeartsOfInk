@@ -150,21 +150,30 @@ public class GlobalLogicController : MonoBehaviour
 
     private void AwakeMap()
     {
-        MapModel mapModel = MapDAC.LoadMapInfo(gameModel.MapId);
-        MapController.Instance.UpdateMap(mapModel.SpritePath);
-        CleanTransform(citiesCanvas.transform);
-        CleanTransform(troopsCanvas.transform);
+        MapModel mapModel;
 
-        foreach (MapCityModel city in mapModel.Cities)
+        try
         {
-            Player cityOwner = gameModel.Players.First(item => item.MapSocketId == city.MapSocketId);
-            InstantiateCity(city, cityOwner);
+            mapModel = MapDAC.LoadMapInfo(gameModel.MapId);
+            MapController.Instance.UpdateMap(mapModel.SpritePath);
+            CleanTransform(citiesCanvas.transform);
+            CleanTransform(troopsCanvas.transform);
+
+            foreach (MapCityModel city in mapModel.Cities)
+            {
+                Player cityOwner = gameModel.Players.First(item => item.MapSocketId == city.MapSocketId);
+                InstantiateCity(city, cityOwner);
+            }
+
+            foreach (MapTroopModel troop in mapModel.Troops)
+            {
+                Player troopOwner = gameModel.Players.First(item => item.MapSocketId == troop.MapSocketId);
+                InstantiateTroop(troop.Units, VectorUtils.FloatVectorToVector3(troop.Position), troopOwner);
+            }
         }
-
-        foreach (MapTroopModel troop in mapModel.Troops)
+        catch (InvalidOperationException ex)
         {
-            Player troopOwner = gameModel.Players.First(item => item.MapSocketId == troop.MapSocketId);
-            InstantiateTroop(troop.Units, VectorUtils.FloatVectorToVector3(troop.Position), troopOwner);
+            Debug.LogError($"Any city or troop has an invalid MapSocketId: {ex.Message}");
         }
     }
 

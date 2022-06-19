@@ -86,6 +86,18 @@ public class TroopController : MonoBehaviour
         }
     }
 
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        TroopController enemyController;
+
+        enemyController = collision.gameObject.GetComponent<TroopController>();
+
+        if (enemyController != null)
+        {
+            combatingEnemys.Remove(enemyController);
+        }
+    }
+
     private void OnMouseDown()
     {
         globalLogic.ClickReceivedFromTroop(this);

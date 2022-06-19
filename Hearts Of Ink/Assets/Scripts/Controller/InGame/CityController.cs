@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Data;
-using Assets.Scripts.Utils;
+﻿using Assets.Scripts.Utils;
 using NETCoreServer.Models;
 using System;
 using System.Collections.Generic;
@@ -8,20 +7,24 @@ using UnityEngine;
 
 public class CityController : MonoBehaviour
 {
-    private SpriteRenderer SpriteRenderer;
+    private SpriteRenderer spriteRenderer;
     private GlobalLogicController globalLogic;
     private List<TroopController> troopsInZone;
     private float recruitmentProgress = 0;
     public Player Owner;
     public bool IsCapital;
 
+    public void Awake()
+    {
+        troopsInZone = new List<TroopController>();
+    }
+
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         globalLogic = FindObjectOfType<GlobalLogicController>();
-        SpriteRenderer = GetComponent<SpriteRenderer>();
-        troopsInZone = new List<TroopController>();
-        SpriteRenderer.color = ColorUtils.GetColorByString(Owner.Color);
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.color = ColorUtils.GetColorByString(Owner.Color);
     }
 
     // Update is called once per frame
@@ -41,11 +44,18 @@ public class CityController : MonoBehaviour
     {
         TroopController troopController;
 
-        troopController = collision.gameObject.GetComponent<TroopController>();
-
-        if (troopController != null)
+        try
         {
-            troopsInZone.Add(troopController);
+            troopController = collision.gameObject.GetComponent<TroopController>();
+
+            if (troopController != null)
+            {
+                troopsInZone.Add(troopController);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error detecting collision for city {this.name} and troop {collision.gameObject.name}, exception: {ex.Message}");
         }
     }
 
@@ -114,14 +124,14 @@ public class CityController : MonoBehaviour
     private void ChangeOwner(Player newOwner)
     {
         Owner = newOwner;
-        SpriteRenderer.color = ColorUtils.GetColorByString(Owner.Color);
+        spriteRenderer.color = ColorUtils.GetColorByString(Owner.Color);
         recruitmentProgress = 0;
     }
 
     private void RecruitTroops()
     {
         const int CompanySize = 80;
-        const float recruitmentSpeed = 0.5f;
+        const float recruitmentSpeed = 1f;
         float capitalBonus = 1;
 
         if (IsCapital)
@@ -129,7 +139,10 @@ public class CityController : MonoBehaviour
             capitalBonus = 1.5f;
         }
 
-        recruitmentProgress += Time.deltaTime * globalLogic.GameSpeed * capitalBonus * recruitmentSpeed;
+        if (Owner.Faction.Bonus.BonusId != Bonus.Id.NoArmy)
+        {
+            recruitmentProgress += Time.deltaTime * globalLogic.GameSpeed * capitalBonus * recruitmentSpeed;
+        }
 
         if (recruitmentProgress > CompanySize)
         {
