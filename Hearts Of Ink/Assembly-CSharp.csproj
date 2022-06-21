@@ -121,6 +121,7 @@
     <Compile Include="Assets\Scripts\Rawgen\RuntimeColliderManager2D.cs" />
     <Compile Include="Assets\Scripts\Utils\CameraUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\ColorUtils.cs" />
+    <Compile Include="Assets\Scripts\Utils\DropdownIndexer.cs" />
     <Compile Include="Assets\Scripts\Utils\JsonCustomUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\PanelUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\RandomManagement.cs" />

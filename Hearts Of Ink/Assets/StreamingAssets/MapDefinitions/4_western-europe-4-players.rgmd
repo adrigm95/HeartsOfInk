@@ -1,1 +1,213 @@
-{"MapId":4,"DefinitionName":"4_western-europe-4-players","DisplayName":"(4) Western Europe","SpritePath":"MapSprites/4_western-europe-4-players.png","AvailableForMultiplayer":true,"AvailableForSingleplayer":true,"Players":[{"MapSocketId":0,"FactionId":4,"IaId":0,"Name":"España","Color":"255,0,46","IsPlayable":true},{"MapSocketId":1,"FactionId":5,"IaId":1,"Name":"Marruecos","Color":"0,153,51","IsPlayable":true},{"MapSocketId":2,"FactionId":6,"IaId":1,"Name":"Tunez","Color":"255,204,0","IsPlayable":true},{"MapSocketId":3,"FactionId":7,"IaId":1,"Name":"Italia","Color":"0,51,204","IsPlayable":true},{"MapSocketId":4,"FactionId":8,"IaId":4,"Name":"Ciudades libres","Color":"255,255,255","IsPlayable":false}],"Cities":[{"Name":"Bilbao","Position":[-3.87,2.0],"Type":1,"MapSocketId":4},{"Name":"Barcelona","Position":[-0.8,0.6],"Type":1,"MapSocketId":4},{"Name":"Madrid","Position":[-4.3,-0.31],"Type":0,"MapSocketId":0},{"Name":"Oporto","Position":[-7.2,0.37],"Type":1,"MapSocketId":4},{"Name":"Lisboa","Position":[-7.7,-1.43],"Type":1,"MapSocketId":4},{"Name":"Sevilla","Position":[-5.7,-2.7],"Type":1,"MapSocketId":4},{"Name":"Toulouse","Position":[-1.33,2.3],"Type":1,"MapSocketId":4},{"Name":"Valencia","Position":[-2.27,-1.0],"Type":1,"MapSocketId":4},{"Name":"Casablanca","Position":[-6.81,-5.8],"Type":1,"MapSocketId":4},{"Name":"Fez","Position":[-5.1,-5.4],"Type":1,"MapSocketId":4},{"Name":"Rabat","Position":[-6.22,-5.36],"Type":0,"MapSocketId":1},{"Name":"Oran","Position":[-2.0,-4.0],"Type":1,"MapSocketId":4},{"Name":"Argel","Position":[0.1,-3.1],"Type":1,"MapSocketId":4},{"Name":"Tunez","Position":[4.55,-2.3],"Type":0,"MapSocketId":2},{"Name":"Tripoli","Position":[6.9,-5.05],"Type":1,"MapSocketId":4},{"Name":"Palermo","Position":[6.2,-1.05],"Type":1,"MapSocketId":4},{"Name":"Catania","Position":[7.2,-1.25],"Type":1,"MapSocketId":4},{"Name":"Napoli","Position":[6.3,1.23],"Type":1,"MapSocketId":4},{"Name":"Roma","Position":[5.0,1.91],"Type":0,"MapSocketId":3},{"Name":"Cagliari","Position":[3.6,-0.58],"Type":1,"MapSocketId":4},{"Name":"Firenze","Position":[4.1,3.19],"Type":1,"MapSocketId":4},{"Name":"Milano","Position":[2.73,4.26],"Type":1,"MapSocketId":4},{"Name":"Marsella","Position":[0.9,2.3],"Type":1,"MapSocketId":4},{"Name":"Lyon","Position":[0.3,4.1],"Type":1,"MapSocketId":4},{"Name":"Nantes","Position":[-3.1,4.9],"Type":1,"MapSocketId":4},{"Name":"Zagreb","Position":[5.92,5.2],"Type":1,"MapSocketId":4},{"Name":"Venezia","Position":[4.41,4.6],"Type":1,"MapSocketId":4}],"Troops":[{"Units":300,"Position":[-4.4,-0.5],"MapSocketId":0},{"Units":300,"Position":[-6.2,-5.0],"MapSocketId":1},{"Units":300,"Position":[4.4,-2.6],"MapSocketId":2},{"Units":300,"Position":[5.3,1.6],"MapSocketId":3},{"Units":100,"Position":[-6.9,-5.8],"MapSocketId":4},{"Units":200,"Position":[-5.8,-2.7],"MapSocketId":4},{"Units":100,"Position":[6.1,-1.2],"MapSocketId":4},{"Units":100,"Position":[2.7,4.3],"MapSocketId":4}]}
+{
+	"MapId": 4,
+	"DefinitionName": "4_western-europe-4-players",
+	"DisplayName": "(4) Western Europe",
+	"SpritePath": "MapSprites/4_western-europe-4-players.png",
+	"AvailableForMultiplayer": true,
+	"AvailableForSingleplayer": true,
+	"Players": [{
+		"MapSocketId": 0,
+		"FactionId": 4,
+		"IaId": 0,
+		"Name": "España",
+		"Color": "255,0,46",
+		"IsPlayable": true
+	}, {
+		"MapSocketId": 1,
+		"FactionId": 5,
+		"IaId": 1,
+		"Name": "Marruecos",
+		"Color": "0,153,51",
+		"IsPlayable": true
+	}, {
+		"MapSocketId": 2,
+		"FactionId": 6,
+		"IaId": 1,
+		"Name": "Tunez",
+		"Color": "255,204,0",
+		"IsPlayable": true
+	}, {
+		"MapSocketId": 3,
+		"FactionId": 7,
+		"IaId": 1,
+		"Name": "Italia",
+		"Color": "0,51,204",
+		"IsPlayable": true
+	}, {
+		"MapSocketId": 4,
+		"FactionId": 8,
+		"IaId": 4,
+		"Name": "Ciudades libres",
+		"Color": "255,255,255",
+		"IsPlayable": false
+	}],
+	"Cities": [{
+		"Name": "Bilbao",
+		"Position": [-3.87, 2.0],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Barcelona",
+		"Position": [-0.8, 0.6],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Madrid",
+		"Position": [-4.3, -0.31],
+		"Type": 0,
+		"MapSocketId": 0
+	}, {
+		"Name": "Oporto",
+		"Position": [-7.2, 0.37],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Lisboa",
+		"Position": [-7.7, -1.43],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Sevilla",
+		"Position": [-5.7, -2.7],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Toulouse",
+		"Position": [-1.33, 2.3],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Valencia",
+		"Position": [-2.27, -1.0],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Casablanca",
+		"Position": [-6.81, -5.8],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Fez",
+		"Position": [-5.1, -5.4],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Rabat",
+		"Position": [-6.22, -5.36],
+		"Type": 0,
+		"MapSocketId": 1
+	}, {
+		"Name": "Oran",
+		"Position": [-2.0, -4.0],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Argel",
+		"Position": [0.1, -3.1],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Tunez",
+		"Position": [4.55, -2.3],
+		"Type": 0,
+		"MapSocketId": 2
+	}, {
+		"Name": "Tripoli",
+		"Position": [6.9, -5.05],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Palermo",
+		"Position": [6.2, -1.05],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Catania",
+		"Position": [7.2, -1.25],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Napoli",
+		"Position": [6.3, 1.23],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Roma",
+		"Position": [5.0, 1.91],
+		"Type": 0,
+		"MapSocketId": 3
+	}, {
+		"Name": "Cagliari",
+		"Position": [3.6, -0.58],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Firenze",
+		"Position": [4.1, 3.19],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Milano",
+		"Position": [2.73, 4.26],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Marsella",
+		"Position": [0.9, 2.3],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Lyon",
+		"Position": [0.3, 4.1],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Nantes",
+		"Position": [-3.1, 4.9],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Zagreb",
+		"Position": [5.92, 5.2],
+		"Type": 1,
+		"MapSocketId": 4
+	}, {
+		"Name": "Venezia",
+		"Position": [4.41, 4.6],
+		"Type": 1,
+		"MapSocketId": 4
+	}],
+	"Troops": [{
+		"Units": 300,
+		"Position": [-4.4, -0.5],
+		"MapSocketId": 0
+	}, {
+		"Units": 300,
+		"Position": [-6.2, -5.0],
+		"MapSocketId": 1
+	}, {
+		"Units": 300,
+		"Position": [4.4, -2.6],
+		"MapSocketId": 2
+	}, {
+		"Units": 300,
+		"Position": [5.3, 1.6],
+		"MapSocketId": 3
+	}, {
+		"Units": 100,
+		"Position": [-6.9, -5.8],
+		"MapSocketId": 4
+	}, {
+		"Units": 200,
+		"Position": [-5.8, -2.7],
+		"MapSocketId": 4
+	}, {
+		"Units": 100,
+		"Position": [6.1, -1.2],
+		"MapSocketId": 4
+	}, {
+		"Units": 100,
+		"Position": [2.7, 4.3],
+		"MapSocketId": 4
+	}]
+}

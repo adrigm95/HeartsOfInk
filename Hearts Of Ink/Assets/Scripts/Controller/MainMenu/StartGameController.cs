@@ -72,6 +72,9 @@ public class StartGameController : MonoBehaviour
 
     private void GetPlayerOptions(GameModel gameModel)
     {
+        // Singleplayer: newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + player.MapSocketId;
+        // Multiplayer: string ObjetName = "factionLine" + "_" + configLine.MapSocketId;
+
         string globalInfoPath = Application.streamingAssetsPath + "/_GlobalInfo.json";
         GlobalInfo globalInfo = JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
 

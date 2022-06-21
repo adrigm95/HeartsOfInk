@@ -6587,6 +6587,7 @@ MonoBehaviour:
   mainMenuButton: {fileID: 0}
   exitToMenuButton: {fileID: 753557355}
   startGame: {fileID: 0}
+  mapEditorButton: {fileID: 0}
 --- !u!4 &1893032737
 Transform:
   m_ObjectHideFlags: 0
@@ -7221,7 +7222,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoPanelController: {fileID: 829216849}
-  mapController: {fileID: 3589996446012058678}
   gamesListPanel: {fileID: 826515998}
   btnCreateGame: {fileID: 2109189093}
   gameNameText: {fileID: 451439028}
@@ -8053,7 +8053,6 @@ MonoBehaviour:
   factionDescription: {fileID: 5135278582474188539}
   bonusDescription: {fileID: 5135278582095824233}
   playerName: {fileID: 1048713331}
-  mapController: {fileID: 3589996446012058678}
 --- !u!114 &5135278583319347560
 MonoBehaviour:
   m_ObjectHideFlags: 0
