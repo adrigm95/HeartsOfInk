@@ -316,3 +316,4 @@ D:\Adrian\Repositorios\HeartsOfInk\Hearts Of Ink\Temp\bin\Debug\Boo.Lang.Useful.
 D:\Adrian\Repositorios\HeartsOfInk\Hearts Of Ink\Temp\bin\Debug\LobbyHOIServer.Models.pdb
 D:\Adrian\Repositorios\HeartsOfInk\Hearts Of Ink\Temp\bin\Debug\Unity.VisualStudio.Editor.pdb
 D:\Adrian\Repositorios\HeartsOfInk\Hearts Of Ink\Temp\bin\Debug\Unity.PlasticSCM.Editor.pdb
+D:\Adrian\Repositorios\HeartsOfInk\Hearts Of Ink\obj\Debug\Assembly-CSharp-firstpass.csproj.CopyComplete

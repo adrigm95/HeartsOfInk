@@ -81,7 +81,28 @@ public class EditorPanelController : MonoBehaviour
 
     private void SetCitiesInCanvas()
     {
-        //TODO
+        foreach (MapCityModel mapCityModel in mapModel.Cities)
+        {
+            EditorCity newObject;
+            MapPlayerModel player;
+            SpriteRenderer spriteRenderer;
+            Vector3 position = VectorUtils.FloatVectorToVector3(mapCityModel.Position);
+            string resourceName = mapCityModel.Type == 1 ? "Prefabs/EditorCityPrefab" : "Prefabs/EditorCapital";
+
+            newObject = ((GameObject)Instantiate(
+                            Resources.Load(resourceName),
+                            position,
+                            cities.rotation,
+                            cities)
+                            ).GetComponent<EditorCity>();
+
+            spriteRenderer = newObject.GetComponent<SpriteRenderer>();
+            newObject.name = mapCityModel.Name;
+            newObject.isCapital = !Convert.ToBoolean(mapCityModel.Type);
+            newObject.ownerSocketId = mapCityModel.MapSocketId;
+            player = mapModel.Players.Find(p => p.MapSocketId == mapCityModel.MapSocketId);
+            spriteRenderer.color = ColorUtils.GetColorByString(player.Color);
+        }
     }
 
     private void SetTroopsInCanvas()

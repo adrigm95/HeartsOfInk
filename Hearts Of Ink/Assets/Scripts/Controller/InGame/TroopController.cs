@@ -16,8 +16,9 @@ public class TroopController : MonoBehaviour
     private TextMeshProUGUI unitsText;
     private GlobalLogicController globalLogic;
     private SoundEffectsController soundEffectsController;
-    private CircleCollider2D circleCollider;
+    public CircleCollider2D circleCollider;
     public CombatLogic combatLogic = new CombatLogic();
+    public SpriteRenderer rotationImage;
 
     private AILogic aiLogic;
     private float lastAttack = 0;
@@ -201,7 +202,7 @@ public class TroopController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError("Target Position: " + troopModel.Target.transform.position + "; Current Position: " + transform.position);
+            Debug.LogError("Target Position: " + troopModel.Target.transform.position + "; Current Position: " + transform.position + " exception: " + ex.Message);
             throw;
         }
     }
@@ -294,8 +295,33 @@ public class TroopController : MonoBehaviour
         }
     }
 
-    public void AnimateText(float textSize)
+    public void Animate(UnitAnimation unitAnimation)
     {
-        unitsText.fontSize = textSize;
+        float animationValue = unitAnimation.IterateAnimation(Time.time, this);
+
+        if (unitAnimation.GetType() == typeof(UnitSizeAnimation))
+        {
+            unitsText.fontSize = animationValue;
+        }
+        else
+        {
+            Vector3 rotationPoint = rotationImage.transform.position;
+
+            Debug.Log($"Animation value: {animationValue}");
+            rotationImage.gameObject.SetActive(true);
+            rotationImage.transform.RotateAround(rotationPoint, new Vector3(0, 0, 1), 1);
+        }
+    }
+
+    public void EndAnimation(UnitAnimation unitAnimation)
+    {
+        if (unitAnimation.GetType() == typeof(UnitSizeAnimation))
+        {
+            unitsText.fontSize = 1f;
+        }
+        else
+        {
+            rotationImage.gameObject.SetActive(false);
+        }
     }
 }

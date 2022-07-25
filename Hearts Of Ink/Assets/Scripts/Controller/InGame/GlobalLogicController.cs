@@ -1,14 +1,12 @@
 ﻿using Assets.Scripts.Data;
-using Assets.Scripts.Data.GlobalInfo;
-using Assets.Scripts.Data.Literals;
 using Assets.Scripts.DataAccess;
+using Assets.Scripts.Logic;
 using Assets.Scripts.Utils;
 using NETCoreServer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using static SceneChangeController;
 
 public class GlobalLogicController : MonoBehaviour
@@ -309,7 +307,7 @@ public class GlobalLogicController : MonoBehaviour
         if (selection.HaveObjectSelected && unitAnimation != null)
         {
             TroopController selectedTroop = selection.SelectionObject.GetComponent<TroopController>();
-            selectedTroop.AnimateText(unitAnimation.IterateAnimation(Time.time));
+            selectedTroop.Animate(unitAnimation);
         }
     }
 
@@ -321,7 +319,7 @@ public class GlobalLogicController : MonoBehaviour
             {
                 selection.ChangeSelection(newSelection.gameObject, typeof(TroopController));
                 Debug.Log("TroopSelected: " + newSelection);
-                unitAnimation = new UnitAnimation(Time.time);
+                unitAnimation = GetUnitAnimation();
             }
         }
         else
@@ -376,6 +374,18 @@ public class GlobalLogicController : MonoBehaviour
         }
     }
 
+    private UnitAnimation GetUnitAnimation()
+    {
+        if (false)
+        {
+            return new UnitSizeAnimation(Time.time);
+        }
+        else
+        {
+            return new UnitRotationAnimation(Time.time);
+        }
+    }
+
     /// <summary>
     /// Método utilizado para obtener la posición en pantalla de un click.
     /// 
@@ -427,7 +437,7 @@ public class GlobalLogicController : MonoBehaviour
         if (selection.SelectionType == typeof(TroopController))
         {
             TroopController selectedTroop = selection.SelectionObject.GetComponent<TroopController>();
-            selectedTroop.AnimateText(1f);
+            selectedTroop.EndAnimation(unitAnimation);
         }
 
         selection.SetAsNull();

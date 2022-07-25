@@ -500,10 +500,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00137d52e3d0eb148827b4649eda1830, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  multiplayerButton: {fileID: 0}
   creditsButton: {fileID: 0}
   mainMenuButton: {fileID: 647490091}
   exitToMenuButton: {fileID: 0}
   startGame: {fileID: 0}
+  mapEditorButton: {fileID: 0}
 --- !u!4 &343524254
 Transform:
   m_ObjectHideFlags: 0
@@ -821,7 +823,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000028006625, y: -0.000028034712}
+  m_AnchoredPosition: {x: 0.00006683371, y: 0.00012132027}
   m_SizeDelta: {x: -323.00003, y: 500}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1131040821
@@ -1270,19 +1272,22 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\n\nHearts of ink\r\n\r\nA game developed by Rawgen Games\r\n\r\nProgramming\t\nAdri\xE1n
-    Garc\xEDa Mari\xF1o\r\nLuis Cebrian Mendui\xF1a\n\nMultiplayer\nAndr\xE9s Balanza
-    Cant\xF3\t\r\nAdri\xE1n Garc\xEDa Mari\xF1o\r\nLuis Cebrian Mendui\xF1a\n\r\nArtist\r\nAdri\xE1n
-    Garc\xEDa Mari\xF1o\r\n\r\nProduction\r\nAdri\xE1n Garc\xEDa Mari\xF1o\r\n\r\nTools\r\nRawgen
-    Studio\r\nUnity 2019\r - Unity Technologies\n\r\nAssets\r\nKenney (www.kenney.nl)\r\n\r\nMusic\r\nTribal
-    Affair - SYBS\r\nEyes of Glory - Aakash Gandhi\r\nDestination unknown - Ugonna
-    Onyekwe\r\nThunderstorm - Hanu Dixit\r\nSahara Rains - Hanu Dixit\r\nLondon Fog
-    - Quincas Moreira\r\nThe New Order - Aaron Kenny\r\nThe Bronx is Burning - Doug
-    Maxwell/Media Right Productions\r\nThunder Chant - E's Jammy Jams\r\nCalcutta
-    Sunset - E's Jammy Jams\r\n\nTypographies\nNicone - Vernon Adams (vern@newtypography.co.uk)
-    (SIL Open Font License)\n\r\nSound\r\nAdri\xE1n Garc\xEDa Mari\xF1o\r\n\r\nSpecial
-    Thanks\r\nIrene Alberola\nJavier Bardisa\nMarina Boluda\nAdri\xE1n Corbal\xE1n\r\nEzequiel
-    Matesanz\r\nFlavia de Paula\n\n\n\n"
+  m_Text: "\n\nHearts of ink\r\n\r\nA game developed by Rawgen Games\r\n\r\nProgrammers\t\nAdri\xE1n
+    Garc\xEDa Mari\xF1o\r\nLuis Cebrian Mendui\xF1a\n\r\nUI \nLaia Tugas Berrocal
+    (Pro UI things)\nAdri\xE1n Garc\xEDa Mari\xF1o (Meh UI things)\nKenney assets
+    (see Assets section)\n\nHearts of Ink logo\nLaia Tugas Berrocal\nAdri\xE1n Garc\xEDa
+    Mari\xF1o\n\nProduction\r\nAdri\xE1n Garc\xEDa Mari\xF1o\r\n\r\nTools\r\nRawgen
+    Studio\r\nUnity 2019\r - Unity Technologies\n\r\nAssets\r\nKenney (www.kenney.nl)\r\n\r\nReferences
+    for realistic maps\nOpenStreetMap (www.openstreetmap.org)\t\nIGN-CNIG (centrodedescargas.cnig.es)
+    \n\nMusic\r\nTribal Affair - SYBS\r\nEyes of Glory - Aakash Gandhi\r\nDestination
+    unknown - Ugonna Onyekwe\r\nThunderstorm - Hanu Dixit\r\nSahara Rains - Hanu
+    Dixit\r\nLondon Fog - Quincas Moreira\r\nThe New Order - Aaron Kenny\r\nThe Bronx
+    is Burning - Doug Maxwell/Media Right Productions\r\nThunder Chant - E's Jammy
+    Jams\r\nCalcutta Sunset - E's Jammy Jams\r\n\nTypographies\nNicone - Vernon Adams
+    (vern@newtypography.co.uk) (SIL Open Font License)\n\r\nSound\r\nAdri\xE1n Garc\xEDa
+    Mari\xF1o\r\n\r\nSpecial Thanks\r\nIrene Alberola\nAndr\xE9s Balanza Cant\xF3\nJavier
+    Bardisa\nMarina Boluda\nAdri\xE1n Corbal\xE1n\r\nEzequiel Matesanz\r\nFlavia
+    de Paula\n\n\n\n"
 --- !u!222 &1801411498
 CanvasRenderer:
   m_ObjectHideFlags: 0

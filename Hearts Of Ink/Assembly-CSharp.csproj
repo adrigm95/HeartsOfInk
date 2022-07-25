@@ -109,11 +109,13 @@
     <Compile Include="Assets\Scripts\Data\TroopModel.cs" />
     <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialModel.cs" />
     <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialStep.cs" />
-    <Compile Include="Assets\Scripts\Data\UnitAnimation.cs" />
     <Compile Include="Assets\Scripts\DataAccess\MapDAC.cs" />
     <Compile Include="Assets\Scripts\DataAccess\WebServiceCaller.cs" />
     <Compile Include="Assets\Scripts\Logic\AILogic.cs" />
     <Compile Include="Assets\Scripts\Logic\CombatLogic.cs" />
+    <Compile Include="Assets\Scripts\Logic\UnitAnimations\UnitAnimation.cs" />
+    <Compile Include="Assets\Scripts\Logic\UnitAnimations\UnitRotationAnimation.cs" />
+    <Compile Include="Assets\Scripts\Logic\UnitAnimations\UnitSizeAnimation.cs" />
     <Compile Include="Assets\Scripts\Rawgen\FPSMetrics.cs" />
     <Compile Include="Assets\Scripts\Rawgen\Literals\Literal.cs" />
     <Compile Include="Assets\Scripts\Rawgen\Literals\LiteralsFactory.cs" />
