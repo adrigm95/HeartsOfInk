@@ -66,7 +66,7 @@
 		},
 		{
 			"Number": 3,
-			"PauseGame": false,
+			"PauseGame": true,
 			"Title": [
 				{
 					"Language": "ES-es",
@@ -82,7 +82,7 @@
 		},
 		{
 			"Number": 4,
-			"PauseGame": false,
+			"PauseGame": true,
 			"Title": [
 				{
 					"Language": "ES-es",
@@ -98,7 +98,7 @@
 		},
 		{
 			"Number": 5,
-			"PauseGame": false,
+			"PauseGame": true,
 			"Title": [
 				{
 					"Language": "ES-es",
@@ -124,7 +124,7 @@
 			"Content": [
 				{
 					"Language": "ES-es",
-					"Value": "Hay dos tipos de ciudades, las capitales (Cuadradas) y las poblaciones (Circulares). \r\n\r\nTodas las ciudades dan refuerzos cada cierto tiempo después de haberlas tomado, pero las capitales tardan menos tiempo en dar esos refuerzos."
+					"Value": "Hay dos tipos de ciudades, las capitales (Torre con muralla) y las poblaciones (Torre sin muralla). \r\n\r\nTodas las ciudades dan refuerzos cada cierto tiempo después de haberlas tomado, pero las capitales tardan menos tiempo en dar esos refuerzos."
 				}
 			]
 		},
