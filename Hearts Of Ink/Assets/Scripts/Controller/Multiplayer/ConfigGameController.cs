@@ -28,10 +28,10 @@ public class ConfigGameController : MonoBehaviour
 
     private bool isGameHost;
     private int ownLine;
-    private List<ConfigLineModel> _configLinesState;
     private MapModel mapModel;
     private GlobalInfo globalInfo;
     private DropdownIndexer factionDropdownsIds;
+    public List<ConfigLineModel> _configLinesState;
     public int startLines;
     public int spacing;
     public Text txtGamekey;

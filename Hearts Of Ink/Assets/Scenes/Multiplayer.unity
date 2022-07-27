@@ -6586,7 +6586,7 @@ MonoBehaviour:
   creditsButton: {fileID: 0}
   mainMenuButton: {fileID: 0}
   exitToMenuButton: {fileID: 753557355}
-  startGame: {fileID: 0}
+  startGame: {fileID: 5135278583460072850}
   mapEditorButton: {fileID: 0}
 --- !u!4 &1893032737
 Transform:

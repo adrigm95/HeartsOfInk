@@ -68,7 +68,6 @@
     <Compile Include="Assets\Scripts\Controller\InfoPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\MainMenu\FactionItemController.cs" />
     <Compile Include="Assets\Scripts\Controller\MainMenu\FactionsPanelController.cs" />
-    <Compile Include="Assets\Scripts\Controller\MainMenu\StartGameController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\EditorCity.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\EditorPanelController.cs" />
@@ -85,6 +84,7 @@
     <Compile Include="Assets\Scripts\Controller\Multiplayer\LobbySignalR\StartCountdownSignalR.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\LobbySignalR\StartGameSignalR.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\SubMenuPanelController.cs" />
+    <Compile Include="Assets\Scripts\Controller\StartGameController.cs" />
     <Compile Include="Assets\Scripts\Controller\StatisticsController.cs" />
     <Compile Include="Assets\Scripts\Controller\UIAnimator.cs" />
     <Compile Include="Assets\Scripts\Data\AxisData.cs" />

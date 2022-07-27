@@ -76,7 +76,7 @@
 			"Content": [
 				{
 					"Language": "ES-es",
-					"Value": "Para mover una tropa debes clicar sobre ella y después sobre el punto de destino.\r\n\r\nEl punto de destino puede ser una ciudad, un punto cualquiera del mapa, o una tropa propia o enemiga."
+					"Value": "Para mover una tropa (Números) debes clicar sobre ella y después sobre el punto de destino.\r\n\r\nEl punto de destino puede ser una ciudad, un punto cualquiera del mapa, o una tropa propia o enemiga."
 				}
 			]
 		},

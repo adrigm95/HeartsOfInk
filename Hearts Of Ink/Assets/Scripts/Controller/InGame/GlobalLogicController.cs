@@ -71,7 +71,7 @@ public class GlobalLogicController : MonoBehaviour
         else
         {
             SetPauseState(true, null);
-            waitingPanel.Show(this);
+            //waitingPanel.Show(this);
             StartGameSignalR.Instance.SendClientReady(gameModel.gameKey);
         }
     }
