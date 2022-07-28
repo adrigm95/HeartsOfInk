@@ -50,8 +50,8 @@ public class StartGameController : MonoBehaviour
 
         if (readyForChangeScene)
         {
-            sceneChangeController.ChangeScene(transform);
             gameOptionsController.gameModel = gameModel;
+            sceneChangeController.ChangeScene(transform);
         }
     }
 

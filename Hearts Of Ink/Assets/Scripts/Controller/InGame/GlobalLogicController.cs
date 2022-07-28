@@ -148,11 +148,13 @@ public class GlobalLogicController : MonoBehaviour
 
     private void AwakeMap()
     {
-        MapModel mapModel;
+        MapModel mapModel = null;
 
         try
         {
+            Debug.Log($"Loading map id: {gameModel.MapId}");
             mapModel = MapDAC.LoadMapInfo(gameModel.MapId);
+            Debug.Log($"Map path: {mapModel.SpritePath}");
             MapController.Instance.UpdateMap(mapModel.SpritePath);
             CleanTransform(citiesCanvas.transform);
             CleanTransform(troopsCanvas.transform);
@@ -172,6 +174,9 @@ public class GlobalLogicController : MonoBehaviour
         catch (InvalidOperationException ex)
         {
             Debug.LogError($"Any city or troop has an invalid MapSocketId: {ex.Message}");
+            Debug.Log($"Cities: {JsonUtility.ToJson(mapModel.Cities)}");
+            Debug.Log($"Troops: {JsonUtility.ToJson(mapModel.Troops)}");
+            Debug.Log($"Players: {JsonUtility.ToJson(mapModel.Players)}");
         }
     }
 

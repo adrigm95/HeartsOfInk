@@ -8053,6 +8053,7 @@ MonoBehaviour:
   factionDescription: {fileID: 5135278582474188539}
   bonusDescription: {fileID: 5135278582095824233}
   playerName: {fileID: 1048713331}
+  startGameController: {fileID: 5135278583460072854}
 --- !u!114 &5135278583319347560
 MonoBehaviour:
   m_ObjectHideFlags: 0

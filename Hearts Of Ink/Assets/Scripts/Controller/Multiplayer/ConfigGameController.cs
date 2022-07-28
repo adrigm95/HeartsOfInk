@@ -28,7 +28,7 @@ public class ConfigGameController : MonoBehaviour
 
     private bool isGameHost;
     private int ownLine;
-    private MapModel mapModel;
+    private MapModel _mapModel;
     private GlobalInfo globalInfo;
     private DropdownIndexer factionDropdownsIds;
     public List<ConfigLineModel> _configLinesState;
@@ -38,6 +38,7 @@ public class ConfigGameController : MonoBehaviour
     public Text factionDescription;
     public Text bonusDescription;
     public InputField playerName;
+    public StartGameController startGameController;
 
     // Start is called before the first frame update
     void Start()
@@ -132,10 +133,11 @@ public class ConfigGameController : MonoBehaviour
     {
         this.txtGamekey.text = gameKey;
         this.gameObject.SetActive(true);
-        mapModel = MapDAC.LoadMapInfo(mapId);
+        startGameController.MapId = mapId;
+        _mapModel = MapDAC.LoadMapInfo(mapId);
         globalInfo = MapDAC.LoadGlobalMapInfo();
         LobbyHOIHub.Instance.SuscribeToRoom(txtGamekey.text);
-        MapController.Instance.UpdateMap(mapModel.SpritePath);
+        MapController.Instance.UpdateMap(_mapModel.SpritePath);
 
         if (configLines == null)
         {
@@ -168,7 +170,7 @@ public class ConfigGameController : MonoBehaviour
     {
         List<ConfigLineModel> configLines = new List<ConfigLineModel>();
 
-        foreach (MapPlayerModel player in mapModel.Players.FindAll(p => p.IsPlayable))
+        foreach (MapPlayerModel player in _mapModel.Players.FindAll(p => p.IsPlayable))
         {
             configLines.Add(new ConfigLineModel()
             {
