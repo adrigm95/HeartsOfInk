@@ -122,7 +122,7 @@ public class StartGameController : MonoBehaviour
         string globalInfoPath = Application.streamingAssetsPath + "/_GlobalInfo.json";
         GlobalInfo globalInfo = JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
 
-        foreach (ConfigLineModel configLine in configGameController._configLinesState)
+        foreach (ConfigLineModel configLine in configGameController.GetConfigLinesForMultiplayer())
         {
             Player player = configLine.ConvertToPlayer();
             player.Faction.Bonus = new Bonus((Bonus.Id)globalInfo.Factions.Find(item => item.Id == player.Faction.Id).BonusId);

@@ -31,7 +31,7 @@ public class ConfigGameController : MonoBehaviour
     private MapModel _mapModel;
     private GlobalInfo globalInfo;
     private DropdownIndexer factionDropdownsIds;
-    public List<ConfigLineModel> _configLinesState;
+    private List<ConfigLineModel> _configLinesState;
     public int startLines;
     public int spacing;
     public Text txtGamekey;
@@ -141,7 +141,7 @@ public class ConfigGameController : MonoBehaviour
 
         if (configLines == null)
         {
-            configLines = LoadConfigLinesFromMap();
+            configLines = LoadConfigLinesFromMap(true);
             configLines[0].PlayerName = playerName.text;
             Debug.Log("ConfigLines received empty, this is ok if are creating game.");
         }
@@ -166,11 +166,31 @@ public class ConfigGameController : MonoBehaviour
         _configLinesState = configLines;
     }
 
-    private List<ConfigLineModel> LoadConfigLinesFromMap()
+    public List<ConfigLineModel> GetConfigLinesForMultiplayer()
+    {
+        List<ConfigLineModel> allLines;
+
+        allLines = LoadConfigLinesFromMap(false);
+        allLines.AddRange(_configLinesState);
+
+        return allLines;
+    }
+
+    private List<ConfigLineModel> LoadConfigLinesFromMap(bool getPlayables)
     {
         List<ConfigLineModel> configLines = new List<ConfigLineModel>();
+        List<MapPlayerModel> loadedLines;
 
-        foreach (MapPlayerModel player in _mapModel.Players.FindAll(p => p.IsPlayable))
+        if (getPlayables)
+        {
+            loadedLines = _mapModel.Players.FindAll(p => p.IsPlayable);
+        }
+        else
+        {
+            loadedLines = _mapModel.Players.FindAll(p => !p.IsPlayable);
+        }
+
+        foreach (MapPlayerModel player in loadedLines)
         {
             configLines.Add(new ConfigLineModel()
             {
