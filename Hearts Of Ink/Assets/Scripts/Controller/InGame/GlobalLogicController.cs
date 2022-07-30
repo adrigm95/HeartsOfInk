@@ -72,7 +72,8 @@ public class GlobalLogicController : MonoBehaviour
         {
             SetPauseState(true, null);
             //waitingPanel.Show(this);
-            StartGameSignalR.Instance.SendClientReady(gameModel.gameKey);
+            IngameHOIHub.Instance.SuscribeToRoom(gameModel.gameKey, thisPcPlayer.Name);
+            StartGameIngameSignalR.Instance.SendClientReady(gameModel.gameKey);
         }
     }
 
@@ -141,6 +142,7 @@ public class GlobalLogicController : MonoBehaviour
                     break;
                 case Player.IA.PLAYER:
                     thisPcPlayer = player;
+                    Debug.Log($"Player assigned {player.Name}");
                     break;
             }
         }

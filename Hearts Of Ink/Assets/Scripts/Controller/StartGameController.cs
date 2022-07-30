@@ -23,7 +23,7 @@ public class StartGameController : MonoBehaviour
         configGameController = FindObjectOfType<ConfigGameController>();
         gameOptionsController = FindObjectOfType<GameOptionsController>();
         sceneChangeController = FindObjectOfType<SceneChangeController>();
-        StartGameSignalR.Instance.StartGameController = this;
+        StartGameIngameSignalR.Instance.StartGameController = this;
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public class StartGameController : MonoBehaviour
 
         if (ingameServerResponse.serviceResponse)
         {
-            StartGameSignalR.Instance.SendStartGame(gameModel.gameKey);
+            StartGameLobbySignalR.Instance.SendStartGame(gameModel.gameKey);
         }
         else
         {

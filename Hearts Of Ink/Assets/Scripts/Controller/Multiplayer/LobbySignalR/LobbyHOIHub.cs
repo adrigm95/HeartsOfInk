@@ -50,7 +50,7 @@ public class LobbyHOIHub
                 {
                     Debug.Log("Setting signalR connection.ON");
                     ConfigLinesUpdater.Instance.SusbcribeReceiver(this, connection);
-                    StartGameSignalR.Instance.SusbcribeReceiver(this, connection);
+                    StartGameLobbySignalR.Instance.SusbcribeReceiver(this, connection);
                     Debug.Log("Starting connection with signalR");
                     await connection.StartAsync();
                     return;
