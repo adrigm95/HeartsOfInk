@@ -19,6 +19,8 @@ namespace Assets.Scripts.DataAccess
         private const string RGMHFormat = ".rgmh";
         private const string RGMDPattern = "*.rgmd";
         private const string RGMHPattern = "*.rgmh";
+        private const string PNGPattern = "*.png";
+        private const string JPGPattern = "*.jpg";
         private const string JsonFormat = ".json";
         private const string JsonFormatPattern = "*.json";
         private const string GlobalInfoFile = "/_GlobalInfo.json";
@@ -94,7 +96,7 @@ namespace Assets.Scripts.DataAccess
             return JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
         }
 
-        private static List<MapModelHeader> GetAvailableMaps()
+        public static List<MapModelHeader> GetAvailableMaps()
         {
             string directory = Application.streamingAssetsPath + "/MapDefinitions";
             string[] files = Directory.GetFiles(directory, RGMHPattern);
@@ -120,6 +122,14 @@ namespace Assets.Scripts.DataAccess
             {
                 return mapModels.Where(map => map.AvailableForSingleplayer).ToList();
             }
+        }
+
+        public static List<string> GetAvailableSprites()
+        {
+            string directory = Application.streamingAssetsPath + "/MapSprites/";
+            string[] files = Directory.GetFiles(directory, PNGPattern);
+
+            return files.ToList().Select(file => file.Split('/').Last()).ToList();
         }
 
         public static Sprite LoadMapSprite(string spritePath)
