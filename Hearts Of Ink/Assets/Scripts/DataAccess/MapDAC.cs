@@ -167,5 +167,21 @@ namespace Assets.Scripts.DataAccess
                 throw;
             }
         }
+
+        public static void SaveMapHeader(MapModelHeader mapHeaderModel)
+        {
+            string path = null;
+
+            try
+            {
+                path = Application.streamingAssetsPath + MapDefinitionsPath + mapHeaderModel.DefinitionName + RGMHFormat;
+                JsonCustomUtils<MapModelHeader>.SaveObjectIntoFile(mapHeaderModel, path);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Error trying to saving map header '{path}': {ex.Message}");
+                throw;
+            }
+        }
     }
 }

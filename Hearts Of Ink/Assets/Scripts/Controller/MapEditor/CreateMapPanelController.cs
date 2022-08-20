@@ -51,12 +51,28 @@ public class CreateMapPanelController : MonoBehaviour
         MapModelHeader mapModelHeader = new MapModelHeader()
         {
             MapId = GenerateMapId(),
-            SpritePath = "MapSprites/" + background.options[background.value].text,
-            DefinitionName = mapName.text,
             DisplayName = FileUtils.SanitizeFilename(mapName.text),
+            DefinitionName = mapName.text,
+            SpritePath = "MapSprites/" + background.options[background.value].text,
             AvailableForMultiplayer = isForMultiplayer.isOn,
             AvailableForSingleplayer = isForSingleplayer.isOn
         };
+
+        MapModel mapModel = new MapModel()
+        {
+            MapId = GenerateMapId(),
+            DisplayName = FileUtils.SanitizeFilename(mapName.text),
+            DefinitionName = mapName.text,
+            SpritePath = "MapSprites/" + background.options[background.value].text,
+            AvailableForMultiplayer = isForMultiplayer.isOn,
+            AvailableForSingleplayer = isForSingleplayer.isOn,
+            Players = new List<MapPlayerModel>(),
+            Cities = new List<MapCityModel>(),
+            Troops = new List<MapTroopModel>()
+        };
+
+        MapDAC.SaveMapHeader(mapModelHeader);
+        MapDAC.SaveMapDefinition(mapModel);
     }
 
     public void OnChangeBackground()
