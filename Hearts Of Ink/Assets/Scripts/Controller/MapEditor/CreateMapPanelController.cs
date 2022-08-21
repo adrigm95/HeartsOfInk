@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class CreateMapPanelController : MonoBehaviour
 {
     [SerializeField]
-    private GameObject rightPanelController;
+    private EditorPanelController rightPanelController;
     [SerializeField]
     private Dropdown background;
     [SerializeField]
@@ -20,6 +20,8 @@ public class CreateMapPanelController : MonoBehaviour
     private Toggle isForMultiplayer;
     [SerializeField]
     private Text backgroundPath;
+    [SerializeField]
+    private MapController mapController;
 
     // Start is called before the first frame update
     void Start()
@@ -37,13 +39,13 @@ public class CreateMapPanelController : MonoBehaviour
     public void EnablePanel()
     {
         this.gameObject.SetActive(true);
-        rightPanelController.SetActive(false);
+        rightPanelController.gameObject.SetActive(false);
     }
 
     public void CancelCreation()
     {
         this.gameObject.SetActive(false);
-        rightPanelController.SetActive(true);
+        rightPanelController.gameObject.SetActive(true);
     }
 
     public void CreateMap()
@@ -77,9 +79,12 @@ public class CreateMapPanelController : MonoBehaviour
 
     public void OnChangeBackground()
     {
+        string spriteFilename = background.options[background.value].text;
+
+        mapController.UpdateMap("MapSprites/" + spriteFilename);
         if (string.IsNullOrWhiteSpace(mapName.text))
         {
-            mapName.text = background.options[background.value].text;
+            mapName.text = spriteFilename;
         }
     }
 
@@ -88,6 +93,8 @@ public class CreateMapPanelController : MonoBehaviour
         Debug.Log("Loading available sprites");
         background.AddOptions(MapDAC.GetAvailableSprites());
         background.RefreshShownValue();
+        string spriteFilename = background.options[background.value].text;
+        mapController.UpdateMap("MapSprites/" + spriteFilename);
     }
 
     private void SetBackgroundPath()

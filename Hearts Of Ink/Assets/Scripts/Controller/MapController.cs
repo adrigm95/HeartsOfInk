@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.DataAccess;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MapController : MonoBehaviour
@@ -6,6 +7,10 @@ public class MapController : MonoBehaviour
     private static MapController _instance;
     private GlobalLogicController globalLogic;
     private SpriteRenderer spriteRenderer;
+    [SerializeField]
+    private Transform citiesHolder;
+    [SerializeField]
+    private Transform troopsHolder;
     public static MapController Instance { get { return _instance; } }
 
     void Awake()
@@ -24,11 +29,35 @@ public class MapController : MonoBehaviour
 
     public void UpdateMap(string spritePath)
     {
+        CleanMap();
         spriteRenderer.sprite = MapDAC.LoadMapSprite(spritePath);
     }
 
     void OnMouseDown()
     {
         globalLogic.ClickReceivedFromMap();
+    }
+
+    public void CleanMap()
+    {
+        CleanTransform(citiesHolder);
+        CleanTransform(troopsHolder);
+    }
+
+    private void CleanTransform(Transform cleanTransform)
+    {
+        List<GameObject> references = new List<GameObject>();
+
+        foreach (Transform child in cleanTransform)
+        {
+            references.Add(child.gameObject);
+        }
+
+        foreach (GameObject gameObject in references)
+        {
+            Destroy(gameObject);
+        }
+
+        Debug.Log($"Cleaned transform: {cleanTransform.name}");
     }
 }

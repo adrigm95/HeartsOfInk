@@ -2197,6 +2197,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2e39ce124ab0f54b9a922e38708578d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  citiesHolder: {fileID: 2002964811}
+  troopsHolder: {fileID: 1695975697}
 --- !u!1 &1120863596
 GameObject:
   m_ObjectHideFlags: 0

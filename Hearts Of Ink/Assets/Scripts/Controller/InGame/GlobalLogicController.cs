@@ -158,8 +158,6 @@ public class GlobalLogicController : MonoBehaviour
             mapModel = MapDAC.LoadMapInfo(gameModel.MapId);
             Debug.Log($"Map path: {mapModel.SpritePath}");
             MapController.Instance.UpdateMap(mapModel.SpritePath);
-            CleanTransform(citiesCanvas.transform);
-            CleanTransform(troopsCanvas.transform);
 
             foreach (MapCityModel city in mapModel.Cities)
             {
@@ -449,20 +447,5 @@ public class GlobalLogicController : MonoBehaviour
 
         selection.SetAsNull();
         unitAnimation = null;
-    }
-
-    private void CleanTransform(Transform cleanTransform)
-    {
-        foreach (Transform child in cleanTransform)
-        {
-            child.parent = null;
-            // Esto no funciona.
-            //Destroy(child);
-
-            // Esto si.
-            Destroy(child.gameObject);
-        }
-
-        Debug.Log($"Cleaned transform: {cleanTransform.name}");
     }
 }

@@ -14,8 +14,8 @@ public class EditorPanelController : MonoBehaviour
     private GlobalInfo globalInfo;
     private List<Dropdown> factions;
     private List<MapModelHeader> availableMaps;
-    public Transform cities;
-    public Transform troops;
+    public Transform citiesHolder;
+    public Transform troopsHolder;
     public Dropdown cbMaps;
     public int startFactionLines;
     public int spacing;
@@ -92,8 +92,8 @@ public class EditorPanelController : MonoBehaviour
             newObject = ((GameObject)Instantiate(
                             Resources.Load(resourceName),
                             position,
-                            cities.rotation,
-                            cities)
+                            citiesHolder.rotation,
+                            citiesHolder)
                             ).GetComponent<EditorCity>();
 
             spriteRenderer = newObject.GetComponent<SpriteRenderer>();
@@ -128,7 +128,7 @@ public class EditorPanelController : MonoBehaviour
     {
         mapModel.Cities = new List<MapCityModel>();
 
-        foreach (Transform city in cities)
+        foreach (Transform city in citiesHolder)
         {
             EditorCity editorCity = city.GetComponent<EditorCity>();
 
@@ -147,7 +147,7 @@ public class EditorPanelController : MonoBehaviour
         TextMeshProUGUI unitsText;
         mapModel.Troops = new List<MapTroopModel>();
 
-        foreach (Transform troop in troops)
+        foreach (Transform troop in troopsHolder)
         {
             EditorTroop editorCity = troop.GetComponent<EditorTroop>();
             unitsText = troop.GetComponent<TextMeshProUGUI>();
