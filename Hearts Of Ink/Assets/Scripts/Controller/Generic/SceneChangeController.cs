@@ -57,6 +57,7 @@ public class SceneChangeController : MonoBehaviour
 
     public void ExitGame()
     {
+        Debug.Log("Exit game called");
         Application.Quit();
     }
 
