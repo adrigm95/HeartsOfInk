@@ -33,9 +33,19 @@ public class MapController : MonoBehaviour
         spriteRenderer.sprite = MapDAC.LoadMapSprite(spritePath);
     }
 
-    void OnMouseDown()
+    void OnMouseOver()
     {
-        globalLogic.ClickReceivedFromMap();
+        const int LeftClick = 0;
+        const int RightClick = 1;
+
+        if (Input.GetMouseButtonDown(LeftClick))
+        {
+            // TODO: Multiselect
+        }
+        else if (Input.GetMouseButtonDown(RightClick))
+        {
+            globalLogic.ClickReceivedFromMap();
+        }
     }
 
     public void CleanMap()

@@ -352,6 +352,10 @@ public class GlobalLogicController : MonoBehaviour
                 Debug.Log("New target for troop: " + newSelection);
                 selectedTroop.troopModel.SetTarget(newSelection.gameObject, this);
             }
+            else
+            {
+                Debug.LogWarning("Selection type different of TroopController");
+            }
 
             EndSelection();
         }
@@ -377,6 +381,15 @@ public class GlobalLogicController : MonoBehaviour
         {
             Debug.Log("Map click received.");
         }
+    }
+
+    /// <summary>
+    /// Check if player wants to split a unit.
+    /// </summary>
+    /// <returns></returns>
+    private bool SplitOption()
+    {
+        return false;
     }
 
     private UnitAnimation GetUnitAnimation()

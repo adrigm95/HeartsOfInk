@@ -40,7 +40,7 @@ public class CityController : MonoBehaviour
         troopsInZone.RemoveAll(item => item == null || item.name == null);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         TroopController troopController;
 
@@ -59,7 +59,7 @@ public class CityController : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         TroopController troopController;
 
@@ -71,10 +71,20 @@ public class CityController : MonoBehaviour
         }
     }
 
-    private void OnMouseDown()
+    private void OnMouseOver()
     {
-        globalLogic.ClickReceivedFromCity(this);
-        Debug.Log("On click: " + this);
+        const int LeftClick = 0;
+        const int RightClick = 1;
+
+        if (Input.GetMouseButtonDown(LeftClick))
+        {
+            // TODO: Multiselect
+        }
+        else if (Input.GetMouseButtonDown(RightClick))
+        {
+            globalLogic.ClickReceivedFromCity(this);
+            Debug.Log("On click: " + this);
+        }
     }
 
     private void UpdateOwner()
