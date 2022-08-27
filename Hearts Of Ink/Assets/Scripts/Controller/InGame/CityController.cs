@@ -71,7 +71,8 @@ public class CityController : MonoBehaviour
         }
     }
 
-    private void OnMouseOver()
+    // Obsoleto: Para evitar conflictos en la selección de tropas con las ciudades se ha eliminado esta funcionalidad. 27-08-22
+    /*private void OnMouseOver()
     {
         const int LeftClick = 0;
         const int RightClick = 1;
@@ -85,7 +86,7 @@ public class CityController : MonoBehaviour
             globalLogic.ClickReceivedFromCity(this);
             Debug.Log("On click: " + this);
         }
-    }
+    }*/
 
     private void UpdateOwner()
     {

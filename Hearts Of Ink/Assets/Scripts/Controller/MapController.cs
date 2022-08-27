@@ -44,7 +44,7 @@ public class MapController : MonoBehaviour
         }
         else if (Input.GetMouseButtonDown(RightClick))
         {
-            globalLogic.ClickReceivedFromMap();
+            globalLogic.ClickReceivedFromMap(KeyCode.Mouse1);
         }
     }
 

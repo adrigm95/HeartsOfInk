@@ -11,6 +11,8 @@ using static SceneChangeController;
 
 public class GlobalLogicController : MonoBehaviour
 {
+    private bool ShiftPressed;
+
     /// <summary>
     /// Contador que se utiliza para que las unidades clonadas no tengan el mismo nombre.
     /// </summary>
@@ -271,6 +273,8 @@ public class GlobalLogicController : MonoBehaviour
             EndSelection();
         }
 
+        ShiftPressed = Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift);
+
         horizontalAxis = Input.GetAxis(AxisData.HorizontalAxis);
         verticalAxis = Input.GetAxis(AxisData.VerticalAxis);
 
@@ -311,37 +315,16 @@ public class GlobalLogicController : MonoBehaviour
     {
         if (selection.HaveObjectSelected && unitAnimation != null)
         {
-            TroopController selectedTroop = selection.SelectionObject.GetComponent<TroopController>();
-            selectedTroop.Animate(unitAnimation);
-        }
-    }
-
-    public void ClickReceivedFromTroop(TroopController newSelection)
-    {
-        if (!selection.HaveObjectSelected)
-        {
-            if (newSelection.troopModel.Player == thisPcPlayer)
+            foreach (GameObject selectedTroopObject in selection.SelectionObjects)
             {
-                selection.ChangeSelection(newSelection.gameObject, typeof(TroopController));
-                Debug.Log("TroopSelected: " + newSelection);
-                unitAnimation = GetUnitAnimation();
-            }
-        }
-        else
-        {
-            if (selection.SelectionObject != newSelection.gameObject)
-            {
-                TroopController selectedTroop = selection.SelectionObject.GetComponent<TroopController>();
-
-                Debug.Log("New target for troop: " + newSelection);
-                selectedTroop.troopModel.SetTarget(newSelection.gameObject, this);
-
-                EndSelection();
+                TroopController selectedTroop = selectedTroopObject.GetComponent<TroopController>();
+                selectedTroop.Animate(unitAnimation);
             }
         }
     }
 
-    public void ClickReceivedFromCity(CityController newSelection)
+    // Obsoleto: Para evitar conflictos en la selección de tropas con las ciudades se ha eliminado esta funcionalidad. 27-08-22
+    /*public void ClickReceivedFromCity(CityController newSelection)
     {
         if (selection.HaveObjectSelected)
         {
@@ -359,37 +342,78 @@ public class GlobalLogicController : MonoBehaviour
 
             EndSelection();
         }
-    }
+    }*/
 
-    public void ClickReceivedFromMap()
+    public void LeftClickReceivedFromTroop(TroopController newSelection)
     {
-        if (selection.HaveObjectSelected)
+        if (ShiftPressed)
         {
-            if (selection.SelectionType == typeof(TroopController))
-            {
-                Vector3 mouseClickPosition = ScreenToWorldPoint();
-                TroopController selectedTroop = selection.SelectionObject.GetComponent<TroopController>();
-
-                Debug.Log("New target position for troop: " + mouseClickPosition);
-                selectedTroop.troopModel.SetTarget(new GameObject(GlobalConstants.EmptyTargetName), this);
-                selectedTroop.troopModel.Target.transform.position = mouseClickPosition;
-                selectedTroop.troopModel.Target.transform.parent = emptyTargetsHolder.transform;
-                EndSelection();
-            }
+            // TODO: Multiselection.
         }
         else
         {
-            Debug.Log("Map click received.");
+            if (newSelection.troopModel.Player == thisPcPlayer)
+            {
+                selection.ChangeSelection(newSelection.gameObject, typeof(TroopController));
+                Debug.Log("TroopSelected: " + newSelection);
+                unitAnimation = GetUnitAnimation();
+            }
         }
     }
 
-    /// <summary>
-    /// Check if player wants to split a unit.
-    /// </summary>
-    /// <returns></returns>
-    private bool SplitOption()
+    public void RightClickReceivedFromTroop(TroopController newSelection)
     {
-        return false;
+        if (selection.HaveObjectSelected)
+        {
+            if (!selection.SelectionObjects.Contains(newSelection.gameObject))
+            {
+                foreach (GameObject selectedTroopObject in selection.SelectionObjects)
+                {
+                    TroopController selectedTroop = selectedTroopObject.GetComponent<TroopController>();
+
+                    Debug.Log("New target for troop: " + newSelection);
+                    selectedTroop.troopModel.SetTarget(newSelection.gameObject, this);
+                }
+
+                EndSelection();
+            }
+        }
+    }
+
+    public void ClickReceivedFromMap(KeyCode mouseKeyPressed)
+    {
+        switch (mouseKeyPressed)
+        {
+            case KeyCode.Mouse0: // Left mouse button
+                // TODO: Multiselection.
+                break;
+            case KeyCode.Mouse1: // Right mouse button
+                MoveSelectedTroops();
+                break;
+            default:
+                Debug.LogWarning($"Unexpected map click {mouseKeyPressed}");
+                break;
+        }
+    }
+
+    private void MoveSelectedTroops()
+    {
+        if (selection.HaveObjectSelected && selection.SelectionType == typeof(TroopController))
+        {
+            Vector3 mouseClickPosition = ScreenToWorldPoint();
+            Debug.Log("New target position for troop: " + mouseClickPosition);
+
+            foreach (GameObject selectedTroopObject in selection.SelectionObjects)
+            {
+                TroopController selectedTroop = selectedTroopObject.GetComponent<TroopController>();
+
+                selectedTroop.troopModel.SetTarget(new GameObject(GlobalConstants.EmptyTargetName), this);
+                selectedTroop.troopModel.Target.transform.position = mouseClickPosition;
+                selectedTroop.troopModel.Target.transform.parent = emptyTargetsHolder.transform;
+            }
+
+            EndSelection();
+        }
     }
 
     private UnitAnimation GetUnitAnimation()
@@ -454,8 +478,11 @@ public class GlobalLogicController : MonoBehaviour
     {
         if (selection.SelectionType == typeof(TroopController))
         {
-            TroopController selectedTroop = selection.SelectionObject.GetComponent<TroopController>();
-            selectedTroop.EndAnimation(unitAnimation);
+            foreach (GameObject selectedTroopObject in selection.SelectionObjects)
+            {
+                TroopController selectedTroop = selectedTroopObject.GetComponent<TroopController>();
+                selectedTroop.EndAnimation(unitAnimation);
+            }
         }
 
         selection.SetAsNull();

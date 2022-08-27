@@ -40,7 +40,7 @@ public class IngameHOIHub
 
     private async void StartConnection()
     {
-        bool retry = false;
+        bool retry;
 
         while (true)
         {

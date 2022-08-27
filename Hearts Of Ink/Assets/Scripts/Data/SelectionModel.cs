@@ -1,24 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Data
 {
     public class SelectionModel
     {
-        public GameObject SelectionObject { get; private set; }
+        public List<GameObject> SelectionObjects { get; private set; }
         public Type SelectionType { get; private set; }
-        public bool HaveObjectSelected { get { return SelectionObject != null; } }
+        public bool HaveObjectSelected { get { return SelectionObjects != null && SelectionObjects.Count > 0; } }
 
         public void ChangeSelection(GameObject newSelection, Type newType)
         {
-            SelectionObject = newSelection;
+            OverwriteSelection(newSelection);
             SelectionType = newType;
         }
 
         public void SetAsNull()
         {
-            SelectionObject = null;
+            SelectionObjects.Clear();
             SelectionType = null;
+        }
+
+        private void OverwriteSelection(GameObject newSelection)
+        {
+            if (SelectionObjects == null)
+            {
+                SelectionObjects = new List<GameObject>();
+            }
+            else
+            {
+                SelectionObjects.Clear();
+            }
+
+            SelectionObjects.Add(newSelection);
         }
     }
 }

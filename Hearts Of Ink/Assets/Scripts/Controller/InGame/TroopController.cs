@@ -99,15 +99,20 @@ public class TroopController : MonoBehaviour
         }
     }
 
+    private void OnMouseDown()
+    {
+        globalLogic.LeftClickReceivedFromTroop(this);
+        Debug.Log("On left click: " + this);
+    }
+
     private void OnMouseOver()
     {
-        const int LeftClick = 0;
         const int RightClick = 1;
 
-        if (Input.GetMouseButtonDown(LeftClick) || Input.GetMouseButtonDown(RightClick))
+        if (Input.GetMouseButtonDown(RightClick))
         {
-            globalLogic.ClickReceivedFromTroop(this);
-            Debug.Log("On click: " + this);
+            globalLogic.RightClickReceivedFromTroop(this);
+            Debug.Log("On right click: " + this);
         }
     }
 
