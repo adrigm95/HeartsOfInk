@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{30027A7E-3B82-2853-DD53-C3E2DF470AFC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -63,6 +62,7 @@
     <Compile Include="Assets\Scripts\Controller\Generic\SoundEffectsController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\CityController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\GlobalLogicController.cs" />
+    <Compile Include="Assets\Scripts\Controller\InGame\TargetPositionMarkerController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TroopController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TutorialController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\WaitingPanelController.cs" />
@@ -167,7 +167,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

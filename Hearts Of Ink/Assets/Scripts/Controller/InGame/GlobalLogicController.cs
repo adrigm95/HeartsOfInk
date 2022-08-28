@@ -22,6 +22,8 @@ public class GlobalLogicController : MonoBehaviour
     [NonSerialized]
     public GameModel gameModel;
 
+    [SerializeField]
+    public TargetPositionMarkerController targetMarkerController;
     public List<CityController> cities;
     public List<AILogic> aiLogics;
     public float GameSpeed;
@@ -352,11 +354,17 @@ public class GlobalLogicController : MonoBehaviour
         }
         else
         {
-            if (newSelection.troopModel.Player == thisPcPlayer)
+            if (selection.HaveObjectSelected)
             {
-                selection.ChangeSelection(newSelection.gameObject, typeof(TroopController));
-                Debug.Log("TroopSelected: " + newSelection);
-                unitAnimation = GetUnitAnimation();
+                if (!selection.SelectionObjects.Contains(newSelection.gameObject))
+                {
+                    EndSelection();
+                    SetTroopSelected(newSelection);
+                }
+            }
+            else
+            {
+                SetTroopSelected(newSelection);
             }
         }
     }
@@ -396,6 +404,17 @@ public class GlobalLogicController : MonoBehaviour
         }
     }
 
+    private void SetTroopSelected(TroopController newSelection)
+    {
+        if (newSelection.troopModel.Player == thisPcPlayer)
+        {
+            selection.ChangeSelection(newSelection.gameObject, typeof(TroopController));
+            Debug.Log("TroopSelected: " + newSelection);
+            unitAnimation = GetUnitAnimation();
+            targetMarkerController.SetTargetPosition(newSelection.troopModel.Target, false);
+        }
+    }
+
     private void MoveSelectedTroops()
     {
         if (selection.HaveObjectSelected && selection.SelectionType == typeof(TroopController))
@@ -410,6 +429,7 @@ public class GlobalLogicController : MonoBehaviour
                 selectedTroop.troopModel.SetTarget(new GameObject(GlobalConstants.EmptyTargetName), this);
                 selectedTroop.troopModel.Target.transform.position = mouseClickPosition;
                 selectedTroop.troopModel.Target.transform.parent = emptyTargetsHolder.transform;
+                targetMarkerController.SetTargetPosition(mouseClickPosition, true);
             }
 
             EndSelection();
@@ -444,6 +464,7 @@ public class GlobalLogicController : MonoBehaviour
         position *= -1f;
         position.x += cameraPosition.x * 2;
         position.y += cameraPosition.y * 2;
+        position.z = 0;
 
         return position;
     }
@@ -485,6 +506,7 @@ public class GlobalLogicController : MonoBehaviour
             }
         }
 
+        targetMarkerController.RemoveTargetPosition();
         selection.SetAsNull();
         unitAnimation = null;
     }
