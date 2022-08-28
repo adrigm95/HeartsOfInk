@@ -71,10 +71,10 @@
     <Compile Include="Assets\Scripts\Controller\MainMenu\FactionsPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\CreateMapPanelController.cs" />
-    <Compile Include="Assets\Scripts\Controller\MapEditor\EditorCity.cs" />
+    <Compile Include="Assets\Scripts\Controller\MapEditor\EditorCityController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\EditorPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\EditorPauseController.cs" />
-    <Compile Include="Assets\Scripts\Controller\MapEditor\EditorTroop.cs" />
+    <Compile Include="Assets\Scripts\Controller\MapEditor\EditorTroopController.cs" />
     <Compile Include="Assets\Scripts\Controller\MenuPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\ConfigGameController.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\CreateGameController.cs" />
@@ -97,6 +97,7 @@
     <Compile Include="Assets\Scripts\Data\Constants\ApiConfig.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\GlobalConstants.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\PlayerPrefsData.cs" />
+    <Compile Include="Assets\Scripts\Data\EditorModels\EditorConfigLine.cs" />
     <Compile Include="Assets\Scripts\Data\FactionStatistics.cs" />
     <Compile Include="Assets\Scripts\Data\GlobalInfo\GlobalInfo.cs" />
     <Compile Include="Assets\Scripts\Data\GlobalInfo\GlobalInfoBonus.cs" />

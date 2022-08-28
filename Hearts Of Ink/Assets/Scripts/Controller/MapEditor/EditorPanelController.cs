@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Data;
+using Assets.Scripts.Data.EditorModels;
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
@@ -14,6 +15,7 @@ public class EditorPanelController : MonoBehaviour
     private GlobalInfo globalInfo;
     private List<Dropdown> factions;
     private List<MapModelHeader> availableMaps;
+    private List<EditorConfigLine> configLines;
     public Transform citiesHolder;
     public Transform troopsHolder;
     public Dropdown cbMaps;
@@ -22,6 +24,7 @@ public class EditorPanelController : MonoBehaviour
 
     public void Start()
     {
+        configLines = new List<EditorConfigLine>();
         availableMaps = MapDAC.GetAvailableMaps(false);
         availableMaps.ForEach(map => cbMaps.options.Add(new Dropdown.OptionData(map.DisplayName)));
         cbMaps.RefreshShownValue();
@@ -39,32 +42,39 @@ public class EditorPanelController : MonoBehaviour
         UpdateCanvas();
     }
 
-    public void LoadFactionLine(MapPlayerModel player)
+    private void LoadFactionLines()
     {
-        string prefabPath = "Prefabs/fileFactionSingleplayer";
+        foreach (MapPlayerModel player in mapModel.Players)
+        {
+            LoadFactionLine(player);
+        }
+    }
+
+    private void LoadFactionLine(MapPlayerModel player)
+    {
+        string prefabPath = "Prefabs/editorFactionLine";
         Transform newObject;
         Vector3 position;
         Dropdown cbFaction;
-        Text txtFaction;
         Image btnColorFaction;
         GlobalInfoFaction faction;
+        EditorConfigLine configLine = new EditorConfigLine();
 
         faction = globalInfo.Factions.Find(item => item.Id == player.FactionId);
         position = new Vector3(0, startFactionLines);
-        position.y -= spacing * factions.Count;
+        position.y -= spacing * configLines.Count;
         newObject = ((GameObject)Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
         newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + player.MapSocketId;
         newObject.SetParent(this.transform, false);
 
         cbFaction = newObject.Find("cbFaction").GetComponent<Dropdown>();
-        txtFaction = newObject.Find("txtFaction").GetComponent<Text>();
         btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
 
         cbFaction.value = player.IaId;
-        txtFaction.text = faction.Names[0].Value;
         btnColorFaction.color = ColorUtils.GetColorByString(player.Color);
 
-        factions.Add(cbFaction);
+        configLines.Add(configLine);
+        //factions.Add(cbFaction);
     }
 
     public void SaveMap()
@@ -77,13 +87,14 @@ public class EditorPanelController : MonoBehaviour
     {
         SetCitiesInCanvas();
         SetTroopsInCanvas();
+        LoadFactionLines();
     }
 
     private void SetCitiesInCanvas()
     {
         foreach (MapCityModel mapCityModel in mapModel.Cities)
         {
-            EditorCity newObject;
+            EditorCityController newObject;
             MapPlayerModel player;
             SpriteRenderer spriteRenderer;
             Vector3 position = VectorUtils.FloatVectorToVector3(mapCityModel.Position);
@@ -94,7 +105,7 @@ public class EditorPanelController : MonoBehaviour
                             position,
                             citiesHolder.rotation,
                             citiesHolder)
-                            ).GetComponent<EditorCity>();
+                            ).GetComponent<EditorCityController>();
 
             spriteRenderer = newObject.GetComponent<SpriteRenderer>();
             newObject.name = mapCityModel.Name;
@@ -130,7 +141,7 @@ public class EditorPanelController : MonoBehaviour
 
         foreach (Transform city in citiesHolder)
         {
-            EditorCity editorCity = city.GetComponent<EditorCity>();
+            EditorCityController editorCity = city.GetComponent<EditorCityController>();
 
             mapModel.Cities.Add(new MapCityModel()
             {
@@ -149,7 +160,7 @@ public class EditorPanelController : MonoBehaviour
 
         foreach (Transform troop in troopsHolder)
         {
-            EditorTroop editorCity = troop.GetComponent<EditorTroop>();
+            EditorTroopController editorCity = troop.GetComponent<EditorTroopController>();
             unitsText = troop.GetComponent<TextMeshProUGUI>();
 
             mapModel.Troops.Add(new MapTroopModel()
