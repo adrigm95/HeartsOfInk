@@ -42,6 +42,11 @@ public class EditorPanelController : MonoBehaviour
         UpdateCanvas();
     }
 
+    public void AddNewFactionLine()
+    {
+        LoadFactionLine(new MapPlayerModel());
+    }
+
     private void LoadFactionLines()
     {
         foreach (MapPlayerModel player in mapModel.Players)
