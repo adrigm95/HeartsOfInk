@@ -7445,6 +7445,9 @@ MonoBehaviour:
   citiesHolder: {fileID: 5229715151674442226}
   troopsHolder: {fileID: 4962537092160212825}
   cbMaps: {fileID: 2736418950088965573}
+  mapName: {fileID: 1764667992}
+  isForMultiplayer: {fileID: 1517127357}
+  isForSingleplayer: {fileID: 2082005074}
   startFactionLines: -380
   spacing: 35
 --- !u!224 &2736418949753084027

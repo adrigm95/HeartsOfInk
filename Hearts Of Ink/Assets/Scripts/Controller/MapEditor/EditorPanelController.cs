@@ -19,6 +19,9 @@ public class EditorPanelController : MonoBehaviour
     public Transform citiesHolder;
     public Transform troopsHolder;
     public Dropdown cbMaps;
+    public InputField mapName;
+    public Toggle isForMultiplayer;
+    public Toggle isForSingleplayer;
     public int startFactionLines;
     public int spacing;
 
@@ -45,8 +48,9 @@ public class EditorPanelController : MonoBehaviour
         mapModel = MapDAC.LoadMapInfo(availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).DefinitionName);
         globalInfo = MapDAC.LoadGlobalMapInfo();
 
-
-
+        mapName.text = mapModel.DisplayName;
+        isForMultiplayer.isOn = mapModel.AvailableForMultiplayer;
+        isForSingleplayer.isOn = mapModel.AvailableForSingleplayer;
         MapController.Instance.UpdateMap(mapModel.SpritePath);
         UpdateCanvas();
     }
