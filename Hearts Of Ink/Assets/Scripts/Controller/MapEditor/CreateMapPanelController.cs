@@ -50,6 +50,10 @@ public class CreateMapPanelController : MonoBehaviour
 
     public void CreateMap()
     {
+        rightPanelController.gameObject.SetActive(true);
+        rightPanelController.LoadAvailableMaps();
+        gameObject.SetActive(false);
+
         MapModelHeader mapModelHeader = new MapModelHeader()
         {
             MapId = GenerateMapId(),

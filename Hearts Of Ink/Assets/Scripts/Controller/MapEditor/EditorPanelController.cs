@@ -26,11 +26,17 @@ public class EditorPanelController : MonoBehaviour
     {
         factions = new List<Dropdown>();
         configLines = new List<EditorConfigLine>();
-        availableMaps = MapDAC.GetAvailableMaps(false);
-        availableMaps.ForEach(map => cbMaps.options.Add(new Dropdown.OptionData(map.DisplayName)));
-        cbMaps.RefreshShownValue();
+        LoadAvailableMaps();
         cbMaps.onValueChanged.AddListener(delegate { LoadMap(); });
         LoadMap();
+    }
+
+    public void LoadAvailableMaps()
+    {
+        cbMaps.options.Clear();
+        availableMaps = MapDAC.GetAvailableMaps();
+        availableMaps.ForEach(map => cbMaps.options.Add(new Dropdown.OptionData(map.DisplayName)));
+        cbMaps.RefreshShownValue();
     }
 
     public void LoadMap()
@@ -38,6 +44,8 @@ public class EditorPanelController : MonoBehaviour
         Debug.Log("Loading map: " + cbMaps.itemText.text);
         mapModel = MapDAC.LoadMapInfo(availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).DefinitionName);
         globalInfo = MapDAC.LoadGlobalMapInfo();
+
+
 
         MapController.Instance.UpdateMap(mapModel.SpritePath);
         UpdateCanvas();
