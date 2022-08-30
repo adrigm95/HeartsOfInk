@@ -150,7 +150,7 @@ public class ConfigGameController : MonoBehaviour
         foreach (ConfigLineModel configLine in configLines)
         {
             GlobalInfoFaction globalInfoFaction = globalInfo.Factions.Find(faction => faction.Id == configLine.FactionId);
-            factionDropdownsIds.AddRegister(configLine.FactionId, globalInfoFaction.Names[0].Value);
+            factionDropdownsIds.AddRegister(configLine.FactionId, globalInfoFaction.NameLiteral);
         }
 
         ownLine = configLines.Find(item => item.PlayerName == playerName.text).MapSocketId;
@@ -237,7 +237,7 @@ public class ConfigGameController : MonoBehaviour
         if (isGameHost || configLine.MapSocketId == ownLine)
         {
             configLine.FactionId = globalInfo.Factions.Find(item =>
-                    item.Names[0].Value == cbFaction.options[cbFaction.value].text).Id;
+                    item.NameLiteral == cbFaction.options[cbFaction.value].text).Id;
             configLine.Alliance = string.IsNullOrWhiteSpace(txtAlliance.text) ? NoAlliance : Convert.ToByte(txtAlliance.text);
             configLine.Color = ColorUtils.GetStringByColor(colorFactionImage.color);
             configLine.PlayerType = (Player.IA)cbPlayerType.value;
@@ -320,7 +320,7 @@ public class ConfigGameController : MonoBehaviour
         if (comboOrder.value == 0)
         {
             string comboFactionName = comboOrder.options[comboOrder.value].text;
-            GlobalInfoFaction globalInfoFaction = globalInfo.Factions.Find(faction => faction.Names[0].Value == comboFactionName);
+            GlobalInfoFaction globalInfoFaction = globalInfo.Factions.Find(faction => faction.NameLiteral == comboFactionName);
             ChangeFactionDescriptions(globalInfoFaction);
         }
     }
@@ -335,8 +335,8 @@ public class ConfigGameController : MonoBehaviour
 
     private void ChangeFactionDescriptions(GlobalInfoFaction faction)
     {
-        Debug.Log("New faction:" + faction.Names[0].Value);
-        factionDescription.text = faction.Descriptions[0].Value;
+        Debug.Log("New faction:" + faction.NameLiteral);
+        factionDescription.text = faction.DescriptionLiteral;
         bonusDescription.text = globalInfo.Bonus.Find(bonus => bonus.Id == faction.BonusId).Descriptions[0].Value;
     }
 }

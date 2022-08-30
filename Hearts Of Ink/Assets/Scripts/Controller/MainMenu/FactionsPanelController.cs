@@ -81,7 +81,7 @@ public class FactionsPanelController : MonoBehaviour
         position = new Vector3(0, startFactionLines);
         position.y -= spacing * factions.Count;
         newObject = ((GameObject) Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
-        newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + player.MapSocketId;
+        newObject.name = "factionLine" + faction.NameLiteral + "_" + faction.Id + "_" + player.MapSocketId;
         newObject.SetParent(this.transform, false);
         newObject.gameObject.SetActive(player.IsPlayable);
 
@@ -91,7 +91,7 @@ public class FactionsPanelController : MonoBehaviour
 
         cbFaction.value = player.IaId;
         cbFaction.onValueChanged.AddListener(delegate { CbFaction_OnValueChange(cbFaction); });
-        txtFaction.text = faction.Names[0].Value;
+        txtFaction.text = faction.NameLiteral;
         btnColorFaction.color = ColorUtils.GetColorByString(player.Color);
 
         factions.Add(cbFaction);
@@ -116,8 +116,8 @@ public class FactionsPanelController : MonoBehaviour
 
     private void ChangeFactionDescriptions(GlobalInfoFaction faction)
     {
-        Debug.Log("New faction:" + faction.Names[0].Value);
-        factionDescription.text = faction.Descriptions[0].Value;
+        Debug.Log("New faction:" + faction.NameLiteral);
+        factionDescription.text = faction.DescriptionLiteral;
         bonusDescription.text = globalInfo.Bonus.Find(bonus => bonus.Id == faction.BonusId).Descriptions[0].Value;
     }
 

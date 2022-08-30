@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{30027A7E-3B82-2853-DD53-C3E2DF470AFC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -97,6 +96,7 @@
     <Compile Include="Assets\Scripts\Data\CombatResults.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\ApiConfig.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\GlobalConstants.cs" />
+    <Compile Include="Assets\Scripts\Data\Constants\LanguageConstants.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\PlayerPrefsData.cs" />
     <Compile Include="Assets\Scripts\Data\EditorModels\EditorConfigLine.cs" />
     <Compile Include="Assets\Scripts\Data\FactionStatistics.cs" />
@@ -120,6 +120,7 @@
     <Compile Include="Assets\Scripts\DataAccess\WebServiceCaller.cs" />
     <Compile Include="Assets\Scripts\Logic\AILogic.cs" />
     <Compile Include="Assets\Scripts\Logic\CombatLogic.cs" />
+    <Compile Include="Assets\Scripts\Logic\LanguageManager.cs" />
     <Compile Include="Assets\Scripts\Logic\UnitAnimations\UnitAnimation.cs" />
     <Compile Include="Assets\Scripts\Logic\UnitAnimations\UnitRotationAnimation.cs" />
     <Compile Include="Assets\Scripts\Logic\UnitAnimations\UnitSizeAnimation.cs" />

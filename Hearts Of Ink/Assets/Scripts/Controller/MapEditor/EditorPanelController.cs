@@ -85,7 +85,7 @@ public class EditorPanelController : MonoBehaviour
         position = new Vector3(0, startFactionLines);
         position.y -= spacing * factions.Count;
         newObject = ((GameObject)Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
-        newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + player.MapSocketId;
+        newObject.name = "factionLine" + faction.NameLiteral + "_" + faction.Id + "_" + player.MapSocketId;
         newObject.SetParent(this.transform, false);
 
         cbFaction = newObject.Find("cbFaction").GetComponent<Dropdown>();
@@ -161,8 +161,7 @@ public class EditorPanelController : MonoBehaviour
         {
             dropdownOptions.Add(new Dropdown.OptionData()
             {
-                //TODO: Modificar con evolutivo de multilenguaje.
-                text = factionInfo.Names[0].Value
+                text = factionInfo.NameLiteral
             });
         }
 

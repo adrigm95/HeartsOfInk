@@ -13,5 +13,21 @@ namespace Assets.Scripts.Data.GlobalInfo
         public int BonusId { get; set; }
         public List<LiteralModel> Names { get; set; }
         public List<LiteralModel> Descriptions { get; set; }
+
+        public string NameLiteral 
+        { 
+            get
+            {
+                return LanguageManager.GetLiteral(Names);
+            } 
+        }
+
+        public string DescriptionLiteral
+        {
+            get
+            {
+                return LanguageManager.GetLiteral(Descriptions);
+            }
+        }
     }
 }

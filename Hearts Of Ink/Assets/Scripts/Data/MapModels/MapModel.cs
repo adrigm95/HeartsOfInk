@@ -19,7 +19,6 @@ namespace Assets.Scripts.Data
         /// <summary>
         /// Nombre de mapa a mostrar. 
         /// </summary>
-        [Obsolete("Modificar cuando llegue la US de multiidioma")]
         public string DisplayName { get; set; }
 
         /// <summary>
