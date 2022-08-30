@@ -8,5 +8,10 @@
         public string Name { get; set; }
         public string Color { get; set; }
         public bool IsPlayable { get; set; }
+
+        public MapPlayerModel()
+        {
+            IsPlayable = true;
+        }
     }
 }

@@ -22,7 +22,7 @@ public class FactionsPanelController : MonoBehaviour
     public Text bonusDescription;
     public Dropdown cbMaps;
 
-    private void Start()
+    void Start()
     {
         factions = new List<Dropdown>();
         availableMaps = MapDAC.GetAvailableMaps(false);
