@@ -11,6 +11,7 @@ using UnityEngine.UI;
 
 public class EditorPanelController : MonoBehaviour
 {
+    private MapModelHeader mapModelHeader;
     private MapModel mapModel;
     private GlobalInfo globalInfo;
     private List<Dropdown> factions;
@@ -45,7 +46,8 @@ public class EditorPanelController : MonoBehaviour
     public void LoadMap()
     {
         Debug.Log("Loading map: " + cbMaps.itemText.text);
-        mapModel = MapDAC.LoadMapInfo(availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).DefinitionName);
+        mapModelHeader = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text);
+        mapModel = MapDAC.LoadMapInfo(mapModelHeader.DefinitionName);
         globalInfo = MapDAC.LoadGlobalMapInfo();
 
         mapName.text = mapModel.DisplayName;
@@ -106,6 +108,7 @@ public class EditorPanelController : MonoBehaviour
     {
         UpdateModel();
         MapDAC.SaveMapDefinition(mapModel);
+        MapDAC.SaveMapHeader(mapModelHeader);
     }
 
     private void UpdateCanvas()
@@ -172,9 +175,15 @@ public class EditorPanelController : MonoBehaviour
 
     private void SetMapInfoOnModel()
     {
-        string mapName = cbMaps.options[cbMaps.value].text;
+        string image = cbMaps.options[cbMaps.value].text;
 
-        //TODO
+        mapModel.DisplayName = mapName.text;
+        mapModel.AvailableForMultiplayer = isForMultiplayer.isOn;
+        mapModel.AvailableForSingleplayer = isForSingleplayer.isOn;
+
+        mapModelHeader.DisplayName = mapName.text;
+        mapModelHeader.AvailableForMultiplayer = isForMultiplayer.isOn;
+        mapModelHeader.AvailableForSingleplayer = isForSingleplayer.isOn;
     }
 
     private void SaveCitiesInModel()
