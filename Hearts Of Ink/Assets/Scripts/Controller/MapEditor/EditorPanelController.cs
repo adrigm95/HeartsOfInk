@@ -16,7 +16,6 @@ public class EditorPanelController : MonoBehaviour
     private GlobalInfo globalInfo;
     private List<Dropdown> factions;
     private List<MapModelHeader> availableMaps;
-    private List<EditorConfigLine> configLines;
     public Transform citiesHolder;
     public Transform troopsHolder;
     public Dropdown cbMaps;
@@ -29,7 +28,6 @@ public class EditorPanelController : MonoBehaviour
     public void Start()
     {
         factions = new List<Dropdown>();
-        configLines = new List<EditorConfigLine>();
         LoadAvailableMaps();
         cbMaps.onValueChanged.AddListener(delegate { LoadMap(); });
         LoadMap();
@@ -59,7 +57,14 @@ public class EditorPanelController : MonoBehaviour
 
     public void AddNewFactionLine()
     {
-        LoadFactionLine(new MapPlayerModel());
+        byte maxSocketId = 0;
+        MapPlayerModel playerModel;
+
+        mapModel.Players.ForEach(player => maxSocketId = player.MapSocketId > maxSocketId ? player.MapSocketId : maxSocketId);
+        maxSocketId++;
+        playerModel = new MapPlayerModel(maxSocketId);
+        mapModel.Players.Add(playerModel);
+        LoadFactionLine(playerModel);
     }
 
     private void LoadFactionLines()
@@ -76,18 +81,17 @@ public class EditorPanelController : MonoBehaviour
         string prefabPath = "Prefabs/editorFactionLine";
         Transform newObject;
         Vector3 position;
+        GlobalInfoFaction faction;
         Dropdown cbFaction;
         Dropdown cbPlayerType;
         Image btnColorFaction;
-        GlobalInfoFaction faction;
         Toggle tgIsPlayable;
-        EditorConfigLine configLine = new EditorConfigLine();
 
         faction = globalInfo.Factions.Find(item => item.Id == player.FactionId);
         position = new Vector3(0, startFactionLines);
         position.y -= spacing * factions.Count;
         newObject = ((GameObject)Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
-        newObject.name = "factionLine" + faction.NameLiteral + "_" + faction.Id + "_" + player.MapSocketId;
+        newObject.name = "factionLine_" + player.MapSocketId;
         newObject.SetParent(this.transform, false);
 
         cbFaction = newObject.Find("cbFaction").GetComponent<Dropdown>();
@@ -100,7 +104,6 @@ public class EditorPanelController : MonoBehaviour
         LoadFactionsCombo(cbFaction, player.FactionId);
         tgIsPlayable.isOn = player.IsPlayable;
 
-        configLines.Add(configLine);
         factions.Add(cbFaction);
     }
 
@@ -152,6 +155,7 @@ public class EditorPanelController : MonoBehaviour
     private void UpdateModel()
     {
         SetMapInfoOnModel();
+        SaveFactionsInModel();
         SaveCitiesInModel();
         SaveTroopsInModel();
     }
@@ -184,6 +188,43 @@ public class EditorPanelController : MonoBehaviour
         mapModelHeader.DisplayName = mapName.text;
         mapModelHeader.AvailableForMultiplayer = isForMultiplayer.isOn;
         mapModelHeader.AvailableForSingleplayer = isForSingleplayer.isOn;
+    }
+
+    private void SaveFactionsInModel()
+    {
+        Transform lineObject;
+        MapPlayerModel playerModel;
+        Dropdown cbPlayerType;
+        Image btnColorFaction;
+        Toggle tgIsPlayable;
+        Text txtAlliance;
+
+        foreach (Dropdown cbFaction in factions)
+        {
+            byte mapSocketId;
+
+            lineObject = cbFaction.transform.parent;
+            mapSocketId = Convert.ToByte(lineObject.name.Split('_')[1]);
+            playerModel = mapModel.Players.Find(item => item.MapSocketId == mapSocketId);
+
+            if (playerModel == null)
+            {
+                playerModel = new MapPlayerModel(mapSocketId);
+                mapModel.Players.Add(playerModel);
+            }
+            
+            cbPlayerType = lineObject.Find("cbPlayerType").GetComponent<Dropdown>();
+            btnColorFaction = lineObject.Find("btnColorFaction").GetComponent<Image>();
+            tgIsPlayable = lineObject.Find("tgIsPlayable").GetComponent<Toggle>();
+            txtAlliance = lineObject.Find("btnAlliance").GetComponentInChildren<Text>();
+
+            playerModel.IaId = cbPlayerType.value;
+            playerModel.FactionId = globalInfo.Factions.Find(item =>
+                    item.NameLiteral == cbFaction.options[cbFaction.value].text).Id;
+            playerModel.Alliance = Convert.ToInt32(txtAlliance);
+            playerModel.IsPlayable = tgIsPlayable.isOn;
+            playerModel.Color = ColorUtils.GetStringByColor(btnColorFaction.color);
+        }
     }
 
     private void SaveCitiesInModel()
@@ -231,6 +272,5 @@ public class EditorPanelController : MonoBehaviour
         }
 
         factions.Clear();
-        configLines.Clear();
     }
 }
