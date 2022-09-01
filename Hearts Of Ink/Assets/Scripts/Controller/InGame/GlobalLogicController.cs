@@ -419,7 +419,7 @@ public class GlobalLogicController : MonoBehaviour
     {
         if (selection.HaveObjectSelected && selection.SelectionType == typeof(TroopController))
         {
-            Vector3 mouseClickPosition = ScreenToWorldPoint();
+            Vector3 mouseClickPosition = cameraController.ScreenToWorldPoint();
             Debug.Log("New target position for troop: " + mouseClickPosition);
 
             foreach (GameObject selectedTroopObject in selection.SelectionObjects)
@@ -446,27 +446,6 @@ public class GlobalLogicController : MonoBehaviour
         {
             return new UnitRotationAnimation(Time.time);
         }
-    }
-
-    /// <summary>
-    /// Método utilizado para obtener la posición en pantalla de un click.
-    /// 
-    /// TODO: Mover a CameraUtils y comprobar si sigue funcionando.
-    /// </summary>
-    /// <returns></returns>
-    private Vector3 ScreenToWorldPoint()
-    {
-        Vector3 cameraPosition = cameraController.transform.position;
-        Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cameraPosition.z);
-
-        position = Camera.main.ScreenToViewportPoint(position);
-        position = Camera.main.ViewportToWorldPoint(position);
-        position *= -1f;
-        position.x += cameraPosition.x * 2;
-        position.y += cameraPosition.y * 2;
-        position.z = 0;
-
-        return position;
     }
 
     public void CleanTroopSelection(TroopModel selectedTroop)

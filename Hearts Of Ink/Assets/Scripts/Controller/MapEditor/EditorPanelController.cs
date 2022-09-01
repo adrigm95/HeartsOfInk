@@ -11,11 +11,16 @@ using UnityEngine.UI;
 
 public class EditorPanelController : MonoBehaviour
 {
+    private const string PrefabCity = "Prefabs/EditorCityPrefab";
+    private const string PrefabCapital = "Prefabs/EditorCapital";
     private MapModelHeader mapModelHeader;
     private MapModel mapModel;
     private GlobalInfo globalInfo;
     private List<Dropdown> factions;
     private List<MapModelHeader> availableMaps;
+    private CameraController cameraController;
+    private bool addingCities;
+    private bool addingTroops;
     public Transform citiesHolder;
     public Transform troopsHolder;
     public Dropdown cbMaps;
@@ -25,9 +30,20 @@ public class EditorPanelController : MonoBehaviour
     public int startFactionLines;
     public int spacing;
 
+    public bool AddingCities
+    {
+        get { return addingCities; }
+    }
+
+    public bool AddingTroops
+    {
+        get { return addingTroops; }
+    }
+
     public void Start()
     {
         factions = new List<Dropdown>();
+        cameraController = FindObjectOfType<CameraController>();
         LoadAvailableMaps();
         cbMaps.onValueChanged.AddListener(delegate { LoadMap(); });
         LoadMap();
@@ -71,6 +87,43 @@ public class EditorPanelController : MonoBehaviour
     {
         Debug.Log($"Color changed for image {colorImage.name}; color: {colorImage.color}");
         colorImage.color = ColorUtils.NextColor(colorImage.color, globalInfo.AvailableColors);
+    }
+
+    public void ClickReceivedFromMap(KeyCode mouseKeyPressed)
+    {
+        Debug.Log("ClickReceivedFromMap");
+
+        if (addingCities)
+        {
+            CreateNewCity();
+        }
+        else if (addingTroops)
+        {
+
+        }
+    }
+
+    private void CreateNewCity()
+    {
+        EditorCityController newObject;
+        SpriteRenderer spriteRenderer;
+        MapPlayerModel player;
+        Vector3 mouseClickPosition;
+
+        mouseClickPosition = cameraController.ScreenToWorldPoint();
+        newObject = ((GameObject)Instantiate(
+                            Resources.Load(PrefabCity),
+                            mouseClickPosition,
+                            citiesHolder.rotation,
+                            citiesHolder)
+                            ).GetComponent<EditorCityController>();
+
+        spriteRenderer = newObject.GetComponent<SpriteRenderer>();
+        player = mapModel.Players[0];
+        newObject.name = "New City";
+        newObject.isCapital = false;
+        newObject.ownerSocketId = player.MapSocketId;
+        spriteRenderer.color = ColorUtils.GetColorByString(player.Color);
     }
 
     private void LoadFactionLines()
@@ -138,7 +191,7 @@ public class EditorPanelController : MonoBehaviour
             MapPlayerModel player;
             SpriteRenderer spriteRenderer;
             Vector3 position = VectorUtils.FloatVectorToVector3(mapCityModel.Position);
-            string resourceName = mapCityModel.Type == 1 ? "Prefabs/EditorCityPrefab" : "Prefabs/EditorCapital";
+            string resourceName = mapCityModel.Type == 1 ? PrefabCity : PrefabCapital;
 
             newObject = ((GameObject)Instantiate(
                             Resources.Load(resourceName),
@@ -281,5 +334,25 @@ public class EditorPanelController : MonoBehaviour
         }
 
         factions.Clear();
+    }
+
+    public void ChangeAddingCitiesState()
+    {
+        addingCities = !addingCities;
+
+        if (addingCities)
+        {
+            addingTroops = false;
+        }
+    }
+
+    public void ChangeAddingTroopsState()
+    {
+        addingTroops = !addingTroops;
+
+        if (addingTroops)
+        {
+            addingCities = false;
+        }
     }
 }

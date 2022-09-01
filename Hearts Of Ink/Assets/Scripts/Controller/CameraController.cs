@@ -93,4 +93,24 @@ public class CameraController : MonoBehaviour
             mainCamera.transform.position = cameraPosition;
         }
     }
+
+    /// <summary>
+    /// Método utilizado para obtener la posición en pantalla de un click.
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public Vector3 ScreenToWorldPoint()
+    {
+        Vector3 cameraPosition = transform.position;
+        Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cameraPosition.z);
+
+        position = Camera.main.ScreenToViewportPoint(position);
+        position = Camera.main.ViewportToWorldPoint(position);
+        position *= -1f;
+        position.x += cameraPosition.x * 2;
+        position.y += cameraPosition.y * 2;
+        position.z = 0;
+
+        return position;
+    }
 }

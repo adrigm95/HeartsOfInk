@@ -6,6 +6,7 @@ public class MapController : MonoBehaviour
 {
     private static MapController _instance;
     private GlobalLogicController globalLogic;
+    private EditorPanelController editorPanel;
     private SpriteRenderer spriteRenderer;
     [SerializeField]
     private Transform citiesHolder;
@@ -24,6 +25,7 @@ public class MapController : MonoBehaviour
             _instance = this;
             globalLogic = FindObjectOfType<GlobalLogicController>();
             spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+            editorPanel = FindObjectOfType<EditorPanelController>();
         }
     }
 
@@ -40,11 +42,21 @@ public class MapController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(LeftClick))
         {
-            // TODO: Multiselect
+            if (globalLogic != null)
+            {
+                // TODO: Multiselect
+            }
+            else if (editorPanel != null)
+            {
+                editorPanel.ClickReceivedFromMap(KeyCode.Mouse0);
+            }
         }
         else if (Input.GetMouseButtonDown(RightClick))
         {
-            globalLogic.ClickReceivedFromMap(KeyCode.Mouse1);
+            if (globalLogic != null)
+            {
+                globalLogic.ClickReceivedFromMap(KeyCode.Mouse1);
+            }
         }
     }
 
