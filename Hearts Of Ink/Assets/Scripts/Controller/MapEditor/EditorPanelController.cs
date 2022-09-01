@@ -67,6 +67,12 @@ public class EditorPanelController : MonoBehaviour
         LoadFactionLine(playerModel);
     }
 
+    public void OnClick_PlayerColor(Image colorImage)
+    {
+        Debug.Log($"Color changed for image {colorImage.name}; color: {colorImage.color}");
+        colorImage.color = ColorUtils.NextColor(colorImage.color, globalInfo.AvailableColors);
+    }
+
     private void LoadFactionLines()
     {
         CleanFactionLines();
@@ -84,7 +90,8 @@ public class EditorPanelController : MonoBehaviour
         GlobalInfoFaction faction;
         Dropdown cbFaction;
         Dropdown cbPlayerType;
-        Image btnColorFaction;
+        Image colorFactionImage;
+        Button btnColorFaction;
         Toggle tgIsPlayable;
 
         faction = globalInfo.Factions.Find(item => item.Id == player.FactionId);
@@ -96,11 +103,13 @@ public class EditorPanelController : MonoBehaviour
 
         cbFaction = newObject.Find("cbFaction").GetComponent<Dropdown>();
         cbPlayerType = newObject.Find("cbPlayerType").GetComponent<Dropdown>();
-        btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
+        colorFactionImage = newObject.Find("btnColorFaction").GetComponent<Image>();
+        btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Button>();
         tgIsPlayable = newObject.Find("tgIsPlayable").GetComponent<Toggle>();
 
+        btnColorFaction.onClick.AddListener(delegate { OnClick_PlayerColor(colorFactionImage); });
         cbPlayerType.value = player.IaId;
-        btnColorFaction.color = ColorUtils.GetColorByString(player.Color);
+        colorFactionImage.color = ColorUtils.GetColorByString(player.Color);
         LoadFactionsCombo(cbFaction, player.FactionId);
         tgIsPlayable.isOn = player.IsPlayable;
 
