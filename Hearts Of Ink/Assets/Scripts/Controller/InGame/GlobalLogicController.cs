@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Data;
+﻿using Assets.Scripts.Controller.InGame;
+using Assets.Scripts.Data;
 using Assets.Scripts.DataAccess;
 using Assets.Scripts.Logic;
 using Assets.Scripts.Utils;
@@ -11,6 +12,7 @@ using static SceneChangeController;
 
 public class GlobalLogicController : MonoBehaviour
 {
+    private SelectionModel selection;
     private bool ShiftPressed;
 
     /// <summary>
@@ -27,8 +29,6 @@ public class GlobalLogicController : MonoBehaviour
     public List<CityController> cities;
     public List<AILogic> aiLogics;
     public float GameSpeed;
-    public SelectionModel selection;
-    public UnitAnimation unitAnimation;
     public Player thisPcPlayer;
     public CameraController cameraController;
     public StatisticsController statisticsController;
@@ -315,12 +315,16 @@ public class GlobalLogicController : MonoBehaviour
     /// </summary>
     public void UpdateUnitAnimation()
     {
-        if (selection.HaveObjectSelected && unitAnimation != null)
+        if (selection.HaveObjectSelected)
         {
             foreach (GameObject selectedTroopObject in selection.SelectionObjects)
             {
-                TroopController selectedTroop = selectedTroopObject.GetComponent<TroopController>();
-                selectedTroop.Animate(unitAnimation);
+                IObjectAnimator selectedTroop = selectedTroopObject.GetComponent<IObjectAnimator>();
+
+                if (selectedTroop != null)
+                {
+                    selectedTroop.Animate();
+                }
             }
         }
     }
@@ -410,7 +414,6 @@ public class GlobalLogicController : MonoBehaviour
         {
             selection.ChangeSelection(newSelection.gameObject, typeof(TroopController));
             Debug.Log("TroopSelected: " + newSelection);
-            unitAnimation = GetUnitAnimation();
             targetMarkerController.SetTargetPosition(newSelection.troopModel.Target, false);
         }
     }
@@ -433,18 +436,6 @@ public class GlobalLogicController : MonoBehaviour
             }
 
             EndSelection();
-        }
-    }
-
-    private UnitAnimation GetUnitAnimation()
-    {
-        if (false)
-        {
-            return new UnitSizeAnimation(Time.time);
-        }
-        else
-        {
-            return new UnitRotationAnimation(Time.time);
         }
     }
 
@@ -480,13 +471,12 @@ public class GlobalLogicController : MonoBehaviour
         {
             foreach (GameObject selectedTroopObject in selection.SelectionObjects)
             {
-                TroopController selectedTroop = selectedTroopObject.GetComponent<TroopController>();
-                selectedTroop.EndAnimation(unitAnimation);
+                IObjectAnimator selectedTroop = selectedTroopObject.GetComponent<IObjectAnimator>();
+                selectedTroop.EndAnimation();
             }
         }
 
         targetMarkerController.RemoveTargetPosition();
         selection.SetAsNull();
-        unitAnimation = null;
     }
 }

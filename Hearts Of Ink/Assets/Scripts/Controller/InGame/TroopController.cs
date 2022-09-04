@@ -8,23 +8,23 @@ using TMPro;
 using Assets.Scripts.Logic;
 using Assets.Scripts.Utils;
 using NETCoreServer.Models;
+using Assets.Scripts.Controller.InGame;
 
-public class TroopController : MonoBehaviour
+public class TroopController : MonoBehaviour, IObjectAnimator
 {
     private const int GuerrillaLimit = 100;
     private const int MaxTroops = 9000;
     private TextMeshProUGUI unitsText;
     private GlobalLogicController globalLogic;
     private SoundEffectsController soundEffectsController;
-    public CircleCollider2D circleCollider;
-    public CombatLogic combatLogic = new CombatLogic();
-    public SpriteRenderer rotationImage;
-
     private AILogic aiLogic;
     private float lastAttack = 0;
     private float reloadTime = 3f;
+    public CircleCollider2D circleCollider;
+    public CombatLogic combatLogic = new CombatLogic();
     public TroopModel troopModel;
     public List<TroopController> combatingEnemys = new List<TroopController>();
+    public CircleRotationAnimation animator;
 
     // Start is called before the first frame update
     void Start()
@@ -306,33 +306,14 @@ public class TroopController : MonoBehaviour
         }
     }
 
-    public void Animate(UnitAnimation unitAnimation)
+    public void Animate()
     {
-        float animationValue = unitAnimation.IterateAnimation(Time.time, this);
-
-        if (unitAnimation.GetType() == typeof(UnitSizeAnimation))
-        {
-            unitsText.fontSize = animationValue;
-        }
-        else
-        {
-            Vector3 rotationPoint = rotationImage.transform.position;
-
-            Debug.Log($"Animation value: {animationValue}");
-            rotationImage.gameObject.SetActive(true);
-            rotationImage.transform.RotateAround(rotationPoint, new Vector3(0, 0, 1), 1);
-        }
+        animator.gameObject.SetActive(true);
+        animator.IterateAnimation();
     }
 
-    public void EndAnimation(UnitAnimation unitAnimation)
+    public void EndAnimation()
     {
-        if (unitAnimation.GetType() == typeof(UnitSizeAnimation))
-        {
-            unitsText.fontSize = 1f;
-        }
-        else
-        {
-            rotationImage.gameObject.SetActive(false);
-        }
+        animator.gameObject.SetActive(false);
     }
 }

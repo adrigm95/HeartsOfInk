@@ -57,11 +57,13 @@
     <Compile Include="Assets\Scripts\Controller\Endgame\EndgameLineController.cs" />
     <Compile Include="Assets\Scripts\Controller\Endgame\GlobalEndgameController.cs" />
     <Compile Include="Assets\Scripts\Controller\GameOptionsController.cs" />
+    <Compile Include="Assets\Scripts\Controller\Generic\CircleRotationAnimation.cs" />
     <Compile Include="Assets\Scripts\Controller\Generic\MusicController.cs" />
     <Compile Include="Assets\Scripts\Controller\Generic\SceneChangeController.cs" />
     <Compile Include="Assets\Scripts\Controller\Generic\SoundEffectsController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\CityController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\GlobalLogicController.cs" />
+    <Compile Include="Assets\Scripts\Controller\InGame\IObjectAnimator.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TargetPositionMarkerController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TroopController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TutorialController.cs" />
@@ -121,9 +123,6 @@
     <Compile Include="Assets\Scripts\Logic\AILogic.cs" />
     <Compile Include="Assets\Scripts\Logic\CombatLogic.cs" />
     <Compile Include="Assets\Scripts\Logic\LanguageManager.cs" />
-    <Compile Include="Assets\Scripts\Logic\UnitAnimations\UnitAnimation.cs" />
-    <Compile Include="Assets\Scripts\Logic\UnitAnimations\UnitRotationAnimation.cs" />
-    <Compile Include="Assets\Scripts\Logic\UnitAnimations\UnitSizeAnimation.cs" />
     <Compile Include="Assets\Scripts\Rawgen\FPSMetrics.cs" />
     <Compile Include="Assets\Scripts\Rawgen\Literals\Literal.cs" />
     <Compile Include="Assets\Scripts\Rawgen\Literals\LiteralsFactory.cs" />

@@ -1,7 +1,9 @@
-﻿using Assets.Scripts.Data;
+﻿using Assets.Scripts.Controller.InGame;
+using Assets.Scripts.Data;
 using Assets.Scripts.Data.EditorModels;
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.DataAccess;
+using Assets.Scripts.Logic;
 using Assets.Scripts.Utils;
 using System;
 using System.Collections.Generic;
@@ -19,6 +21,7 @@ public class EditorPanelController : MonoBehaviour
     private List<Dropdown> factions;
     private List<MapModelHeader> availableMaps;
     private CameraController cameraController;
+    private SelectionModel selection;
     private bool addingCities;
     private bool addingTroops;
     public Transform citiesHolder;
@@ -100,6 +103,22 @@ public class EditorPanelController : MonoBehaviour
         else if (addingTroops)
         {
 
+        }
+    }
+
+    /// <summary>
+    /// Actualiza el estado de la animación de parpadeo de la unidad seleccionada.
+    /// </summary>
+    public void UpdateUnitAnimation()
+    {
+        if (selection.HaveObjectSelected)
+        {
+            foreach (GameObject selectedObject in selection.SelectionObjects)
+            {
+                IObjectAnimator selectedAnimator = selectedObject.GetComponent<IObjectAnimator>();
+                
+                selectedAnimator?.Animate();
+            }
         }
     }
 

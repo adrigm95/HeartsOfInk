@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Controller.InGame;
+using Assets.Scripts.Logic;
+using UnityEngine;
 
-public class EditorCityController : MonoBehaviour
+public class EditorCityController : MonoBehaviour, IObjectAnimator
 {
+    public CircleRotationAnimation animator;
     public int ownerSocketId;
     public bool isCapital;
 
@@ -29,5 +32,15 @@ public class EditorCityController : MonoBehaviour
     public void ChangeOwner()
     {
 
+    }
+
+    public void Animate()
+    {
+        animator.IterateAnimation();
+    }
+
+    public void EndAnimation()
+    {
+        animator.gameObject.SetActive(false);
     }
 }

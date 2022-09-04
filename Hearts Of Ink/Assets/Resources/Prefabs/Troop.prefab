@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6187464342576532234}
   - component: {fileID: 5071457028352809787}
+  - component: {fileID: 4308162853504725200}
   m_Layer: 0
   m_Name: AnimationCircle
   m_TagString: Untagged
@@ -81,6 +82,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4308162853504725200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141302237012178924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8faa8e9b68409547aa7a0f606c1d3a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  circleCollider: {fileID: 3372899479411800774}
 --- !u!1 &3372899479411800773
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,5 +281,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23be1558a1de4c64db2f0c0b4b5e4ebf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationImage: {fileID: 5071457028352809787}
+  circleCollider: {fileID: 3372899479411800774}
   combatingEnemys: []
+  animator: {fileID: 4308162853504725200}
