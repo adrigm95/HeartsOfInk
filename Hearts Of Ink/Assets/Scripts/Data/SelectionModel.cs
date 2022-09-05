@@ -18,7 +18,11 @@ namespace Assets.Scripts.Data
 
         public void SetAsNull()
         {
-            SelectionObjects.Clear();
+            if (SelectionObjects != null)
+            {
+                SelectionObjects.Clear();
+            }
+            
             SelectionType = null;
         }
 

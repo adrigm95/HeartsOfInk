@@ -48,6 +48,7 @@ public class EditorCityController : MonoBehaviour, IObjectAnimator
 
     public void EndAnimation()
     {
+        Debug.Log("EndAnimation: " + this.name);
         animator.gameObject.SetActive(false);
     }
 }

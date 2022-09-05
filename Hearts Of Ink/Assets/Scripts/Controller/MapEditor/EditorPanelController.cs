@@ -117,6 +117,7 @@ public class EditorPanelController : MonoBehaviour
     {
         if (!addingCities && !addingTroops)
         {
+            EndSelection();
             selection.ChangeSelection(city.gameObject, typeof(EditorCityController));
         }
     }
@@ -125,6 +126,7 @@ public class EditorPanelController : MonoBehaviour
     {
         if (!addingTroops && !addingCities)
         {
+            EndSelection();
             selection.ChangeSelection(troop.gameObject, typeof(EditorCityController));
         }
     }
@@ -142,6 +144,23 @@ public class EditorPanelController : MonoBehaviour
                 
                 selectedAnimator?.Animate();
             }
+        }
+    }
+
+    private void EndSelection()
+    {
+        if (selection.HaveObjectSelected)
+        {
+            foreach (GameObject selectedTroopObject in selection.SelectionObjects)
+            {
+                IObjectAnimator selectedTroop = selectedTroopObject.GetComponent<IObjectAnimator>();
+                if (selectedTroop != null)
+                {
+                    selectedTroop.EndAnimation();
+                }
+            }
+
+            selection.SetAsNull();
         }
     }
 
