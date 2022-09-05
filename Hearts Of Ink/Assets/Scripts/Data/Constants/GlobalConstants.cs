@@ -11,5 +11,6 @@ namespace Assets.Scripts.Data
         public const string EmptyTargetName = "Unit target position";
         public const string FactionLineStart = "factionLine";
         public const int GuerrillaLimit = 100;
+        public const int DefaultCompanySize = 80;
     }
 }

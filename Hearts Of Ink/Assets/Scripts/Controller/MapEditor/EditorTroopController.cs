@@ -2,6 +2,7 @@
 
 public class EditorTroopController : MonoBehaviour
 {
+    public EditorPanelController panelController;
     public int ownerSocketId;
 
     // Start is called before the first frame update

@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Utils;
+﻿using Assets.Scripts.Data;
+using Assets.Scripts.Utils;
 using NETCoreServer.Models;
 using System;
 using System.Collections.Generic;
@@ -71,23 +72,6 @@ public class CityController : MonoBehaviour
         }
     }
 
-    // Obsoleto: Para evitar conflictos en la selección de tropas con las ciudades se ha eliminado esta funcionalidad. 27-08-22
-    /*private void OnMouseOver()
-    {
-        const int LeftClick = 0;
-        const int RightClick = 1;
-
-        if (Input.GetMouseButtonDown(LeftClick))
-        {
-            // TODO: Multiselect
-        }
-        else if (Input.GetMouseButtonDown(RightClick))
-        {
-            globalLogic.ClickReceivedFromCity(this);
-            Debug.Log("On click: " + this);
-        }
-    }*/
-
     private void UpdateOwner()
     {
         if (troopsInZone.Count == 1)
@@ -141,7 +125,6 @@ public class CityController : MonoBehaviour
 
     private void RecruitTroops()
     {
-        const int CompanySize = 80;
         const float recruitmentSpeed = 1f;
         float capitalBonus = 1;
 
@@ -155,9 +138,9 @@ public class CityController : MonoBehaviour
             recruitmentProgress += Time.deltaTime * globalLogic.GameSpeed * capitalBonus * recruitmentSpeed;
         }
 
-        if (recruitmentProgress > CompanySize)
+        if (recruitmentProgress > GlobalConstants.DefaultCompanySize)
         {
-            globalLogic.InstantiateTroop(CompanySize, this.transform.position, Owner);
+            globalLogic.InstantiateTroop(GlobalConstants.DefaultCompanySize, this.transform.position, Owner);
             recruitmentProgress = 0;
         }
     }

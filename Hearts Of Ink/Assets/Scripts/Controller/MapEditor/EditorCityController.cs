@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EditorCityController : MonoBehaviour, IObjectAnimator
 {
+    public EditorPanelController panelController;
     public CircleRotationAnimation animator;
     public int ownerSocketId;
     public bool isCapital;
@@ -16,6 +17,12 @@ public class EditorCityController : MonoBehaviour, IObjectAnimator
     public void Update()
     {
         
+    }
+
+    private void OnMouseDown()
+    {
+        panelController.ClickReceivedFromCity(this);
+        Debug.Log("On left click: " + this);
     }
 
     /// <summary>

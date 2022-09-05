@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class CircleRotationAnimation : MonoBehaviour
 {
-    private float LastFrame { get; set; }
     private const float scalationFactor = 1.65f;
-    private readonly float AnimationPart = 360f;
     public CircleCollider2D circleCollider;
     public const float AnimationSpeed = 0.5f;
 
