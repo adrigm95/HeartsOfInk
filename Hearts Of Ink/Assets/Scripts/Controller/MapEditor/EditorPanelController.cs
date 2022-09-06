@@ -147,6 +147,11 @@ public class EditorPanelController : MonoBehaviour
         }
     }
 
+    public void ShowMapInfoPanel_OnClick()
+    {
+        gameObject.SetActive(!isActiveAndEnabled);
+    }
+
     private void EndSelection()
     {
         if (selection.HaveObjectSelected)
@@ -423,25 +428,5 @@ public class EditorPanelController : MonoBehaviour
         }
 
         factions.Clear();
-    }
-
-    public void ChangeAddingCitiesState()
-    {
-        addingCities = !addingCities;
-
-        if (addingCities)
-        {
-            addingTroops = false;
-        }
-    }
-
-    public void ChangeAddingTroopsState()
-    {
-        addingTroops = !addingTroops;
-
-        if (addingTroops)
-        {
-            addingCities = false;
-        }
     }
 }

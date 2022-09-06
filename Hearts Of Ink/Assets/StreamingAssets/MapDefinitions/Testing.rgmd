@@ -1,1 +1,76 @@
-{"MapId":4,"DefinitionName":"Testing","DisplayName":"Testing_DKHGFSJ","SpritePath":"MapSprites/3_aburicu-flatlands.png","AvailableForMultiplayer":false,"AvailableForSingleplayer":true,"Players":[{"MapSocketId":1,"FactionId":1,"IaId":0,"Alliance":1,"Name":null,"Color":"88,212,255","IsPlayable":true},{"MapSocketId":2,"FactionId":3,"IaId":1,"Alliance":1,"Name":null,"Color":"255,223,0","IsPlayable":true},{"MapSocketId":3,"FactionId":8,"IaId":0,"Alliance":1,"Name":null,"Color":"0,234,61","IsPlayable":false}],"Cities":[{"Name":"New City","Position":[-0.6667824,1.340455],"Type":1,"MapSocketId":1},{"Name":"New City","Position":[-2.1327467,-3.679976],"Type":1,"MapSocketId":1},{"Name":"New City","Position":[-4.70320845,-2.22405076],"Type":1,"MapSocketId":1},{"Name":"New City","Position":[8.651138,-5.0656147],"Type":1,"MapSocketId":1}],"Troops":[]}
+{
+    "MapId": 4,
+    "DefinitionName": "Testing",
+    "DisplayName": "Testing_DKHGFSJ",
+    "SpritePath": "MapSprites/3_aburicu-flatlands.png",
+    "AvailableForMultiplayer": false,
+    "AvailableForSingleplayer": true,
+    "Players": [
+        {
+            "MapSocketId": 1,
+            "FactionId": 1,
+            "IaId": 0,
+            "Alliance": 1,
+            "Name": null,
+            "Color": "88,212,255",
+            "IsPlayable": true
+        },
+        {
+            "MapSocketId": 2,
+            "FactionId": 3,
+            "IaId": 1,
+            "Alliance": 1,
+            "Name": null,
+            "Color": "255,223,0",
+            "IsPlayable": true
+        },
+        {
+            "MapSocketId": 3,
+            "FactionId": 8,
+            "IaId": 0,
+            "Alliance": 1,
+            "Name": null,
+            "Color": "0,234,61",
+            "IsPlayable": false
+        }
+    ],
+    "Cities": [
+        {
+            "Name": "New City",
+            "Position": [
+                -0.6667824,
+                1.340455
+            ],
+            "Type": 1,
+            "MapSocketId": 1
+        },
+        {
+            "Name": "New City",
+            "Position": [
+                -2.1327467,
+                -3.679976
+            ],
+            "Type": 1,
+            "MapSocketId": 1
+        },
+        {
+            "Name": "New City",
+            "Position": [
+                -4.70320845,
+                -2.22405076
+            ],
+            "Type": 1,
+            "MapSocketId": 1
+        },
+        {
+            "Name": "New City",
+            "Position": [
+                8.651138,
+                -5.0656147
+            ],
+            "Type": 1,
+            "MapSocketId": 1
+        }
+    ],
+    "Troops": []
+}
