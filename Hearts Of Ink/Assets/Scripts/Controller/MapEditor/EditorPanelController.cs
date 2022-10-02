@@ -152,6 +152,11 @@ public class EditorPanelController : MonoBehaviour
         gameObject.SetActive(!isActiveAndEnabled);
     }
 
+    public void ChangeOption_OnClick(GameObject sender)
+    {
+        
+    }
+
     private void EndSelection()
     {
         if (selection.HaveObjectSelected)
