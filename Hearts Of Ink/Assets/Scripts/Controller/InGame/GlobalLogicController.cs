@@ -13,7 +13,7 @@ using static SceneChangeController;
 public class GlobalLogicController : MonoBehaviour
 {
     private SelectionModel selection;
-    private bool ShiftPressed;
+    private Vector3? MultiselectOrigin;
 
     /// <summary>
     /// Contador que se utiliza para que las unidades clonadas no tengan el mismo nombre.
@@ -88,6 +88,38 @@ public class GlobalLogicController : MonoBehaviour
         TimeManagement();
         UpdateUnitAnimation();
         CheckVictoryConditions();
+        UpdateUnitSelection();
+    }
+
+    private void UpdateUnitSelection()
+    {
+        if (MultiselectOrigin.HasValue)
+        {
+            Bounds bounds = new Bounds();
+            Vector3 multiselectEnd = cameraController.ScreenToWorldPoint();
+            
+            if (MultiselectOrigin.Value.x > multiselectEnd.x)
+            {
+                bounds.max = MultiselectOrigin.Value;
+                bounds.min = multiselectEnd;
+            }
+            else
+            {
+                bounds.max = multiselectEnd;
+                bounds.min = MultiselectOrigin.Value;
+            }
+
+            foreach (Transform troopTransform in troopsCanvas.transform)
+            {
+                if (bounds.Contains(troopTransform.position))
+                {
+                    TroopController troopController = troopTransform.GetComponent<TroopController>();
+                    SetTroopSelected(troopController, true);
+                }
+            }
+
+            //Debug.Log($"Start {MultiselectOrigin} and end {multiselectEnd}");
+        }
     }
 
     private GameModel GetMockedGameModel()
@@ -275,7 +307,13 @@ public class GlobalLogicController : MonoBehaviour
             EndSelection();
         }
 
-        ShiftPressed = Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift);
+        if (MultiselectOrigin != null)
+        {
+            if (Input.GetMouseButtonUp(KeyConstants.LeftClick))
+            {
+                MultiselectOrigin = null;
+            }
+        }
 
         horizontalAxis = Input.GetAxis(AxisData.HorizontalAxis);
         verticalAxis = Input.GetAxis(AxisData.VerticalAxis);
@@ -352,24 +390,17 @@ public class GlobalLogicController : MonoBehaviour
 
     public void LeftClickReceivedFromTroop(TroopController newSelection)
     {
-        if (ShiftPressed)
+        if (selection.HaveObjectSelected)
         {
-            // TODO: Multiselection.
+            if (!selection.SelectionObjects.Contains(newSelection.gameObject))
+            {
+                EndSelection();
+                SetTroopSelected(newSelection, false);
+            }
         }
         else
         {
-            if (selection.HaveObjectSelected)
-            {
-                if (!selection.SelectionObjects.Contains(newSelection.gameObject))
-                {
-                    EndSelection();
-                    SetTroopSelected(newSelection);
-                }
-            }
-            else
-            {
-                SetTroopSelected(newSelection);
-            }
+            SetTroopSelected(newSelection, false);
         }
     }
 
@@ -397,7 +428,10 @@ public class GlobalLogicController : MonoBehaviour
         switch (mouseKeyPressed)
         {
             case KeyCode.Mouse0: // Left mouse button
-                // TODO: Multiselection.
+                MultiselectOrigin = cameraController.ScreenToWorldPoint();
+                selection.SetAsNull();
+                selection.ChangeSelection(null, typeof(TroopController));
+                Debug.Log($"MultiselectOrigin assignated {MultiselectOrigin}");
                 break;
             case KeyCode.Mouse1: // Right mouse button
                 MoveSelectedTroops();
@@ -408,11 +442,19 @@ public class GlobalLogicController : MonoBehaviour
         }
     }
 
-    private void SetTroopSelected(TroopController newSelection)
+    private void SetTroopSelected(TroopController newSelection, bool isMultiselect)
     {
         if (newSelection.troopModel.Player == thisPcPlayer)
         {
-            selection.ChangeSelection(newSelection.gameObject, typeof(TroopController));
+            if (isMultiselect)
+            {
+                selection.AppendSelection(newSelection.gameObject);
+            }
+            else
+            {
+                selection.ChangeSelection(newSelection.gameObject, typeof(TroopController));
+            }
+            
             Debug.Log("TroopSelected: " + newSelection);
             targetMarkerController.SetTargetPosition(newSelection.troopModel.Target, false);
         }

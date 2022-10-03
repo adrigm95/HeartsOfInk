@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.DataAccess;
+﻿using Assets.Scripts.Data;
+using Assets.Scripts.DataAccess;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,21 +38,19 @@ public class MapController : MonoBehaviour
 
     void OnMouseOver()
     {
-        const int LeftClick = 0;
-        const int RightClick = 1;
-
-        if (Input.GetMouseButtonDown(LeftClick))
+        if (Input.GetMouseButtonDown(KeyConstants.LeftClick))
         {
+            Debug.Log("Map controller - Left mouse button down detected");
             if (globalLogic != null)
             {
-                // TODO: Multiselect
+                globalLogic.ClickReceivedFromMap(KeyCode.Mouse0);
             }
             else if (editorPanel != null)
             {
                 editorPanel.ClickReceivedFromMap(KeyCode.Mouse0);
             }
         }
-        else if (Input.GetMouseButtonDown(RightClick))
+        else if (Input.GetMouseButtonDown(KeyConstants.RightClick))
         {
             if (globalLogic != null)
             {

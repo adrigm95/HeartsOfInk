@@ -107,9 +107,7 @@ public class TroopController : MonoBehaviour, IObjectAnimator
 
     private void OnMouseOver()
     {
-        const int RightClick = 1;
-
-        if (Input.GetMouseButtonDown(RightClick))
+        if (Input.GetMouseButtonDown(KeyConstants.RightClick))
         {
             globalLogic.RightClickReceivedFromTroop(this);
             Debug.Log("On right click: " + this);

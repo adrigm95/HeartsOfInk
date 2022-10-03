@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,9 +53,6 @@
     <UnityVersion>2019.4.35f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="D:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Assets\Scripts\Controller\CameraController.cs" />
     <Compile Include="Assets\Scripts\Controller\Endgame\EndgameLineController.cs" />
     <Compile Include="Assets\Scripts\Controller\Endgame\GlobalEndgameController.cs" />
@@ -101,6 +98,7 @@
     <Compile Include="Assets\Scripts\Data\CombatResults.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\ApiConfig.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\GlobalConstants.cs" />
+    <Compile Include="Assets\Scripts\Data\Constants\KeyConstants.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\LanguageConstants.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\PlayerPrefsData.cs" />
     <Compile Include="Assets\Scripts\Data\EditorModels\EditorConfigLine.cs" />

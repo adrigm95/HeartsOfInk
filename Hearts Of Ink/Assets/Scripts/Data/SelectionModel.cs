@@ -16,6 +16,14 @@ namespace Assets.Scripts.Data
             SelectionType = newType;
         }
 
+        public void AppendSelection(GameObject newSelection)
+        {
+            if (newSelection != null && !SelectionObjects.Contains(newSelection))
+            {
+                SelectionObjects.Add(newSelection);
+            }
+        }
+
         public void SetAsNull()
         {
             if (SelectionObjects != null)
@@ -37,7 +45,7 @@ namespace Assets.Scripts.Data
                 SelectionObjects.Clear();
             }
 
-            SelectionObjects.Add(newSelection);
+            AppendSelection(newSelection);
         }
     }
 }
