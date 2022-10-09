@@ -13,7 +13,6 @@ using static SceneChangeController;
 public class GlobalLogicController : MonoBehaviour
 {
     private SelectionModel selection;
-    private Vector3? MultiselectOrigin;
 
     /// <summary>
     /// Contador que se utiliza para que las unidades clonadas no tengan el mismo nombre.
@@ -88,38 +87,7 @@ public class GlobalLogicController : MonoBehaviour
         TimeManagement();
         UpdateUnitAnimation();
         CheckVictoryConditions();
-        UpdateUnitSelection();
-    }
-
-    private void UpdateUnitSelection()
-    {
-        if (MultiselectOrigin.HasValue)
-        {
-            Bounds bounds = new Bounds();
-            Vector3 multiselectEnd = cameraController.ScreenToWorldPoint();
-            
-            if (MultiselectOrigin.Value.x > multiselectEnd.x)
-            {
-                bounds.max = MultiselectOrigin.Value;
-                bounds.min = multiselectEnd;
-            }
-            else
-            {
-                bounds.max = multiselectEnd;
-                bounds.min = MultiselectOrigin.Value;
-            }
-
-            foreach (Transform troopTransform in troopsCanvas.transform)
-            {
-                if (bounds.Contains(troopTransform.position))
-                {
-                    TroopController troopController = troopTransform.GetComponent<TroopController>();
-                    SetTroopSelected(troopController, true);
-                }
-            }
-
-            //Debug.Log($"Start {MultiselectOrigin} and end {multiselectEnd}");
-        }
+        selection.UpdateMultiselect(cameraController.ScreenToWorldPoint(), troopsCanvas.transform, thisPcPlayer.MapSocketId);
     }
 
     private GameModel GetMockedGameModel()
@@ -307,11 +275,11 @@ public class GlobalLogicController : MonoBehaviour
             EndSelection();
         }
 
-        if (MultiselectOrigin != null)
+        if (selection.MultiselectOrigin != null)
         {
             if (Input.GetMouseButtonUp(KeyConstants.LeftClick))
             {
-                MultiselectOrigin = null;
+                selection.MultiselectOrigin = null;
             }
         }
 
@@ -428,10 +396,9 @@ public class GlobalLogicController : MonoBehaviour
         switch (mouseKeyPressed)
         {
             case KeyCode.Mouse0: // Left mouse button
-                MultiselectOrigin = cameraController.ScreenToWorldPoint();
-                selection.SetAsNull();
-                selection.ChangeSelection(null, typeof(TroopController));
-                Debug.Log($"MultiselectOrigin assignated {MultiselectOrigin}");
+                selection.StartMultiselect(cameraController.ScreenToWorldPoint(), typeof(TroopController));
+                targetMarkerController.RemoveTargetPosition();
+                Debug.Log($"MultiselectOrigin assignated {selection.MultiselectOrigin}");
                 break;
             case KeyCode.Mouse1: // Right mouse button
                 MoveSelectedTroops();

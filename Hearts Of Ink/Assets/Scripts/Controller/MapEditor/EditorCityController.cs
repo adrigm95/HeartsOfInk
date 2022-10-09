@@ -2,7 +2,7 @@
 using Assets.Scripts.Logic;
 using UnityEngine;
 
-public class EditorCityController : MonoBehaviour, IObjectAnimator
+public class EditorCityController : MonoBehaviour, IObjectAnimator, IObjectSelectable
 {
     public EditorPanelController panelController;
     public CircleRotationAnimation animator;
@@ -30,7 +30,7 @@ public class EditorCityController : MonoBehaviour, IObjectAnimator
     /// </summary>
     public void ChangeType()
     {
-
+        isCapital = !isCapital;
     }
 
     /// <summary>
@@ -50,5 +50,15 @@ public class EditorCityController : MonoBehaviour, IObjectAnimator
     {
         Debug.Log("EndAnimation: " + this.name);
         animator.gameObject.SetActive(false);
+    }
+
+    public bool IsSelectable(int owner)
+    {
+        return ownerSocketId == owner;
+    }
+
+    public GameObject GetGameObject()
+    {
+        return gameObject;
     }
 }

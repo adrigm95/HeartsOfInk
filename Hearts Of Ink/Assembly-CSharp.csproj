@@ -64,6 +64,7 @@
     <Compile Include="Assets\Scripts\Controller\InGame\CityController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\GlobalLogicController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\IObjectAnimator.cs" />
+    <Compile Include="Assets\Scripts\Controller\InGame\IObjectSelectable.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TargetPositionMarkerController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TroopController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TutorialController.cs" />

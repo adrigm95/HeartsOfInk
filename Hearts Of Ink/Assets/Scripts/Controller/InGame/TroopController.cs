@@ -10,7 +10,7 @@ using Assets.Scripts.Utils;
 using NETCoreServer.Models;
 using Assets.Scripts.Controller.InGame;
 
-public class TroopController : MonoBehaviour, IObjectAnimator
+public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
 {
     private const int GuerrillaLimit = 100;
     private const int MaxTroops = 9000;
@@ -313,5 +313,15 @@ public class TroopController : MonoBehaviour, IObjectAnimator
     public void EndAnimation()
     {
         animator.gameObject.SetActive(false);
+    }
+
+    public bool IsSelectable(int owner)
+    {
+        return troopModel.Player.MapSocketId == owner;
+    }
+
+    public GameObject GetGameObject()
+    {
+        return gameObject;
     }
 }

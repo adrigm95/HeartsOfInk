@@ -23,25 +23,25 @@ public class EditorPanelController : MonoBehaviour
     private List<MapModelHeader> availableMaps;
     private CameraController cameraController;
     private SelectionModel selection;
-    private bool addingCities;
-    private bool addingTroops;
     public Transform citiesHolder;
     public Transform troopsHolder;
     public Dropdown cbMaps;
     public InputField mapName;
     public Toggle isForMultiplayer;
     public Toggle isForSingleplayer;
+    public Toggle citiesEnabled;
+    public Toggle troopsEnabled;
     public int startFactionLines;
     public int spacing;
 
     public bool AddingCities
     {
-        get { return addingCities; }
+        get { return citiesEnabled.isOn; }
     }
 
     public bool AddingTroops
     {
-        get { return addingTroops; }
+        get { return troopsEnabled.isOn; }
     }
 
     void Start()
@@ -103,11 +103,11 @@ public class EditorPanelController : MonoBehaviour
     {
         Debug.Log("ClickReceivedFromMap");
 
-        if (addingCities)
+        if (citiesEnabled.isOn)
         {
             CreateNewCity();
         }
-        else if (addingTroops)
+        else if (troopsEnabled.isOn)
         {
             CreateNewTroop();
         }
@@ -115,7 +115,7 @@ public class EditorPanelController : MonoBehaviour
 
     public void ClickReceivedFromCity(EditorCityController city)
     {
-        if (!addingCities && !addingTroops)
+        if (!citiesEnabled.isOn && !troopsEnabled.isOn)
         {
             EndSelection();
             selection.ChangeSelection(city.gameObject, typeof(EditorCityController));
@@ -124,7 +124,7 @@ public class EditorPanelController : MonoBehaviour
 
     public void ClickReceivedFromTroop(EditorTroopController troop)
     {
-        if (!addingTroops && !addingCities)
+        if (!troopsEnabled.isOn && !citiesEnabled.isOn)
         {
             EndSelection();
             selection.ChangeSelection(troop.gameObject, typeof(EditorCityController));
