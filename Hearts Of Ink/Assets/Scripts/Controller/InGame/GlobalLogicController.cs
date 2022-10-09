@@ -396,6 +396,7 @@ public class GlobalLogicController : MonoBehaviour
         switch (mouseKeyPressed)
         {
             case KeyCode.Mouse0: // Left mouse button
+                EndSelection();
                 selection.StartMultiselect(cameraController.ScreenToWorldPoint(), typeof(TroopController));
                 targetMarkerController.RemoveTargetPosition();
                 Debug.Log($"MultiselectOrigin assignated {selection.MultiselectOrigin}");
