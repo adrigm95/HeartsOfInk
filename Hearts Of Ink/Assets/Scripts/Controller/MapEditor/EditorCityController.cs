@@ -61,4 +61,9 @@ public class EditorCityController : MonoBehaviour, IObjectAnimator, IObjectSelec
     {
         return gameObject;
     }
+
+    public void EndSelection()
+    {
+        EndAnimation();
+    }
 }

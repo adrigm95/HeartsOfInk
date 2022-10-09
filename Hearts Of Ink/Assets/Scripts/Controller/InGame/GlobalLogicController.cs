@@ -87,7 +87,45 @@ public class GlobalLogicController : MonoBehaviour
         TimeManagement();
         UpdateUnitAnimation();
         CheckVictoryConditions();
-        selection.UpdateMultiselect(cameraController.ScreenToWorldPoint(), troopsCanvas.transform, thisPcPlayer.MapSocketId);
+        UpdateMultiselect();
+    }
+
+    private void UpdateMultiselect()
+    {
+        if (selection.UpdateMultiselect(cameraController.ScreenToWorldPoint(), troopsCanvas.transform, thisPcPlayer.MapSocketId))
+        {
+            UpdateTargetMarker();
+        }
+    }
+
+    private void UpdateTargetMarker()
+    {
+        if (selection.SelectionType == typeof(TroopController))
+        {
+            GameObject target = null;
+            bool allTargetEquals = true;
+
+            foreach (GameObject selectable in selection.SelectionObjects)
+            {
+                TroopController troopController = selectable.GetComponent<TroopController>();
+                target = target == null ? troopController.troopModel.Target : target;
+
+                if (target.transform.position != troopController.troopModel.Target.transform.position)
+                {
+                    allTargetEquals = false;
+                    break;
+                }
+            }
+
+            if (allTargetEquals)
+            {
+                targetMarkerController.SetTargetPosition(target, false);
+            }
+            else
+            {
+                targetMarkerController.RemoveTargetPosition();
+            }
+        }
     }
 
     private GameModel GetMockedGameModel()
@@ -335,27 +373,6 @@ public class GlobalLogicController : MonoBehaviour
         }
     }
 
-    // Obsoleto: Para evitar conflictos en la selección de tropas con las ciudades se ha eliminado esta funcionalidad. 27-08-22
-    /*public void ClickReceivedFromCity(CityController newSelection)
-    {
-        if (selection.HaveObjectSelected)
-        {
-            if (selection.SelectionType == typeof(TroopController))
-            {
-                TroopController selectedTroop = selection.SelectionObject.GetComponent<TroopController>();
-
-                Debug.Log("New target for troop: " + newSelection);
-                selectedTroop.troopModel.SetTarget(newSelection.gameObject, this);
-            }
-            else
-            {
-                Debug.LogWarning("Selection type different of TroopController");
-            }
-
-            EndSelection();
-        }
-    }*/
-
     public void LeftClickReceivedFromTroop(TroopController newSelection)
     {
         if (selection.HaveObjectSelected)
@@ -414,16 +431,7 @@ public class GlobalLogicController : MonoBehaviour
     {
         if (newSelection.troopModel.Player == thisPcPlayer)
         {
-            if (isMultiselect)
-            {
-                selection.AppendSelection(newSelection.gameObject);
-            }
-            else
-            {
-                selection.ChangeSelection(newSelection.gameObject, typeof(TroopController));
-            }
-            
-            Debug.Log("TroopSelected: " + newSelection);
+            selection.SetObjectSelected(newSelection, isMultiselect, typeof(TroopController), thisPcPlayer.MapSocketId);
             targetMarkerController.SetTargetPosition(newSelection.troopModel.Target, false);
         }
     }
@@ -477,16 +485,7 @@ public class GlobalLogicController : MonoBehaviour
 
     private void EndSelection()
     {
-        if (selection.SelectionType == typeof(TroopController))
-        {
-            foreach (GameObject selectedTroopObject in selection.SelectionObjects)
-            {
-                IObjectAnimator selectedTroop = selectedTroopObject.GetComponent<IObjectAnimator>();
-                selectedTroop.EndAnimation();
-            }
-        }
-
+        selection.EndSelection();
         targetMarkerController.RemoveTargetPosition();
-        selection.SetAsNull();
     }
 }

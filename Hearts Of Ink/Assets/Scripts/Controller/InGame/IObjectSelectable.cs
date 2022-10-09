@@ -12,5 +12,6 @@ namespace Assets.Scripts.Controller.InGame
     {
         bool IsSelectable(int owner);
         GameObject GetGameObject();
+        void EndSelection();
     }
 }

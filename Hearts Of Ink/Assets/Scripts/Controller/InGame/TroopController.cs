@@ -324,4 +324,9 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
     {
         return gameObject;
     }
+
+    public void EndSelection()
+    {
+        EndAnimation();
+    }
 }

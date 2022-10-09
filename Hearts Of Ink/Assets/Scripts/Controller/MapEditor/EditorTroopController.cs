@@ -38,4 +38,9 @@ public class EditorTroopController : MonoBehaviour, IObjectAnimator, IObjectSele
     {
         throw new System.NotImplementedException();
     }
+
+    public void EndSelection()
+    {
+        //EndAnimation();
+    }
 }

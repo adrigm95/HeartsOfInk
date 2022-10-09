@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Controller.InGame;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro.Examples;
 using UnityEditor;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace Assets.Scripts.Data
             ChangeSelection(null, selectionType);
         }
 
-        public void UpdateMultiselect(Vector3 multiselectEnd, Transform parentHolder, int thisPcPlayer)
+        public bool UpdateMultiselect(Vector3 multiselectEnd, Transform parentHolder, int thisPcPlayer)
         {
             if (MultiselectOrigin.HasValue)
             {
@@ -67,15 +68,17 @@ namespace Assets.Scripts.Data
                     if (bounds.Contains(troopTransform.position))
                     {
                         IObjectSelectable objectSelectable = troopTransform.GetComponent<IObjectSelectable>();
-                        SetTroopSelected(objectSelectable, true, SelectionType, thisPcPlayer);
+                        SetObjectSelected(objectSelectable, true, SelectionType, thisPcPlayer);
                     }
                 }
 
                 //Debug.Log($"Start {MultiselectOrigin} and end {multiselectEnd}");
             }
+
+            return SelectionObjects != null && SelectionObjects.Any();
         }
 
-        private void SetTroopSelected(IObjectSelectable newSelection, bool isMultiselect, Type type, int thisPcPlayer)
+        public void SetObjectSelected(IObjectSelectable newSelection, bool isMultiselect, Type type, int thisPcPlayer)
         {
             if (newSelection.IsSelectable(thisPcPlayer))
             {
@@ -102,6 +105,20 @@ namespace Assets.Scripts.Data
             }
 
             AppendSelection(newSelection);
+        }
+
+        internal void EndSelection()
+        {
+            if (SelectionObjects != null)
+            {
+                foreach (GameObject selectedTroopObject in SelectionObjects)
+                {
+                    IObjectSelectable selectedTroop = selectedTroopObject.GetComponent<IObjectSelectable>();
+                    selectedTroop.EndSelection();
+                }
+
+                SetAsNull();
+            }
         }
     }
 }
