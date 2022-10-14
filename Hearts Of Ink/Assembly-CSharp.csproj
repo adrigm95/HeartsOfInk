@@ -78,6 +78,7 @@
     <Compile Include="Assets\Scripts\Controller\MapEditor\EditorPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\EditorPauseController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\EditorTroopController.cs" />
+    <Compile Include="Assets\Scripts\Controller\MapEditor\MapEditorLogicController.cs" />
     <Compile Include="Assets\Scripts\Controller\MenuPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\ConfigGameController.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\CreateGameController.cs" />

@@ -8,47 +8,32 @@ using Assets.Scripts.Utils;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EditorPanelController : MonoBehaviour
 {
-    private const string PrefabCity = "Prefabs/EditorCityPrefab";
-    private const string PrefabCapital = "Prefabs/EditorCapital";
-    private const string PrefabTroop = "Prefabs/EditorTroop";
     private MapModelHeader mapModelHeader;
     private MapModel mapModel;
     private GlobalInfo globalInfo;
     private List<Dropdown> factions;
     private List<MapModelHeader> availableMaps;
-    private CameraController cameraController;
-    private SelectionModel selection;
+    public MapEditorLogicController mapEditorLogic;
     public Transform citiesHolder;
     public Transform troopsHolder;
     public Dropdown cbMaps;
     public InputField mapName;
     public Toggle isForMultiplayer;
     public Toggle isForSingleplayer;
-    public Toggle citiesEnabled;
-    public Toggle troopsEnabled;
     public int startFactionLines;
     public int spacing;
 
-    public bool AddingCities
-    {
-        get { return citiesEnabled.isOn; }
-    }
-
-    public bool AddingTroops
-    {
-        get { return troopsEnabled.isOn; }
-    }
+    public MapModel MapModel { get { return mapModel; } }
 
     void Start()
     {
         factions = new List<Dropdown>();
-        selection = new SelectionModel();
-        cameraController = FindObjectOfType<CameraController>();
         LoadAvailableMaps();
         cbMaps.onValueChanged.AddListener(delegate { LoadMap(); });
         LoadMap();
@@ -56,7 +41,7 @@ public class EditorPanelController : MonoBehaviour
 
     void Update()
     {
-        UpdateUnitAnimation();
+        
     }
 
     public void LoadAvailableMaps()
@@ -99,54 +84,6 @@ public class EditorPanelController : MonoBehaviour
         colorImage.color = ColorUtils.NextColor(colorImage.color, globalInfo.AvailableColors);
     }
 
-    public void ClickReceivedFromMap(KeyCode mouseKeyPressed)
-    {
-        Debug.Log("ClickReceivedFromMap");
-
-        if (citiesEnabled.isOn)
-        {
-            CreateNewCity();
-        }
-        else if (troopsEnabled.isOn)
-        {
-            CreateNewTroop();
-        }
-    }
-
-    public void ClickReceivedFromCity(EditorCityController city)
-    {
-        if (!citiesEnabled.isOn && !troopsEnabled.isOn)
-        {
-            EndSelection();
-            selection.ChangeSelection(city.gameObject, typeof(EditorCityController));
-        }
-    }
-
-    public void ClickReceivedFromTroop(EditorTroopController troop)
-    {
-        if (!troopsEnabled.isOn && !citiesEnabled.isOn)
-        {
-            EndSelection();
-            selection.ChangeSelection(troop.gameObject, typeof(EditorCityController));
-        }
-    }
-
-    /// <summary>
-    /// Actualiza el estado de la animación de parpadeo de la unidad seleccionada.
-    /// </summary>
-    public void UpdateUnitAnimation()
-    {
-        if (selection.HaveObjectSelected)
-        {
-            foreach (GameObject selectedObject in selection.SelectionObjects)
-            {
-                IObjectAnimator selectedAnimator = selectedObject.GetComponent<IObjectAnimator>();
-                
-                selectedAnimator?.Animate();
-            }
-        }
-    }
-
     public void ShowMapInfoPanel_OnClick()
     {
         gameObject.SetActive(!isActiveAndEnabled);
@@ -155,73 +92,6 @@ public class EditorPanelController : MonoBehaviour
     public void ChangeOption_OnClick(GameObject sender)
     {
         
-    }
-
-    private void EndSelection()
-    {
-        if (selection.HaveObjectSelected)
-        {
-            foreach (GameObject selectedTroopObject in selection.SelectionObjects)
-            {
-                IObjectAnimator selectedTroop = selectedTroopObject.GetComponent<IObjectAnimator>();
-                if (selectedTroop != null)
-                {
-                    selectedTroop.EndAnimation();
-                }
-            }
-
-            selection.SetAsNull();
-        }
-    }
-
-    private void CreateNewCity()
-    {
-        EditorCityController newObject;
-        SpriteRenderer spriteRenderer;
-        MapPlayerModel player;
-        Vector3 mouseClickPosition;
-
-        mouseClickPosition = cameraController.ScreenToWorldPoint();
-        Debug.Log("Adding new city for position: " + mouseClickPosition);
-        newObject = ((GameObject)Instantiate(
-                            Resources.Load(PrefabCity),
-                            mouseClickPosition,
-                            citiesHolder.rotation,
-                            citiesHolder)
-                            ).GetComponent<EditorCityController>();
-
-        spriteRenderer = newObject.GetComponent<SpriteRenderer>();
-        player = mapModel.Players[0];
-        newObject.name = "New City";
-        newObject.isCapital = false;
-        newObject.ownerSocketId = player.MapSocketId;
-        newObject.panelController = this;
-        spriteRenderer.color = ColorUtils.GetColorByString(player.Color);
-    }
-
-    private void CreateNewTroop()
-    {
-        EditorTroopController newObject;
-        TextMeshProUGUI unitsText;
-        MapPlayerModel player;
-        Vector3 mouseClickPosition;
-
-        mouseClickPosition = cameraController.ScreenToWorldPoint();
-        Debug.Log("Adding new troop for position: " + mouseClickPosition);
-        newObject = ((GameObject)Instantiate(
-                            Resources.Load(PrefabTroop),
-                            mouseClickPosition,
-                            troopsHolder.rotation,
-                            troopsHolder)
-                            ).GetComponent<EditorTroopController>();
-
-        unitsText = newObject.GetComponent<TextMeshProUGUI>();
-        player = mapModel.Players[0];
-        newObject.name = "Troop";
-        newObject.ownerSocketId = player.MapSocketId;
-        newObject.panelController = this;
-        unitsText.text = Convert.ToString(GlobalConstants.DefaultCompanySize);
-        unitsText.color = ColorUtils.GetColorByString(player.Color);
     }
 
     private void LoadFactionLines()
@@ -276,41 +146,25 @@ public class EditorPanelController : MonoBehaviour
 
     private void UpdateCanvas()
     {
+        LoadFactionLines();
         SetCitiesInCanvas();
         SetTroopsInCanvas();
-        LoadFactionLines();
     }
 
     private void SetCitiesInCanvas()
     {
         foreach (MapCityModel mapCityModel in mapModel.Cities)
         {
-            EditorCityController newObject;
-            MapPlayerModel player;
-            SpriteRenderer spriteRenderer;
-            Vector3 position = VectorUtils.FloatVectorToVector3(mapCityModel.Position);
-            string resourceName = mapCityModel.Type == 1 ? PrefabCity : PrefabCapital;
-
-            newObject = ((GameObject)Instantiate(
-                            Resources.Load(resourceName),
-                            position,
-                            citiesHolder.rotation,
-                            citiesHolder)
-                            ).GetComponent<EditorCityController>();
-
-            spriteRenderer = newObject.GetComponent<SpriteRenderer>();
-            newObject.name = mapCityModel.Name;
-            newObject.isCapital = !Convert.ToBoolean(mapCityModel.Type);
-            newObject.ownerSocketId = mapCityModel.MapSocketId;
-            newObject.panelController = this;
-            player = mapModel.Players.Find(p => p.MapSocketId == mapCityModel.MapSocketId);
-            spriteRenderer.color = ColorUtils.GetColorByString(player.Color);
+            mapEditorLogic.SetCityInCanvas(mapCityModel);
         }
     }
 
     private void SetTroopsInCanvas()
     {
-        //TODO
+        foreach (MapTroopModel mapTroopModel in mapModel.Troops)
+        {
+            mapEditorLogic.SetTroopInCanvas(mapTroopModel);
+        }
     }
 
     private void UpdateModel()

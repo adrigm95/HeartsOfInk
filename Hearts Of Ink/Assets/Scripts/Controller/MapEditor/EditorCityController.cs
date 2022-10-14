@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EditorCityController : MonoBehaviour, IObjectAnimator, IObjectSelectable
 {
-    public EditorPanelController panelController;
+    public MapEditorLogicController editorLogicController;
     public CircleRotationAnimation animator;
     public int ownerSocketId;
     public bool isCapital;
@@ -21,7 +21,7 @@ public class EditorCityController : MonoBehaviour, IObjectAnimator, IObjectSelec
 
     private void OnMouseDown()
     {
-        panelController.ClickReceivedFromCity(this);
+        editorLogicController.ClickReceivedFromCity(this);
         Debug.Log("On left click: " + this);
     }
 

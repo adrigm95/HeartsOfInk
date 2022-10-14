@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EditorTroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
 {
-    public EditorPanelController panelController;
+    public MapEditorLogicController editorLogicController;
     public CircleRotationAnimation animator;
     public int ownerSocketId;
 
