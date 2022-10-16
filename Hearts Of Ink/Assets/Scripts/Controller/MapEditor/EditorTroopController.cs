@@ -19,9 +19,15 @@ public class EditorTroopController : MonoBehaviour, IObjectAnimator, IObjectSele
         
     }
 
+    private void OnMouseDown()
+    {
+        editorLogicController.ClickReceivedFromTroop(this);
+        Debug.Log("On left click: " + this);
+    }
+
     public bool IsSelectable(int owner)
     {
-        return ownerSocketId == owner;
+        return true;
     }
 
     public GameObject GetGameObject()
@@ -36,11 +42,12 @@ public class EditorTroopController : MonoBehaviour, IObjectAnimator, IObjectSele
 
     public void EndAnimation()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("EndAnimation: " + this.name);
+        animator.gameObject.SetActive(false);
     }
 
     public void EndSelection()
     {
-        //EndAnimation();
+        EndAnimation();
     }
 }

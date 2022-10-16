@@ -186,7 +186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86ca1c3ece3fdb049a34957ddfe5c608, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelController: {fileID: 0}
+  editorLogicController: {fileID: 0}
+  animator: {fileID: 909759967731927209}
   ownerSocketId: 0
 --- !u!1 &3936066042793742229
 GameObject:

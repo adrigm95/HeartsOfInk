@@ -654,12 +654,12 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2736418949753084025}
+      - m_Target: {fileID: 1584833618}
         m_MethodName: ChangeOption_OnClick
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 85995867}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 85995869}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Toggle, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -826,12 +826,12 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2736418949753084025}
+      - m_Target: {fileID: 1584833618}
         m_MethodName: ChangeOption_OnClick
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 102469656}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 102469658}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Toggle, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3753,12 +3753,12 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2736418949753084025}
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 1584833618}
+        m_MethodName: ChangeOption_OnClick
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 810453461}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Toggle, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7081,6 +7081,7 @@ MonoBehaviour:
   troopsEnabled: {fileID: 1674541458}
   selectionEnabled: {fileID: 2048427877}
   aditionEnabled: {fileID: 1985266400}
+  deleteEnabled: {fileID: 102469658}
   editorPanelController: {fileID: 2736418949753084025}
 --- !u!1 &1605131861
 GameObject:
@@ -7540,12 +7541,12 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2736418949753084025}
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 1584833618}
+        m_MethodName: ChangeOption_OnClick
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1674541458}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Toggle, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -8523,12 +8524,12 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2736418949753084025}
+      - m_Target: {fileID: 1584833618}
         m_MethodName: ChangeOption_OnClick
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 1865289652}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 1865289654}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Toggle, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -9285,12 +9286,12 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2736418949753084025}
+      - m_Target: {fileID: 1584833618}
         m_MethodName: ChangeOption_OnClick
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 1985266398}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 1985266400}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Toggle, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -9420,12 +9421,12 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2736418949753084025}
+      - m_Target: {fileID: 1584833618}
         m_MethodName: ChangeOption_OnClick
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2048427875}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 2048427877}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Toggle, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -11450,7 +11451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b4ac9400401ebe4abdf33fe46c975e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapEditorLogic: {fileID: 1584833618}
+  _mapEditorLogic: {fileID: 1584833618}
   citiesHolder: {fileID: 5229715151674442226}
   troopsHolder: {fileID: 4962537092160212825}
   cbMaps: {fileID: 2736418950088965573}

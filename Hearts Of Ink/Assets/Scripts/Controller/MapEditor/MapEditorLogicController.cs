@@ -1,7 +1,9 @@
 ﻿using Assets.Scripts.Controller.InGame;
 using Assets.Scripts.Data;
 using Assets.Scripts.Utils;
+using Boo.Lang;
 using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +21,7 @@ public class MapEditorLogicController : MonoBehaviour
     public Toggle troopsEnabled;
     public Toggle selectionEnabled;
     public Toggle aditionEnabled;
+    public Toggle deleteEnabled;
     public EditorPanelController editorPanelController;
 
     public bool AddingCities
@@ -51,7 +54,7 @@ public class MapEditorLogicController : MonoBehaviour
 
     public void ClickReceivedFromCity(EditorCityController city)
     {
-        if (!citiesEnabled.isOn && !troopsEnabled.isOn)
+        if (citiesEnabled.isOn && !troopsEnabled.isOn)
         {
             EndSelection();
             selection.ChangeSelection(city.gameObject, typeof(EditorCityController));
@@ -60,7 +63,7 @@ public class MapEditorLogicController : MonoBehaviour
 
     public void ClickReceivedFromTroop(EditorTroopController troop)
     {
-        if (!troopsEnabled.isOn && !citiesEnabled.isOn)
+        if (troopsEnabled.isOn && !citiesEnabled.isOn)
         {
             EndSelection();
             selection.ChangeSelection(troop.gameObject, typeof(EditorTroopController));
@@ -112,6 +115,50 @@ public class MapEditorLogicController : MonoBehaviour
         player = editorPanelController.MapModel.Players.Find(p => p.MapSocketId == mapTroopModel.MapSocketId);
         unitsText.text = mapTroopModel.Units.ToString();
         unitsText.color = ColorUtils.GetColorByString(player.Color);
+    }
+
+    public void ChangeOption_OnClick(Toggle sender)
+    {
+        Debug.Log($"ChangeOption_OnClick - Sender: {sender}");
+        if (sender.Equals(citiesEnabled))
+        {
+            if (citiesEnabled.isOn)
+            {
+                Debug.LogWarning("TODO: Enable cities selection");
+            }
+            else
+            {
+                Debug.LogWarning("TODO: Remove cities from selection");
+            }
+        }
+        else if (sender.Equals(troopsEnabled))
+        {
+            if (troopsEnabled.isOn)
+            {
+                Debug.LogWarning("TODO: Enable troops selection");
+            }
+            else
+            {
+                Debug.LogWarning("TODO: Remove troops from selection");
+            }
+        }
+        else if (sender.Equals(deleteEnabled))
+        {
+            if (deleteEnabled.isOn)
+            {
+                DeleteSelection();
+            }
+        }
+        else
+        {
+            Debug.Log($"ChangeOption_OnClick - Cities: {citiesEnabled}");
+            Debug.Log($"ChangeOption_OnClick - Troops: {troopsEnabled}");
+        }
+    }
+
+    public void ResetSelection()
+    {
+        selection.EndSelection();
     }
 
     private void EndSelection()
@@ -244,4 +291,23 @@ public class MapEditorLogicController : MonoBehaviour
         unitsText.color = ColorUtils.GetColorByString(player.Color);
     }
 
+    private void DeleteSelection()
+    {
+        Debug.Log("Start - DeleteSelection");
+        if (selection.HaveObjectSelected)
+        {
+            foreach (GameObject selectedObject in selection.SelectionObjects)
+            {
+                Destroy(selectedObject);
+            }
+
+            selection.SetAsNull();
+        }
+        else
+        {
+            Debug.LogWarning("No objects selected");
+        }
+
+        selectionEnabled.isOn = true;
+    }
 }

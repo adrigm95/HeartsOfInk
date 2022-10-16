@@ -54,7 +54,7 @@ public class EditorCityController : MonoBehaviour, IObjectAnimator, IObjectSelec
 
     public bool IsSelectable(int owner)
     {
-        return ownerSocketId == owner;
+        return true;
     }
 
     public GameObject GetGameObject()

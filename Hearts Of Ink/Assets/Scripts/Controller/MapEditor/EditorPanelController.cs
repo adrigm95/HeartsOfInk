@@ -19,7 +19,7 @@ public class EditorPanelController : MonoBehaviour
     private GlobalInfo globalInfo;
     private List<Dropdown> factions;
     private List<MapModelHeader> availableMaps;
-    public MapEditorLogicController mapEditorLogic;
+    public MapEditorLogicController _mapEditorLogic;
     public Transform citiesHolder;
     public Transform troopsHolder;
     public Dropdown cbMaps;
@@ -55,6 +55,7 @@ public class EditorPanelController : MonoBehaviour
     public void LoadMap()
     {
         Debug.Log("Loading map: " + cbMaps.itemText.text);
+        _mapEditorLogic.ResetSelection();
         mapModelHeader = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text);
         mapModel = MapDAC.LoadMapInfo(mapModelHeader.DefinitionName);
         globalInfo = MapDAC.LoadGlobalMapInfo();
@@ -87,11 +88,6 @@ public class EditorPanelController : MonoBehaviour
     public void ShowMapInfoPanel_OnClick()
     {
         gameObject.SetActive(!isActiveAndEnabled);
-    }
-
-    public void ChangeOption_OnClick(GameObject sender)
-    {
-        
     }
 
     private void LoadFactionLines()
@@ -155,7 +151,7 @@ public class EditorPanelController : MonoBehaviour
     {
         foreach (MapCityModel mapCityModel in mapModel.Cities)
         {
-            mapEditorLogic.SetCityInCanvas(mapCityModel);
+            _mapEditorLogic.SetCityInCanvas(mapCityModel);
         }
     }
 
@@ -163,7 +159,7 @@ public class EditorPanelController : MonoBehaviour
     {
         foreach (MapTroopModel mapTroopModel in mapModel.Troops)
         {
-            mapEditorLogic.SetTroopInCanvas(mapTroopModel);
+            _mapEditorLogic.SetTroopInCanvas(mapTroopModel);
         }
     }
 
