@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\Controller\MapController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\CreateMapPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\EditorCityController.cs" />
+    <Compile Include="Assets\Scripts\Controller\MapEditor\EditorEntitiesController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\EditorPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\EditorPauseController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\EditorTroopController.cs" />

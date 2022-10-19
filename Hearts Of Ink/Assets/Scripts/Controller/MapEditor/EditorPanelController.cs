@@ -85,11 +85,6 @@ public class EditorPanelController : MonoBehaviour
         colorImage.color = ColorUtils.NextColor(colorImage.color, globalInfo.AvailableColors);
     }
 
-    public void ShowMapInfoPanel_OnClick()
-    {
-        gameObject.SetActive(!isActiveAndEnabled);
-    }
-
     private void LoadFactionLines()
     {
         CleanFactionLines();

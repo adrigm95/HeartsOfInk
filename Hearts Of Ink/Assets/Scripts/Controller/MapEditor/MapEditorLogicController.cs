@@ -17,12 +17,15 @@ public class MapEditorLogicController : MonoBehaviour
     public Transform citiesHolder;
     public Transform troopsHolder;
     public CameraController cameraController;
+    public Toggle editMapEnabled;
     public Toggle citiesEnabled;
     public Toggle troopsEnabled;
     public Toggle selectionEnabled;
+    public Toggle editEntitiesEnabled;
     public Toggle aditionEnabled;
     public Toggle deleteEnabled;
     public EditorPanelController editorPanelController;
+    public EditorEntitiesController editorEntitiesController;
 
     public bool AddingCities
     {
@@ -141,6 +144,14 @@ public class MapEditorLogicController : MonoBehaviour
             {
                 Debug.LogWarning("TODO: Remove troops from selection");
             }
+        }
+        else if (sender.Equals(editMapEnabled))
+        {
+            editorPanelController.gameObject.SetActive(editMapEnabled.isOn);
+        }
+        else if (sender.Equals(editEntitiesEnabled))
+        {
+            editorEntitiesController.gameObject.SetActive(editEntitiesEnabled.isOn);
         }
         else if (sender.Equals(deleteEnabled))
         {

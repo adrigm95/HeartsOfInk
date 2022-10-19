@@ -1035,12 +1035,12 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2736418949753084025}
-        m_MethodName: ShowMapInfoPanel_OnClick
-        m_Mode: 1
+      - m_Target: {fileID: 1584833618}
+        m_MethodName: ChangeOption_OnClick
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 112761613}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Toggle, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7077,12 +7077,15 @@ MonoBehaviour:
   citiesHolder: {fileID: 5229715151674442226}
   troopsHolder: {fileID: 4962537092160212825}
   cameraController: {fileID: 811116003}
+  editMapEnabled: {fileID: 112761613}
   citiesEnabled: {fileID: 810453461}
   troopsEnabled: {fileID: 1674541458}
   selectionEnabled: {fileID: 2048427877}
+  editEntitiesEnabled: {fileID: 85995869}
   aditionEnabled: {fileID: 1985266400}
   deleteEnabled: {fileID: 102469658}
   editorPanelController: {fileID: 2736418949753084025}
+  editorEntitiesController: {fileID: 1898586340}
 --- !u!1 &1605131861
 GameObject:
   m_ObjectHideFlags: 0
@@ -8695,6 +8698,7 @@ GameObject:
   - component: {fileID: 1898586339}
   - component: {fileID: 1898586342}
   - component: {fileID: 1898586341}
+  - component: {fileID: 1898586340}
   m_Layer: 5
   m_Name: EntitiesEditionPanel
   m_TagString: Untagged
@@ -8721,11 +8725,23 @@ RectTransform:
   m_Father: {fileID: 1605131865}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -10, y: 0}
-  m_SizeDelta: {x: 400, y: -200}
-  m_Pivot: {x: 1, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 10, y: 35}
+  m_SizeDelta: {x: 400, y: -130}
+  m_Pivot: {x: 0, y: 0.5}
+--- !u!114 &1898586340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898586338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3b991b0b3ef0bb479f4d052f59caeae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1898586341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9936,7 +9952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AllowSwitchOff: 0
+  m_AllowSwitchOff: 1
 --- !u!1 &2108155543
 GameObject:
   m_ObjectHideFlags: 0
