@@ -57,19 +57,21 @@ public class MapEditorLogicController : MonoBehaviour
 
     public void ClickReceivedFromCity(EditorCityController city)
     {
-        if (citiesEnabled.isOn && !troopsEnabled.isOn)
+        if (citiesEnabled.isOn)
         {
             EndSelection();
             selection.ChangeSelection(city.gameObject, typeof(EditorCityController));
+            editorEntitiesController.SetValues(selection);
         }
     }
 
     public void ClickReceivedFromTroop(EditorTroopController troop)
     {
-        if (troopsEnabled.isOn && !citiesEnabled.isOn)
+        if (troopsEnabled.isOn)
         {
             EndSelection();
             selection.ChangeSelection(troop.gameObject, typeof(EditorTroopController));
+            editorEntitiesController.SetValues(selection);
         }
     }
 
@@ -152,6 +154,7 @@ public class MapEditorLogicController : MonoBehaviour
         else if (sender.Equals(editEntitiesEnabled))
         {
             editorEntitiesController.gameObject.SetActive(editEntitiesEnabled.isOn);
+            editorEntitiesController.SetValues(selection);
         }
         else if (sender.Equals(deleteEnabled))
         {
@@ -170,6 +173,11 @@ public class MapEditorLogicController : MonoBehaviour
     public void ResetSelection()
     {
         selection.EndSelection();
+    }
+
+    public MapPlayerModel GetSocketOwner(byte mapSocketId)
+    {
+        return editorPanelController.MapModel.Players.FirstOrDefault(player => player.MapSocketId == mapSocketId);
     }
 
     private void EndSelection()

@@ -8742,6 +8742,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3b991b0b3ef0bb479f4d052f59caeae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logicController: {fileID: 1584833618}
+  ownerColor: {fileID: 6714971994221487095}
+  entityName: {fileID: 720865101}
+  isCapital: {fileID: 1261546345}
+  troopSize: {fileID: 619812703}
 --- !u!114 &1898586341
 MonoBehaviour:
   m_ObjectHideFlags: 0
