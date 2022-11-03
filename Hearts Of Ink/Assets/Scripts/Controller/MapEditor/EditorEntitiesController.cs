@@ -3,12 +3,14 @@ using Assets.Scripts.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EditorEntitiesController : MonoBehaviour
 {
+    private SelectionModel selectionModel;
     public MapEditorLogicController logicController;
     public Image ownerColor;
     public InputField entityName;
@@ -24,12 +26,12 @@ public class EditorEntitiesController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        UpdateEntity();
     }
 
     public void SetValues(SelectionModel selection)
     {
-        if (selection.SelectionObjects.Count > 0)
+        if (selection.SelectionObjects != null && selection.SelectionObjects.Count > 0)
         {
             GameObject selected = selection.SelectionObjects[0];
 
@@ -41,6 +43,12 @@ public class EditorEntitiesController : MonoBehaviour
             {
                 SetTroopsValues(selected.GetComponent<EditorTroopController>());
             }
+            else
+            {
+                Debug.LogError("Unexpected selection type on SetValues method.");
+            }
+
+            selectionModel = selection;
         }
     }
 
@@ -67,9 +75,59 @@ public class EditorEntitiesController : MonoBehaviour
         entityName.text = troopModel.gameObject.name;
     }
 
-    public void SetOwner(byte mapSocketId)
+    private void SetOwner(byte mapSocketId)
     {
         MapPlayerModel playerModel = logicController.GetSocketOwner(mapSocketId);
         ownerColor.color = ColorUtils.GetColorByString(playerModel.Color);
+    }
+
+    private MapPlayerModel GetOwner(Color ownerColor)
+    {
+        string parsedColor = ColorUtils.GetStringByColor(ownerColor);
+        return logicController.GetSocketOwner(parsedColor);
+    } 
+
+    private void UpdateEntity()
+    {
+        if (selectionModel != null)
+        {
+            MapPlayerModel owner = GetOwner(ownerColor.color);
+            SpriteRenderer spriteRenderer = null;
+
+            if (selectionModel.SelectionType == typeof(EditorCityController))
+            {
+                string spriteName;
+                EditorCityController editorCityController = selectionModel.SelectionObjects.FirstOrDefault().GetComponent<EditorCityController>();
+
+                editorCityController.isCapital = isCapital.isOn;
+                editorCityController.name = entityName.text;
+                editorCityController.ownerSocketId = owner.MapSocketId;
+
+                spriteName = editorCityController.isCapital ? "Textures/Capital" : "Textures/City";
+                spriteRenderer = editorCityController.GetComponent<SpriteRenderer>();
+                spriteRenderer.sprite = Resources.Load<Sprite>(spriteName);
+            }
+            else if (selectionModel.SelectionType == typeof(EditorTroopController))
+            {
+                TextMeshProUGUI unitsText;
+                EditorTroopController editorTroopController = selectionModel.SelectionObjects.FirstOrDefault().GetComponent<EditorTroopController>();
+
+                editorTroopController.name = entityName.text;
+                editorTroopController.ownerSocketId = owner.MapSocketId;
+
+                spriteRenderer = editorTroopController.GetComponent<SpriteRenderer>();
+                unitsText = editorTroopController.GetComponent<TextMeshProUGUI>();
+                unitsText.text = troopSize.text;
+            }
+            else
+            {
+                selectionModel = null;
+            }
+
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.color = ownerColor.color;
+            }
+        }
     }
 }

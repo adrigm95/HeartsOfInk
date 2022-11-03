@@ -16,9 +16,17 @@ public class CameraController : MonoBehaviour
     public int minYPosition;
     public int maxYPosition;
 
-    private void Start()
+    void Start()
     {
         mainCamera = FindObjectOfType<Camera>();
+    }
+
+    void Update()
+    {
+        float horizontalAxis = Input.GetAxis(AxisData.HorizontalAxis);
+        float verticalAxis = Input.GetAxis(AxisData.VerticalAxis);
+
+        InputCameraMovement(horizontalAxis, verticalAxis);
     }
 
     /// <summary>

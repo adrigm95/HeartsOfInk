@@ -180,6 +180,11 @@ public class MapEditorLogicController : MonoBehaviour
         return editorPanelController.MapModel.Players.FirstOrDefault(player => player.MapSocketId == mapSocketId);
     }
 
+    public MapPlayerModel GetSocketOwner(string ownerColor)
+    {
+        return editorPanelController.MapModel.Players.FirstOrDefault(player => player.Color == ownerColor);
+    }
+
     private void EndSelection()
     {
         if (selection.HaveObjectSelected)

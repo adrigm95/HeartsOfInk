@@ -296,9 +296,6 @@ public class GlobalLogicController : MonoBehaviour
 
     public void InputManagement()
     {
-        float horizontalAxis;
-        float verticalAxis;
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SetPauseState(!Pause, KeyCode.Escape);
@@ -319,18 +316,6 @@ public class GlobalLogicController : MonoBehaviour
             {
                 selection.MultiselectOrigin = null;
             }
-        }
-
-        horizontalAxis = Input.GetAxis(AxisData.HorizontalAxis);
-        verticalAxis = Input.GetAxis(AxisData.VerticalAxis);
-
-        if (horizontalAxis == 0 && verticalAxis == 0)
-        {
-            // TODO: Check on screen axis.
-        }
-        else
-        {
-            cameraController.InputCameraMovement(horizontalAxis, verticalAxis);
         }
     }
 
