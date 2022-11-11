@@ -7,6 +7,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class MapEditorLogicController : MonoBehaviour
 {
@@ -177,7 +178,42 @@ public class MapEditorLogicController : MonoBehaviour
 
     public MapPlayerModel GetSocketOwner(byte mapSocketId)
     {
-        return editorPanelController.MapModel.Players.FirstOrDefault(player => player.MapSocketId == mapSocketId);
+        Debug.Log($"Getting owner for {mapSocketId}");
+        MapPlayerModel owner = editorPanelController.MapModel.Players.FirstOrDefault(player => player.MapSocketId == mapSocketId);
+
+        if (owner != null)
+        {
+            Debug.Log($"Getted owner {owner.FactionId}");
+        }
+        else
+        {
+            Debug.LogWarning($"No owner getted for mapSocketId {mapSocketId}");
+        }
+
+        return owner;
+    }
+
+    public MapPlayerModel GetNextOwner(string ownerColor)
+    {
+        MapPlayerModel currentOwner = editorPanelController.MapModel.Players.FirstOrDefault(player => player.Color == ownerColor);
+        byte nextSocketId = Convert.ToByte(currentOwner.MapSocketId + Convert.ToByte(1));
+        MapPlayerModel nextOwner = editorPanelController.MapModel.Players.FirstOrDefault(player => player.MapSocketId == nextSocketId);
+
+        if (nextOwner == null)
+        {
+            nextSocketId = 0;
+            nextOwner = editorPanelController.MapModel.Players.FirstOrDefault(player => player.MapSocketId == nextSocketId);
+        }
+
+        while (nextOwner == null && editorPanelController.MapModel.Players.Any())
+        {
+            nextSocketId++;
+            nextOwner = editorPanelController.MapModel.Players.FirstOrDefault(player => player.MapSocketId == nextSocketId);
+        }
+
+        Debug.Log($"Total players {editorPanelController.MapModel.Players.Count}");
+        Debug.Log($"Getted owner {nextOwner.FactionId}");
+        return nextOwner;
     }
 
     public MapPlayerModel GetSocketOwner(string ownerColor)

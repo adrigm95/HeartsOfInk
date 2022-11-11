@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Data;
+using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.Utils;
 using System;
 using System.Collections;
@@ -75,6 +76,14 @@ public class EditorEntitiesController : MonoBehaviour
         entityName.text = troopModel.gameObject.name;
     }
 
+    public void CbFaction_OnValueChange()
+    {
+        string parsedColor = ColorUtils.GetStringByColor(ownerColor.color);
+        MapPlayerModel playerModel = logicController.GetNextOwner(parsedColor);
+        Color newColor = ColorUtils.GetColorByString(playerModel.Color);
+        ownerColor.color = newColor;
+    }
+
     private void SetOwner(byte mapSocketId)
     {
         MapPlayerModel playerModel = logicController.GetSocketOwner(mapSocketId);
@@ -106,6 +115,7 @@ public class EditorEntitiesController : MonoBehaviour
                 spriteName = editorCityController.isCapital ? "Textures/Capital" : "Textures/City";
                 spriteRenderer = editorCityController.GetComponent<SpriteRenderer>();
                 spriteRenderer.sprite = Resources.Load<Sprite>(spriteName);
+                spriteRenderer.color = ownerColor.color;
             }
             else if (selectionModel.SelectionType == typeof(EditorTroopController))
             {
@@ -115,18 +125,13 @@ public class EditorEntitiesController : MonoBehaviour
                 editorTroopController.name = entityName.text;
                 editorTroopController.ownerSocketId = owner.MapSocketId;
 
-                spriteRenderer = editorTroopController.GetComponent<SpriteRenderer>();
                 unitsText = editorTroopController.GetComponent<TextMeshProUGUI>();
                 unitsText.text = troopSize.text;
+                unitsText.color = ownerColor.color;
             }
             else
             {
                 selectionModel = null;
-            }
-
-            if (spriteRenderer != null)
-            {
-                spriteRenderer.color = ownerColor.color;
             }
         }
     }
