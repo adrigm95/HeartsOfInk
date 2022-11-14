@@ -193,6 +193,9 @@ public class GlobalLogicController : MonoBehaviour
     private void AwakeMap()
     {
         MapModel mapModel = null;
+        int index = 0;
+        MapCityModel city = null;
+        MapTroopModel troop = null;
 
         try
         {
@@ -201,24 +204,32 @@ public class GlobalLogicController : MonoBehaviour
             Debug.Log($"Map path: {mapModel.SpritePath}");
             MapController.Instance.UpdateMap(mapModel.SpritePath);
 
-            foreach (MapCityModel city in mapModel.Cities)
+            for (index = 0; index < mapModel.Cities.Count; index++)
             {
+                city = mapModel.Cities[index];
                 Player cityOwner = gameModel.Players.First(item => item.MapSocketId == city.MapSocketId);
                 InstantiateCity(city, cityOwner);
             }
 
-            foreach (MapTroopModel troop in mapModel.Troops)
+            for (index = 0; index < mapModel.Troops.Count; index++)
             {
+                troop = mapModel.Troops[index];
                 Player troopOwner = gameModel.Players.First(item => item.MapSocketId == troop.MapSocketId);
                 InstantiateTroop(troop.Units, VectorUtils.FloatVectorToVector3(troop.Position), troopOwner);
             }
         }
         catch (InvalidOperationException ex)
         {
-            Debug.LogError($"Any city or troop has an invalid MapSocketId: {ex.Message}");
-            Debug.Log($"Cities: {JsonUtility.ToJson(mapModel.Cities)}");
-            Debug.Log($"Troops: {JsonUtility.ToJson(mapModel.Troops)}");
-            Debug.Log($"Players: {JsonUtility.ToJson(mapModel.Players)}");
+            Debug.LogError($"Any city or troop has an invalid MapSocketId: {ex.Message}; array index {index}");
+
+            if (troop == null)
+            {
+                Debug.Log($"Last city evaluated: {city}");
+            }
+            else
+            {
+                Debug.Log($"Last troop evaluated: {troop}");
+            }
         }
     }
 

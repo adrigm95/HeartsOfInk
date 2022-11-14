@@ -1,9 +1,16 @@
-﻿namespace Assets.Scripts.Data
+﻿using System.Xml.Linq;
+
+namespace Assets.Scripts.Data
 {
     public class MapTroopModel
     {
         public int Units { get; set; }
         public float[] Position { get; set; }
         public byte MapSocketId { get; set; }
+
+        public override string ToString()
+        {
+            return $"'Units': {Units}, 'Position': {Position}, 'MapSocketId': {MapSocketId}";
+        }
     }
 }
