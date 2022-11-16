@@ -100,31 +100,51 @@ public class GlobalLogicController : MonoBehaviour
 
     private void UpdateTargetMarker()
     {
-        if (selection.SelectionType == typeof(TroopController))
+        GameObject target = null;
+        bool allTargetEquals = true;
+        TroopController troopController = null;
+
+        try
         {
-            GameObject target = null;
-            bool allTargetEquals = true;
-
-            foreach (GameObject selectable in selection.SelectionObjects)
+            if (selection.SelectionType == typeof(TroopController))
             {
-                TroopController troopController = selectable.GetComponent<TroopController>();
-                target = target == null ? troopController.troopModel.Target : target;
-
-                if (target.transform.position != troopController.troopModel.Target.transform.position)
+                foreach (GameObject selectable in selection.SelectionObjects)
                 {
-                    allTargetEquals = false;
-                    break;
+                    troopController = selectable.GetComponent<TroopController>();
+                    target = target == null ? troopController.troopModel.Target : target;
+
+                    if (target != null)
+                    {
+                        if (troopController.troopModel.Target == null)
+                        {
+                            allTargetEquals = false;
+                            break;
+                        }
+                        else if (target.transform.position != troopController.troopModel.Target.transform.position)
+                        {
+                            allTargetEquals = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (allTargetEquals)
+                {
+                    targetMarkerController.SetTargetPosition(target, false);
+                }
+                else
+                {
+                    targetMarkerController.RemoveTargetPosition();
                 }
             }
-
-            if (allTargetEquals)
-            {
-                targetMarkerController.SetTargetPosition(target, false);
-            }
-            else
-            {
-                targetMarkerController.RemoveTargetPosition();
-            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error on UpdateTargetMarker, message: {ex.Message};");
+            Debug.LogError($"Error on UpdateTargetMarker, stacktrace: {ex.StackTrace};");
+            Debug.LogError($"Error on UpdateTargetMarker, variable Target: {target};");
+            Debug.LogError($"Error on UpdateTargetMarker, variable allTargetEquals: {allTargetEquals};");
+            Debug.LogError($"Error on UpdateTargetMarker, variable troopController: {troopController};");
         }
     }
 
