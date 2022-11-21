@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class CreateMapPanelController : MonoBehaviour
 {
     [SerializeField]
-    private EditorPanelController rightPanelController;
+    private EditorPanelController editorPanelController;
     [SerializeField]
     private Dropdown background;
     [SerializeField]
@@ -39,19 +39,17 @@ public class CreateMapPanelController : MonoBehaviour
     public void EnablePanel()
     {
         this.gameObject.SetActive(true);
-        rightPanelController.gameObject.SetActive(false);
+        editorPanelController.gameObject.SetActive(false);
     }
 
     public void CancelCreation()
     {
         this.gameObject.SetActive(false);
-        rightPanelController.gameObject.SetActive(true);
+        editorPanelController.gameObject.SetActive(true);
     }
 
     public void CreateMap()
     {
-        rightPanelController.gameObject.SetActive(true);
-        rightPanelController.LoadAvailableMaps();
         gameObject.SetActive(false);
 
         MapModelHeader mapModelHeader = new MapModelHeader()
@@ -79,6 +77,8 @@ public class CreateMapPanelController : MonoBehaviour
 
         MapDAC.SaveMapHeader(mapModelHeader);
         MapDAC.SaveMapDefinition(mapModel);
+        editorPanelController.gameObject.SetActive(true);
+        editorPanelController.LoadAvailableMaps();
     }
 
     public void OnChangeBackground()

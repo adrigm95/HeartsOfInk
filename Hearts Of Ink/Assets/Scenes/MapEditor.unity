@@ -1406,7 +1406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 514797a52a2a2234c81d112e6d85ec0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightPanelController: {fileID: 2736418949753084025}
+  editorPanelController: {fileID: 2736418949753084025}
   background: {fileID: 743346099}
   mapName: {fileID: 1608031149}
   isForSingleplayer: {fileID: 414410874}
