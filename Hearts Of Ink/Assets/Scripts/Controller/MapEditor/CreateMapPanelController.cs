@@ -50,12 +50,14 @@ public class CreateMapPanelController : MonoBehaviour
 
     public void CreateMap()
     {
+        short mapId = GenerateMapId();
+        string displayName = FileUtils.SanitizeFilename(mapName.text);
         gameObject.SetActive(false);
 
         MapModelHeader mapModelHeader = new MapModelHeader()
         {
-            MapId = GenerateMapId(),
-            DisplayName = FileUtils.SanitizeFilename(mapName.text),
+            MapId = mapId,
+            DisplayName = displayName,
             DefinitionName = mapName.text,
             SpritePath = "MapSprites/" + background.options[background.value].text,
             AvailableForMultiplayer = isForMultiplayer.isOn,
@@ -64,8 +66,8 @@ public class CreateMapPanelController : MonoBehaviour
 
         MapModel mapModel = new MapModel()
         {
-            MapId = GenerateMapId(),
-            DisplayName = FileUtils.SanitizeFilename(mapName.text),
+            MapId = mapId,
+            DisplayName = displayName,
             DefinitionName = mapName.text,
             SpritePath = "MapSprites/" + background.options[background.value].text,
             AvailableForMultiplayer = isForMultiplayer.isOn,
@@ -78,7 +80,7 @@ public class CreateMapPanelController : MonoBehaviour
         MapDAC.SaveMapHeader(mapModelHeader);
         MapDAC.SaveMapDefinition(mapModel);
         editorPanelController.gameObject.SetActive(true);
-        editorPanelController.LoadAvailableMaps();
+        editorPanelController.LoadAvailableMaps(displayName);
     }
 
     public void OnChangeBackground()

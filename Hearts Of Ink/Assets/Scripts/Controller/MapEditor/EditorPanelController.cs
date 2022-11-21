@@ -7,6 +7,7 @@ using Assets.Scripts.Logic;
 using Assets.Scripts.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -34,7 +35,7 @@ public class EditorPanelController : MonoBehaviour
     void Start()
     {
         factions = new List<Dropdown>();
-        LoadAvailableMaps();
+        LoadAvailableMaps(string.Empty);
         cbMaps.onValueChanged.AddListener(delegate { LoadMap(); });
         LoadMap();
     }
@@ -44,12 +45,17 @@ public class EditorPanelController : MonoBehaviour
         
     }
 
-    public void LoadAvailableMaps()
+    public void LoadAvailableMaps(string firstMap)
     {
         cbMaps.options.Clear();
         availableMaps = MapDAC.GetAvailableMaps();
         availableMaps.ForEach(map => cbMaps.options.Add(new Dropdown.OptionData(map.DisplayName)));
         cbMaps.RefreshShownValue();
+
+        if (!string.IsNullOrWhiteSpace(firstMap))
+        {
+            cbMaps.value = cbMaps.options.Select(option => option.text).ToList().IndexOf(firstMap);
+        }
     }
 
     public void LoadMap()
