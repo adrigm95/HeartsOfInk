@@ -83,12 +83,14 @@ public class EditorPanelController : MonoBehaviour
         playerModel = new MapPlayerModel(maxSocketId);
         mapModel.Players.Add(playerModel);
         LoadFactionLine(playerModel);
+        LoadFactionLines();
     }
 
     public void OnClick_PlayerColor(Image colorImage)
     {
         Debug.Log($"Color changed for image {colorImage.name}; color: {colorImage.color}");
         colorImage.color = ColorUtils.NextColor(colorImage.color, globalInfo.AvailableColors);
+        SaveFactionsInModel();
     }
 
     private void LoadFactionLines()
