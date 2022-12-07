@@ -1,8 +1,10 @@
 ﻿using Assets.Scripts.Data;
 using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -111,16 +113,10 @@ public class CreateMapPanelController : MonoBehaviour
     private short GenerateMapId()
     {
         List<MapModelHeader> availableMaps = MapDAC.GetAvailableMaps();
-        short maxId = short.MinValue;
+        short maxId = availableMaps.Max(map => map.MapId);
 
-        foreach (MapModelHeader map in availableMaps)
-        {
-            if (map.MapId > maxId)
-            {
-                maxId = map.MapId;
-            }
-        }
+        Debug.Log($"Generating new map id: {maxId}");
 
-        return maxId++;
+        return Convert.ToInt16(maxId + 1);
     }
 }
