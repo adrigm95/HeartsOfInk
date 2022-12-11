@@ -14,6 +14,7 @@ public class MapEditorLogicController : MonoBehaviour
     private const string PrefabCity = "Prefabs/EditorCityPrefab";
     private const string PrefabCapital = "Prefabs/EditorCapital";
     private const string PrefabTroop = "Prefabs/EditorTroop";
+
     private SelectionModel selection;
     public Transform citiesHolder;
     public Transform troopsHolder;
@@ -24,9 +25,12 @@ public class MapEditorLogicController : MonoBehaviour
     public Toggle selectionEnabled;
     public Toggle editEntitiesEnabled;
     public Toggle aditionEnabled;
+    public Toggle moveEntitiesEnabled;
     public Toggle deleteEnabled;
     public EditorPanelController editorPanelController;
     public EditorEntitiesController editorEntitiesController;
+    public float entityMovementSpeed;
+    public float entitySpeedMultiplier;
 
     public bool AddingCities
     {
@@ -49,11 +53,57 @@ public class MapEditorLogicController : MonoBehaviour
     {
         UpdateUnitAnimation();
         UpdateMultiselect();
+        InputManagement();
     }
 
     private void UpdateMultiselect()
     {
         selection.UpdateMultiselect(cameraController.ScreenToWorldPoint(), troopsHolder, -1);
+    }
+
+    public void InputManagement()
+    {
+
+        cameraController.movementEnabled = !moveEntitiesEnabled.isOn;
+        if (moveEntitiesEnabled.isOn && selection.HaveObjectSelected)
+        {
+            float speedMultiplier = Input.GetKey(KeyCode.LeftShift) ? entitySpeedMultiplier : 1f;
+            float xMovement = 0;
+            float yMovement = 0;
+
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                xMovement -= (entityMovementSpeed * speedMultiplier);
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                xMovement += (entityMovementSpeed * speedMultiplier);
+            }
+            else if (Input.GetKey(KeyCode.UpArrow))
+            {
+                yMovement += (entityMovementSpeed * speedMultiplier);
+            }
+            else if (Input.GetKey(KeyCode.DownArrow))
+            {
+                yMovement -= (entityMovementSpeed * speedMultiplier);
+            }
+
+            foreach (GameObject gameObject in selection.SelectionObjects)
+            {
+                Vector3 position = gameObject.transform.position;
+                position.x += xMovement;
+                position.y += yMovement;
+                gameObject.transform.position = position;
+            }
+        }
+
+        if (selection.MultiselectOrigin != null)
+        {
+            if (Input.GetMouseButtonUp(KeyConstants.LeftClick))
+            {
+                selection.MultiselectOrigin = null;
+            }
+        }
     }
 
     public void ClickReceivedFromCity(EditorCityController city)
