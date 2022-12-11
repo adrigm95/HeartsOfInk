@@ -15,18 +15,17 @@ public class CameraController : MonoBehaviour
     public int maxXPosition;
     public int minYPosition;
     public int maxYPosition;
+    public bool movementEnabled;
 
     void Start()
     {
         mainCamera = FindObjectOfType<Camera>();
+        movementEnabled = true;
     }
 
     void Update()
     {
-        float horizontalAxis = Input.GetAxis(AxisData.HorizontalAxis);
-        float verticalAxis = Input.GetAxis(AxisData.VerticalAxis);
-
-        InputCameraMovement(horizontalAxis, verticalAxis);
+        InputCameraMovement();
     }
 
     /// <summary>
@@ -34,14 +33,20 @@ public class CameraController : MonoBehaviour
     /// </summary>
     /// <param name="horizontalAxis"> Movimiento el en el eje horizontal. </param>
     /// <param name="verticalAxis"> Movimiento en el eje vertical. </param>
-    public void InputCameraMovement(float horizontalAxis, float verticalAxis)
+    public void InputCameraMovement()
     {
-        Vector3 cameraPosition = mainCamera.transform.position;
+        Vector3 cameraPosition;
 
-        cameraPosition.x = LimitMovement(AxisData.Axis.HORIZONTAL, cameraPosition.x + DefaultMovementForce * horizontalAxis);
-        cameraPosition.y = LimitMovement(AxisData.Axis.HORIZONTAL, cameraPosition.y + DefaultMovementForce * verticalAxis);
+        if (movementEnabled)
+        {
+            float horizontalAxis = Input.GetAxis(AxisData.HorizontalAxis);
+            float verticalAxis = Input.GetAxis(AxisData.VerticalAxis);
 
-        mainCamera.transform.position = cameraPosition;
+            cameraPosition = mainCamera.transform.position;
+            cameraPosition.x = LimitMovement(AxisData.Axis.HORIZONTAL, cameraPosition.x + DefaultMovementForce * horizontalAxis);
+            cameraPosition.y = LimitMovement(AxisData.Axis.VERTICAL, cameraPosition.y + DefaultMovementForce * verticalAxis);
+            mainCamera.transform.position = cameraPosition;
+        }
     }
 
     private float LimitMovement(AxisData.Axis axis, float newPosition)

@@ -1406,7 +1406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 514797a52a2a2234c81d112e6d85ec0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightPanelController: {fileID: 2736418949753084025}
+  editorPanelController: {fileID: 2736418949753084025}
   background: {fileID: 743346099}
   mapName: {fileID: 1608031149}
   isForSingleplayer: {fileID: 414410874}
@@ -3905,6 +3905,7 @@ MonoBehaviour:
   maxXPosition: 5
   minYPosition: -5
   maxYPosition: 5
+  movementEnabled: 0
 --- !u!1 &823154779
 GameObject:
   m_ObjectHideFlags: 0
@@ -7094,9 +7095,12 @@ MonoBehaviour:
   selectionEnabled: {fileID: 2048427877}
   editEntitiesEnabled: {fileID: 85995869}
   aditionEnabled: {fileID: 1985266400}
+  moveEntitiesEnabled: {fileID: 1865289654}
   deleteEnabled: {fileID: 102469658}
   editorPanelController: {fileID: 2736418949753084025}
   editorEntitiesController: {fileID: 1898586340}
+  entityMovementSpeed: 0.001
+  entitySpeedMultiplier: 10
 --- !u!1 &1605131861
 GameObject:
   m_ObjectHideFlags: 0

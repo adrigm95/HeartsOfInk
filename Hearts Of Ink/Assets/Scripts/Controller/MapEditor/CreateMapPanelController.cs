@@ -1,15 +1,17 @@
 ﻿using Assets.Scripts.Data;
 using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CreateMapPanelController : MonoBehaviour
 {
     [SerializeField]
-    private EditorPanelController rightPanelController;
+    private EditorPanelController editorPanelController;
     [SerializeField]
     private Dropdown background;
     [SerializeField]
@@ -39,25 +41,25 @@ public class CreateMapPanelController : MonoBehaviour
     public void EnablePanel()
     {
         this.gameObject.SetActive(true);
-        rightPanelController.gameObject.SetActive(false);
+        editorPanelController.gameObject.SetActive(false);
     }
 
     public void CancelCreation()
     {
         this.gameObject.SetActive(false);
-        rightPanelController.gameObject.SetActive(true);
+        editorPanelController.gameObject.SetActive(true);
     }
 
     public void CreateMap()
     {
-        rightPanelController.gameObject.SetActive(true);
-        rightPanelController.LoadAvailableMaps();
+        short mapId = GenerateMapId();
+        string displayName = FileUtils.SanitizeFilename(mapName.text);
         gameObject.SetActive(false);
 
         MapModelHeader mapModelHeader = new MapModelHeader()
         {
-            MapId = GenerateMapId(),
-            DisplayName = FileUtils.SanitizeFilename(mapName.text),
+            MapId = mapId,
+            DisplayName = displayName,
             DefinitionName = mapName.text,
             SpritePath = "MapSprites/" + background.options[background.value].text,
             AvailableForMultiplayer = isForMultiplayer.isOn,
@@ -66,8 +68,8 @@ public class CreateMapPanelController : MonoBehaviour
 
         MapModel mapModel = new MapModel()
         {
-            MapId = GenerateMapId(),
-            DisplayName = FileUtils.SanitizeFilename(mapName.text),
+            MapId = mapId,
+            DisplayName = displayName,
             DefinitionName = mapName.text,
             SpritePath = "MapSprites/" + background.options[background.value].text,
             AvailableForMultiplayer = isForMultiplayer.isOn,
@@ -79,6 +81,8 @@ public class CreateMapPanelController : MonoBehaviour
 
         MapDAC.SaveMapHeader(mapModelHeader);
         MapDAC.SaveMapDefinition(mapModel);
+        editorPanelController.gameObject.SetActive(true);
+        editorPanelController.LoadAvailableMaps(displayName);
     }
 
     public void OnChangeBackground()
@@ -109,16 +113,10 @@ public class CreateMapPanelController : MonoBehaviour
     private short GenerateMapId()
     {
         List<MapModelHeader> availableMaps = MapDAC.GetAvailableMaps();
-        short maxId = short.MinValue;
+        short maxId = availableMaps.Max(map => map.MapId);
 
-        foreach (MapModelHeader map in availableMaps)
-        {
-            if (map.MapId > maxId)
-            {
-                maxId = map.MapId;
-            }
-        }
+        Debug.Log($"Generating new map id: {maxId}");
 
-        return maxId++;
+        return Convert.ToInt16(maxId + 1);
     }
 }
