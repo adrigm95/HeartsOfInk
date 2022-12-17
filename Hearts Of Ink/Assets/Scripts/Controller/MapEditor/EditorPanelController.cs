@@ -77,10 +77,12 @@ public class EditorPanelController : MonoBehaviour
     {
         byte maxSocketId = 0;
         MapPlayerModel playerModel;
+        Color startColor = ColorUtils.NextColor(Color.black, globalInfo.AvailableColors);
 
         mapModel.Players.ForEach(player => maxSocketId = player.MapSocketId > maxSocketId ? player.MapSocketId : maxSocketId);
         maxSocketId++;
         playerModel = new MapPlayerModel(maxSocketId);
+        playerModel.Color = ColorUtils.GetStringByColor(startColor);
         mapModel.Players.Add(playerModel);
         LoadFactionLine(playerModel);
         LoadFactionLines();
@@ -96,9 +98,15 @@ public class EditorPanelController : MonoBehaviour
     private void LoadFactionLines()
     {
         CleanFactionLines();
+
         foreach (MapPlayerModel player in mapModel.Players)
         {
             LoadFactionLine(player);
+        }
+
+        if (mapModel.Players.Count == 0)
+        {
+            AddNewFactionLine();
         }
     }
 
