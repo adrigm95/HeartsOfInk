@@ -589,7 +589,7 @@ ScriptsOnlyBuild:
     className: TMP_SelectionCaret
   - hash:
       serializedVersion: 2
-      Hash: 41d549c021dd5e6aaaefe1c2af15c16e
+      Hash: ba3eb2e2fd8fbb391a84e217f7f055b7
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: EditorPanelController
@@ -667,7 +667,7 @@ ScriptsOnlyBuild:
     className: StartGameController
   - hash:
       serializedVersion: 2
-      Hash: 7885de0cb9ecc81fc9c009d7946319a2
+      Hash: 317338c95b2e6a8ba4d3750b569823f0
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CameraController
@@ -877,7 +877,7 @@ ScriptsOnlyBuild:
     className: ScrollRect
   - hash:
       serializedVersion: 2
-      Hash: 22580c03b6550f83c57ef83808e6a7c6
+      Hash: 08a3e2fcc2e20d2a95b099172bd0302c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: MapEditorLogicController
