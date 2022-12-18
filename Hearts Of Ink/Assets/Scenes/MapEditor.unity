@@ -8553,7 +8553,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &1865289655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11491,6 +11491,7 @@ MonoBehaviour:
   citiesHolder: {fileID: 5229715151674442226}
   troopsHolder: {fileID: 4962537092160212825}
   cbMaps: {fileID: 2736418950088965573}
+  cbMapImages: {fileID: 1970992001}
   mapName: {fileID: 1764667992}
   isForMultiplayer: {fileID: 1517127357}
   isForSingleplayer: {fileID: 2082005074}

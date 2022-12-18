@@ -24,6 +24,7 @@ public class EditorPanelController : MonoBehaviour
     public Transform citiesHolder;
     public Transform troopsHolder;
     public Dropdown cbMaps;
+    public Dropdown cbMapImages;
     public InputField mapName;
     public Toggle isForMultiplayer;
     public Toggle isForSingleplayer;
@@ -149,6 +150,7 @@ public class EditorPanelController : MonoBehaviour
         UpdateModel();
         MapDAC.SaveMapDefinition(mapModel);
         MapDAC.SaveMapHeader(mapModelHeader);
+        LoadAvailableMaps(mapModel.DisplayName);
     }
 
     private void UpdateCanvas()
@@ -201,7 +203,14 @@ public class EditorPanelController : MonoBehaviour
 
     private void SetMapInfoOnModel()
     {
-        string image = cbMaps.options[cbMaps.value].text;
+        string image = string.Empty;
+        //Falta inicializar el combo para que esto funcione
+        //string image = cbMapImages.options[cbMaps.value].text;
+
+        if (!string.IsNullOrWhiteSpace(image))
+        {
+            mapModel.SpritePath = image;
+        }
 
         mapModel.DisplayName = mapName.text;
         mapModel.AvailableForMultiplayer = isForMultiplayer.isOn;
