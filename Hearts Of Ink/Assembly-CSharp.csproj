@@ -132,6 +132,7 @@
     <Compile Include="Assets\Scripts\Rawgen\Literals\LiteralsFactory.cs" />
     <Compile Include="Assets\Scripts\Rawgen\Models\CachedCollider2D.cs" />
     <Compile Include="Assets\Scripts\Rawgen\RuntimeColliderManager2D.cs" />
+    <Compile Include="Assets\Scripts\Utils\AllianceUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\CameraUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\ColorUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\DropdownIndexer.cs" />
