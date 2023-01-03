@@ -255,11 +255,7 @@ public class EditorPanelController : MonoBehaviour
             playerModel.IaId = cbPlayerType.value;
             playerModel.FactionId = globalInfo.Factions.Find(item =>
             item.NameLiteral == cbFaction.options[cbFaction.value].text).Id;
-
-            if (!string.IsNullOrWhiteSpace(txtAlliance.text))
-            {
-                playerModel.Alliance = Convert.ToInt32(txtAlliance.text);
-            }
+            playerModel.Alliance = StringUtils.ToInt32(txtAlliance.text);
             
             playerModel.IsPlayable = tgIsPlayable.isOn;
             playerModel.Color = ColorUtils.GetStringByColor(btnColorFaction.color);

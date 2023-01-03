@@ -140,6 +140,7 @@
     <Compile Include="Assets\Scripts\Utils\JsonCustomUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\PanelUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\RandomManagement.cs" />
+    <Compile Include="Assets\Scripts\Utils\StringUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\VectorUtils.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
