@@ -377,15 +377,26 @@ public class GlobalLogicController : MonoBehaviour
     {
         if (selection.HaveObjectSelected)
         {
+            List<GameObject> destroyedObjects = new List<GameObject>();
+
             foreach (GameObject selectedTroopObject in selection.SelectionObjects)
             {
-                IObjectAnimator selectedTroop = selectedTroopObject.GetComponent<IObjectAnimator>();
-
-                if (selectedTroop != null)
+                try
                 {
-                    selectedTroop.Animate();
+                    IObjectAnimator selectedTroop = selectedTroopObject.GetComponent<IObjectAnimator>();
+
+                    if (selectedTroop != null)
+                    {
+                        selectedTroop.Animate();
+                    }
+                }
+                catch (MissingReferenceException)
+                {
+                    destroyedObjects.Add(selectedTroopObject);
                 }
             }
+
+            selection.SelectionObjects.RemoveAll(item => destroyedObjects.Contains(item));
         }
     }
 
