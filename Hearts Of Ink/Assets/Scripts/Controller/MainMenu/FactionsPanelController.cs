@@ -76,6 +76,7 @@ public class FactionsPanelController : MonoBehaviour
         Text txtFaction;
         Image btnColorFaction;
         GlobalInfoFaction faction;
+        Text txtAlliance;
 
         faction = globalInfo.Factions.Find(item => item.Id == player.FactionId);
         position = new Vector3(0, startFactionLines);
@@ -88,11 +89,13 @@ public class FactionsPanelController : MonoBehaviour
         cbFaction = newObject.Find("cbFaction").GetComponent<Dropdown>();
         txtFaction = newObject.Find("txtFaction").GetComponent<Text>();
         btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
+        txtAlliance = newObject.Find("btnAlliance").GetComponentInChildren<Text>();
 
         cbFaction.value = player.IaId;
         cbFaction.onValueChanged.AddListener(delegate { CbFaction_OnValueChange(cbFaction); });
         txtFaction.text = faction.NameLiteral;
         btnColorFaction.color = ColorUtils.GetColorByString(player.Color);
+        txtAlliance.text = AllianceUtils.ConvertToString(player.Alliance);
 
         factions.Add(cbFaction);
 

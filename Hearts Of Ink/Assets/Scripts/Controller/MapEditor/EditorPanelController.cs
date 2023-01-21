@@ -122,6 +122,7 @@ public class EditorPanelController : MonoBehaviour
         Image colorFactionImage;
         Button btnColorFaction;
         Toggle tgIsPlayable;
+        Text txtAlliance;
 
         faction = globalInfo.Factions.Find(item => item.Id == player.FactionId);
         position = new Vector3(0, startFactionLines);
@@ -134,12 +135,14 @@ public class EditorPanelController : MonoBehaviour
         cbPlayerType = newObject.Find("cbPlayerType").GetComponent<Dropdown>();
         colorFactionImage = newObject.Find("btnColorFaction").GetComponent<Image>();
         btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Button>();
+        txtAlliance = newObject.Find("btnAlliance").GetComponentInChildren<Text>();
         tgIsPlayable = newObject.Find("tgIsPlayable").GetComponent<Toggle>();
 
         btnColorFaction.onClick.AddListener(delegate { OnClick_PlayerColor(colorFactionImage); });
         cbPlayerType.value = player.IaId;
         colorFactionImage.color = ColorUtils.GetColorByString(player.Color);
         LoadFactionsCombo(cbFaction, player.FactionId);
+        txtAlliance.text = AllianceUtils.ConvertToString(player.Alliance);
         tgIsPlayable.isOn = player.IsPlayable;
 
         factions.Add(cbFaction);
@@ -251,8 +254,9 @@ public class EditorPanelController : MonoBehaviour
 
             playerModel.IaId = cbPlayerType.value;
             playerModel.FactionId = globalInfo.Factions.Find(item =>
-                    item.NameLiteral == cbFaction.options[cbFaction.value].text).Id;
-            playerModel.Alliance = Convert.ToInt32(txtAlliance);
+            item.NameLiteral == cbFaction.options[cbFaction.value].text).Id;
+            playerModel.Alliance = StringUtils.ToInt32(txtAlliance.text);
+            
             playerModel.IsPlayable = tgIsPlayable.isOn;
             playerModel.Color = ColorUtils.GetStringByColor(btnColorFaction.color);
         }
