@@ -192,6 +192,7 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\Fonts\OFL.txt" />
+    <None Include="Assets\Music\SoundEffects\Créditos_SoundEffects.txt" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Scripts\Rawgen\LICENSE.txt" />
     <None Include="Assets\Music\Oriental\Creditos_oriental.txt" />
