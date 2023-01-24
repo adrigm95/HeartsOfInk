@@ -58,6 +58,7 @@
     <Compile Include="Assets\Scripts\Controller\Endgame\GlobalEndgameController.cs" />
     <Compile Include="Assets\Scripts\Controller\GameOptionsController.cs" />
     <Compile Include="Assets\Scripts\Controller\Generic\CircleRotationAnimation.cs" />
+    <Compile Include="Assets\Scripts\Controller\Generic\CreditsController.cs" />
     <Compile Include="Assets\Scripts\Controller\Generic\MusicController.cs" />
     <Compile Include="Assets\Scripts\Controller\Generic\SceneChangeController.cs" />
     <Compile Include="Assets\Scripts\Controller\Generic\SoundEffectsController.cs" />
