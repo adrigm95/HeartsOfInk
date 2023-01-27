@@ -2,6 +2,7 @@
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
+using NETCoreServer.Models;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -91,7 +92,8 @@ public class FactionsPanelController : MonoBehaviour
         btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
         txtAlliance = newObject.Find("btnAlliance").GetComponentInChildren<Text>();
 
-        cbFaction.value = player.IaId;
+        Player.IA slotPlayerType = (Player.IA)player.IaId;
+        cbFaction.value = slotPlayerType == Player.IA.OTHER_PLAYER ? (int) Player.IA.IA : player.IaId;
         cbFaction.onValueChanged.AddListener(delegate { CbFaction_OnValueChange(cbFaction); });
         txtFaction.text = faction.NameLiteral;
         btnColorFaction.color = ColorUtils.GetColorByString(player.Color);

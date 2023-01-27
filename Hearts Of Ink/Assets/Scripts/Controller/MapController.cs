@@ -67,18 +67,27 @@ public class MapController : MonoBehaviour
 
     private void CleanTransform(Transform cleanTransform)
     {
-        List<GameObject> references = new List<GameObject>();
+        List<GameObject> references;
 
-        foreach (Transform child in cleanTransform)
+        if (cleanTransform != null)
         {
-            references.Add(child.gameObject);
-        }
+            references = new List<GameObject>();
 
-        foreach (GameObject gameObject in references)
+            foreach (Transform child in cleanTransform)
+            {
+                references.Add(child.gameObject);
+            }
+
+            foreach (GameObject gameObject in references)
+            {
+                Destroy(gameObject);
+            }
+
+            Debug.Log($"Cleaned transform: {cleanTransform.name}");
+        }
+        else
         {
-            Destroy(gameObject);
+            Debug.Log("Received transform empty, this is ok when the map display doesn't want to show cities and/or troops.");
         }
-
-        Debug.Log($"Cleaned transform: {cleanTransform.name}");
     }
 }
