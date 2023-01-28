@@ -16,7 +16,7 @@ public class StartGameController : MonoBehaviour
     private GameOptionsController gameOptionsController;
     private SceneChangeController sceneChangeController;
     public Transform factionDropdownsHolder;
-    public short MapId { get; set; }
+    public string MapId { get; set; }
 
     private void Start()
     {
@@ -33,7 +33,7 @@ public class StartGameController : MonoBehaviour
     public async void StartGame(bool sendStartToServer)
     {
         bool readyForChangeScene = true;
-        GameModel gameModel = new GameModel(0);
+        GameModel gameModel = new GameModel("0");
         gameModel.MapId = MapId;
         gameModel.Gametype = sendStartToServer ? GameModel.GameType.MultiplayerHost : GameModel.GameType.Single;
 
@@ -60,12 +60,12 @@ public class StartGameController : MonoBehaviour
         WebServiceCaller<GameModel, bool> wsCaller = new WebServiceCaller<GameModel, bool>();
         HOIResponseModel<bool> ingameServerResponse;
 
-        gameModel.gameKey = configGameController.txtGamekey.text;
+        gameModel.GameKey = configGameController.txtGamekey.text;
         ingameServerResponse = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/GameRoom", gameModel);
 
         if (ingameServerResponse.serviceResponse)
         {
-            StartGameLobbySignalR.Instance.SendStartGame(gameModel.gameKey);
+            StartGameLobbySignalR.Instance.SendStartGame(gameModel.GameKey);
         }
         else
         {

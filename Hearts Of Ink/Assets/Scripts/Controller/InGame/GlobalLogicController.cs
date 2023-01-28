@@ -75,8 +75,8 @@ public class GlobalLogicController : MonoBehaviour
         {
             SetPauseState(true, null);
             //waitingPanel.Show(this);
-            IngameHOIHub.Instance.SuscribeToRoom(gameModel.gameKey, thisPcPlayer.Name);
-            StartGameIngameSignalR.Instance.SendClientReady(gameModel.gameKey);
+            IngameHOIHub.Instance.SuscribeToRoom(gameModel.GameKey, thisPcPlayer.Name);
+            StartGameIngameSignalR.Instance.SendClientReady(gameModel.GameKey);
         }
     }
 
@@ -150,7 +150,7 @@ public class GlobalLogicController : MonoBehaviour
 
     private GameModel GetMockedGameModel()
     {
-        GameModel gameModel = new GameModel(0);
+        GameModel gameModel = new GameModel("0");
         gameModel.Gametype = GameModel.GameType.Single;
 
         for (int index = 0; index < 4; index++)

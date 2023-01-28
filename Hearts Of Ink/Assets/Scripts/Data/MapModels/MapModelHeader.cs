@@ -9,7 +9,7 @@ namespace Assets.Scripts.Data
         /// <summary>
         /// Identificador del mapa dentro del juego. También aplica al servidor.
         /// </summary>
-        public short MapId { get; set; }
+        public string MapId { get; set; }
 
         /// <summary>
         /// Nombre del fichero de definición del mapa. No contiene la extensión (.rgmd).

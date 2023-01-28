@@ -39,10 +39,10 @@ public class CreateGameController : MonoBehaviour
 
         CreateGameModelIn newGame = new CreateGameModelIn
         {
-            isPublic = !checkIsPrivate.isOn,
-            name = gameNameText.text,
-            mapId = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).MapId,
-            playerName = creatorNick.text
+            IsPublic = !checkIsPrivate.isOn,
+            Name = gameNameText.text,
+            MapId = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).MapId,
+            PlayerName = creatorNick.text
         };
 
         response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.POST, LobbyHOIControllers.CreateGame, newGame);
@@ -51,7 +51,7 @@ public class CreateGameController : MonoBehaviour
         {
             CreateGameModelOut responseModel = response.serviceResponse;
 
-            configGameController.GameCreatedByHost(responseModel.gameKey, newGame.mapId);
+            configGameController.GameCreatedByHost(responseModel.gameKey, newGame.MapId);
             EnableDisableCreateGame(false);
             configGamePanel.SetActive(true);
             AddPlayerToDropdowns();

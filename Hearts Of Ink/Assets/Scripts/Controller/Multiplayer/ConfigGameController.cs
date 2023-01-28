@@ -104,7 +104,7 @@ public class ConfigGameController : MonoBehaviour
         }
     }
 
-    public void GameCreatedByHost(string gameKey, short mapId)
+    public void GameCreatedByHost(string gameKey, string mapId)
     {
         LoadConfigGame(null, gameKey, mapId, true);
     }
@@ -129,7 +129,7 @@ public class ConfigGameController : MonoBehaviour
         }
     }
 
-    public void LoadConfigGame(List<ConfigLineModel> configLines, string gameKey, short mapId, bool isGameHost)
+    public void LoadConfigGame(List<ConfigLineModel> configLines, string gameKey, string mapId, bool isGameHost)
     {
         this.txtGamekey.text = gameKey;
         this.gameObject.SetActive(true);
