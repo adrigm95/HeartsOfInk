@@ -1238,6 +1238,7 @@ MonoBehaviour:
   maxXPosition: 5
   minYPosition: -5
   maxYPosition: 5
+  movementEnabled: 0
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -2121,7 +2122,7 @@ SpriteRenderer:
   m_Size: {x: 11.64, y: 8.206667}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1108151885
@@ -2758,7 +2759,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02cfdc202bade994fb2b6fea8dcb85d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicVolume: 0.5
+  musicVolume: 0.25
 --- !u!4 &1247690770
 Transform:
   m_ObjectHideFlags: 0
