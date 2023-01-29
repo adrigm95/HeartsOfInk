@@ -36,7 +36,7 @@ public class FactionsPanelController : MonoBehaviour
     public void LoadMap()
     {
         Debug.Log("Loading map: " + cbMaps.itemText.text);
-        mapModel = MapDAC.LoadMapInfo(GetMapDefinitionName());
+        mapModel = MapDAC.LoadMapInfoByName(GetMapDefinitionName());
         startGameController.MapId = mapModel.MapId;
         globalInfo = MapDAC.LoadGlobalMapInfo();
 
@@ -63,7 +63,7 @@ public class FactionsPanelController : MonoBehaviour
         return availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).DefinitionName;
     }
 
-    public short GetMapDefinitionId()
+    public string GetMapDefinitionId()
     {
         return availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).MapId;
     }

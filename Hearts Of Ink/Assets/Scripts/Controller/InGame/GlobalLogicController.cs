@@ -220,7 +220,7 @@ public class GlobalLogicController : MonoBehaviour
         try
         {
             Debug.Log($"Loading map id: {gameModel.MapId}");
-            mapModel = MapDAC.LoadMapInfo(gameModel.MapId);
+            mapModel = MapDAC.LoadMapInfoById(gameModel.MapId);
             Debug.Log($"Map path: {mapModel.SpritePath}");
             MapController.Instance.UpdateMap(mapModel.SpritePath);
 

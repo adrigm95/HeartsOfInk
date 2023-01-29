@@ -52,7 +52,7 @@ public class CreateMapPanelController : MonoBehaviour
 
     public void CreateMap()
     {
-        short mapId = GenerateMapId();
+        string mapId = GenerateMapId();
         string displayName = FileUtils.SanitizeFilename(mapName.text);
         gameObject.SetActive(false);
 
@@ -110,13 +110,14 @@ public class CreateMapPanelController : MonoBehaviour
         backgroundPath.text = Application.streamingAssetsPath + "/MapSprites/";
     }
 
-    private short GenerateMapId()
+    private string GenerateMapId()
     {
         List<MapModelHeader> availableMaps = MapDAC.GetAvailableMaps();
-        short maxId = availableMaps.Max(map => map.MapId);
+        int maxId = availableMaps.Max(map => Convert.ToInt32(map.MapId));
+        maxId += 1;
 
         Debug.Log($"Generating new map id: {maxId}");
 
-        return Convert.ToInt16(maxId + 1);
+        return Convert.ToString(maxId);
     }
 }

@@ -64,7 +64,7 @@ public class EditorPanelController : MonoBehaviour
         Debug.Log("Loading map: " + cbMaps.itemText.text);
         _mapEditorLogic.ResetSelection();
         mapModelHeader = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text);
-        mapModel = MapDAC.LoadMapInfo(mapModelHeader.DefinitionName);
+        mapModel = MapDAC.LoadMapInfoByName(mapModelHeader.DefinitionName);
         globalInfo = MapDAC.LoadGlobalMapInfo();
 
         mapName.text = mapModel.DisplayName;

@@ -134,7 +134,7 @@ public class ConfigGameController : MonoBehaviour
         this.txtGamekey.text = gameKey;
         this.gameObject.SetActive(true);
         startGameController.MapId = mapId;
-        _mapModel = MapDAC.LoadMapInfo(mapId);
+        _mapModel = MapDAC.LoadMapInfoById(mapId);
         globalInfo = MapDAC.LoadGlobalMapInfo();
         LobbyHOIHub.Instance.SuscribeToRoom(txtGamekey.text);
         MapController.Instance.UpdateMap(_mapModel.SpritePath);
