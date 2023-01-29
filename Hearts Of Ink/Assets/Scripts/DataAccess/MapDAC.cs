@@ -53,15 +53,15 @@ namespace Assets.Scripts.DataAccess
             return result;
         }
 
-        public static MapModel LoadMapInfo(short mapId)
+        public static MapModel LoadMapInfoById(string mapId)
         {
             List<MapModelHeader> availableMaps = GetAvailableMaps();
             MapModelHeader wantedMap = availableMaps.Find(map => map.MapId == mapId);
 
-            return LoadMapInfo(wantedMap.DefinitionName);
+            return LoadMapInfoByName(wantedMap.DefinitionName);
         }
 
-        public static MapModel LoadMapInfo(string mapName)
+        public static MapModel LoadMapInfoByName(string mapName)
         {
             MapModel result;
             string mapPath;
