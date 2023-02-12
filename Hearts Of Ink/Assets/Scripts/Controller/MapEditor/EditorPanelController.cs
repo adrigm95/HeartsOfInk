@@ -23,6 +23,7 @@ public class EditorPanelController : MonoBehaviour
     public MapEditorLogicController _mapEditorLogic;
     public Transform citiesHolder;
     public Transform troopsHolder;
+    public GameObject uploadChoise;
     public Dropdown cbMaps;
     public Dropdown cbMapImages;
     public InputField mapName;
@@ -154,6 +155,21 @@ public class EditorPanelController : MonoBehaviour
         MapDAC.SaveMapDefinition(mapModel);
         MapDAC.SaveMapHeader(mapModelHeader);
         LoadAvailableMaps(mapModel.DisplayName);
+    }
+
+    public void UploadMap()
+    {
+        uploadChoise.SetActive(true);
+    }
+
+    public void AcceptUploadMap()
+    {
+        uploadChoise.SetActive(false);
+    }
+
+    public void CancelUploadMap()
+    {
+        uploadChoise.SetActive(false);
     }
 
     private void UpdateCanvas()
