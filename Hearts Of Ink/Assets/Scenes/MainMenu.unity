@@ -1012,7 +1012,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   otherPanel: {fileID: 1562273885}
-  logo: {fileID: 6153900799615746249}
   isOrigin: 0
 --- !u!114 &617376960
 MonoBehaviour:
@@ -1706,7 +1705,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 857345305}
   m_OnClick:
     m_PersistentCalls:
@@ -2937,7 +2936,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   otherPanel: {fileID: 617376957}
-  logo: {fileID: 6153900799615746249}
   isOrigin: 1
 --- !u!1 &1574561983
 GameObject:

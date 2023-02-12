@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Scripts.Data
 {
     public static class GlobalConstants
     {
+        public static readonly string RootPath = Application.streamingAssetsPath;
         public const string EmptyTargetName = "Unit target position";
         public const string FactionLineStart = "factionLine";
         public const int GuerrillaLimit = 100;

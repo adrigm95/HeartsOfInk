@@ -8,7 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{30027A7E-3B82-2853-DD53-C3E2DF470AFC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -114,16 +115,12 @@
     <Compile Include="Assets\Scripts\Data\Literals\EndgameLiterals.cs" />
     <Compile Include="Assets\Scripts\Data\Literals\FactionNames.cs" />
     <Compile Include="Assets\Scripts\Data\Literals\LiteralModel.cs" />
-    <Compile Include="Assets\Scripts\Data\MapModels\MapCityModel.cs" />
-    <Compile Include="Assets\Scripts\Data\MapModels\MapModel.cs" />
-    <Compile Include="Assets\Scripts\Data\MapModels\MapModelHeader.cs" />
-    <Compile Include="Assets\Scripts\Data\MapModels\MapPlayerModel.cs" />
-    <Compile Include="Assets\Scripts\Data\MapModels\MapTroopModel.cs" />
     <Compile Include="Assets\Scripts\Data\SelectionModel.cs" />
     <Compile Include="Assets\Scripts\Data\TroopModel.cs" />
     <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialModel.cs" />
     <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialStep.cs" />
-    <Compile Include="Assets\Scripts\DataAccess\MapDAC.cs" />
+    <Compile Include="Assets\Scripts\DataAccess\GlobalInfoDAC.cs" />
+    <Compile Include="Assets\Scripts\DataAccess\MapSpriteDAC.cs" />
     <Compile Include="Assets\Scripts\DataAccess\WebServiceCaller.cs" />
     <Compile Include="Assets\Scripts\Logic\AILogic.cs" />
     <Compile Include="Assets\Scripts\Logic\CombatLogic.cs" />
@@ -138,7 +135,6 @@
     <Compile Include="Assets\Scripts\Utils\ColorUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\DropdownIndexer.cs" />
     <Compile Include="Assets\Scripts\Utils\FileUtils.cs" />
-    <Compile Include="Assets\Scripts\Utils\JsonCustomUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\PanelUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\RandomManagement.cs" />
     <Compile Include="Assets\Scripts\Utils\StringUtils.cs" />
@@ -207,6 +203,9 @@
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Bangers - OFL.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="HeartsOfInk.SharedLogic">
+      <HintPath>Assets\Plugins\Rawgen\Libraries\HeartsOfInk.SharedLogic.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2019.4.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>

@@ -11,13 +11,14 @@ public class StartGameLobbySignalR
     // Singleton variables
     private static readonly Lazy<StartGameLobbySignalR> _singletonReference = new Lazy<StartGameLobbySignalR>(() => new StartGameLobbySignalR());
     public static StartGameLobbySignalR Instance => _singletonReference.Value;
-    public StartGameController StartGameController { get; set; }
+    private bool startGameReceived;
 
     // Other Variables
     private LobbyHOIHub signalRController;
 
     private StartGameLobbySignalR()
     {
+        startGameReceived = false;
     }
 
     /// <summary>
@@ -64,7 +65,27 @@ public class StartGameLobbySignalR
 
     public void ReceiveStartGame()
     {
-        Debug.Log("ReceiveStartGame");
-        StartGameController.StartGame(false);
+        try
+        {
+            Debug.Log("ReceiveStartGame");
+            startGameReceived = true;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogException(ex);
+        }
+    }
+
+    public bool IsStartGameReceived()
+    {
+        if (startGameReceived)
+        {
+            startGameReceived = false;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

@@ -1,9 +1,10 @@
-﻿using Assets.Scripts.Data;
-using Assets.Scripts.Data.Constants;
+﻿using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
+using HeartsOfInk.SharedLogic;
+using LobbyHOIServer.Models.MapModels;
 using LobbyHOIServer.Models.Models;
 using LobbyHOIServer.Models.Models.In;
 using NETCoreServer.Models;
@@ -14,6 +15,7 @@ using UnityEngine.UI;
 
 public class ConfigGameController : MonoBehaviour
 {
+    private readonly string RootPath = Application.streamingAssetsPath;
     /// <summary>
     /// Tiempo en segundos tras el cual hay que notificar al servidor que aun estamos configurando la partida.
     /// </summary>
@@ -43,7 +45,6 @@ public class ConfigGameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -131,39 +132,52 @@ public class ConfigGameController : MonoBehaviour
 
     public void LoadConfigGame(List<ConfigLineModel> configLines, string gameKey, string mapId, bool isGameHost)
     {
-        this.txtGamekey.text = gameKey;
-        this.gameObject.SetActive(true);
-        startGameController.MapId = mapId;
-        _mapModel = MapDAC.LoadMapInfoById(mapId);
-        globalInfo = MapDAC.LoadGlobalMapInfo();
-        LobbyHOIHub.Instance.SuscribeToRoom(txtGamekey.text);
-        MapController.Instance.UpdateMap(_mapModel.SpritePath);
-
-        if (configLines == null)
+        try
         {
-            configLines = LoadConfigLinesFromMap(true);
-            configLines[0].PlayerName = playerName.text;
-            Debug.Log("ConfigLines received empty, this is ok if are creating game.");
-        }
+            this.txtGamekey.text = gameKey;
+            this.gameObject.SetActive(true);
+            startGameController.MapId = mapId;
+            _mapModel = MapDAC.LoadMapInfoById(mapId, RootPath);
+            globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
+            LobbyHOIHub.Instance.SuscribeToRoom(txtGamekey.text);
+            MapController.Instance.UpdateMap(_mapModel.SpritePath);
 
-        factionDropdownsIds = new DropdownIndexer();
-        foreach (ConfigLineModel configLine in configLines)
+            if (configLines == null)
+            {
+                configLines = LoadConfigLinesFromMap(true);
+                configLines[0].PlayerName = playerName.text;
+                Debug.Log("ConfigLines received empty, this is ok if are creating game.");
+            }
+
+            factionDropdownsIds = new DropdownIndexer();
+            foreach (ConfigLineModel configLine in configLines)
+            {
+                GlobalInfoFaction globalInfoFaction = globalInfo.Factions.Find(faction => faction.Id == configLine.FactionId);
+                factionDropdownsIds.AddRegister(configLine.FactionId, globalInfoFaction.NameLiteral);
+            }
+
+            ownLine = configLines.Find(item => item.PlayerName == playerName.text).MapSocketId;
+            for (int index = 0; index < configLines.Count; index++)
+            {
+                bool lineEnabled = isGameHost || ownLine == configLines[index].MapSocketId;
+
+                LoadFactionLine(configLines, index, lineEnabled);
+            }
+
+            this.isGameHost = isGameHost;
+            _configLinesState = configLines;
+        }
+        catch (Exception ex)
         {
-            GlobalInfoFaction globalInfoFaction = globalInfo.Factions.Find(faction => faction.Id == configLine.FactionId);
-            factionDropdownsIds.AddRegister(configLine.FactionId, globalInfoFaction.NameLiteral);
+            Debug.LogError("Error message: " + ex.Message);
+            Debug.LogError("Error StackTrace: " + ex.Message);
+            Debug.LogError($"MethodImput... gameKey: {gameKey}, mapId: {mapId}, isGameHost: {isGameHost}");
+
+            foreach (var configLine in configLines)
+            {
+                Debug.LogError("Objects (configLine): " + configLine.ToString());
+            }
         }
-
-        ownLine = configLines.Find(item => item.PlayerName == playerName.text).MapSocketId;
-
-        for (int index = 0; index < configLines.Count; index++)
-        {
-            bool lineEnabled = isGameHost || ownLine == configLines[index].MapSocketId;
-
-            LoadFactionLine(configLines, index, lineEnabled);
-        }
-
-        this.isGameHost = isGameHost;        
-        _configLinesState = configLines;
     }
 
     public List<ConfigLineModel> GetConfigLinesForMultiplayer()

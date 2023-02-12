@@ -33,7 +33,7 @@ public class MapController : MonoBehaviour
     public void UpdateMap(string spritePath)
     {
         CleanMap();
-        spriteRenderer.sprite = MapDAC.LoadMapSprite(spritePath);
+        spriteRenderer.sprite = MapSpriteDAC.LoadMapSprite(spritePath);
     }
 
     void OnMouseOver()

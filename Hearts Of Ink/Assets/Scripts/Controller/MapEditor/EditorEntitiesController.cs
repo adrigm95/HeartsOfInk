@@ -1,9 +1,6 @@
 ﻿using Assets.Scripts.Data;
-using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.Utils;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using LobbyHOIServer.Models.MapModels;
 using System.Linq;
 using TMPro;
 using UnityEngine;

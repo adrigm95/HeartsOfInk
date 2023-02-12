@@ -2,6 +2,8 @@
 using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
+using HeartsOfInk.SharedLogic;
+using LobbyHOIServer.Models.MapModels;
 using NETCoreServer.Models;
 using NETCoreServer.Models.In;
 using NETCoreServer.Models.Out;
@@ -26,7 +28,7 @@ public class CreateGameController : MonoBehaviour
     void Start()
     {
         configGameController = configGamePanel.GetComponent<ConfigGameController>();
-        availableMaps = MapDAC.GetAvailableMaps(true);
+        availableMaps = MapDAC.GetAvailableMaps(GlobalConstants.RootPath, true);
         availableMaps.ForEach(map => cbMaps.options.Add(new Dropdown.OptionData(map.DisplayName)));
         cbMaps.RefreshShownValue();
         cbMaps.onValueChanged.AddListener(delegate { OnValueChange(); });

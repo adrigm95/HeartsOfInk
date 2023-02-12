@@ -1,8 +1,8 @@
 ﻿using Assets.Scripts.Controller.InGame;
 using Assets.Scripts.Data;
-using Assets.Scripts.DataAccess;
-using Assets.Scripts.Logic;
 using Assets.Scripts.Utils;
+using HeartsOfInk.SharedLogic;
+using LobbyHOIServer.Models.MapModels;
 using NETCoreServer.Models;
 using System;
 using System.Collections.Generic;
@@ -220,7 +220,7 @@ public class GlobalLogicController : MonoBehaviour
         try
         {
             Debug.Log($"Loading map id: {gameModel.MapId}");
-            mapModel = MapDAC.LoadMapInfoById(gameModel.MapId);
+            mapModel = MapDAC.LoadMapInfoById(gameModel.MapId, GlobalConstants.RootPath);
             Debug.Log($"Map path: {mapModel.SpritePath}");
             MapController.Instance.UpdateMap(mapModel.SpritePath);
 
