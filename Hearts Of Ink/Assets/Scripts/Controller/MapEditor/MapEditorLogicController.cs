@@ -1,13 +1,12 @@
 ﻿using Assets.Scripts.Controller.InGame;
 using Assets.Scripts.Data;
 using Assets.Scripts.Utils;
-using Boo.Lang;
+using LobbyHOIServer.Models.MapModels;
 using System;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.UI.GridLayoutGroup;
 
 public class MapEditorLogicController : MonoBehaviour
 {

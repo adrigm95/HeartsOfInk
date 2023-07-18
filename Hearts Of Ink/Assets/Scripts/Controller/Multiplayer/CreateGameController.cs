@@ -2,6 +2,8 @@
 using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
+using HeartsOfInk.SharedLogic;
+using LobbyHOIServer.Models.MapModels;
 using NETCoreServer.Models;
 using NETCoreServer.Models.In;
 using NETCoreServer.Models.Out;
@@ -26,7 +28,7 @@ public class CreateGameController : MonoBehaviour
     void Start()
     {
         configGameController = configGamePanel.GetComponent<ConfigGameController>();
-        availableMaps = MapDAC.GetAvailableMaps(true);
+        availableMaps = MapDAC.GetAvailableMaps(GlobalConstants.RootPath, true);
         availableMaps.ForEach(map => cbMaps.options.Add(new Dropdown.OptionData(map.DisplayName)));
         cbMaps.RefreshShownValue();
         cbMaps.onValueChanged.AddListener(delegate { OnValueChange(); });
@@ -39,10 +41,10 @@ public class CreateGameController : MonoBehaviour
 
         CreateGameModelIn newGame = new CreateGameModelIn
         {
-            isPublic = !checkIsPrivate.isOn,
-            name = gameNameText.text,
-            mapId = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).MapId,
-            playerName = creatorNick.text
+            IsPublic = !checkIsPrivate.isOn,
+            Name = gameNameText.text,
+            MapId = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).MapId,
+            PlayerName = creatorNick.text
         };
 
         response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.POST, LobbyHOIControllers.CreateGame, newGame);
@@ -51,7 +53,7 @@ public class CreateGameController : MonoBehaviour
         {
             CreateGameModelOut responseModel = response.serviceResponse;
 
-            configGameController.GameCreatedByHost(responseModel.gameKey, newGame.mapId);
+            configGameController.GameCreatedByHost(responseModel.gameKey, newGame.MapId);
             EnableDisableCreateGame(false);
             configGamePanel.SetActive(true);
             AddPlayerToDropdowns();

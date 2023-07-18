@@ -13,8 +13,8 @@ namespace Assets.Scripts.Utils
         {
             string fullGamename = string.Empty;
 
-            fullGamename += game.name;
-            fullGamename += "(" + game.playersInside + "/4)";
+            fullGamename += game.Name;
+            fullGamename += "(" + game.PlayersInside + "/4)";
 
             return fullGamename;
         }

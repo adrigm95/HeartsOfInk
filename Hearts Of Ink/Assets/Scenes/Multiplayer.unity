@@ -6544,7 +6544,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Opciones de partida
+  m_Text: Crear partida
 --- !u!222 &1890393102
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7337,6 +7337,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2e39ce124ab0f54b9a922e38708578d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  citiesHolder: {fileID: 0}
+  troopsHolder: {fileID: 0}
 --- !u!50 &3589996446012058679
 Rigidbody2D:
   serializedVersion: 4

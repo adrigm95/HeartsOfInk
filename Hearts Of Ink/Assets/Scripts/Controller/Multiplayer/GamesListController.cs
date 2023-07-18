@@ -102,7 +102,7 @@ public class GamesListController : MonoBehaviour
         Text text;
 
         newGameText = (GameObject) Instantiate(Resources.Load(ItemPrefab), nextItemPosition, transform.rotation, transform);
-        newGameText.name = game.gameKey;
+        newGameText.name = game.GameKey;
         rectTransform = newGameText.GetComponent<RectTransform>();
         rectTransform.anchoredPosition = nextItemPosition;
         text = newGameText.GetComponent<Text>();
@@ -110,7 +110,7 @@ public class GamesListController : MonoBehaviour
         nextItemPosition.y -= lineSpacing;
 
         text.text = PanelUtils.GetGameName(game);
-        Debug.Log("New game added to panel with key " + game.gameKey);
+        Debug.Log("New game added to panel with key " + game.GameKey);
 
         if (isSelected)
         {

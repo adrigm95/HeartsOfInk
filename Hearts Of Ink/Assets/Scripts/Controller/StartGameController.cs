@@ -3,6 +3,7 @@ using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
+using HeartsOfInk.SharedLogic;
 using LobbyHOIServer.Models.Models;
 using NETCoreServer.Models;
 using System;
@@ -15,15 +16,23 @@ public class StartGameController : MonoBehaviour
     private ConfigGameController configGameController;
     private GameOptionsController gameOptionsController;
     private SceneChangeController sceneChangeController;
+    private WebServiceCaller<Exception, bool> _logger = new WebServiceCaller<Exception, bool>();
     public Transform factionDropdownsHolder;
-    public short MapId { get; set; }
+    public string MapId { get; set; }
 
     private void Start()
     {
         configGameController = FindObjectOfType<ConfigGameController>();
         gameOptionsController = FindObjectOfType<GameOptionsController>();
         sceneChangeController = FindObjectOfType<SceneChangeController>();
-        StartGameIngameSignalR.Instance.StartGameController = this;
+    }
+
+    private void Update()
+    {
+        if (StartGameLobbySignalR.Instance.IsStartGameReceived())
+        {
+            StartGame(false, true);
+        }
     }
 
     /// <summary>
@@ -32,8 +41,13 @@ public class StartGameController : MonoBehaviour
     /// <param name="sendStartToServer"> Solo es true si lo llama el host al darle a comenzar partida en multiplayer.</param>
     public async void StartGame(bool sendStartToServer)
     {
+        StartGame(sendStartToServer, false);
+    }
+
+    private async void StartGame(bool sendStartToServer, bool startReceivedFromServer)
+    {
         bool readyForChangeScene = true;
-        GameModel gameModel = new GameModel(0);
+        GameModel gameModel = new GameModel("0");
         gameModel.MapId = MapId;
         gameModel.Gametype = sendStartToServer ? GameModel.GameType.MultiplayerHost : GameModel.GameType.Single;
 
@@ -42,6 +56,10 @@ public class StartGameController : MonoBehaviour
         {
             GetMultiplayerOptions(gameModel);
             readyForChangeScene = await StartGameInServer(gameModel);
+        }
+        else if (startReceivedFromServer)
+        {
+            GetMultiplayerOptions(gameModel);
         }
         else
         {
@@ -60,19 +78,27 @@ public class StartGameController : MonoBehaviour
         WebServiceCaller<GameModel, bool> wsCaller = new WebServiceCaller<GameModel, bool>();
         HOIResponseModel<bool> ingameServerResponse;
 
-        gameModel.gameKey = configGameController.txtGamekey.text;
-        ingameServerResponse = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/GameRoom", gameModel);
-
-        if (ingameServerResponse.serviceResponse)
+        try
         {
-            StartGameLobbySignalR.Instance.SendStartGame(gameModel.gameKey);
-        }
-        else
-        {
-            Debug.LogError($"Error on StartGameInServer: {ingameServerResponse.ServiceError}");
-        }
+            gameModel.GameKey = configGameController.txtGamekey.text;
+            ingameServerResponse = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/GameRoom", gameModel);
 
-        return ingameServerResponse.serviceResponse;
+            if (ingameServerResponse.serviceResponse)
+            {
+                StartGameLobbySignalR.Instance.SendStartGame(gameModel.GameKey);
+            }
+            else
+            {
+                Debug.LogError($"Error on StartGameInServer: {ingameServerResponse.ServiceError}");
+            }
+
+            return ingameServerResponse.serviceResponse;
+        }
+        catch (Exception ex)
+        {
+            await _logger.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/Log", ex);
+            throw ex;
+        }
     }
 
     private void GetSingleplayerOptions(GameModel gameModel)

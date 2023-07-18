@@ -1,8 +1,8 @@
 ﻿using Assets.Scripts.Data;
-using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
+using HeartsOfInk.SharedLogic;
+using LobbyHOIServer.Models.MapModels;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -52,7 +52,7 @@ public class CreateMapPanelController : MonoBehaviour
 
     public void CreateMap()
     {
-        short mapId = GenerateMapId();
+        string mapId = GenerateMapId();
         string displayName = FileUtils.SanitizeFilename(mapName.text);
         gameObject.SetActive(false);
 
@@ -79,8 +79,8 @@ public class CreateMapPanelController : MonoBehaviour
             Troops = new List<MapTroopModel>()
         };
 
-        MapDAC.SaveMapHeader(mapModelHeader);
-        MapDAC.SaveMapDefinition(mapModel);
+        MapDAC.SaveMapHeader(mapModelHeader, GlobalConstants.RootPath);
+        MapDAC.SaveMapDefinition(mapModel, GlobalConstants.RootPath);
         editorPanelController.gameObject.SetActive(true);
         editorPanelController.LoadAvailableMaps(displayName);
     }
@@ -99,7 +99,7 @@ public class CreateMapPanelController : MonoBehaviour
     private void LoadBackgroundCombo()
     {
         Debug.Log("Loading available sprites");
-        background.AddOptions(MapDAC.GetAvailableSprites());
+        background.AddOptions(MapDAC.GetAvailableSprites(GlobalConstants.RootPath));
         background.RefreshShownValue();
         string spriteFilename = background.options[background.value].text;
         mapController.UpdateMap("MapSprites/" + spriteFilename);
@@ -110,13 +110,14 @@ public class CreateMapPanelController : MonoBehaviour
         backgroundPath.text = Application.streamingAssetsPath + "/MapSprites/";
     }
 
-    private short GenerateMapId()
+    private string GenerateMapId()
     {
-        List<MapModelHeader> availableMaps = MapDAC.GetAvailableMaps();
-        short maxId = availableMaps.Max(map => map.MapId);
+        List<MapModelHeader> availableMaps = MapDAC.GetAvailableMaps(GlobalConstants.RootPath);
+        int maxId = availableMaps.Max(map => Convert.ToInt32(map.MapId));
+        maxId += 1;
 
         Debug.Log($"Generating new map id: {maxId}");
 
-        return Convert.ToInt16(maxId + 1);
+        return Convert.ToString(maxId);
     }
 }

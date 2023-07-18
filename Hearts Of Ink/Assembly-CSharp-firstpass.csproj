@@ -67,6 +67,7 @@
     <None Include="Assets\Plugins\SignalR\Microsoft.AspNetCore.Connections.Abstractions.dll" />
     <None Include="Assets\Plugins\Rawgen\Libraries\ASCUtility.dll" />
     <None Include="Assets\Plugins\SignalR\Microsoft.AspNetCore.SignalR.Protocols.Json.dll" />
+    <None Include="Assets\Plugins\Rawgen\Libraries\HeartsOfInk.SharedLogic.dll" />
     <None Include="Assets\Plugins\SignalR\System.IO.Pipelines.dll" />
     <None Include="Assets\Plugins\SignalR\System.Text.Json.dll" />
     <None Include="Assets\Plugins\SignalR\Microsoft.Bcl.AsyncInterfaces.dll" />
@@ -80,6 +81,7 @@
     <None Include="Assets\Plugins\Rawgen\Libraries\Rawgen Studio Models.dll" />
     <None Include="Assets\Plugins\SignalR\System.Threading.Channels.dll" />
     <None Include="Assets\Plugins\SignalR\Microsoft.Extensions.Primitives.dll" />
+    <None Include="Assets\Plugins\Rawgen\Libraries\Newtonsoft.Json.xml" />
     <None Include="Assets\Plugins\SignalR\Microsoft.AspNetCore.SignalR.Client.Core.dll" />
     <None Include="Assets\Plugins\Rawgen\Libraries\Rawgen.Math.dll" />
     <None Include="Assets\Plugins\SignalR\Microsoft.Extensions.DependencyInjection.dll" />
@@ -280,6 +282,9 @@
     </Reference>
     <Reference Include="ASCUtility">
       <HintPath>Assets\Plugins\Rawgen\Libraries\ASCUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="HeartsOfInk.SharedLogic">
+      <HintPath>Assets\Plugins\Rawgen\Libraries\HeartsOfInk.SharedLogic.dll</HintPath>
     </Reference>
     <Reference Include="LobbyHOIServer.Models">
       <HintPath>Assets\Plugins\Rawgen\Libraries\LobbyHOIServer.Models.dll</HintPath>

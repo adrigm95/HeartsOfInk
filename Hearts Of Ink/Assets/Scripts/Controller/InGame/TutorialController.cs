@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Data.TutorialModels;
 using Assets.Scripts.Utils;
+using HeartsOfInk.SharedLogic;
 using UnityEngine;
 
 public class TutorialController : MonoBehaviour

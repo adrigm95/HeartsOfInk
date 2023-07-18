@@ -2,6 +2,9 @@
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
+using HeartsOfInk.SharedLogic;
+using LobbyHOIServer.Models.MapModels;
+using NETCoreServer.Models;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,7 +28,7 @@ public class FactionsPanelController : MonoBehaviour
     void Start()
     {
         factions = new List<Dropdown>();
-        availableMaps = MapDAC.GetAvailableMaps(false);
+        availableMaps = MapDAC.GetAvailableMaps(GlobalConstants.RootPath, false);
         availableMaps.ForEach(map => cbMaps.options.Add(new Dropdown.OptionData(map.DisplayName)));
         cbMaps.RefreshShownValue();
         cbMaps.onValueChanged.AddListener(delegate { LoadMap(); });
@@ -35,9 +38,9 @@ public class FactionsPanelController : MonoBehaviour
     public void LoadMap()
     {
         Debug.Log("Loading map: " + cbMaps.itemText.text);
-        mapModel = MapDAC.LoadMapInfo(GetMapDefinitionName());
+        mapModel = MapDAC.LoadMapInfoByName(GetMapDefinitionName(), GlobalConstants.RootPath);
         startGameController.MapId = mapModel.MapId;
-        globalInfo = MapDAC.LoadGlobalMapInfo();
+        globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
 
         CleanFactionLines();
         foreach (MapPlayerModel player in mapModel.Players)
@@ -62,7 +65,7 @@ public class FactionsPanelController : MonoBehaviour
         return availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).DefinitionName;
     }
 
-    public short GetMapDefinitionId()
+    public string GetMapDefinitionId()
     {
         return availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).MapId;
     }
@@ -91,7 +94,8 @@ public class FactionsPanelController : MonoBehaviour
         btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
         txtAlliance = newObject.Find("btnAlliance").GetComponentInChildren<Text>();
 
-        cbFaction.value = player.IaId;
+        Player.IA slotPlayerType = (Player.IA)player.IaId;
+        cbFaction.value = slotPlayerType == Player.IA.OTHER_PLAYER ? (int) Player.IA.IA : player.IaId;
         cbFaction.onValueChanged.AddListener(delegate { CbFaction_OnValueChange(cbFaction); });
         txtFaction.text = faction.NameLiteral;
         btnColorFaction.color = ColorUtils.GetColorByString(player.Color);

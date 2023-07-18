@@ -1,8 +1,8 @@
 ﻿using Assets.Scripts.Controller.InGame;
 using Assets.Scripts.Data;
-using Assets.Scripts.DataAccess;
-using Assets.Scripts.Logic;
 using Assets.Scripts.Utils;
+using HeartsOfInk.SharedLogic;
+using LobbyHOIServer.Models.MapModels;
 using NETCoreServer.Models;
 using System;
 using System.Collections.Generic;
@@ -75,8 +75,8 @@ public class GlobalLogicController : MonoBehaviour
         {
             SetPauseState(true, null);
             //waitingPanel.Show(this);
-            IngameHOIHub.Instance.SuscribeToRoom(gameModel.gameKey, thisPcPlayer.Name);
-            StartGameIngameSignalR.Instance.SendClientReady(gameModel.gameKey);
+            IngameHOIHub.Instance.SuscribeToRoom(gameModel.GameKey, thisPcPlayer.Name);
+            StartGameIngameSignalR.Instance.SendClientReady(gameModel.GameKey);
         }
     }
 
@@ -150,7 +150,7 @@ public class GlobalLogicController : MonoBehaviour
 
     private GameModel GetMockedGameModel()
     {
-        GameModel gameModel = new GameModel(0);
+        GameModel gameModel = new GameModel("0");
         gameModel.Gametype = GameModel.GameType.Single;
 
         for (int index = 0; index < 4; index++)
@@ -220,7 +220,7 @@ public class GlobalLogicController : MonoBehaviour
         try
         {
             Debug.Log($"Loading map id: {gameModel.MapId}");
-            mapModel = MapDAC.LoadMapInfo(gameModel.MapId);
+            mapModel = MapDAC.LoadMapInfoById(gameModel.MapId, GlobalConstants.RootPath);
             Debug.Log($"Map path: {mapModel.SpritePath}");
             MapController.Instance.UpdateMap(mapModel.SpritePath);
 

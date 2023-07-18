@@ -1,15 +1,13 @@
-﻿using Assets.Scripts.Controller.InGame;
-using Assets.Scripts.Data;
-using Assets.Scripts.Data.EditorModels;
+﻿using Assets.Scripts.Data;
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.DataAccess;
-using Assets.Scripts.Logic;
 using Assets.Scripts.Utils;
+using HeartsOfInk.SharedLogic;
+using LobbyHOIServer.Models.MapModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +21,7 @@ public class EditorPanelController : MonoBehaviour
     public MapEditorLogicController _mapEditorLogic;
     public Transform citiesHolder;
     public Transform troopsHolder;
+    public GameObject uploadChoise;
     public Dropdown cbMaps;
     public Dropdown cbMapImages;
     public InputField mapName;
@@ -49,7 +48,7 @@ public class EditorPanelController : MonoBehaviour
     public void LoadAvailableMaps(string firstMap)
     {
         cbMaps.options.Clear();
-        availableMaps = MapDAC.GetAvailableMaps();
+        availableMaps = MapDAC.GetAvailableMaps(GlobalConstants.RootPath);
         availableMaps.ForEach(map => cbMaps.options.Add(new Dropdown.OptionData(map.DisplayName)));
         cbMaps.RefreshShownValue();
 
@@ -64,8 +63,8 @@ public class EditorPanelController : MonoBehaviour
         Debug.Log("Loading map: " + cbMaps.itemText.text);
         _mapEditorLogic.ResetSelection();
         mapModelHeader = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text);
-        mapModel = MapDAC.LoadMapInfo(mapModelHeader.DefinitionName);
-        globalInfo = MapDAC.LoadGlobalMapInfo();
+        mapModel = MapDAC.LoadMapInfoByName(mapModelHeader.DefinitionName, GlobalConstants.RootPath);
+        globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
 
         mapName.text = mapModel.DisplayName;
         isForMultiplayer.isOn = mapModel.AvailableForMultiplayer;
@@ -151,9 +150,24 @@ public class EditorPanelController : MonoBehaviour
     public void SaveMap()
     {
         UpdateModel();
-        MapDAC.SaveMapDefinition(mapModel);
-        MapDAC.SaveMapHeader(mapModelHeader);
+        MapDAC.SaveMapDefinition(mapModel, GlobalConstants.RootPath);
+        MapDAC.SaveMapHeader(mapModelHeader, GlobalConstants.RootPath);
         LoadAvailableMaps(mapModel.DisplayName);
+    }
+
+    public void UploadMap()
+    {
+        uploadChoise.SetActive(true);
+    }
+
+    public void AcceptUploadMap()
+    {
+        uploadChoise.SetActive(false);
+    }
+
+    public void CancelUploadMap()
+    {
+        uploadChoise.SetActive(false);
     }
 
     private void UpdateCanvas()
