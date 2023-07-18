@@ -13,12 +13,19 @@ public class SceneChangeController : MonoBehaviour
 
     public enum Scenes
     {
-        MainMenu = 0,
-        InGameScene = 1,
-        Credits = 2,
-        Endgame = 3,
-        Multiplayer = 4,
-        MapEditor = 5,
+        RawgenLogo = 0,
+        MainMenu = 1,
+        InGameScene = 2,
+        Credits = 3,
+        Endgame = 4,
+        Multiplayer = 5,
+        MapEditor = 6,
+        AcceptPolicy = 7
+    }
+
+    public void DirectChangeScene(Scenes scene)
+    {
+        SceneManager.LoadScene(Convert.ToInt32(scene));
     }
 
     public void ChangeScene(Transform orderButton)

@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{30027A7E-3B82-2853-DD53-C3E2DF470AFC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -63,6 +62,7 @@
     <Compile Include="Assets\Scripts\Controller\Generic\MusicController.cs" />
     <Compile Include="Assets\Scripts\Controller\Generic\SceneChangeController.cs" />
     <Compile Include="Assets\Scripts\Controller\Generic\SoundEffectsController.cs" />
+    <Compile Include="Assets\Scripts\Controller\Generic\TimedSceneChange.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\CityController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\GlobalLogicController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\IObjectAnimator.cs" />
@@ -203,9 +203,6 @@
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Bangers - OFL.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="HeartsOfInk.SharedLogic">
-      <HintPath>Assets\Plugins\Rawgen\Libraries\HeartsOfInk.SharedLogic.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2019.4.35f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -391,6 +388,9 @@
     </Reference>
     <Reference Include="ASCUtility">
       <HintPath>Assets\Plugins\Rawgen\Libraries\ASCUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="HeartsOfInk.SharedLogic">
+      <HintPath>Assets\Plugins\Rawgen\Libraries\HeartsOfInk.SharedLogic.dll</HintPath>
     </Reference>
     <Reference Include="LobbyHOIServer.Models">
       <HintPath>Assets\Plugins\Rawgen\Libraries\LobbyHOIServer.Models.dll</HintPath>

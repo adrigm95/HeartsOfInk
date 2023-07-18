@@ -751,21 +751,20 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "A game developed by Rawgen Games\r\n\r\nProgrammers\t\r\nLuis Cebri\xE1n
-    Mendui\xF1a\r\nAdri\xE1n Garc\xEDa Mari\xF1o\r\n\r\nUI \r\nLaia Tugas Berrocal\r\nAdri\xE1n
-    Garc\xEDa Mari\xF1o\r\nKenney assets (see Assets section)\r\n\r\nHearts of Ink
-    logo\r\nLaia Tugas Berrocal\r\nAdri\xE1n Garc\xEDa Mari\xF1o\r\n\r\nLevel Design\r\nPablo
-    Ar\xE9valo\r\nAdri\xE1n Garc\xEDa Mari\xF1o\r\n\r\nProduction\r\nAdri\xE1n Garc\xEDa
-    Mari\xF1o\r\n\r\nTools\r\nRawgen Studio\r\nUnity 2019 (Unity Technologies)\r\n\r\nAssets\r\nKenney
-    (www.kenney.nl)\r\n\r\nReferences for realistic maps\r\nOpenStreetMap (www.openstreetmap.org)\t\r\nIGN-CNIG
-    (centrodedescargas.cnig.es) \r\n\r\nMusic\r\nTribal Affair - SYBS\r\nEyes of
-    Glory - Aakash Gandhi\r\nDestination unknown - Ugonna Onyekwe\r\nThunderstorm
-    - Hanu Dixit\r\nLondon Fog - Quincas Moreira\r\nThe New Order - Aaron Kenny\r\nThe
-    Bronx is Burning - Doug Maxwell/Media Right Productions\r\nThunder Chant - E's
-    Jammy Jams\r\nCalcutta Sunset - E's Jammy Jams\r\nSahara Rains - Hanu Dixit\r\n\r\nSound
-    Effects\r\nAdri\xE1n Garc\xEDa Mari\xF1o\r\n\r\nSpecial Thanks\r\nIrene Alberola\r\nAndr\xE9s
-    Balanza\r\nMarina Boluda\r\nAdri\xE1n Corbal\xE1n\r\nEzequiel Matesanz\r\nFlavia
-    de Paula\r\n"
+  m_Text: "Hearts of ink\r\n\r\nA game developed by Rawgen Games\r\n\r\nProgrammers\t\r\nLuis
+    Cebri\xE1n Mendui\xF1a\r\nSara Garc\xEDa\r\n\r\nUI \r\nLaia Tugas Berrocal\r\nSara
+    Garc\xEDa\r\nKenney assets (see Assets section)\r\n\r\nHearts of Ink logo\r\nLaia
+    Tugas Berrocal\r\nSara Garc\xEDa\r\n\r\nLevel Design\r\nPablo Ar\xE9valo\r\nSara
+    Garc\xEDa\r\n\r\nProduction\r\nSara Garc\xEDa\r\n\r\nTools\r\nRawgen Studio\r\nUnity
+    2019 (Unity Technologies)\r\n\r\nAssets\r\nKenney (www.kenney.nl)\r\n\r\nReferences
+    for realistic maps\r\nOpenStreetMap (www.openstreetmap.org)\t\r\nIGN-CNIG (centrodedescargas.cnig.es)
+    \r\n\r\nMusic\r\nTribal Affair - SYBS\r\nEyes of Glory - Aakash Gandhi\r\nDestination
+    unknown - Ugonna Onyekwe\r\nThunderstorm - Hanu Dixit\r\nLondon Fog - Quincas
+    Moreira\r\nThe New Order - Aaron Kenny\r\nThe Bronx is Burning - Doug Maxwell/Media
+    Right Productions\r\nThunder Chant - E's Jammy Jams\r\nCalcutta Sunset - E's
+    Jammy Jams\r\nSahara Rains - Hanu Dixit\r\n\r\nSound Effects\r\nSara Garc\xEDa\r\n\r\nSpecial
+    Thanks\r\nIrene Alberola\r\nAndr\xE9s Balanza\r\nMarina Boluda\r\nAdri\xE1n Corbal\xE1n\r\nEzequiel
+    Matesanz\r\nFlavia de Paula\r\nRoc\xEDo Tom\xE9\r\n"
 --- !u!222 &1619024607
 CanvasRenderer:
   m_ObjectHideFlags: 0
