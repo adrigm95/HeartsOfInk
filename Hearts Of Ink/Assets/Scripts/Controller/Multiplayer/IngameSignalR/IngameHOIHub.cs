@@ -17,7 +17,7 @@ public class IngameHOIHub
     private IngameHOIHub()
     {
         connection = new HubConnectionBuilder()
-            .WithUrl(ApiConfig.IngameServerUrl + "signalrhoi")
+            .WithUrl(ApiConfig.IngameServerUrl + ApiConfig.SignalRHUBName)
             .Build();
         connection.Closed += async (error) =>
         {

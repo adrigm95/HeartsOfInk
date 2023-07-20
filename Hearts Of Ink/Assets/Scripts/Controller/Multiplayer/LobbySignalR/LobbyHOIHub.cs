@@ -17,7 +17,7 @@ public class LobbyHOIHub
     private LobbyHOIHub()
     {
         connection = new HubConnectionBuilder()
-            .WithUrl(ApiConfig.LobbyHOIServerUrl + "signalrhoi")
+            .WithUrl(ApiConfig.LobbyHOIServerUrl + ApiConfig.SignalRHUBName)
             .Build();
         connection.Closed += async (error) =>
         {
