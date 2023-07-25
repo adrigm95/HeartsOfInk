@@ -30,7 +30,7 @@ namespace Assets.Scripts.DataAccess
         /// </summary>
         /// <param name="requestBody"> Request body to serialize as json. </param>
         /// <param name="targetRequest"> Value like "api/Home/GetData". </param>
-        public async Task<HOIResponseModel<S>> GenericWebServiceCaller(string baseAdress, Method method, string targetRequest, object requestBody)
+        public async Task<HOIResponseModel<S>> GenericWebServiceCaller(string baseAdress, Method method, string targetRequest, T requestBody)
         {
             HttpClient client = new HttpClient();
             HOIResponseModel<S> serverResponse;

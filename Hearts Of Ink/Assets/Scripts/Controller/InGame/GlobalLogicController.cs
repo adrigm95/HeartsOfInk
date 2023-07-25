@@ -1,9 +1,12 @@
 ﻿using Assets.Scripts.Controller.InGame;
 using Assets.Scripts.Data;
+using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
 using HeartsOfInk.SharedLogic;
 using LobbyHOIServer.Models.MapModels;
 using NETCoreServer.Models;
+using NETCoreServer.Models.In;
+using NETCoreServer.Models.Out;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,9 +95,18 @@ public class GlobalLogicController : MonoBehaviour
 
     private void UpdateMultiselect()
     {
-        if (selection.UpdateMultiselect(cameraController.ScreenToWorldPoint(), troopsCanvas.transform, thisPcPlayer.MapSocketId))
+        try
         {
-            UpdateTargetMarker();
+            if (selection.UpdateMultiselect(cameraController.ScreenToWorldPoint(), troopsCanvas.transform, thisPcPlayer.MapSocketId))
+            {
+                UpdateTargetMarker();
+            }
+        }
+        catch (Exception e)
+        {
+            WebServiceCaller<Exception, bool> wsCaller = new WebServiceCaller<Exception, bool>();
+
+            wsCaller.GenericWebServiceCaller("localhost:44356/Log", Method.POST, "api/Log", e);
         }
     }
 

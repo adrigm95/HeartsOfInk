@@ -10,7 +10,7 @@ public class SceneChangeController : MonoBehaviour
     public Transform exitToMenuButton;
     public Transform startGame;
     public Transform mapEditorButton;
-
+     
     public enum Scenes
     {
         RawgenLogo = 0,

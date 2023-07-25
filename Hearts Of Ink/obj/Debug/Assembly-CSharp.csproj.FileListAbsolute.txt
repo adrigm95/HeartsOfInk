@@ -317,3 +317,7 @@ D:\Adrian\Repositorios\HeartsOfInk\Hearts Of Ink\Temp\bin\Debug\Boo.Lang.Useful.
 D:\Adrian\Repositorios\HeartsOfInk\Hearts Of Ink\Temp\bin\Debug\LobbyHOIServer.Models.pdb
 D:\Adrian\Repositorios\HeartsOfInk\Hearts Of Ink\Temp\bin\Debug\Unity.VisualStudio.Editor.pdb
 D:\Adrian\Repositorios\HeartsOfInk\Hearts Of Ink\Temp\bin\Debug\Unity.PlasticSCM.Editor.pdb
+C:\Users\Elizabeth\Desktop\PROYECTO SARA\HeartsOfInk\Hearts Of Ink\obj\Debug\Assembly-CSharp.csproj.AssemblyReference.cache
+C:\Users\Elizabeth\Desktop\PROYECTO SARA\HeartsOfInk\Hearts Of Ink\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
+C:\Users\Elizabeth\Desktop\PROYECTO SARA\HeartsOfInk\Hearts Of Ink\obj\Debug\Assembly-CSharp.dll
+C:\Users\Elizabeth\Desktop\PROYECTO SARA\HeartsOfInk\Hearts Of Ink\obj\Debug\Assembly-CSharp.pdb
