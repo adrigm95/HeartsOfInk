@@ -153,7 +153,10 @@ public class ConfigGameController : MonoBehaviour
             foreach (ConfigLineModel configLine in configLines)
             {
                 GlobalInfoFaction globalInfoFaction = globalInfo.Factions.Find(faction => faction.Id == configLine.FactionId);
-                factionDropdownsIds.AddRegister(configLine.FactionId, globalInfoFaction.NameLiteral);
+                if (factionDropdownsIds.GetValue(configLine.FactionId) != -1)
+                {
+                    factionDropdownsIds.AddRegister(configLine.FactionId, globalInfoFaction.NameLiteral);
+                }
             }
 
             ownLine = configLines.Find(item => item.PlayerName == playerName.text).MapSocketId;
