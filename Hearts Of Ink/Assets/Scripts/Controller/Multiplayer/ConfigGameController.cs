@@ -87,7 +87,7 @@ public class ConfigGameController : MonoBehaviour
                 txtAlliance = objectLine.Find("btnAlliance").GetComponentInChildren<Text>();
                 cbPlayerType.value = (int)configLine.PlayerType;              
                 colorFactionImage.color = ColorUtils.GetColorByString(configLine.Color);
-                if (!string.IsNullOrEmpty(configLine.PlayerName))
+                if (isGameHost || configLine.MapSocketId == ownLine)
                 {
                     ChangeFactionDescriptions(faction);
                     cbPlayerType.gameObject.SetActive(false);
