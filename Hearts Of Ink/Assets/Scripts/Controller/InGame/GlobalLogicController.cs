@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Controller.InGame;
 using Assets.Scripts.Data;
+using Assets.Scripts.Data.Constants;
 using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
 using HeartsOfInk.SharedLogic;
@@ -47,6 +48,10 @@ public class GlobalLogicController : MonoBehaviour
 
     private void Start()
     {
+        var wsCaller = new WebServiceCaller<string, bool>();
+
+        wsCaller.GenericWebServiceCaller(ApiConfig.LoggingServerUrl, Method.POST, "Log", "START - GlobalLogicController");
+
         aiLogics = new List<AILogic>();
         selection = new SelectionModel();
         cameraController = FindObjectOfType<CameraController>();
@@ -104,9 +109,8 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception e)
         {
-            WebServiceCaller<Exception, bool> wsCaller = new WebServiceCaller<Exception, bool>();
-
-            wsCaller.GenericWebServiceCaller("localhost:44356/Log", Method.POST, "api/Log", e);
+            var wsCaller = new WebServiceCaller<Exception, bool>();
+            wsCaller.GenericWebServiceCaller(ApiConfig.LoggingServerUrl, Method.POST, "api/Log/Exception", e);
         }
     }
 

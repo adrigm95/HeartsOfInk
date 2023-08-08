@@ -13,7 +13,7 @@ using Assets.Scripts.Controller.InGame;
 public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
 {
     private const int GuerrillaLimit = 100;
-    private const int MaxTroops = 9000;
+    public const int MaxTroops = 9999;
     private TextMeshProUGUI unitsText;
     private GlobalLogicController globalLogic;
     private SoundEffectsController soundEffectsController;
@@ -57,32 +57,38 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        TroopController enemyController;
+        TroopController otherTroopController;
 
-        enemyController = collision.gameObject.GetComponent<TroopController>();
+        otherTroopController = collision.gameObject.GetComponent<TroopController>();
 
-        if (enemyController != null)
+        if (otherTroopController != null)
         {
-            if (enemyController.troopModel.Player != troopModel.Player)
+            if (otherTroopController.troopModel.Player != troopModel.Player)
             {
-                if (troopModel.Player.Alliance == Player.NoAlliance || enemyController.troopModel.Player.Alliance != troopModel.Player.Alliance)
+                if (troopModel.Player.Alliance == Player.NoAlliance || otherTroopController.troopModel.Player.Alliance != troopModel.Player.Alliance)
                 {
                     troopModel.InCombat = true;
-                    enemyController.troopModel.InCombat = true;
-                    combatingEnemys.Add(enemyController);
+                    otherTroopController.troopModel.InCombat = true;
+                    combatingEnemys.Add(otherTroopController);
                     soundEffectsController.PlayBattleSound();
                 }
             }
-            else if (enemyController.troopModel.Units < troopModel.Units ||
-                 (enemyController.troopModel.Units == troopModel.Units 
-                 && enemyController.gameObject.name.CompareTo(gameObject.name) < 0))
+            else if (otherTroopController.troopModel.Units < troopModel.Units ||
+                 (otherTroopController.troopModel.Units == troopModel.Units 
+                 && otherTroopController.gameObject.name.CompareTo(gameObject.name) < 0))
             {
-                 if (troopModel.Units + enemyController.troopModel.Units <= MaxTroops)
+                 if (troopModel.Units + otherTroopController.troopModel.Units <= MaxTroops)
                  {
-                        troopModel.MergeTroop(enemyController.troopModel);
+                        troopModel.MergeTroop(otherTroopController.troopModel);
                         unitsText.text = Convert.ToString(troopModel.Units);
-                        globalLogic.DestroyUnit(enemyController.gameObject, null);
+                        globalLogic.DestroyUnit(otherTroopController.gameObject, null);
                  }
+                else
+                {
+                    troopModel.MergeUntilMax(otherTroopController.troopModel);
+                    unitsText.text = Convert.ToString(troopModel.Units);
+                    otherTroopController.unitsText.text = Convert.ToString(otherTroopController.troopModel.Units);
+                }
             }
         }
     }

@@ -34,5 +34,19 @@ namespace Assets.Scripts.Data
         {
             Units += otherTroop.Units;
         }
+        public void MergeUntilMax(TroopModel otherTroop)
+        {
+            if (otherTroop.Units >= Units)
+            {
+                Units -= TroopController.MaxTroops - otherTroop.Units;
+                otherTroop.Units = TroopController.MaxTroops;
+
+            }
+            else
+            {
+                otherTroop.Units -= TroopController.MaxTroops - Units;
+                Units = TroopController.MaxTroops;
+            }
+        }
     }
 }
