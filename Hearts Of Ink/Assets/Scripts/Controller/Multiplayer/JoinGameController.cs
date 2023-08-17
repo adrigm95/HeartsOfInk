@@ -14,11 +14,12 @@ public class JoinGameController : MonoBehaviour
     public InfoPanelController infoPanelController;
     public InputField inpGameKey;
     public InputField playerName;
+    public Text txtBtnReady;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     public void TryJoinGame()
@@ -56,8 +57,8 @@ public class JoinGameController : MonoBehaviour
         }
         else
         {
+            txtBtnReady.text = "Listo";
             response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.POST, LobbyHOIControllers.RequestEntry, requestEntryModel);
-
             switch (response.internalResultCode)
             {
                 case InternalStatusCodes.OKCode:

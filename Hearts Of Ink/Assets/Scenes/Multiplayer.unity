@@ -216,6 +216,7 @@ MonoBehaviour:
   infoPanelController: {fileID: 829216849}
   inpGameKey: {fileID: 615145041}
   playerName: {fileID: 1048713331}
+  txtBtnReady: {fileID: 5135278582453085103}
 --- !u!1 &29259175
 GameObject:
   m_ObjectHideFlags: 0
