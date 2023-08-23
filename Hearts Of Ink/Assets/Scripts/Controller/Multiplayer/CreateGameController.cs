@@ -49,7 +49,11 @@ public class CreateGameController : MonoBehaviour
 
         response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.POST, LobbyHOIControllers.CreateGame, newGame);
 
-        if (response.internalResultCode == InternalStatusCodes.OKCode)
+        if (string.IsNullOrEmpty(newGame.Name) || string.IsNullOrEmpty(newGame.PlayerName))
+        {
+            infoPanelController.DisplayMessage("Check all the fields", "Cannot be empty data.");
+        }
+        else if (response.internalResultCode == InternalStatusCodes.OKCode)
         {
             CreateGameModelOut responseModel = response.serviceResponse;
 
