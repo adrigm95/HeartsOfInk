@@ -385,6 +385,9 @@
  <Reference Include="UnityEditor">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.35f1/Editor/Data/Managed/UnityEditor.dll</HintPath>
  </Reference>
+ <Reference Include="AnalyticsServer.Models">
+ <HintPath>C:/Users/Leurzz/Desktop/HOIProject/HeartsOfInk/Hearts Of Ink/Assets/Plugins/Rawgen/Libraries/AnalyticsServer.Models.dll</HintPath>
+ </Reference>
  <Reference Include="ASCUtility">
  <HintPath>C:/Users/Leurzz/Desktop/HOIProject/HeartsOfInk/Hearts Of Ink/Assets/Plugins/Rawgen/Libraries/ASCUtility.dll</HintPath>
  </Reference>
