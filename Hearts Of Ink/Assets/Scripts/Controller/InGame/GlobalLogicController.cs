@@ -6,17 +6,20 @@ using Assets.Scripts.Utils;
 using HeartsOfInk.SharedLogic;
 using LobbyHOIServer.Models.MapModels;
 using NETCoreServer.Models;
-using NETCoreServer.Models.In;
-using NETCoreServer.Models.Out;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using AnalyticsServer.Models;
 using static SceneChangeController;
 
 public class GlobalLogicController : MonoBehaviour
 {
+    private float LastGameSpeed = 1f;
     private SelectionModel selection;
+    private WebServiceCaller<LogDto, bool> logSender = new WebServiceCaller<LogDto, bool>();
+    private WebServiceCaller<LogExceptionDto, bool> exceptionSender = new WebServiceCaller<LogExceptionDto, bool>();
+    private WebServiceCaller<LogAnalyticsDto, bool> analyticSender = new WebServiceCaller<LogAnalyticsDto, bool>();
 
     /// <summary>
     /// Contador que se utiliza para que las unidades clonadas no tengan el mismo nombre.
@@ -48,43 +51,49 @@ public class GlobalLogicController : MonoBehaviour
 
     private void Start()
     {
-        var wsCaller = new WebServiceCaller<string, bool>();
+        LogManager.SendLog(logSender, "START - GlobalLogicController");
 
-        wsCaller.GenericWebServiceCaller(ApiConfig.LoggingServerUrl, Method.POST, "Log", "START - GlobalLogicController");
-
-        aiLogics = new List<AILogic>();
-        selection = new SelectionModel();
-        cameraController = FindObjectOfType<CameraController>();
-        statisticsController = FindObjectOfType<StatisticsController>();
-        sceneChangeController = FindObjectOfType<SceneChangeController>();
-        gameOptionsHolder = FindObjectOfType<GameOptionsController>();
-
-        if (gameOptionsHolder == null)
+        try
         {
-            Debug.LogWarning("Load mocked game");
-            gameModel = GetMockedGameModel();
+            aiLogics = new List<AILogic>();
+            selection = new SelectionModel();
+            cameraController = FindObjectOfType<CameraController>();
+            statisticsController = FindObjectOfType<StatisticsController>();
+            sceneChangeController = FindObjectOfType<SceneChangeController>();
+            gameOptionsHolder = FindObjectOfType<GameOptionsController>();
+
+            if (gameOptionsHolder == null)
+            {
+                Debug.LogWarning("Load mocked game");
+                gameModel = GetMockedGameModel();
+            }
+            else
+            {
+                gameModel = gameOptionsHolder.gameModel;
+            }
+
+            AwakeIA();
+            AwakeMap();
+            cities = FindObjectsOfType<CityController>().ToList();
+
+            troopsCounter = 0;
+
+            if (gameModel.Gametype == GameModel.GameType.Single)
+            {
+                tutorialController.DisplayTutorial();
+            }
+            else
+            {
+                SetPauseState(true, null);
+                //waitingPanel.Show(this);
+                IngameHOIHub.Instance.SuscribeToRoom(gameModel.GameKey, thisPcPlayer.Name);
+                StartGameIngameSignalR.Instance.SendClientReady(gameModel.GameKey);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            gameModel = gameOptionsHolder.gameModel;
-        }
-
-        AwakeIA();
-        AwakeMap();
-        cities = FindObjectsOfType<CityController>().ToList();
-
-        troopsCounter = 0;
-
-        if (gameModel.Gametype == GameModel.GameType.Single)
-        {
-            tutorialController.DisplayTutorial();
-        }
-        else
-        {
-            SetPauseState(true, null);
-            //waitingPanel.Show(this);
-            IngameHOIHub.Instance.SuscribeToRoom(gameModel.GameKey, thisPcPlayer.Name);
-            StartGameIngameSignalR.Instance.SendClientReady(gameModel.GameKey);
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
         }
     }
 
@@ -107,10 +116,10 @@ public class GlobalLogicController : MonoBehaviour
                 UpdateTargetMarker();
             }
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            var wsCaller = new WebServiceCaller<Exception, bool>();
-            wsCaller.GenericWebServiceCaller(ApiConfig.LoggingServerUrl, Method.POST, "api/Log/Exception", e);
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
         }
     }
 
@@ -161,6 +170,8 @@ public class GlobalLogicController : MonoBehaviour
             Debug.LogError($"Error on UpdateTargetMarker, variable Target: {target};");
             Debug.LogError($"Error on UpdateTargetMarker, variable allTargetEquals: {allTargetEquals};");
             Debug.LogError($"Error on UpdateTargetMarker, variable troopController: {troopController};");
+            LogManager.SendException(exceptionSender, ex, $"allTargetEquals: {allTargetEquals}, target: {target}, troopController: {troopController}");
+            Debug.LogException(ex);
         }
     }
 
@@ -288,101 +299,152 @@ public class GlobalLogicController : MonoBehaviour
     {
         TroopController newObject;
 
-        if (troopOwner.Faction.Bonus.BonusId == Bonus.Id.Recruitment)
+        try
         {
-            units += 10;
+            if (troopOwner.Faction.Bonus.BonusId == Bonus.Id.Recruitment)
+            {
+                units += 10;
+            }
+
+            newObject = ((GameObject)Instantiate(
+                Resources.Load("Prefabs/Troop"),
+                position,
+                troopsCanvas.transform.rotation,
+                troopsCanvas.transform)
+                ).GetComponent<TroopController>();
+            newObject.name += troopsCounter;
+            newObject.troopModel = new TroopModel(troopOwner);
+            newObject.troopModel.Units = units;
+
+            troopsCounter++;
         }
-
-        newObject = ((GameObject) Instantiate(
-            Resources.Load("Prefabs/Troop"), 
-            position, 
-            troopsCanvas.transform.rotation, 
-            troopsCanvas.transform)
-            ).GetComponent<TroopController>();
-        newObject.name += troopsCounter;
-        newObject.troopModel = new TroopModel(troopOwner);
-        newObject.troopModel.Units = units;
-
-        troopsCounter++;
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
+        }
     }
 
     private void TimeManagement()
     {
-        if (Pause)
+        try
         {
-            Time.timeScale = 0;
+            if (Pause)
+            {
+                Time.timeScale = 0;
+            }
+            else
+            {
+                Time.timeScale = 1;
+            }
+
+            if (Time.timeScale != LastGameSpeed)
+            {
+                LastGameSpeed = Time.timeScale;
+                LogManager.LogAnalytic(analyticSender, "TimeManagement", $"New game speed: {Time.timeScale}");
+            }
         }
-        else
+        catch (Exception ex) 
         {
-            Time.timeScale = 1;
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
         }
     }
 
     private void CheckVictoryConditions()
     {
         bool isGameFinished = true;
-        Player firstOwner = cities[0].Owner;
-        byte firstOwnerAlliance = cities[0].Owner.Alliance;
+        Player firstOwner;
+        byte firstOwnerAlliance;
 
-        //TODO: Terminar de adaptar condición de victoria a alianzas
-        foreach (CityController city in cities)
+        try
         {
-            if (city.Owner != firstOwner)
+            firstOwner = cities[0].Owner;
+            firstOwnerAlliance = cities[0].Owner.Alliance;
+
+            //TODO: Terminar de adaptar condición de victoria a alianzas
+            foreach (CityController city in cities)
             {
-                isGameFinished = false;
-                break;
+                if (city.Owner != firstOwner)
+                {
+                    isGameFinished = false;
+                    break;
+                }
+            }
+
+            if (isGameFinished)
+            {
+                sceneChangeController.ChangeScene(Scenes.Endgame);
+                statisticsController.ReportGameEnd(cities);
             }
         }
-
-        if (isGameFinished)
+        catch (Exception ex)
         {
-            sceneChangeController.ChangeScene(Scenes.Endgame);
-            statisticsController.ReportGameEnd(cities);
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
         }
     }
 
     public void InputManagement()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        try
         {
-            SetPauseState(!Pause, KeyCode.Escape);
-        }
-        else if (Input.GetKeyDown(KeyCode.E))
-        {
-            SetPauseState(!Pause, KeyCode.E);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            EndSelection();
-        }
-
-        if (selection.MultiselectOrigin != null)
-        {
-            if (Input.GetMouseButtonUp(KeyConstants.LeftClick))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                selection.MultiselectOrigin = null;
+                SetPauseState(!Pause, KeyCode.Escape);
             }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                SetPauseState(!Pause, KeyCode.E);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                EndSelection();
+            }
+
+            if (selection.MultiselectOrigin != null)
+            {
+                if (Input.GetMouseButtonUp(KeyConstants.LeftClick))
+                {
+                    selection.MultiselectOrigin = null;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
         }
     }
 
     public void SetPauseState(bool pauseState, KeyCode? initializer)
     {
-        Pause = pauseState;
-        pauseItem.SetActive(Pause);
-
-        switch (initializer)
+        try
         {
-            case KeyCode.Escape:
-                pausePanel.SetActive(Pause);
-                break;
-            case KeyCode.E:
-            case null:
-                // No hay que hacer nada en estos caso.
-                break;
-            default:
-                Debug.LogWarning("Unexpected pause estate initializer: " + initializer);
-                break;
+            Pause = pauseState;
+            pauseItem.SetActive(Pause);
+
+            switch (initializer)
+            {
+                case KeyCode.Escape:
+                    pausePanel.SetActive(Pause);
+                    break;
+                case KeyCode.E:
+                case null:
+                    // No hay que hacer nada en estos caso.
+                    break;
+                default:
+                    string log = "Unexpected pause estate initializer: " + initializer;
+                    LogManager.SendLog(logSender, log);
+                    Debug.LogWarning(log);
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
         }
     }
 
@@ -391,144 +453,220 @@ public class GlobalLogicController : MonoBehaviour
     /// </summary>
     public void UpdateUnitAnimation()
     {
-        if (selection.HaveObjectSelected)
+        try
         {
-            List<GameObject> destroyedObjects = new List<GameObject>();
-
-            foreach (GameObject selectedTroopObject in selection.SelectionObjects)
+            if (selection.HaveObjectSelected)
             {
-                try
-                {
-                    IObjectAnimator selectedTroop = selectedTroopObject.GetComponent<IObjectAnimator>();
+                List<GameObject> destroyedObjects = new List<GameObject>();
 
-                    if (selectedTroop != null)
+                foreach (GameObject selectedTroopObject in selection.SelectionObjects)
+                {
+                    try
                     {
-                        selectedTroop.Animate();
+                        IObjectAnimator selectedTroop = selectedTroopObject.GetComponent<IObjectAnimator>();
+
+                        if (selectedTroop != null)
+                        {
+                            selectedTroop.Animate();
+                        }
+                    }
+                    catch (MissingReferenceException)
+                    {
+                        destroyedObjects.Add(selectedTroopObject);
                     }
                 }
-                catch (MissingReferenceException)
-                {
-                    destroyedObjects.Add(selectedTroopObject);
-                }
-            }
 
-            selection.SelectionObjects.RemoveAll(item => destroyedObjects.Contains(item));
+                selection.SelectionObjects.RemoveAll(item => destroyedObjects.Contains(item));
+            }
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
         }
     }
 
     public void LeftClickReceivedFromTroop(TroopController newSelection)
     {
-        if (selection.HaveObjectSelected)
+        try
         {
-            if (!selection.SelectionObjects.Contains(newSelection.gameObject))
+            if (selection.HaveObjectSelected)
             {
-                EndSelection();
+                if (!selection.SelectionObjects.Contains(newSelection.gameObject))
+                {
+                    EndSelection();
+                    SetTroopSelected(newSelection, false);
+                }
+            }
+            else
+            {
                 SetTroopSelected(newSelection, false);
             }
         }
-        else
+        catch (Exception ex)
         {
-            SetTroopSelected(newSelection, false);
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
         }
     }
 
     public void RightClickReceivedFromTroop(TroopController newSelection)
     {
-        if (selection.HaveObjectSelected)
+        try
         {
-            if (!selection.SelectionObjects.Contains(newSelection.gameObject))
+            if (selection.HaveObjectSelected)
             {
-                foreach (GameObject selectedTroopObject in selection.SelectionObjects)
+                if (!selection.SelectionObjects.Contains(newSelection.gameObject))
                 {
-                    TroopController selectedTroop = selectedTroopObject.GetComponent<TroopController>();
+                    foreach (GameObject selectedTroopObject in selection.SelectionObjects)
+                    {
+                        TroopController selectedTroop = selectedTroopObject.GetComponent<TroopController>();
 
-                    Debug.Log("New target for troop: " + newSelection);
-                    selectedTroop.troopModel.SetTarget(newSelection.gameObject, this);
+                        Debug.Log("New target for troop: " + newSelection);
+                        selectedTroop.troopModel.SetTarget(newSelection.gameObject, this);
+                    }
+
+                    EndSelection();
                 }
-
-                EndSelection();
             }
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
         }
     }
 
     public void ClickReceivedFromMap(KeyCode mouseKeyPressed)
     {
-        switch (mouseKeyPressed)
+        try
         {
-            case KeyCode.Mouse0: // Left mouse button
-                EndSelection();
-                selection.StartMultiselect(cameraController.ScreenToWorldPoint(), typeof(TroopController));
-                targetMarkerController.RemoveTargetPosition();
-                Debug.Log($"MultiselectOrigin assignated {selection.MultiselectOrigin}");
-                break;
-            case KeyCode.Mouse1: // Right mouse button
-                MoveSelectedTroops();
-                break;
-            default:
-                Debug.LogWarning($"Unexpected map click {mouseKeyPressed}");
-                break;
+            switch (mouseKeyPressed)
+            {
+                case KeyCode.Mouse0: // Left mouse button
+                    EndSelection();
+                    selection.StartMultiselect(cameraController.ScreenToWorldPoint(), typeof(TroopController));
+                    targetMarkerController.RemoveTargetPosition();
+                    Debug.Log($"MultiselectOrigin assignated {selection.MultiselectOrigin}");
+                    break;
+                case KeyCode.Mouse1: // Right mouse button
+                    MoveSelectedTroops();
+                    break;
+                default:
+                    string log = $"Unexpected map click {mouseKeyPressed}";
+                    LogManager.SendLog(logSender, log);
+                    Debug.LogWarning(log);
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
         }
     }
 
     private void SetTroopSelected(TroopController newSelection, bool isMultiselect)
     {
-        if (newSelection.troopModel.Player == thisPcPlayer)
+        try
         {
-            selection.SetObjectSelected(newSelection, isMultiselect, typeof(TroopController), thisPcPlayer.MapSocketId);
-            targetMarkerController.SetTargetPosition(newSelection.troopModel.Target, false);
+            if (newSelection.troopModel.Player == thisPcPlayer)
+            {
+                selection.SetObjectSelected(newSelection, isMultiselect, typeof(TroopController), thisPcPlayer.MapSocketId);
+                targetMarkerController.SetTargetPosition(newSelection.troopModel.Target, false);
+            }
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
         }
     }
 
     private void MoveSelectedTroops()
     {
-        if (selection.HaveObjectSelected && selection.SelectionType == typeof(TroopController))
+        try
         {
-            Vector3 mouseClickPosition = cameraController.ScreenToWorldPoint();
-            Debug.Log("New target position for troop: " + mouseClickPosition);
-
-            foreach (GameObject selectedTroopObject in selection.SelectionObjects)
+            if (selection.HaveObjectSelected && selection.SelectionType == typeof(TroopController))
             {
-                TroopController selectedTroop = selectedTroopObject.GetComponent<TroopController>();
+                Vector3 mouseClickPosition = cameraController.ScreenToWorldPoint();
+                Debug.Log("New target position for troop: " + mouseClickPosition);
 
-                selectedTroop.troopModel.SetTarget(new GameObject(GlobalConstants.EmptyTargetName), this);
-                selectedTroop.troopModel.Target.transform.position = mouseClickPosition;
-                selectedTroop.troopModel.Target.transform.parent = emptyTargetsHolder.transform;
-                targetMarkerController.SetTargetPosition(mouseClickPosition, true);
+                foreach (GameObject selectedTroopObject in selection.SelectionObjects)
+                {
+                    TroopController selectedTroop = selectedTroopObject.GetComponent<TroopController>();
+
+                    selectedTroop.troopModel.SetTarget(new GameObject(GlobalConstants.EmptyTargetName), this);
+                    selectedTroop.troopModel.Target.transform.position = mouseClickPosition;
+                    selectedTroop.troopModel.Target.transform.parent = emptyTargetsHolder.transform;
+                    targetMarkerController.SetTargetPosition(mouseClickPosition, true);
+                }
+
+                EndSelection();
             }
-
-            EndSelection();
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
         }
     }
 
     public void CleanTroopSelection(TroopModel selectedTroop)
     {
-        if (selectedTroop.Target != null 
-            && selectedTroop.Target.name.Contains(GlobalConstants.EmptyTargetName))
+        try
         {
-            DestroyUnit(selectedTroop.Target, null);
+            if (selectedTroop.Target != null
+                && selectedTroop.Target.name.Contains(GlobalConstants.EmptyTargetName))
+            {
+                DestroyUnit(selectedTroop.Target, null);
+            }
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
         }
     }
 
     public void DestroyUnit(GameObject unitToDestroy, TroopController destroyer)
     {
-        TroopController troopController = unitToDestroy.GetComponent<TroopController>();
+        TroopController troopController;
 
-        if (troopController != null)
+        try
         {
-            CleanTroopSelection(troopController.troopModel);
-        }
+            troopController = unitToDestroy.GetComponent<TroopController>();
 
-        if (destroyer != null)
-        {
-            statisticsController.ReportArmyDefeated(troopController, destroyer);
+            if (troopController != null)
+            {
+                CleanTroopSelection(troopController.troopModel);
+            }
+
+            if (destroyer != null)
+            {
+                statisticsController.ReportArmyDefeated(troopController, destroyer);
+            }
+
+            Destroy(unitToDestroy);
         }
-        
-        Destroy(unitToDestroy);
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
+        }
     }
 
     private void EndSelection()
     {
-        selection.EndSelection();
-        targetMarkerController.RemoveTargetPosition();
+        try
+        {
+            selection.EndSelection();
+            targetMarkerController.RemoveTargetPosition();
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
+        }
     }
 }
