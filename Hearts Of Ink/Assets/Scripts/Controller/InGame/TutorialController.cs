@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Data.TutorialModels;
+﻿using Assets.Scripts.Data.Constants;
+using Assets.Scripts.Data.TutorialModels;
 using Assets.Scripts.Utils;
 using HeartsOfInk.SharedLogic;
 using UnityEngine;
@@ -24,7 +25,7 @@ public class TutorialController : MonoBehaviour
         step = 0;
         tutorialModel = JsonCustomUtils<TutorialModel>.ReadObjectFromFile(tutorialPath);
         tutorialStep = tutorialModel.Steps[step];
-        globalLogic.SetPauseState(tutorialStep.PauseGame, null);
+        globalLogic.ChangeSpeed(tutorialStep.PauseGame ? GameSpeedConstants.PauseSpeed : GameSpeedConstants.PlaySpeed);
         infoPanelController.DisplayDecision(this, tutorialStep.Title[0].Value, tutorialStep.Content[0].Value, false);
     }
 
@@ -41,13 +42,13 @@ public class TutorialController : MonoBehaviour
         if (step < tutorialModel.Steps.Count)
         {
             tutorialStep = tutorialModel.Steps[step];
+            globalLogic.ChangeSpeed(tutorialStep.PauseGame ? GameSpeedConstants.PauseSpeed : GameSpeedConstants.PlaySpeed);
 
-            globalLogic.SetPauseState(tutorialStep.PauseGame, null);
             return tutorialStep;
         }
         else
         {
-            globalLogic.SetPauseState(false, null);
+            globalLogic.ChangeSpeed(GameSpeedConstants.PlaySpeed);
             return null;
         }
     }
@@ -55,6 +56,6 @@ public class TutorialController : MonoBehaviour
     public void DiscardTutorial()
     {
         //TODO: Guardar en preferencias que se omite el tutorial.
-        globalLogic.SetPauseState(false, null);
+        globalLogic.ChangeSpeed(GameSpeedConstants.PlaySpeed);
     }
 }

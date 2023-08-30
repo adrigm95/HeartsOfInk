@@ -102,6 +102,7 @@
     <Compile Include="Assets\Scripts\Data\AxisData.cs" />
     <Compile Include="Assets\Scripts\Data\CombatResults.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\ApiConfig.cs" />
+    <Compile Include="Assets\Scripts\Data\Constants\GameSpeedConstants.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\GlobalConstants.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\KeyConstants.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\LanguageConstants.cs" />

@@ -12,6 +12,7 @@ using System.Linq;
 using UnityEngine;
 using AnalyticsServer.Models;
 using static SceneChangeController;
+using UnityEngine.UI;
 
 public class GlobalLogicController : MonoBehaviour
 {
@@ -46,8 +47,10 @@ public class GlobalLogicController : MonoBehaviour
     public GameObject citiesCanvas;
     public GameObject pausePanel;
     public GameObject emptyTargetsHolder;
-    public GameObject pauseItem;
-    public bool Pause { get; set; }
+    public Image pauseItem;
+    public Image playItem;
+    public Image mediumSpeedItem;
+    public Image fatestSpeedItem;
 
     private void Start()
     {
@@ -84,7 +87,7 @@ public class GlobalLogicController : MonoBehaviour
             }
             else
             {
-                SetPauseState(true, null);
+                ChangeSpeed(GameSpeedConstants.PauseSpeed);
                 //waitingPanel.Show(this);
                 IngameHOIHub.Instance.SuscribeToRoom(gameModel.GameKey, thisPcPlayer.Name);
                 StartGameIngameSignalR.Instance.SendClientReady(gameModel.GameKey);
@@ -101,7 +104,6 @@ public class GlobalLogicController : MonoBehaviour
     void Update()
     {
         InputManagement();
-        TimeManagement();
         UpdateUnitAnimation();
         CheckVictoryConditions();
         UpdateMultiselect();
@@ -325,32 +327,6 @@ public class GlobalLogicController : MonoBehaviour
         }
     }
 
-    private void TimeManagement()
-    {
-        try
-        {
-            if (Pause)
-            {
-                Time.timeScale = 0;
-            }
-            else
-            {
-                Time.timeScale = 1;
-            }
-
-            if (Time.timeScale != LastGameSpeed)
-            {
-                LastGameSpeed = Time.timeScale;
-                LogManager.LogAnalytic(analyticSender, "TimeManagement", $"New game speed: {Time.timeScale}");
-            }
-        }
-        catch (Exception ex) 
-        {
-            LogManager.SendException(exceptionSender, ex);
-            Debug.LogException(ex);
-        }
-    }
-
     private void CheckVictoryConditions()
     {
         bool isGameFinished = true;
@@ -391,11 +367,20 @@ public class GlobalLogicController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                SetPauseState(!Pause, KeyCode.Escape);
+                pausePanel.SetActive(!pausePanel.activeSelf);
+                ChangeSpeed(KeyCode.Escape);
             }
-            else if (Input.GetKeyDown(KeyCode.E))
+            else if (Input.GetKeyDown(KeyCode.Space))
             {
-                SetPauseState(!Pause, KeyCode.E);
+                ChangeSpeed(KeyCode.Space);
+            }
+            else if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
+            {
+                ChangeSpeed(KeyCode.Minus);
+            }
+            else if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus))
+            {
+                ChangeSpeed(KeyCode.Plus);
             }
 
             if (Input.GetKeyDown(KeyCode.Q))
@@ -418,27 +403,152 @@ public class GlobalLogicController : MonoBehaviour
         }
     }
 
-    public void SetPauseState(bool pauseState, KeyCode? initializer)
+    public void ChangeSpeed(KeyCode key)
     {
         try
         {
-            Pause = pauseState;
-            pauseItem.SetActive(Pause);
-
-            switch (initializer)
+            if (key == KeyCode.Escape)
             {
-                case KeyCode.Escape:
-                    pausePanel.SetActive(Pause);
-                    break;
-                case KeyCode.E:
-                case null:
-                    // No hay que hacer nada en estos caso.
-                    break;
-                default:
-                    string log = "Unexpected pause estate initializer: " + initializer;
-                    LogManager.SendLog(logSender, log);
-                    Debug.LogWarning(log);
-                    break;
+                if (pausePanel.activeSelf)
+                {
+                    ChangeSpeed(GameSpeedConstants.PauseSpeed);
+                }
+                else
+                {
+                    ChangeSpeed(GameSpeedConstants.PlaySpeed);
+                }
+            }
+            if (key == KeyCode.Space || key == KeyCode.Plus || key == KeyCode.KeypadPlus)
+            {
+                switch (Time.timeScale)
+                {
+                    case GameSpeedConstants.PauseSpeed:
+                        ChangeSpeed(GameSpeedConstants.PlaySpeed);
+                        break;
+                    case GameSpeedConstants.PlaySpeed:
+                        ChangeSpeed(GameSpeedConstants.MediumSpeed);
+                        break;
+                    case GameSpeedConstants.MediumSpeed:
+                        ChangeSpeed(GameSpeedConstants.FatestSpeed);
+                        break;
+                    case GameSpeedConstants.FatestSpeed:
+                        if (key == KeyCode.Space)
+                        {
+                            ChangeSpeed(GameSpeedConstants.PauseSpeed);
+                        }
+                        break;
+                }
+            }
+            else if (key == KeyCode.Minus || key == KeyCode.KeypadMinus)
+            {
+                switch (Time.timeScale)
+                {
+                    case GameSpeedConstants.FatestSpeed:
+                        ChangeSpeed(GameSpeedConstants.MediumSpeed);
+                        break;
+                    case GameSpeedConstants.MediumSpeed:
+                        ChangeSpeed(GameSpeedConstants.PlaySpeed);
+                        break;
+                    case GameSpeedConstants.PlaySpeed:
+                        ChangeSpeed(GameSpeedConstants.PauseSpeed);
+                        break;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Unexpected key: " + key);
+            }
+
+            CheckTimeChangeAnalytics();
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+            Debug.LogException(ex);
+        }
+    }
+
+    public void ChangeSpeed(Image origin)
+    {
+        try
+        {
+            Debug.Log("ChangeSpeed called by: " + origin.name);
+
+            if (!pausePanel.activeSelf)
+            {
+                if (origin.Equals(pauseItem))
+                {
+                    ChangeSpeed(GameSpeedConstants.PauseSpeed);
+                }
+                else if (origin.Equals(playItem))
+                {
+                    ChangeSpeed(GameSpeedConstants.PlaySpeed);
+                }
+                else if (origin.Equals(mediumSpeedItem))
+                {
+                    ChangeSpeed(GameSpeedConstants.MediumSpeed);
+                }
+                else if (origin.Equals(fatestSpeedItem))
+                {
+                    ChangeSpeed(GameSpeedConstants.FatestSpeed);
+                }
+
+                CheckTimeChangeAnalytics();
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogException(ex);
+            LogManager.SendException(exceptionSender, ex);
+        }
+    }
+
+    public void ChangeSpeed(float newSpeed)
+    {
+        Time.timeScale = newSpeed;
+
+        switch (newSpeed)
+        {
+            case GameSpeedConstants.PauseSpeed:
+                ChangeButtonColors(pauseItem, Color.white);
+                ChangeButtonColors(playItem, Color.black);
+                ChangeButtonColors(mediumSpeedItem, Color.black);
+                ChangeButtonColors(fatestSpeedItem, Color.black);
+                break;
+            case GameSpeedConstants.PlaySpeed:
+                ChangeButtonColors(pauseItem, Color.black);
+                ChangeButtonColors(playItem, Color.white);
+                ChangeButtonColors(mediumSpeedItem, Color.black);
+                ChangeButtonColors(fatestSpeedItem, Color.black);
+                break;
+            case GameSpeedConstants.MediumSpeed:
+                ChangeButtonColors(pauseItem, Color.black);
+                ChangeButtonColors(playItem, Color.black);
+                ChangeButtonColors(mediumSpeedItem, Color.white);
+                ChangeButtonColors(fatestSpeedItem, Color.black);
+                break;
+            case GameSpeedConstants.FatestSpeed:
+                ChangeButtonColors(pauseItem, Color.black);
+                ChangeButtonColors(playItem, Color.black);
+                ChangeButtonColors(mediumSpeedItem, Color.black);
+                ChangeButtonColors(fatestSpeedItem, Color.white);
+                break;
+        }
+    }
+
+    private void ChangeButtonColors(Image button, Color color)
+    {
+        button.color = color;
+    }
+
+    private void CheckTimeChangeAnalytics()
+    {
+        try
+        {
+            if (Time.timeScale != LastGameSpeed)
+            {
+                LastGameSpeed = Time.timeScale;
+                LogManager.LogAnalytic(analyticSender, "TimeManagement", $"New game speed: {Time.timeScale}");
             }
         }
         catch (Exception ex)

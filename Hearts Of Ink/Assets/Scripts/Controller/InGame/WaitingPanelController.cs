@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Data.Constants;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,7 +36,7 @@ public class WaitingPanelController : MonoBehaviour
             }
             else
             {
-                globalLogicController.SetPauseState(false, null);
+                globalLogicController.ChangeSpeed(GameSpeedConstants.PlaySpeed);
             }
         }
     }
