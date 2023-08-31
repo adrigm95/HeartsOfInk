@@ -61,7 +61,6 @@ public class ConfigLinesUpdater
     public List<ConfigLineModel> GetReceivedConfigLines()
     {
         List<ConfigLineModel> listToReturn = receivedConfigLines.Values.ToList();
-
         receivedConfigLines.Clear();
         return listToReturn;
     }

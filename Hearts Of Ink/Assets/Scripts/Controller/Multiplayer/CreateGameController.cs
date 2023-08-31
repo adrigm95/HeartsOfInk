@@ -41,12 +41,13 @@ public class CreateGameController : MonoBehaviour
 
         CreateGameModelIn newGame = new CreateGameModelIn
         {
+            
             IsPublic = !checkIsPrivate.isOn,
             Name = gameNameText.text,
             MapId = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).MapId,
             PlayerName = creatorNick.text
         };
-
+        
         response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.POST, LobbyHOIControllers.CreateGame, newGame);
 
         if (string.IsNullOrEmpty(newGame.Name) || string.IsNullOrEmpty(newGame.PlayerName))
@@ -56,7 +57,7 @@ public class CreateGameController : MonoBehaviour
         else if (response.internalResultCode == InternalStatusCodes.OKCode)
         {
             CreateGameModelOut responseModel = response.serviceResponse;
-
+            
             configGameController.GameCreatedByHost(responseModel.gameKey, newGame.MapId);
             EnableDisableCreateGame(false);
             configGamePanel.SetActive(true);
