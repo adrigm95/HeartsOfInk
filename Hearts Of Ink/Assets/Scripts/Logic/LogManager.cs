@@ -10,6 +10,7 @@ public class LogManager
     private const int MaxLogsInSession = 10;
     private const int MaxExceptionsInSession = 10;
     private const string ApplicationVersion = "2023-08-27_1";
+    private const bool LogsEnabled = false;
     private static readonly object _lock = new object();
     private static string _sessionIdenfier;
     private static int analyticsSendedInSession = 0;
@@ -30,7 +31,10 @@ public class LogManager
                 UserName = "Pending implementation"
             };
 
-            logSender.GenericWebServiceCaller(ApiConfig.LoggingServerUrl, Method.POST, "Log", logDto);
+            if (LogsEnabled)
+            {
+                logSender.GenericWebServiceCaller(ApiConfig.LoggingServerUrl, Method.POST, "Log", logDto);
+            }
         }
     }
 
@@ -39,7 +43,11 @@ public class LogManager
         if (exceptionsSendedInSession < MaxExceptionsInSession)
         {
             Interlocked.Increment(ref exceptionsSendedInSession);
-            SendException(errorSender, ex, string.Empty);
+
+            if (LogsEnabled)
+            {
+                SendException(errorSender, ex, string.Empty);
+            }
         }
     }
 
@@ -58,7 +66,10 @@ public class LogManager
                 UserName = "Pending implementation"
             };
 
-            analyticSender.GenericWebServiceCaller(ApiConfig.LoggingServerUrl, Method.POST, "Analytics", logAnalyticsDto);
+            if (LogsEnabled)
+            {
+                analyticSender.GenericWebServiceCaller(ApiConfig.LoggingServerUrl, Method.POST, "Analytics", logAnalyticsDto);
+            }
         }
     }
 
@@ -73,7 +84,11 @@ public class LogManager
             ApplicationVersion = ApplicationVersion,
             UserName = "Pending implementation"
         };
-        errorSender.GenericWebServiceCaller(ApiConfig.LoggingServerUrl, Method.POST, "Exception", logExceptionDto);
+
+        if (LogsEnabled)
+        {
+            errorSender.GenericWebServiceCaller(ApiConfig.LoggingServerUrl, Method.POST, "Exception", logExceptionDto);
+        }
     }
 
     private static string GetSessionId()
