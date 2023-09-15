@@ -99,6 +99,7 @@ public class StartGameController : MonoBehaviour
             await _logger.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/Log", ex);
             throw ex;
         }
+        
     }
 
     private void GetSingleplayerOptions(GameModel gameModel)
@@ -157,3 +158,4 @@ public class StartGameController : MonoBehaviour
         }
     }
 }
+

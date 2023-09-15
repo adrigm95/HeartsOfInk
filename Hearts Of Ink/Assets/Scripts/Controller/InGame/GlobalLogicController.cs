@@ -352,7 +352,7 @@ public class GlobalLogicController : MonoBehaviour
                 troopsCanvas.transform.rotation,
                 troopsCanvas.transform)
                 ).GetComponent<TroopController>();
-            newObject.name += troopId;
+            newObject.name = troopId.ToString();
             newObject.troopModel = new TroopModel(troopOwner);
             newObject.troopModel.Units = units;
         }

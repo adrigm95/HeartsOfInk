@@ -1,5 +1,10 @@
-﻿using Assets.Scripts.Data.MultiplayerStateModels;
+﻿using Assets.Scripts.Data.Constants;
+using Assets.Scripts.Data.MultiplayerStateModels;
+using Assets.Scripts.Data.ServerModels.Constants;
+using Assets.Scripts.DataAccess;
 using NETCoreServer.Models;
+using NETCoreServer.Models.In;
+using NETCoreServer.Models.Out;
 using System;
 using UnityEngine;
 
@@ -30,14 +35,33 @@ public class StateController : MonoBehaviour
     {
         if (globalLogic.IsMultiplayerHost)
         {
+            SendStateGame();
             // Todo SEPT-23-004
         }
         else if (globalLogic.IsMultiplayerClient)
         {
-            // Todo SEPT-23-005
+            
+        }
+    }
+    public async void GetStateGame()
+    {
+        HOIResponseModel<GameStateModel> response;
+        WebServiceCaller<GameStateModel> wsCaller = new WebServiceCaller<GameStateModel>();
+        response = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.GET, "api/StateGame");
+
+        if (response.serviceResponse.timeSinceStart > GameStateModel.timeSinceStart)
+        {
+            GameStateModel = response.serviceResponse;
+             //TODO
         }
     }
 
+    public async void SendStateGame()
+    {
+        HOIResponseModel<bool> response;
+        WebServiceCaller<GameStateModel, bool> wsCaller = new WebServiceCaller<GameStateModel, bool>();
+        response = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/StateGame", GameStateModel);
+    }
     public void SetCityOwner(Player owner)
     {
         //globalLogic.gameModel
