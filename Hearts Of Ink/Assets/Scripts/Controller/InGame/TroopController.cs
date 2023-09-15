@@ -9,6 +9,7 @@ using Assets.Scripts.Logic;
 using Assets.Scripts.Utils;
 using NETCoreServer.Models;
 using Assets.Scripts.Controller.InGame;
+using Assets.Scripts.Data.MultiplayerStateModels;
 
 public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
 {
@@ -16,6 +17,7 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
     public const int MaxTroops = 9999;
     private TextMeshProUGUI unitsText;
     private GlobalLogicController globalLogic;
+    private StateController stateController;
     private SoundEffectsController soundEffectsController;
     private AILogic aiLogic;
     private float lastAttack = 0;
@@ -31,6 +33,7 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
     {
         unitsText = GetComponent<TextMeshProUGUI>();
         globalLogic = FindObjectOfType<GlobalLogicController>();
+        stateController = FindObjectOfType<StateController>();
         soundEffectsController = FindObjectOfType<SoundEffectsController>();
         circleCollider = GetComponent<CircleCollider2D>();
         aiLogic = globalLogic.aiLogics.Find(item => item.Player == troopModel.Player);
@@ -42,17 +45,37 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
     // Update is called once per frame
     void Update()
     {
-        UpdateTroopModel();
-        Combat();
-
-        if (aiLogic == null)
+        if (globalLogic.IsMultiplayerHost || globalLogic.IsSingleplayer)
         {
-            PlayerTroopUpdate();
+            UpdateTroopModel();
+            Combat();
+
+            if (aiLogic == null)
+            {
+                PlayerTroopUpdate();
+            }
+            else
+            {
+                AITroopUpdate();
+            }
+
+            if (globalLogic.IsMultiplayerHost)
+            {
+
+                //TODO: SEPT-23-007
+                //stateController.SetTroopState();
+            }
+        }
+        else if (globalLogic.IsMultiplayerClient)
+        {
+            TroopStateModel troopStateModel = stateController.GetTroopState();
+            //TODO: SEPT-23-007
         }
         else
         {
-            AITroopUpdate();
+            Debug.LogWarning("Unexpected gametype on CityController");
         }
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -118,6 +141,51 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
             globalLogic.RightClickReceivedFromTroop(this);
             Debug.Log("On right click: " + this);
         }
+    }
+
+    public void ReceiveAttack(CombatResults results, TroopController origin)
+    {
+        troopModel.Units = results.DefensorRemainingUnits;
+        unitsText.text = Convert.ToString(results.DefensorRemainingUnits);
+
+        if (results.DefensorRemainingUnits <= 0)
+        {
+            globalLogic.DestroyUnit(this.gameObject, origin);
+        }
+    }
+
+    public void Animate()
+    {
+        animator.gameObject.SetActive(true);
+        animator.IterateAnimation();
+    }
+
+    public void EndAnimation()
+    {
+        animator.gameObject.SetActive(false);
+    }
+
+    public bool IsSelectable(int owner)
+    {
+        return troopModel.Player.MapSocketId == owner;
+    }
+
+    public GameObject GetGameObject()
+    {
+        return gameObject;
+    }
+
+    /// <summary>
+    /// En las partidas multiplayer, sirve para indicarle manualmente el objetivo a una tropa.
+    /// </summary>
+    public void SetTroopOrder()
+    {
+        //TODO: SEPT-23-008
+    }
+
+    public void EndSelection()
+    {
+        EndAnimation();
     }
 
     private void UpdateTroopModel()
@@ -297,42 +365,5 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
     private void RemoveDestroyedUnits()
     {
         combatingEnemys.RemoveAll(item => item == null);
-    }
-
-    public void ReceiveAttack(CombatResults results, TroopController origin)
-    {
-        troopModel.Units = results.DefensorRemainingUnits;
-        unitsText.text = Convert.ToString(results.DefensorRemainingUnits);
-
-        if (results.DefensorRemainingUnits <= 0)
-        {
-            globalLogic.DestroyUnit(this.gameObject, origin);
-        }
-    }
-
-    public void Animate()
-    {
-        animator.gameObject.SetActive(true);
-        animator.IterateAnimation();
-    }
-
-    public void EndAnimation()
-    {
-        animator.gameObject.SetActive(false);
-    }
-
-    public bool IsSelectable(int owner)
-    {
-        return troopModel.Player.MapSocketId == owner;
-    }
-
-    public GameObject GetGameObject()
-    {
-        return gameObject;
-    }
-
-    public void EndSelection()
-    {
-        EndAnimation();
     }
 }

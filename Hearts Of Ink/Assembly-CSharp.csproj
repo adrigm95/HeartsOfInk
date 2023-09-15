@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\Controller\InGame\GlobalLogicController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\IObjectAnimator.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\IObjectSelectable.cs" />
+    <Compile Include="Assets\Scripts\Controller\InGame\StateController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TargetPositionMarkerController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TroopController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TutorialController.cs" />
@@ -117,6 +118,9 @@
     <Compile Include="Assets\Scripts\Data\Literals\FactionNames.cs" />
     <Compile Include="Assets\Scripts\Data\Literals\LiteralModel.cs" />
     <Compile Include="Assets\Scripts\Data\Log.cs" />
+    <Compile Include="Assets\Scripts\Data\MultiplayerStateModels\CityStateModel.cs" />
+    <Compile Include="Assets\Scripts\Data\MultiplayerStateModels\GameStateModel.cs" />
+    <Compile Include="Assets\Scripts\Data\MultiplayerStateModels\TroopStateModel.cs" />
     <Compile Include="Assets\Scripts\Data\SelectionModel.cs" />
     <Compile Include="Assets\Scripts\Data\TroopModel.cs" />
     <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialModel.cs" />

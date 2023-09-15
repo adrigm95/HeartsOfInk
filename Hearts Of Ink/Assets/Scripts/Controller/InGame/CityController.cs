@@ -11,6 +11,7 @@ public class CityController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private GlobalLogicController globalLogic;
     private List<TroopController> troopsInZone;
+    private StateController stateHolder;
     private float recruitmentProgress = 0;
     public Player Owner;
     public bool IsCapital;
@@ -24,6 +25,7 @@ public class CityController : MonoBehaviour
     public void Start()
     {
         globalLogic = FindObjectOfType<GlobalLogicController>();
+        stateHolder = FindObjectOfType<StateController>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.color = ColorUtils.GetColorByString(Owner.Color);
     }
@@ -31,9 +33,25 @@ public class CityController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CleanUnitsInZoneList();
-        UpdateOwner();
-        RecruitTroops();
+        if (globalLogic.IsMultiplayerHost || globalLogic.IsSingleplayer)
+        {
+            CleanUnitsInZoneList();
+            UpdateOwner();
+            RecruitTroops();
+
+            if (globalLogic.IsMultiplayerHost)
+            {
+                stateHolder.SetCityOwner(Owner);
+            }
+        }
+        else if (globalLogic.IsMultiplayerClient)
+        {
+            Owner = stateHolder.GetCityOwner(this.name);
+        }
+        else
+        {
+            Debug.LogWarning("Unexpected gametype on CityController");
+        }
     }
 
     private void CleanUnitsInZoneList()
@@ -140,7 +158,7 @@ public class CityController : MonoBehaviour
 
         if (recruitmentProgress > GlobalConstants.DefaultCompanySize)
         {
-            globalLogic.InstantiateTroop(GlobalConstants.DefaultCompanySize, this.transform.position, Owner);
+            globalLogic.InstantiateTroopSingleplayer(GlobalConstants.DefaultCompanySize, this.transform.position, Owner);
             recruitmentProgress = 0;
         }
     }
