@@ -41,7 +41,7 @@ public class CityController : MonoBehaviour
 
             if (globalLogic.IsMultiplayerHost)
             {
-                stateHolder.SetCityOwner(Owner);
+                stateHolder.SetCityOwner(this.name, Owner);
             }
         }
         else if (globalLogic.IsMultiplayerClient)
