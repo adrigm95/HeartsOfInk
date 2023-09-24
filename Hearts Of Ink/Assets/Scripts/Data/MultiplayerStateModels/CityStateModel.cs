@@ -3,8 +3,8 @@
     public class CityStateModel
     {
         /// <summary>
-        /// Identificador del dueño actual de la ciudades.
+        /// Identificador del dueño actual de la ciudades. Se corresponde con el mapSocketId de Player.
         /// </summary>
-        byte owner;
+        public byte Owner { get; set; }
     }
 }

@@ -9,12 +9,12 @@ namespace Assets.Scripts.Data.MultiplayerStateModels
         /// <summary>
         /// Posición de la tropa
         /// </summary>
-        string position;
+        public string position;
 
         /// <summary>
         /// Tamaño de la tropa
         /// </summary>
-        short size;
+        public int size;
 
         public Vector3 GetPositionAsVector3()
         {

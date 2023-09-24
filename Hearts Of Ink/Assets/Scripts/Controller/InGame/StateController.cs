@@ -36,13 +36,13 @@ public class StateController : MonoBehaviour
         if (globalLogic.IsMultiplayerHost)
         {
             SendStateGame();
-            // Todo SEPT-23-004
         }
         else if (globalLogic.IsMultiplayerClient)
         {
-            
+            GetStateGame();
         }
     }
+
     public async void GetStateGame()
     {
         HOIResponseModel<GameStateModel> response;
@@ -62,31 +62,57 @@ public class StateController : MonoBehaviour
         WebServiceCaller<GameStateModel, bool> wsCaller = new WebServiceCaller<GameStateModel, bool>();
         response = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/StateGame", GameStateModel);
     }
-    public void SetCityOwner(Player owner)
+
+    public void SetCityOwner(string cityName, Player owner)
     {
-        //globalLogic.gameModel
-        //Todo (SEPT-23-006): Si es multiplayer, actualizar owner en el stateHolder
-        throw new NotImplementedException();
+        CityStateModel cityStateModel;
+
+        if (GameStateModel.citiesStates.TryGetValue(cityName, out cityStateModel))
+        {
+            cityStateModel.Owner = owner.MapSocketId;
+        }
+        else
+        {
+            Debug.LogWarning("City not finded at GetCityOwner: " + cityName);
+        }
     }
 
     public Player GetCityOwner(string cityName)
     {
+        CityStateModel cityStateModel;
         Player owner = null;
 
-        //Todo (SEPT-23-006): Añadir lógica en la que se actualiza el estado de la ciudad a partir del StateHolder
+        if (GameStateModel.citiesStates.TryGetValue(cityName, out cityStateModel))
+        {
+            owner = globalLogic.gameModel.Players.Find(player => player.MapSocketId == cityStateModel.Owner);
+        }
+        else
+        {
+            Debug.LogWarning("City not finded at GetCityOwner: " + cityName);
+        }
 
-        throw new NotImplementedException();
+        return owner;
     }
 
-    public void SetTroopState(int size, Vector3 position)
+    public void SetTroopState(string troopName, int size, Vector3 position)
     {
-        //TODO: SEPT-23-007
-        throw new NotImplementedException();
+        TroopStateModel troopState;
+
+        if (!GameStateModel.troopsStates.TryGetValue(troopName, out troopState))
+        {
+            troopState = new TroopStateModel();
+        }
+
+        troopState.SetPosition(position);
+        troopState.size = size;
     }
 
-    public TroopStateModel GetTroopState()
+    public TroopStateModel GetTroopState(string troopName)
     {
-        //TODO: SEPT-23-007
-        throw new NotImplementedException();
+        TroopStateModel result;
+
+        GameStateModel.troopsStates.TryGetValue(troopName, out result);
+
+        return result;
     }
 }

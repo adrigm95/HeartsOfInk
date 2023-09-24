@@ -61,15 +61,14 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
 
             if (globalLogic.IsMultiplayerHost)
             {
-
-                //TODO: SEPT-23-007
-                //stateController.SetTroopState();
+                stateController.SetTroopState(this.name, troopModel.Units, this.transform.position);
             }
         }
         else if (globalLogic.IsMultiplayerClient)
         {
-            TroopStateModel troopStateModel = stateController.GetTroopState();
-            //TODO: SEPT-23-007
+            TroopStateModel troopStateModel = stateController.GetTroopState(this.name);
+            troopModel.Units = troopStateModel.size;
+            this.transform.position = troopStateModel.GetPositionAsVector3();
         }
         else
         {

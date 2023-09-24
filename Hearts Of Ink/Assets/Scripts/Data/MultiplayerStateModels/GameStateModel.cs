@@ -17,11 +17,11 @@ namespace Assets.Scripts.Data.MultiplayerStateModels
         /// <summary>
         /// Listado con el estado de las distintas ciudades
         /// </summary>
-        public List<CityStateModel> citiesStates;
+        public Dictionary<string, CityStateModel> citiesStates;
 
         /// <summary>
         /// Listado con el estado de las distintas troopsState
         /// </summary>
-        public List<TroopStateModel> troopsStates;
+        public Dictionary<string, TroopStateModel> troopsStates;
     }
 }
