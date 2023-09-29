@@ -28,6 +28,9 @@ public class StateController : MonoBehaviour
     void Start()
     {
         globalLogic = FindObjectOfType<GlobalLogicController>();
+        GameStateModel = new GameStateModel();
+        GameStateModel.gamekey = globalLogic.gameModel.GameKey;
+        GameStateModel.timeSinceStart = Time.realtimeSinceStartup;
     }
 
     // Update is called once per frame
