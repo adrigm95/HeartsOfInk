@@ -22,8 +22,8 @@ public class StateController : MonoBehaviour
     public int LastTroopAdded { get; set; }
 
     private GameStateModel GameStateModel { get; set; }
-
     private GlobalLogicController globalLogic { get; set; }
+    private float lastStateSended = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -73,7 +73,12 @@ public class StateController : MonoBehaviour
 
         GameStateModel.timeSinceStart = Time.realtimeSinceStartup;
 
-        await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/StateGame", GameStateModel);
+        if (lastStateSended + (1 / ApiConfig.DelayBetweenStateUpdates) <= Time.realtimeSinceStartup)
+        {
+            Debug.Log($"lastStateSended: {lastStateSended}; realTime: {Time.realtimeSinceStartup}");
+            lastStateSended = Time.realtimeSinceStartup;
+            await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/StateGame", GameStateModel);
+        }
     }
 
     public void SetCityOwner(string cityName, Player owner)

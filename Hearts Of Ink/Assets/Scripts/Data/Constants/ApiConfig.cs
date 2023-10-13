@@ -8,5 +8,10 @@
         public const string LoggingServerUrl = "https://localhost:44356/";
 
         public const string SignalRHUBName = "signalrhoi";
+
+        /// <summary>
+        /// Delay in miliseconds between calls to server for update states.
+        /// </summary>
+        public const int DelayBetweenStateUpdates = 50;
     }
 }
