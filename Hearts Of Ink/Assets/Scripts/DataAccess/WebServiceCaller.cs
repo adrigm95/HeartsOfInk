@@ -51,7 +51,7 @@ namespace Assets.Scripts.DataAccess
                 {
                     json = JsonConvert.SerializeObject(requestBody);
 
-                    Debug.Log("Sending json: " + json);
+                    Debug.Log($"Sending to: {baseAdress+targetRequest} json: {json}");
                 }
 
                 content = new StringContent(json, Encoding.UTF8, "application/json");
