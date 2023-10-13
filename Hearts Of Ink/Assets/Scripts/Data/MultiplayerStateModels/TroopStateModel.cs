@@ -18,12 +18,20 @@ namespace Assets.Scripts.Data.MultiplayerStateModels
 
         public Vector3 GetPositionAsVector3()
         {
-            return JsonConvert.DeserializeObject<Vector3>(position);
+            if (position != null)
+            {
+                string[] tmp = position.Split(';');
+                return new Vector3(Convert.ToSingle(tmp[0]), Convert.ToSingle(tmp[1]), Convert.ToSingle(tmp[2]));
+            }
+            else
+            {
+                return Vector3.zero;
+            }
         }
 
         public void SetPosition(Vector3 newValue)
         {
-            position = JsonConvert.SerializeObject(newValue);
+            position = newValue.x + ";" + newValue.y + ";" + newValue.z;
         }
     }
 }

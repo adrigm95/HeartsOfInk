@@ -6,6 +6,7 @@ using NETCoreServer.Models;
 using NETCoreServer.Models.In;
 using NETCoreServer.Models.Out;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 //Todo: SEPT-23-001 Completar modelo y lógica.
@@ -29,6 +30,8 @@ public class StateController : MonoBehaviour
     {
         globalLogic = FindObjectOfType<GlobalLogicController>();
         GameStateModel = new GameStateModel();
+        GameStateModel.citiesStates = new Dictionary<string, CityStateModel>();
+        GameStateModel.troopsStates = new Dictionary<string, TroopStateModel>();
         GameStateModel.gamekey = globalLogic.gameModel.GameKey;
         GameStateModel.timeSinceStart = Time.realtimeSinceStartup;
     }
@@ -61,9 +64,16 @@ public class StateController : MonoBehaviour
 
     public async void SendStateGame()
     {
-        HOIResponseModel<bool> response;
         WebServiceCaller<GameStateModel, bool> wsCaller = new WebServiceCaller<GameStateModel, bool>();
-        response = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/StateGame", GameStateModel);
+
+        if (GameStateModel.gamekey == null)
+        {
+            GameStateModel.gamekey = globalLogic.gameModel.GameKey;
+        }
+
+        GameStateModel.timeSinceStart = Time.realtimeSinceStartup;
+
+        await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/StateGame", GameStateModel);
     }
 
     public void SetCityOwner(string cityName, Player owner)
@@ -76,6 +86,10 @@ public class StateController : MonoBehaviour
         }
         else
         {
+            GameStateModel.citiesStates.Add(cityName, new CityStateModel()
+            {
+                Owner = owner.MapSocketId
+            });
             Debug.LogWarning("City not finded at GetCityOwner: " + cityName);
         }
     }
