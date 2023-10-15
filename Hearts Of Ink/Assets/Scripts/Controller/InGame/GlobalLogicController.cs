@@ -28,6 +28,12 @@ public class GlobalLogicController : MonoBehaviour
     [NonSerialized]
     public int troopsCounter;
 
+    /// <summary>
+    /// Contador que se utiliza para que las ciudades clonadas no tengan el mismo nombre.
+    /// </summary>
+    [NonSerialized]
+    public int citiesCounter;
+
     [NonSerialized]
     public GameModel gameModel;
 
@@ -82,8 +88,6 @@ public class GlobalLogicController : MonoBehaviour
             AwakeIA();
             AwakeMap();
             cities = FindObjectsOfType<CityController>().ToList();
-
-            troopsCounter = 0;
 
             if (gameModel.Gametype == GameModel.GameType.Single)
             {
@@ -316,8 +320,10 @@ public class GlobalLogicController : MonoBehaviour
             citiesCanvas.transform.rotation,
             citiesCanvas.transform)
             ).GetComponent<CityController>();
-        newObject.name = cityModel.Name;
+        newObject.name = cityModel.Name + "_" + citiesCounter;
         newObject.Owner = cityOwner;
+
+        citiesCounter++;
     }
 
     public void InstantiateTroopSingleplayer(int units, Vector3 position, Player troopOwner)
