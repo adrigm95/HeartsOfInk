@@ -8,6 +8,7 @@ using NETCoreServer.Models.Out;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 //Todo: SEPT-23-001 Completar modelo y lógica.
 
@@ -123,6 +124,8 @@ public class StateController : MonoBehaviour
         if (!GameStateModel.troopsStates.TryGetValue(troopName, out troopState))
         {
             troopState = new TroopStateModel();
+            GameStateModel.troopsStates.Add(troopName, troopState);
+            Debug.LogWarning("Owner not finded at SetTroopState: " + troopName);
         }
 
         troopState.SetPosition(position);
