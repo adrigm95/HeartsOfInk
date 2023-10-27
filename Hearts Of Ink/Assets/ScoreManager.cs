@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using NETCoreServer.Models;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ public class ScoreManager : MonoBehaviour
     public float SizeClosed;
     public float SizeOpen;
     public GameObject scorePanel;
+    public TMPro.TextMeshProUGUI playerID;
+    public TMPro.TextMeshProUGUI score;
     // Start is called before the first frame update
     void Start()
     {
@@ -57,6 +60,23 @@ public class ScoreManager : MonoBehaviour
         rectTransform.sizeDelta = new Vector2(width, SizeClosed);
         scorePanel.SetActive(false);
     }
+    //Esta función servirá para que si una tropa es aliada se muestre como si fuera la misma facción, en el txt de la puntuación
+    public bool IsEnemy(Player factionId, Player factionId2)
+    {
+        return factionId != factionId2;
+    }
+    public void SetPlayerID(Player factionId)
+    {
+        playerID.text = factionId.ToString();
+    }
+    public void SetScore(int score)
+    {
+        this.score.text = score.ToString();
+    }
+
+
+
+   
 
 
 }

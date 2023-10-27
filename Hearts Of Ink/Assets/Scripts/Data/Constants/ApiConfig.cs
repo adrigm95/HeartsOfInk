@@ -3,7 +3,7 @@
     class ApiConfig
     {
         // Local
-        public const string LobbyHOIServerUrl = "http://192.168.1.134:5000/";
+        public const string LobbyHOIServerUrl = "http://192.168.1.133:5000/";
         public const string IngameServerUrl = "http://192.168.1.133:7001/";
         public const string LoggingServerUrl = "https://localhost:44356/";
 
