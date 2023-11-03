@@ -33,7 +33,7 @@ public class StateController : MonoBehaviour
         GameStateModel = new GameStateModel();
         GameStateModel.citiesStates = new Dictionary<string, CityStateModel>();
         GameStateModel.troopsStates = new Dictionary<string, TroopStateModel>();
-        GameStateModel.gamekey = globalLogic.gameModel.GameKey;
+        GameStateModel.gamekey = globalLogic?.gameModel?.GameKey;
         GameStateModel.timeSinceStart = Time.realtimeSinceStartup;
     }
 
@@ -59,7 +59,6 @@ public class StateController : MonoBehaviour
         if (response.serviceResponse.timeSinceStart > GameStateModel.timeSinceStart)
         {
             GameStateModel = response.serviceResponse;
-             //TODO
         }
     }
 
