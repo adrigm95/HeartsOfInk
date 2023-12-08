@@ -17,8 +17,9 @@ public class StartGameController : MonoBehaviour
     private GameOptionsController gameOptionsController;
     private SceneChangeController sceneChangeController;
     private WebServiceCaller<Exception, bool> _logger = new WebServiceCaller<Exception, bool>();
+    private GameModel gameModel;
     public Transform factionDropdownsHolder;
-    public string MapId { get; set; }
+    public GameModel GameModel { get { return gameModel; } }
 
     private void Start()
     {
@@ -41,34 +42,72 @@ public class StartGameController : MonoBehaviour
     /// <param name="sendStartToServer"> Solo es true si lo llama el host al darle a comenzar partida en multiplayer.</param>
     public async void StartGame(bool sendStartToServer)
     {
-        StartGame(sendStartToServer, false);
+        if (configGameController == null)
+        {
+            // Si no tiene configGame es una partida singleplayer.
+            StartGame(false, false);
+        }
+        else if (configGameController.isGameHost)
+        {
+            StartGame(sendStartToServer, false);
+        }
+        else
+        {
+            
+        }
+    }
+
+    public void UpdateGameModel(GameModel gameModel)
+    {
+        if (GameModel == null)
+        {
+            this.gameModel = gameModel;
+        }
+        else
+        {
+            GameModel.MapId = StringUtils.ReplaceValueIfNotEmpty(gameModel.MapId, GameModel.MapId);
+            GameModel.GameKey = StringUtils.ReplaceValueIfNotEmpty(gameModel.GameKey, GameModel.GameKey);
+            GameModel.Name = StringUtils.ReplaceValueIfNotEmpty(gameModel.Name, GameModel.Name);
+            GameModel.Gametype = gameModel.Gametype;
+            GameModel.IsPublic = gameModel.IsPublic;
+            GameModel.Players = gameModel.Players;
+        }
+    }
+
+    public void SetMapId(string mapId)
+    {
+        if (GameModel == null)
+        {
+            this.gameModel = new GameModel();
+        }
+
+        this.gameModel.MapId = mapId;
     }
 
     private async void StartGame(bool sendStartToServer, bool startReceivedFromServer)
     {
         bool readyForChangeScene = true;
-        GameModel gameModel = new GameModel("0");
-        gameModel.MapId = MapId;
-        gameModel.Gametype = sendStartToServer ? GameModel.GameType.MultiplayerHost : GameModel.GameType.Single;
-
 
         if (sendStartToServer)
         {
-            GetMultiplayerOptions(gameModel);
-            readyForChangeScene = await StartGameInServer(gameModel);
+            GameModel.Gametype = GameModel.GameType.MultiplayerHost;
+            GetMultiplayerOptions(GameModel);
+            readyForChangeScene = await StartGameInServer(GameModel);
         }
         else if (startReceivedFromServer)
         {
-            GetMultiplayerOptions(gameModel);
+            GameModel.Gametype = GameModel.GameType.MultiplayerClient;
+            GetMultiplayerOptions(GameModel);
         }
         else
         {
-            GetSingleplayerOptions(gameModel);
+            GameModel.Gametype = GameModel.GameType.Single;
+            GetSingleplayerOptions(GameModel);
         }
 
         if (readyForChangeScene)
         {
-            gameOptionsController.gameModel = gameModel;
+            gameOptionsController.gameModel = GameModel;
             sceneChangeController.ChangeScene(transform);
         }
     }

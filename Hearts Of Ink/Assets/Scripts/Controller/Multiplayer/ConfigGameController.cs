@@ -28,7 +28,9 @@ public class ConfigGameController : MonoBehaviour
     /// </summary>
     private float lastAdviceToServer;
 
-    private bool isGameHost;
+    [NonSerialized]
+    public bool isGameHost;
+
     private int ownLine;
     private MapModel _mapModel;
     private GlobalInfo globalInfo;
@@ -39,6 +41,7 @@ public class ConfigGameController : MonoBehaviour
     public Text txtGamekey;
     public Text factionDescription;
     public Text bonusDescription;
+    public Text txtBtnReady;
     public InputField playerName;
     public StartGameController startGameController;
 
@@ -136,11 +139,16 @@ public class ConfigGameController : MonoBehaviour
         {
             this.txtGamekey.text = gameKey;
             this.gameObject.SetActive(true);
-            startGameController.MapId = mapId;
+            startGameController.UpdateGameModel(new GameModel(mapId)
+            {
+                GameKey = gameKey
+            });
             _mapModel = MapDAC.LoadMapInfoById(mapId, RootPath);
             globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
             LobbyHOIHub.Instance.SuscribeToRoom(txtGamekey.text);
             MapController.Instance.UpdateMap(_mapModel.SpritePath);
+
+            txtBtnReady.text = isGameHost ? "Comenzar" : "Listo";
 
             if (configLines == null)
             {

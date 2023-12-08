@@ -45,8 +45,12 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("globalLogic.IsMultiplayerClient: " + globalLogic.IsMultiplayerClient);
+
         if (globalLogic.IsMultiplayerHost || globalLogic.IsSingleplayer)
         {
+            Debug.Log("IsMultiplayerHost");
+
             UpdateTroopModel();
             Combat();
 
@@ -66,6 +70,8 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
         }
         else if (globalLogic.IsMultiplayerClient)
         {
+            Debug.Log("IsMultiplayerClient");
+
             TroopStateModel troopStateModel = stateController.GetTroopState(this.name);
             troopModel.Units = troopStateModel.size;
             this.transform.position = troopStateModel.GetPositionAsVector3();
