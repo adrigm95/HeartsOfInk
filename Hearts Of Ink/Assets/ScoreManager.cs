@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Data;
 using NETCoreServer.Models;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,6 @@ public class ScoreManager : MonoBehaviour
     public float SizeOpen;
     public GameObject scorePanel;
     public TMPro.TextMeshProUGUI playerID;
-    public TMPro.TextMeshProUGUI score;
     public TMPro.TextMeshProUGUI[] playerTexts;
     // Start is called before the first frame update
     void Start()
@@ -27,10 +27,12 @@ public class ScoreManager : MonoBehaviour
         if (statisticsControllerInstance == null)
         {
             Debug.Log("StatisticsController not found.");
+            return;
         }
         else
         {
-            UpdatePlayerTexts();
+            ActivatePanel(scorePanel);
+            UpdateTexts();
         }
     }
 
@@ -48,7 +50,6 @@ public class ScoreManager : MonoBehaviour
         }
         else if (activePanel == null)
         {
-            activePanel.SetActive(true);
             ToggleVisibility();
         }
     }
@@ -73,34 +74,45 @@ public class ScoreManager : MonoBehaviour
         rectTransform.sizeDelta = new Vector2(width, SizeClosed);
         scorePanel.SetActive(false);
     }
-    //This method will be used to show the same faction if the troop is an ally, in the score txt
     public bool IsAlly(Player factionId, Player factionId2)
     {
         FactionStatistics faction1 = statisticsControllerInstance.GetFaction(factionId);
         FactionStatistics faction2 = statisticsControllerInstance.GetFaction(factionId2);
-        //Check if both factions are the same
         return faction1 != null && faction2 != null && faction1 == faction2;
     }
     public void SetPlayerID(Player factionId)
     {
         playerID.text = factionId.ToString();
-    }    
-    public void UpdatePlayerTexts()
+    }
+
+    public void UpdateTexts()
     {
         for (int i = 0; i < playerTexts.Length; i++)
         {
-            Player currentPlayer = 
-                (Player)System.Enum.Parse(typeof(Player), playerTexts[i].text.Split(':')[0]);
-            FactionStatistics currentFaction = statisticsControllerInstance.GetFaction(currentPlayer);
+            if (playerTexts[i].text != null)
+            {
+                string[] splitText = playerTexts[i].text.Split(':');
 
-            if (currentFaction != null)
-            {
-                playerTexts[i].text = currentPlayer.ToString() + ": " + currentFaction.Player.ToString();
-            }
-            else
-            {
-                Debug.Log("Faction not found.");
+                if (splitText.Length >= 1)
+                {
+                    string playerText = splitText[0].Trim();
+                    FactionStatistics currentFaction = statisticsControllerInstance.GetFactionByName(playerText);
+
+                    if (currentFaction != null)
+                    {
+                        playerTexts[i].text = playerText + ": " + currentFaction.Player.ToString();
+                    }
+                    else
+                    {
+                        Debug.Log("Faction not found.");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Invalid player text format: " + playerTexts[i].text);
+                }
             }
         }
     }
 }
+

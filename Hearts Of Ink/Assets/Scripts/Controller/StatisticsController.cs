@@ -31,7 +31,17 @@ public class StatisticsController : MonoBehaviour
     {
         return factionsStatistics.Find(item => item.Player == factionId);
     }
-
+    public FactionStatistics GetFactionByName(string playerName)
+    {
+        if (factionsStatistics != null)
+        {
+            return factionsStatistics.Find(item => item.Player.ToString() == playerName);
+        }
+        else
+        {
+            return null;
+        }
+    }
     public void ReportArmyDefeated(TroopController destroyed, TroopController destroyer)
     {
         Player destroyedFaction = destroyed.troopModel.Player;
