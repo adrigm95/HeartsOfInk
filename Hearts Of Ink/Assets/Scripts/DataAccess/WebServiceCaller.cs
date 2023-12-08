@@ -112,6 +112,9 @@ namespace Assets.Scripts.DataAccess
             {
                 case System.Net.HttpStatusCode.OK:
                     break;
+                case System.Net.HttpStatusCode.BadRequest:
+                    Debug.LogError("Bad request: 400");
+                    break;
                 default:
                     Debug.LogWarning("Non 200 http response: " + httpStatusCode.ToString());
                     break;

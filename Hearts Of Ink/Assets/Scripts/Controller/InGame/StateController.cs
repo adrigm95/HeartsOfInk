@@ -24,7 +24,7 @@ public class StateController : MonoBehaviour
 
     private GameStateModel GameStateModel { get; set; }
     private GlobalLogicController globalLogic { get; set; }
-    private float lastStateSended = 0;
+    private float lastStateUpdate = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -53,18 +53,25 @@ public class StateController : MonoBehaviour
     public async void GetStateGame()
     {
         HOIResponseModel<GameStateModel> response;
-        WebServiceCaller<GameStateModel> wsCaller = new WebServiceCaller<GameStateModel>();
-        response = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.GET, "api/StateGame");
+        WebServiceCaller<GameStateModel> wsCaller;
 
-        if (response.serviceResponse.timeSinceStart > GameStateModel.timeSinceStart)
+        if (GetIfUpdateStateRequired())
         {
-            GameStateModel = response.serviceResponse;
+            Debug.Log($"lastStateUpdate: {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
+            lastStateUpdate = Time.realtimeSinceStartup;
+            wsCaller = new WebServiceCaller<GameStateModel>();
+            response = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.GET, "api/StateGame");
+
+            if (response.serviceResponse.timeSinceStart > GameStateModel.timeSinceStart)
+            {
+                GameStateModel = response.serviceResponse;
+            }
         }
     }
 
     public async void SendStateGame()
     {
-        WebServiceCaller<GameStateModel, bool> wsCaller = new WebServiceCaller<GameStateModel, bool>();
+        WebServiceCaller<GameStateModel, bool> wsCaller;
 
         if (GameStateModel.gamekey == null)
         {
@@ -73,12 +80,18 @@ public class StateController : MonoBehaviour
 
         GameStateModel.timeSinceStart = Time.realtimeSinceStartup;
 
-        if (lastStateSended + (1 / ApiConfig.DelayBetweenStateUpdates) <= Time.realtimeSinceStartup)
+        if (GetIfUpdateStateRequired())
         {
-            Debug.Log($"lastStateSended: {lastStateSended}; realTime: {Time.realtimeSinceStartup}");
-            lastStateSended = Time.realtimeSinceStartup;
+            Debug.Log($"lastStateUpdate: {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
+            lastStateUpdate = Time.realtimeSinceStartup;
+            wsCaller = new WebServiceCaller<GameStateModel, bool>();
             await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/StateGame", GameStateModel);
         }
+    }
+
+    private bool GetIfUpdateStateRequired()
+    {
+        return lastStateUpdate + (1 / ApiConfig.DelayBetweenStateUpdates) <= Time.realtimeSinceStartup;
     }
 
     public void SetCityOwner(string cityName, Player owner)

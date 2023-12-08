@@ -20,5 +20,17 @@ namespace Assets.Scripts.Utils
                 return Convert.ToInt32(number);
             }
         }
+
+        public static string ReplaceValueIfNotEmpty(string newValue, string oldValue)
+        {
+            if (string.IsNullOrEmpty(newValue))
+            {
+                return oldValue;
+            }
+            else
+            {
+                return newValue;
+            }
+        }
     }
 }

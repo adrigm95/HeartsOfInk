@@ -39,7 +39,7 @@ public class FactionsPanelController : MonoBehaviour
     {
         Debug.Log("Loading map: " + cbMaps.itemText.text);
         mapModel = MapDAC.LoadMapInfoByName(GetMapDefinitionName(), GlobalConstants.RootPath);
-        startGameController.MapId = mapModel.MapId;
+        startGameController.SetMapId(mapModel.MapId);
         globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
 
         CleanFactionLines();
