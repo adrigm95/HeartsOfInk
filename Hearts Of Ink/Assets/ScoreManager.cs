@@ -1,4 +1,5 @@
-﻿using NETCoreServer.Models;
+﻿using Assets.Scripts.Data;
+using NETCoreServer.Models;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,17 +9,29 @@ public class ScoreManager : MonoBehaviour
     private float width;
     private RectTransform rectTransform;
     private GameObject activePanel;
+    private StatisticsController statisticsControllerInstance;
 
     public float SizeClosed;
     public float SizeOpen;
     public GameObject scorePanel;
     public TMPro.TextMeshProUGUI playerID;
     public TMPro.TextMeshProUGUI score;
+    public TMPro.TextMeshProUGUI[] playerTexts;
     // Start is called before the first frame update
     void Start()
     {
         rectTransform = transform.GetComponent<RectTransform>();
         width = rectTransform.sizeDelta.x;
+        statisticsControllerInstance = FindObjectOfType<StatisticsController>();
+
+        if (statisticsControllerInstance == null)
+        {
+            Debug.Log("StatisticsController not found.");
+        }
+        else
+        {
+            UpdatePlayerTexts();
+        }
     }
 
     // Update is called once per frame
@@ -60,23 +73,34 @@ public class ScoreManager : MonoBehaviour
         rectTransform.sizeDelta = new Vector2(width, SizeClosed);
         scorePanel.SetActive(false);
     }
-    //Esta función servirá para que si una tropa es aliada se muestre como si fuera la misma facción, en el txt de la puntuación
-    public bool IsEnemy(Player factionId, Player factionId2)
+    //This method will be used to show the same faction if the troop is an ally, in the score txt
+    public bool IsAlly(Player factionId, Player factionId2)
     {
-        return factionId != factionId2;
+        FactionStatistics faction1 = statisticsControllerInstance.GetFaction(factionId);
+        FactionStatistics faction2 = statisticsControllerInstance.GetFaction(factionId2);
+        //Check if both factions are the same
+        return faction1 != null && faction2 != null && faction1 == faction2;
     }
     public void SetPlayerID(Player factionId)
     {
         playerID.text = factionId.ToString();
-    }
-    public void SetScore(int score)
+    }    
+    public void UpdatePlayerTexts()
     {
-        this.score.text = score.ToString();
+        for (int i = 0; i < playerTexts.Length; i++)
+        {
+            Player currentPlayer = 
+                (Player)System.Enum.Parse(typeof(Player), playerTexts[i].text.Split(':')[0]);
+            FactionStatistics currentFaction = statisticsControllerInstance.GetFaction(currentPlayer);
+
+            if (currentFaction != null)
+            {
+                playerTexts[i].text = currentPlayer.ToString() + ": " + currentFaction.Player.ToString();
+            }
+            else
+            {
+                Debug.Log("Faction not found.");
+            }
+        }
     }
-
-
-
-   
-
-
 }
