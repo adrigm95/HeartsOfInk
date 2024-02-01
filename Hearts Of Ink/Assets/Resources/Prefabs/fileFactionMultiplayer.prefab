@@ -398,7 +398,7 @@ GameObject:
   - component: {fileID: 3593201533168345019}
   - component: {fileID: 5019205777545104880}
   m_Layer: 5
-  m_Name: Toggle
+  m_Name: tglIsReady
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

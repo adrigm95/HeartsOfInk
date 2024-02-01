@@ -69,7 +69,7 @@ public class ConfigGameController : MonoBehaviour
     {
         foreach (ConfigLineModel configLine in ConfigLinesUpdater.Instance.GetReceivedConfigLines())
         {
-            Transform objectLine;
+            Transform objectLine = null;
             Dropdown cbPlayerType;
             Image colorFactionImage;
             Button btnColorFaction;
@@ -77,28 +77,44 @@ public class ConfigGameController : MonoBehaviour
             GlobalInfoFaction faction;
             Button btnAlliance;
             Text txtAlliance;
+            Toggle tglIsReady;
 
             try
             {
                 faction = globalInfo.Factions.Find(item => item.Id == configLine.FactionId);
                 string objectName = "factionLine" + "_" + configLine.MapSocketId;
-                objectLine = GameObject.Find(objectName).transform;
-                cbPlayerType = objectLine.Find("cbPlayerType").GetComponent<Dropdown>();
-                colorFactionImage = objectLine.Find("btnColorFaction").GetComponent<Image>();
-                btnColorFaction = objectLine.Find("btnColorFaction").GetComponent<Button>();
-                btnAlliance = objectLine.Find("btnAlliance").GetComponent<Button>();
-                txtAlliance = objectLine.Find("btnAlliance").GetComponentInChildren<Text>();
-                cbPlayerType.value = (int)configLine.PlayerType;              
+                GetObjectLineReferences(ref objectLine, out cbPlayerType, out colorFactionImage, out btnColorFaction, 
+                    out txtPlayerName, out btnAlliance, out txtAlliance, out tglIsReady, objectName);
+                cbPlayerType.value = (int)configLine.PlayerType;
                 colorFactionImage.color = ColorUtils.GetColorByString(configLine.Color);
-                if (isGameHost || configLine.MapSocketId == ownLine)
+
+                if (configLine.MapSocketId == ownLine)
                 {
-                    ChangeFactionDescriptions(faction);
-                    cbPlayerType.gameObject.SetActive(false);
-                    txtPlayerName = objectLine.Find("txtPlayerName").GetComponent<Text>();
-                    txtPlayerName.text = configLine.PlayerName;
-                    txtPlayerName.gameObject.SetActive(true);
+                    if (!tglIsReady.isOn)
+                    {
+                        // El HOST puede cambiar la facción/alianza a otros jugadores si no han marcado como ready su linea. 
+                        ChangeFactionDescriptions(faction);
+                        txtAlliance.text = Convert.ToString(configLine.Alliance);
+                    }
                 }
-                txtAlliance.text =  Convert.ToString(configLine.Alliance);
+                else
+                {
+                    // Algunos datos no se pueden actualizar desde fuera para la linea propia pero si para el resto de lineas.
+                    if (string.IsNullOrWhiteSpace(configLine.PlayerName))
+                    {
+                        cbPlayerType.gameObject.SetActive(true);
+                        txtPlayerName.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        cbPlayerType.gameObject.SetActive(false);
+                        txtPlayerName.text = configLine.PlayerName;
+                        txtPlayerName.gameObject.SetActive(true);
+                    }
+
+                    txtAlliance.text = Convert.ToString(configLine.Alliance);
+                    tglIsReady.isOn = configLine.IsReady;
+                }
             }
             catch (Exception ex)
             {
@@ -106,6 +122,18 @@ public class ConfigGameController : MonoBehaviour
                 throw;
             }
         }
+    }
+
+    private static void GetObjectLineReferences(ref Transform objectLine, out Dropdown cbPlayerType, out Image colorFactionImage, out Button btnColorFaction, out Text txtPlayerName, out Button btnAlliance, out Text txtAlliance, out Toggle tglIsReady, string objectLineName)
+    {
+        objectLine = objectLine != null ? objectLine : GameObject.Find(objectLineName).transform;
+        cbPlayerType = objectLine.Find("cbPlayerType").GetComponent<Dropdown>();
+        colorFactionImage = objectLine.Find("btnColorFaction").GetComponent<Image>();
+        btnColorFaction = objectLine.Find("btnColorFaction").GetComponent<Button>();
+        btnAlliance = objectLine.Find("btnAlliance").GetComponent<Button>();
+        txtAlliance = objectLine.Find("btnAlliance").GetComponentInChildren<Text>();
+        txtPlayerName = objectLine.Find("txtPlayerName").GetComponent<Text>();
+        tglIsReady = objectLine.Find("tglIsReady").GetComponent<Toggle>();
     }
 
     public void GameCreatedByHost(string gameKey, string mapId)
@@ -249,11 +277,15 @@ public class ConfigGameController : MonoBehaviour
     public void OnChangeConfigLine(Transform factionLine)
     {
         ConfigLineIn configLineIn = new ConfigLineIn();
-        Dropdown cbFaction = factionLine.Find("cbFaction").GetComponent<Dropdown>();
-        Dropdown cbPlayerType = factionLine.Find("cbPlayerType").GetComponent<Dropdown>();
-        Image colorFactionImage = factionLine.Find("btnColorFaction").GetComponent<Image>();
-        Button btnColorFaction = factionLine.Find("btnColorFaction").GetComponent<Button>();
-        Text txtAlliance = factionLine.Find("btnAlliance").GetComponentInChildren<Text>();
+        Dropdown cbPlayerType;
+        Text txtAlliance;
+        Text txtPlayerName;
+        Image colorFactionImage;
+        Dropdown cbFaction;
+        Toggle tglIsReady;
+
+        GetObjectLineReferences(ref factionLine, out cbPlayerType, out colorFactionImage, out _, out txtPlayerName, out _, out txtAlliance, out tglIsReady, null);
+        cbFaction = factionLine.Find("cbFaction").GetComponent<Dropdown>();
 
         string[] splittedName = factionLine.name.Split('_');
         int mapSocketId = Convert.ToInt32(splittedName[1]);
@@ -266,6 +298,8 @@ public class ConfigGameController : MonoBehaviour
             configLine.Alliance = string.IsNullOrWhiteSpace(txtAlliance.text) ? NoAlliance : Convert.ToByte(txtAlliance.text);
             configLine.Color = ColorUtils.GetStringByColor(colorFactionImage.color);
             configLine.PlayerType = (Player.IA)cbPlayerType.value;
+            configLine.PlayerName = txtPlayerName.text;
+            configLine.IsReady = tglIsReady.isOn;
 
             configLineIn.configLineModel = configLine;
             configLineIn.gameKey = txtGamekey.text;
