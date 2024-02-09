@@ -10,6 +10,7 @@ using Assets.Scripts.Utils;
 using NETCoreServer.Models;
 using Assets.Scripts.Controller.InGame;
 using Assets.Scripts.Data.MultiplayerStateModels;
+using static UnityEngine.GraphicsBuffer;
 
 public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
 {
@@ -70,11 +71,19 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
         }
         else if (globalLogic.IsMultiplayerClient)
         {
-            Debug.Log("IsMultiplayerClient");
-
             TroopStateModel troopStateModel = stateController.GetTroopState(this.name);
-            troopModel.Units = troopStateModel.size;
-            this.transform.position = troopStateModel.GetPositionAsVector3();
+
+            if (troopStateModel == null)
+            {
+                Debug.Log("troopStateModel is null, destroying troop");
+                globalLogic.DestroyUnit(this.gameObject, this);
+            }
+            else
+            {
+                Debug.Log("TroopController multiplayer client logic: " + this.name + " troopModel: " + troopModel + " troopState: " + troopStateModel);
+                troopModel.Units = troopStateModel.size;
+                this.transform.position = troopStateModel.GetPositionAsVector3();
+            }
         }
         else
         {

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -52,9 +52,6 @@
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2019.4.35f1</UnityVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <Analyzer Include="D:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Controller\CameraController.cs" />
     <Compile Include="Assets\Scripts\Controller\Endgame\EndgameLineController.cs" />
@@ -125,6 +122,7 @@
     <Compile Include="Assets\Scripts\Data\Log.cs" />
     <Compile Include="Assets\Scripts\Data\MultiplayerStateModels\CityStateModel.cs" />
     <Compile Include="Assets\Scripts\Data\MultiplayerStateModels\GameStateModel.cs" />
+    <Compile Include="Assets\Scripts\Data\MultiplayerStateModels\StateGameModelIn.cs" />
     <Compile Include="Assets\Scripts\Data\MultiplayerStateModels\TroopStateModel.cs" />
     <Compile Include="Assets\Scripts\Data\SelectionModel.cs" />
     <Compile Include="Assets\Scripts\Data\TroopModel.cs" />

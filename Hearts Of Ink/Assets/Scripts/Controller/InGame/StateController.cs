@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Data.Constants;
+﻿using Assets.Scripts.Data;
+using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.MultiplayerStateModels;
 using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
@@ -8,6 +9,7 @@ using NETCoreServer.Models.Out;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using static UnityEngine.UI.GridLayoutGroup;
 
 //Todo: SEPT-23-001 Completar modelo y lógica.
@@ -25,21 +27,27 @@ public class StateController : MonoBehaviour
     private GameStateModel GameStateModel { get; set; }
     private GlobalLogicController globalLogic { get; set; }
     private float lastStateUpdate = 0;
+    public Text txtIsMultiplayer;
 
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("Start - State Controller");
+
         globalLogic = FindObjectOfType<GlobalLogicController>();
         GameStateModel = new GameStateModel();
         GameStateModel.citiesStates = new Dictionary<string, CityStateModel>();
         GameStateModel.troopsStates = new Dictionary<string, TroopStateModel>();
         GameStateModel.gamekey = globalLogic?.gameModel?.GameKey;
         GameStateModel.timeSinceStart = Time.realtimeSinceStartup;
+
+        Debug.Log("Start - Gamekey from globalLogic: " + globalLogic?.gameModel?.GameKey);
     }
 
     // Update is called once per frame
     void Update()
     {
+        txtIsMultiplayer.text = "Is multiplayer host?: " + globalLogic.IsMultiplayerHost;
         if (globalLogic.IsMultiplayerHost)
         {
             SendStateGame();
@@ -54,24 +62,45 @@ public class StateController : MonoBehaviour
     {
         HOIResponseModel<GameStateModel> response;
         WebServiceCaller<GameStateModel> wsCaller;
+        string serviceParameters;
 
         if (GetIfUpdateStateRequired())
         {
-            Debug.Log($"lastStateUpdate: {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
+            Debug.Log($"lastStateUpdate (as client): {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
             lastStateUpdate = Time.realtimeSinceStartup;
             wsCaller = new WebServiceCaller<GameStateModel>();
-            response = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.GET, "api/StateGame");
+            serviceParameters = $"playername={globalLogic.thisPcPlayer.Name}&gamekey={GameStateModel.gamekey}";
+            response = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.GET, "api/StateGame?" + serviceParameters);
 
             if (response.serviceResponse.timeSinceStart > GameStateModel.timeSinceStart)
             {
                 GameStateModel = response.serviceResponse;
+                Debug.Log("GetStateGame - updated state; cities: " + GameStateModel.citiesStates.Count + "; troops:" + GameStateModel.troopsStates.Count);
+
+                foreach (var troop in GameStateModel.troopsStates)
+                {
+                    GameObject currentTroop = GameObject.Find(troop.Key);
+                    if (currentTroop == null)
+                    {
+                        //globalLogic.InstantiateTroopSingleplayer(troop.Value.size, troop.Value.position, troop.Value.o);
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("GetStateGame - Received state is previous than current; received: " + response.serviceResponse.timeSinceStart + " current: " + GameStateModel.timeSinceStart);
             }
         }
     }
 
     public async void SendStateGame()
     {
-        WebServiceCaller<GameStateModel, bool> wsCaller;
+        WebServiceCaller<StateGameModelIn, bool> wsCaller;
+        StateGameModelIn sgm = new StateGameModelIn()
+        {
+            playerName = globalLogic.thisPcPlayer.Name,
+            gameStateModel = GameStateModel
+        };
 
         if (GameStateModel.gamekey == null)
         {
@@ -82,10 +111,10 @@ public class StateController : MonoBehaviour
 
         if (GetIfUpdateStateRequired())
         {
-            Debug.Log($"lastStateUpdate: {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
+            Debug.Log($"lastStateUpdate (as Host): {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
             lastStateUpdate = Time.realtimeSinceStartup;
-            wsCaller = new WebServiceCaller<GameStateModel, bool>();
-            await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/StateGame", GameStateModel);
+            wsCaller = new WebServiceCaller<StateGameModelIn, bool>();
+            await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/StateGame", sgm);
         }
     }
 

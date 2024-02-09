@@ -47,6 +47,7 @@ public class CityController : MonoBehaviour
         else if (globalLogic.IsMultiplayerClient)
         {
             Owner = stateHolder.GetCityOwner(this.name);
+            spriteRenderer.color = ColorUtils.GetColorByString(Owner.Color);
         }
         else
         {

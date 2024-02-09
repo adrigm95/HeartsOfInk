@@ -35,7 +35,7 @@ public class ConfigGameController : MonoBehaviour
     private MapModel _mapModel;
     private GlobalInfo globalInfo;
     private DropdownIndexer factionDropdownsIds;
-    private List<ConfigLineModel> _configLinesState;
+    public List<ConfigLineModel> _configLinesState;
     public int startLines;
     public int spacing;
     public Text txtGamekey;
@@ -81,12 +81,17 @@ public class ConfigGameController : MonoBehaviour
 
             try
             {
+                Debug.Log("UpdateConfigLines - Start - Player modification received: " + configLine.PlayerName);
+                ConfigLineModel localConfigLine = _configLinesState.Find(item => item.MapSocketId == configLine.MapSocketId);
+
                 faction = globalInfo.Factions.Find(item => item.Id == configLine.FactionId);
                 string objectName = "factionLine" + "_" + configLine.MapSocketId;
                 GetObjectLineReferences(ref objectLine, out cbPlayerType, out colorFactionImage, out btnColorFaction, 
                     out txtPlayerName, out btnAlliance, out txtAlliance, out tglIsReady, objectName);
                 cbPlayerType.value = (int)configLine.PlayerType;
                 colorFactionImage.color = ColorUtils.GetColorByString(configLine.Color);
+                localConfigLine.PlayerType = configLine.PlayerType;
+                localConfigLine.Color = configLine.Color;
 
                 if (configLine.MapSocketId == ownLine)
                 {
@@ -95,6 +100,7 @@ public class ConfigGameController : MonoBehaviour
                         // El HOST puede cambiar la facción/alianza a otros jugadores si no han marcado como ready su linea. 
                         ChangeFactionDescriptions(faction);
                         txtAlliance.text = Convert.ToString(configLine.Alliance);
+                        localConfigLine.Alliance = configLine.Alliance;
                     }
                 }
                 else
@@ -109,11 +115,14 @@ public class ConfigGameController : MonoBehaviour
                     {
                         cbPlayerType.gameObject.SetActive(false);
                         txtPlayerName.text = configLine.PlayerName;
+                        localConfigLine.PlayerName = configLine.PlayerName;
                         txtPlayerName.gameObject.SetActive(true);
                     }
 
                     txtAlliance.text = Convert.ToString(configLine.Alliance);
+                    localConfigLine.Alliance = configLine.Alliance;
                     tglIsReady.isOn = configLine.IsReady;
+                    localConfigLine.IsReady = configLine.IsReady;
                 }
             }
             catch (Exception ex)
@@ -284,12 +293,15 @@ public class ConfigGameController : MonoBehaviour
         Dropdown cbFaction;
         Toggle tglIsReady;
 
+        Debug.Log("OnChangeConfigLine - Start - Object modified: " + factionLine.name);
+
         GetObjectLineReferences(ref factionLine, out cbPlayerType, out colorFactionImage, out _, out txtPlayerName, out _, out txtAlliance, out tglIsReady, null);
         cbFaction = factionLine.Find("cbFaction").GetComponent<Dropdown>();
 
         string[] splittedName = factionLine.name.Split('_');
         int mapSocketId = Convert.ToInt32(splittedName[1]);
         ConfigLineModel configLine = _configLinesState.Find(item => item.MapSocketId == mapSocketId);
+        Debug.Log("Pre-modified configLine || Playername: " + configLine.PlayerName);
 
         if (isGameHost || configLine.MapSocketId == ownLine)
         {
@@ -304,6 +316,7 @@ public class ConfigGameController : MonoBehaviour
             configLineIn.configLineModel = configLine;
             configLineIn.gameKey = txtGamekey.text;
 
+            Debug.Log("Post-modified configLine || Playername: " + configLine.PlayerName);
             ConfigLinesUpdater.Instance.SendConfigLine(configLineIn);
         }
     }

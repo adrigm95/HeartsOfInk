@@ -62,7 +62,7 @@ public class GlobalLogicController : MonoBehaviour
     public Image mediumSpeedItem;
     public Image fatestSpeedItem;
 
-    private void Start()
+    private void Awake()
     {
         LogManager.SendLog(logSender, "START - GlobalLogicController");
 

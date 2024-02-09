@@ -3,6 +3,7 @@ using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
+using Boo.Lang;
 using HeartsOfInk.SharedLogic;
 using LobbyHOIServer.Models.Models;
 using NETCoreServer.Models;
@@ -107,6 +108,7 @@ public class StartGameController : MonoBehaviour
 
         if (readyForChangeScene)
         {
+            Debug.Log("ReadyForChangeScene - GameModel.gamekey: " + gameModel.GameKey);
             gameOptionsController.gameModel = GameModel;
             sceneChangeController.ChangeScene(transform);
         }
@@ -194,6 +196,7 @@ public class StartGameController : MonoBehaviour
             player.Faction.Bonus = new Bonus((Bonus.Id)globalInfo.Factions.Find(item => item.Id == player.Faction.Id).BonusId);
 
             gameModel.Players.Add(player);
+            Debug.Log("GetMultiplayerOptions - player: " + player.Name);
         }
     }
 }
