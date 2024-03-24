@@ -2,9 +2,11 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
+
+# Comentario de Sara: Unity recomienda no subir las tres primeras carpetas.
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
 /[Ll]ogs/
@@ -77,3 +79,6 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+Hearts Of Ink/Assembly-CSharp.csproj
+Hearts Of Ink/Assembly-CSharp-firstpass.csproj
+Hearts Of Ink/Hearts Of Ink.sln
