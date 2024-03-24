@@ -1,0 +1,18 @@
+﻿using Assets.Scripts.Data.GlobalInfo;
+using HeartsOfInk.SharedLogic;
+using UnityEngine;
+
+namespace Assets.Scripts.DataAccess
+{
+    internal class GlobalInfoDAC
+    {
+        private const string GlobalInfoFile = "/_GlobalInfo.json";
+
+        public static GlobalInfo LoadGlobalMapInfo()
+        {
+            string globalInfoPath = Application.streamingAssetsPath + GlobalInfoFile;
+
+            return JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
+        }
+    }
+}

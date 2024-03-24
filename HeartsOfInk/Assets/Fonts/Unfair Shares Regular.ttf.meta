@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 2779ccdf786e2274983a4b011df0c5f3
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Unfair Shares
+  fontNames:
+  - Unfair Shares
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 633c461065aa3bf44858752fecba3644, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
