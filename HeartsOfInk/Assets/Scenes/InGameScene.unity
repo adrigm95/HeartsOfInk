@@ -510,7 +510,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &132330619
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3181,6 +3181,7 @@ MonoBehaviour:
   citiesCanvas: {fileID: 2002964810}
   pausePanel: {fileID: 979112898}
   emptyTargetsHolder: {fileID: 1361529144}
+  debugInfoPanel: {fileID: 1810891221}
   pauseItem: {fileID: 1211124964}
   playItem: {fileID: 2076446156}
   mediumSpeedItem: {fileID: 1262577872}
@@ -5847,12 +5848,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1810891222}
   m_Layer: 5
-  m_Name: debugInfo
+  m_Name: DebugInfoPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1810891222
 RectTransform:
   m_ObjectHideFlags: 0

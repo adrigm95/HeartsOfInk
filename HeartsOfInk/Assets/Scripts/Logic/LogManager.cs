@@ -9,7 +9,7 @@ public class LogManager
     private const int MaxAnalyticsInSession = 10;
     private const int MaxLogsInSession = 10;
     private const int MaxExceptionsInSession = 10;
-    private const string ApplicationVersion = "2023-08-27_1";
+    private const string ApplicationVersion = "2024-03-25_1";
     private const bool LogsEnabled = true;
     private static readonly object _lock = new object();
     private static string _sessionIdenfier;

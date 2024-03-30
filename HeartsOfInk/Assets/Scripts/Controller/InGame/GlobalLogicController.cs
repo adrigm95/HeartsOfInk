@@ -57,6 +57,7 @@ public class GlobalLogicController : MonoBehaviour
     public GameObject citiesCanvas;
     public GameObject pausePanel;
     public GameObject emptyTargetsHolder;
+    public GameObject debugInfoPanel;
     public Image pauseItem;
     public Image playItem;
     public Image mediumSpeedItem;
@@ -74,6 +75,11 @@ public class GlobalLogicController : MonoBehaviour
             statisticsController = FindObjectOfType<StatisticsController>();
             sceneChangeController = FindObjectOfType<SceneChangeController>();
             gameOptionsHolder = FindObjectOfType<GameOptionsController>();
+
+            if (debugInfoPanel != null && Debug.isDebugBuild)
+            {
+                debugInfoPanel.SetActive(true);
+            }
 
             if (gameOptionsHolder == null)
             {
