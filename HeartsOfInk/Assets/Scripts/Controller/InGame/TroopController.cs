@@ -46,11 +46,11 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("globalLogic.IsMultiplayerClient: " + globalLogic.IsMultiplayerClient);
+        //Debug.Log("globalLogic.IsMultiplayerClient: " + globalLogic.IsMultiplayerClient);
 
         if (globalLogic.IsMultiplayerHost || globalLogic.IsSingleplayer)
         {
-            Debug.Log("IsMultiplayerHost");
+            //Debug.Log("IsMultiplayerHost");
 
             UpdateTroopModel();
             Combat();
