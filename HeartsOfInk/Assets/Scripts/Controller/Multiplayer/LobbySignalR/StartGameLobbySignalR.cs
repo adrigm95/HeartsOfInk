@@ -63,11 +63,11 @@ public class StartGameLobbySignalR
         }
     }
 
-    public void ReceiveStartGame()
+    public async void ReceiveStartGame()
     {
         try
         {
-            Debug.Log("ReceiveStartGame");
+            Debug.Log("ReceiveStartGame - Lobby");
             startGameReceived = true;
         }
         catch (Exception ex)

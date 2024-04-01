@@ -47,7 +47,7 @@ public class StartGameIngameSignalR
 
     public void ReceiveStartGame()
     {
-        Debug.Log("ReceiveStartGame");
-        StartGameController.StartGame(false);
+        Debug.Log("ReceiveStartGame - Ingame");
+        StartGameController.StartGameFromServer();
     }
 }
