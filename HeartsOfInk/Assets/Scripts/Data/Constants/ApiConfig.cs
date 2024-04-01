@@ -20,8 +20,8 @@
         public const string SignalRHUBName = "signalrhoi";
 
         /// <summary>
-        /// Delay in miliseconds between calls to server for update states.
+        /// Delay in seconds between calls to server for update states.
         /// </summary>
-        public const int DelayBetweenStateUpdates = 50;
+        public const float DelayBetweenStateUpdates = 0.1f;
     }
 }

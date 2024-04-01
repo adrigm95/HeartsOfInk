@@ -1,18 +1,10 @@
-﻿using Assets.Scripts.Data;
-using Assets.Scripts.Data.Constants;
+﻿using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.MultiplayerStateModels;
-using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
 using NETCoreServer.Models;
-using NETCoreServer.Models.In;
-using NETCoreServer.Models.Out;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.UI.GridLayoutGroup;
-
-//Todo: SEPT-23-001 Completar modelo y lógica.
 
 /// <summary>
 /// Contiene la información actualizada del estado de ciudades y tropas en las partidas multiplayer. No se usa en las partidas singleplayer.
@@ -27,6 +19,7 @@ public class StateController : MonoBehaviour
     private GameStateModel GameStateModel { get; set; }
     private GlobalLogicController globalLogic { get; set; }
     private float lastStateUpdate = 0;
+    private WebServiceCaller<StateGameModelIn, bool> wsCaller;
     public Text txtIsMultiplayer;
 
     // Start is called before the first frame update
@@ -34,6 +27,7 @@ public class StateController : MonoBehaviour
     {
         Debug.Log("Start - State Controller");
 
+        wsCaller = new WebServiceCaller<StateGameModelIn, bool>();
         globalLogic = FindObjectOfType<GlobalLogicController>();
         GameStateModel = new GameStateModel();
         GameStateModel.citiesStates = new Dictionary<string, CityStateModel>();
@@ -64,7 +58,7 @@ public class StateController : MonoBehaviour
         WebServiceCaller<GameStateModel> wsCaller;
         string serviceParameters;
 
-        if (GetIfUpdateStateRequired())
+        if (UpdateStateRequired())
         {
             Debug.Log($"lastStateUpdate (as client): {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
             lastStateUpdate = Time.realtimeSinceStartup;
@@ -95,32 +89,30 @@ public class StateController : MonoBehaviour
 
     public async void SendStateGame()
     {
-        WebServiceCaller<StateGameModelIn, bool> wsCaller;
-        StateGameModelIn sgm = new StateGameModelIn()
+        if (UpdateStateRequired())
         {
-            playerName = globalLogic.thisPcPlayer.Name,
-            gameStateModel = GameStateModel
-        };
+            StateGameModelIn sgm = new StateGameModelIn()
+            {
+                playerName = globalLogic.thisPcPlayer.Name,
+                gameStateModel = GameStateModel
+            };
 
-        if (GameStateModel.gamekey == null)
-        {
-            GameStateModel.gamekey = globalLogic.gameModel.GameKey;
-        }
+            if (GameStateModel.gamekey == null)
+            {
+                GameStateModel.gamekey = globalLogic.gameModel.GameKey;
+            }
 
-        GameStateModel.timeSinceStart = Time.realtimeSinceStartup;
+            GameStateModel.timeSinceStart = Time.realtimeSinceStartup;
 
-        if (GetIfUpdateStateRequired())
-        {
             Debug.Log($"lastStateUpdate (as Host): {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
             lastStateUpdate = Time.realtimeSinceStartup;
-            wsCaller = new WebServiceCaller<StateGameModelIn, bool>();
             await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/StateGame", sgm);
         }
     }
 
-    private bool GetIfUpdateStateRequired()
+    private bool UpdateStateRequired()
     {
-        return lastStateUpdate + (1 / ApiConfig.DelayBetweenStateUpdates) <= Time.realtimeSinceStartup;
+        return lastStateUpdate + ApiConfig.DelayBetweenStateUpdates < Time.realtimeSinceStartup;
     }
 
     public void SetCityOwner(string cityName, Player owner)
