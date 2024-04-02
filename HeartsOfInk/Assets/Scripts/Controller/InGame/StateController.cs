@@ -19,7 +19,7 @@ public class StateController : MonoBehaviour
     private GameStateModel GameStateModel { get; set; }
     private GlobalLogicController globalLogic { get; set; }
     private float lastStateUpdate = 0;
-    private WebServiceCaller<StateGameModelIn, bool> wsCaller;
+    private WebServiceCaller<GameStateModelIn, bool> wsCaller;
     public Text txtIsMultiplayer;
 
     // Start is called before the first frame update
@@ -27,13 +27,13 @@ public class StateController : MonoBehaviour
     {
         Debug.Log("Start - State Controller");
 
-        wsCaller = new WebServiceCaller<StateGameModelIn, bool>();
+        wsCaller = new WebServiceCaller<GameStateModelIn, bool>();
         globalLogic = FindObjectOfType<GlobalLogicController>();
         GameStateModel = new GameStateModel();
-        GameStateModel.citiesStates = new Dictionary<string, CityStateModel>();
-        GameStateModel.troopsStates = new Dictionary<string, TroopStateModel>();
-        GameStateModel.gamekey = globalLogic?.gameModel?.GameKey;
-        GameStateModel.timeSinceStart = Time.realtimeSinceStartup;
+        GameStateModel.CitiesStates = new Dictionary<string, CityStateModel>();
+        GameStateModel.TroopsStates = new Dictionary<string, TroopStateModel>();
+        GameStateModel.Gamekey = globalLogic?.gameModel?.GameKey;
+        GameStateModel.TimeSinceStart = Time.realtimeSinceStartup;
 
         Debug.Log("Start - Gamekey from globalLogic: " + globalLogic?.gameModel?.GameKey);
     }
@@ -63,26 +63,26 @@ public class StateController : MonoBehaviour
             Debug.Log($"lastStateUpdate (as client): {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
             lastStateUpdate = Time.realtimeSinceStartup;
             wsCaller = new WebServiceCaller<GameStateModel>();
-            serviceParameters = $"playername={globalLogic.thisPcPlayer.Name}&gamekey={GameStateModel.gamekey}";
+            serviceParameters = $"playername={globalLogic.thisPcPlayer.Name}&gamekey={GameStateModel.Gamekey}";
             response = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.GET, "api/StateGame?" + serviceParameters);
 
-            if (response.serviceResponse.timeSinceStart > GameStateModel.timeSinceStart)
+            if (response.serviceResponse.TimeSinceStart > GameStateModel.TimeSinceStart)
             {
                 GameStateModel = response.serviceResponse;
-                Debug.Log("GetStateGame - updated state; cities: " + GameStateModel.citiesStates.Count + "; troops:" + GameStateModel.troopsStates.Count);
+                Debug.Log("GetStateGame - updated state; cities: " + GameStateModel.CitiesStates.Count + "; troops:" + GameStateModel.TroopsStates.Count);
 
-                foreach (var troop in GameStateModel.troopsStates)
+                foreach (var troop in GameStateModel.TroopsStates)
                 {
                     GameObject currentTroop = GameObject.Find(troop.Key);
                     if (currentTroop == null)
                     {
-                        //globalLogic.InstantiateTroopSingleplayer(troop.Value.size, troop.Value.position, troop.Value.o);
+                        globalLogic.InstantiateTroopMultiplayer(troop.Value.Size, troop.Value.GetPositionAsVector3(), troop.Value.Owner);
                     }
                 }
             }
             else
             {
-                Debug.LogWarning("GetStateGame - Received state is previous than current; received: " + response.serviceResponse.timeSinceStart + " current: " + GameStateModel.timeSinceStart);
+                Debug.LogWarning("GetStateGame - Received state is previous than current; received: " + response.serviceResponse.TimeSinceStart + " current: " + GameStateModel.TimeSinceStart);
             }
         }
     }
@@ -91,18 +91,18 @@ public class StateController : MonoBehaviour
     {
         if (UpdateStateRequired())
         {
-            StateGameModelIn sgm = new StateGameModelIn()
+            GameStateModelIn sgm = new GameStateModelIn()
             {
-                playerName = globalLogic.thisPcPlayer.Name,
-                gameStateModel = GameStateModel
+                PlayerName = globalLogic.thisPcPlayer.Name,
+                GameStateModel = GameStateModel
             };
 
-            if (GameStateModel.gamekey == null)
+            if (GameStateModel.Gamekey == null)
             {
-                GameStateModel.gamekey = globalLogic.gameModel.GameKey;
+                GameStateModel.Gamekey = globalLogic.gameModel.GameKey;
             }
 
-            GameStateModel.timeSinceStart = Time.realtimeSinceStartup;
+            GameStateModel.TimeSinceStart = Time.realtimeSinceStartup;
 
             Debug.Log($"lastStateUpdate (as Host): {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
             lastStateUpdate = Time.realtimeSinceStartup;
@@ -119,13 +119,13 @@ public class StateController : MonoBehaviour
     {
         CityStateModel cityStateModel;
 
-        if (GameStateModel.citiesStates.TryGetValue(cityName, out cityStateModel))
+        if (GameStateModel.CitiesStates.TryGetValue(cityName, out cityStateModel))
         {
             cityStateModel.Owner = owner.MapSocketId;
         }
         else
         {
-            GameStateModel.citiesStates.Add(cityName, new CityStateModel()
+            GameStateModel.CitiesStates.Add(cityName, new CityStateModel()
             {
                 Owner = owner.MapSocketId
             });
@@ -138,7 +138,7 @@ public class StateController : MonoBehaviour
         CityStateModel cityStateModel;
         Player owner = null;
 
-        if (GameStateModel.citiesStates.TryGetValue(cityName, out cityStateModel))
+        if (GameStateModel.CitiesStates.TryGetValue(cityName, out cityStateModel))
         {
             owner = globalLogic.gameModel.Players.Find(player => player.MapSocketId == cityStateModel.Owner);
         }
@@ -150,26 +150,32 @@ public class StateController : MonoBehaviour
         return owner;
     }
 
-    public void SetTroopState(string troopName, int size, Vector3 position)
+    public void SetTroopState(string troopName, int size, Vector3 position, Player player)
     {
         TroopStateModel troopState;
 
-        if (!GameStateModel.troopsStates.TryGetValue(troopName, out troopState))
+        if (!GameStateModel.TroopsStates.TryGetValue(troopName, out troopState))
         {
-            troopState = new TroopStateModel();
-            GameStateModel.troopsStates.Add(troopName, troopState);
+            troopState = new TroopStateModel()
+            {
+                Owner = player.MapSocketId,
+                Size = size
+            };
+            troopState.SetPosition(position);
+
+            GameStateModel.TroopsStates.Add(troopName, troopState);
             Debug.LogWarning("Owner not finded at SetTroopState: " + troopName);
         }
 
         troopState.SetPosition(position);
-        troopState.size = size;
+        troopState.Size = size;
     }
 
     public TroopStateModel GetTroopState(string troopName)
     {
         TroopStateModel result;
 
-        GameStateModel.troopsStates.TryGetValue(troopName, out result);
+        GameStateModel.TroopsStates.TryGetValue(troopName, out result);
 
         return result;
     }

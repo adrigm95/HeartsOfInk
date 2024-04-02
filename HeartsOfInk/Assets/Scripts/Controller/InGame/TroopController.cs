@@ -66,7 +66,7 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
 
             if (globalLogic.IsMultiplayerHost)
             {
-                stateController.SetTroopState(this.name, troopModel.Units, this.transform.position);
+                stateController.SetTroopState(this.name, troopModel.Units, this.transform.position, troopModel.Player);
             }
         }
         else if (globalLogic.IsMultiplayerClient)
@@ -81,7 +81,7 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
             else
             {
                 Debug.Log("TroopController multiplayer client logic: " + this.name + " troopModel: " + troopModel + " troopState: " + troopStateModel);
-                troopModel.Units = troopStateModel.size;
+                troopModel.Units = troopStateModel.Size;
                 this.transform.position = troopStateModel.GetPositionAsVector3();
             }
         }

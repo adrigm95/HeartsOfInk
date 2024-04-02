@@ -342,7 +342,6 @@ public class GlobalLogicController : MonoBehaviour
             }
 
             InstantiateTroop(units, position, troopOwner, troopsCounter);
-            troopsCounter++;
         }
         catch (Exception ex)
         {
@@ -351,7 +350,13 @@ public class GlobalLogicController : MonoBehaviour
         }
     }
 
-    public void InstantiateTroop(int units, Vector3 position, Player troopOwner, int troopId)
+    public void InstantiateTroopMultiplayer(int units, Vector3 position, byte mapSocketId)
+    {
+        Player troopOwner = gameModel.Players.First(item => item.MapSocketId == mapSocketId);
+        InstantiateTroop(units, position, troopOwner, troopsCounter);
+    }
+
+    private void InstantiateTroop(int units, Vector3 position, Player troopOwner, int troopId)
     {
         TroopController newObject;
 
@@ -367,6 +372,7 @@ public class GlobalLogicController : MonoBehaviour
             newObject.name = troopId.ToString();
             newObject.troopModel = new TroopModel(troopOwner);
             newObject.troopModel.Units = units;
+            troopsCounter++;
         }
         catch (Exception ex)
         {

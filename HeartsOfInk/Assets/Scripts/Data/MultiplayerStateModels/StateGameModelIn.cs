@@ -1,8 +1,8 @@
 ﻿namespace Assets.Scripts.Data.MultiplayerStateModels
 {
-    public class StateGameModelIn
+    public class GameStateModelIn
     {
-        public string playerName;
-        public GameStateModel gameStateModel;
+        public string PlayerName { get; set; }
+        public GameStateModel GameStateModel { get; set; }
     }
 }

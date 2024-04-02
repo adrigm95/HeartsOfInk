@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Data.MultiplayerStateModels
@@ -9,18 +8,23 @@ namespace Assets.Scripts.Data.MultiplayerStateModels
         /// <summary>
         /// Posición de la tropa
         /// </summary>
-        public string position;
+        public string Position { get; set; }
 
         /// <summary>
         /// Tamaño de la tropa
         /// </summary>
-        public int size;
+        public int Size { get; set; }
+
+        /// <summary>
+        /// Identificador del dueño actual de la tropa. Se corresponde con el mapSocketId de Player.
+        /// </summary>
+        public byte Owner { get; set; }
 
         public Vector3 GetPositionAsVector3()
         {
-            if (position != null)
+            if (Position != null)
             {
-                string[] tmp = position.Split(';');
+                string[] tmp = Position.Split(';');
                 return new Vector3(Convert.ToSingle(tmp[0]), Convert.ToSingle(tmp[1]), Convert.ToSingle(tmp[2]));
             }
             else
@@ -31,7 +35,7 @@ namespace Assets.Scripts.Data.MultiplayerStateModels
 
         public void SetPosition(Vector3 newValue)
         {
-            position = newValue.x + ";" + newValue.y + ";" + newValue.z;
+            Position = newValue.x + ";" + newValue.y + ";" + newValue.z;
         }
     }
 }
