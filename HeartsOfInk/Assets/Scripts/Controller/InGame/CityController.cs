@@ -15,10 +15,12 @@ public class CityController : MonoBehaviour
     private float recruitmentProgress = 0;
     public Player Owner;
     public bool IsCapital;
+    private FactionScore factionScore;
 
     public void Awake()
     {
         troopsInZone = new List<TroopController>();
+        factionScore = new FactionScore();
     }
 
     // Start is called before the first frame update
@@ -27,7 +29,7 @@ public class CityController : MonoBehaviour
         globalLogic = FindObjectOfType<GlobalLogicController>();
         stateHolder = FindObjectOfType<StateController>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.color = ColorUtils.GetColorByString(Owner.Color);
+        spriteRenderer.color = ColorUtils.GetColorByString(Owner.Color);   
     }
 
     // Update is called once per frame
@@ -53,6 +55,7 @@ public class CityController : MonoBehaviour
         {
             Debug.LogWarning("Unexpected gametype on CityController");
         }
+        factionScore.AddScore(troopController.troopModel.Units);
     }
 
     private void CleanUnitsInZoneList()
@@ -77,6 +80,7 @@ public class CityController : MonoBehaviour
         {
             Debug.LogError($"Error detecting collision for city {this.name} and troop {collision.gameObject.name}, exception: {ex.Message}");
         }
+        
     }
 
     private void OnTriggerExit2D(Collider2D collision)

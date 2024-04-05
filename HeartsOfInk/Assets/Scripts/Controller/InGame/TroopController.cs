@@ -380,4 +380,5 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
     {
         combatingEnemys.RemoveAll(item => item == null);
     }
+
 }
