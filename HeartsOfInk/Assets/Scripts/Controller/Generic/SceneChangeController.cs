@@ -9,8 +9,9 @@ public class SceneChangeController : MonoBehaviour
     public Transform mainMenuButton;
     public Transform exitToMenuButton;
     public Transform startGame;
+    public Transform optionsButton;
     public Transform mapEditorButton;
-     
+
     public enum Scenes
     {
         RawgenLogo = 0,
@@ -20,7 +21,8 @@ public class SceneChangeController : MonoBehaviour
         Endgame = 4,
         Multiplayer = 5,
         MapEditor = 6,
-        AcceptPolicy = 7
+        AcceptPolicy = 7,
+        Options = 8
     }
 
     public void DirectChangeScene(Scenes scene)
@@ -50,6 +52,10 @@ public class SceneChangeController : MonoBehaviour
         else if (AreEquals(orderButton, mapEditorButton))
         {
             SceneManager.LoadScene(Convert.ToInt32(Scenes.MapEditor));
+        }
+        else if (AreEquals(orderButton, optionsButton))
+        {
+            SceneManager.LoadScene(Convert.ToInt32(Scenes.Options));
         }
         else
         {
