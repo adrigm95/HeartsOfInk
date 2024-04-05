@@ -210,6 +210,15 @@ public class GlobalLogicController : MonoBehaviour
         }
     }
 
+    public Player GetPlayer(byte mapSocketId)
+    {
+        return gameModel.Players.First(pl => pl.MapSocketId == mapSocketId);
+    }
+    public Player GetPlayer(string name)
+    {
+        return gameModel.Players.First(pl => pl.Name == name);
+    }
+
     private GameModel GetMockedGameModel()
     {
         GameModel gameModel = new GameModel("0");
@@ -289,14 +298,14 @@ public class GlobalLogicController : MonoBehaviour
             for (index = 0; index < mapModel.Cities.Count; index++)
             {
                 city = mapModel.Cities[index];
-                Player cityOwner = gameModel.Players.First(item => item.MapSocketId == city.MapSocketId);
+                Player cityOwner = GetPlayer(city.MapSocketId);
                 InstantiateCity(city, cityOwner);
             }
 
             for (index = 0; index < mapModel.Troops.Count; index++)
             {
                 troop = mapModel.Troops[index];
-                Player troopOwner = gameModel.Players.First(item => item.MapSocketId == troop.MapSocketId);
+                Player troopOwner = GetPlayer(troop.MapSocketId);
                 InstantiateTroopSingleplayer(troop.Units, VectorUtils.FloatVectorToVector3(troop.Position), troopOwner);
             }
         }
@@ -341,7 +350,8 @@ public class GlobalLogicController : MonoBehaviour
                 units += 10;
             }
 
-            InstantiateTroop(units, position, troopOwner, troopsCounter);
+            InstantiateTroop(units, position, troopOwner, troopsCounter.ToString());
+            troopsCounter++;
         }
         catch (Exception ex)
         {
@@ -350,13 +360,12 @@ public class GlobalLogicController : MonoBehaviour
         }
     }
 
-    public void InstantiateTroopMultiplayer(int units, Vector3 position, byte mapSocketId)
+    public void InstantiateTroopMultiplayer(string name, int units, Vector3 position, byte mapSocketId)
     {
-        Player troopOwner = gameModel.Players.First(item => item.MapSocketId == mapSocketId);
-        InstantiateTroop(units, position, troopOwner, troopsCounter);
+        InstantiateTroop(units, position, GetPlayer(mapSocketId), name);
     }
 
-    private void InstantiateTroop(int units, Vector3 position, Player troopOwner, int troopId)
+    private void InstantiateTroop(int units, Vector3 position, Player troopOwner, string troopId)
     {
         TroopController newObject;
 
@@ -369,10 +378,9 @@ public class GlobalLogicController : MonoBehaviour
                 troopsCanvas.transform.rotation,
                 troopsCanvas.transform)
                 ).GetComponent<TroopController>();
-            newObject.name = troopId.ToString();
+            newObject.name = troopId;
             newObject.troopModel = new TroopModel(troopOwner);
             newObject.troopModel.Units = units;
-            troopsCounter++;
         }
         catch (Exception ex)
         {

@@ -22,6 +22,6 @@
         /// <summary>
         /// Delay in seconds between calls to server for update states.
         /// </summary>
-        public const float DelayBetweenStateUpdates = 0.1f;
+        public const float DelayBetweenStateUpdates = 0.12f;
     }
 }

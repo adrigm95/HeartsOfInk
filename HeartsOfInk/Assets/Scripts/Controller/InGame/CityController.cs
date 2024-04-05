@@ -130,7 +130,7 @@ public class CityController : MonoBehaviour
             if (!ownerPresent)
             {
                 unitsInCombat.OrderByDescending(item => item.Value);
-                ChangeOwner(globalLogic.gameModel.Players.First(player => player.Name == unitsInCombat.First().Key));
+                ChangeOwner(globalLogic.GetPlayer(unitsInCombat.First().Key));
             }
         }
     }

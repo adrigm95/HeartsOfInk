@@ -3,6 +3,7 @@ using Assets.Scripts.Data.MultiplayerStateModels;
 using Assets.Scripts.DataAccess;
 using NETCoreServer.Models;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -71,12 +72,33 @@ public class StateController : MonoBehaviour
                 GameStateModel = response.serviceResponse;
                 Debug.Log("GetStateGame - updated state; cities: " + GameStateModel.CitiesStates.Count + "; troops:" + GameStateModel.TroopsStates.Count);
 
+                foreach (var city in GameStateModel.CitiesStates)
+                {
+                    GameObject currentCity = GameObject.Find(city.Key);
+                    if (currentCity == null)
+                    {
+
+                    }
+                    else
+                    {
+                        CityController cityController = currentCity.GetComponent<CityController>();
+                        cityController.Owner = globalLogic.GetPlayer(city.Value.Owner);
+                    }
+                }
+
                 foreach (var troop in GameStateModel.TroopsStates)
                 {
                     GameObject currentTroop = GameObject.Find(troop.Key);
                     if (currentTroop == null)
                     {
-                        globalLogic.InstantiateTroopMultiplayer(troop.Value.Size, troop.Value.GetPositionAsVector3(), troop.Value.Owner);
+                        globalLogic.InstantiateTroopMultiplayer(troop.Key, troop.Value.Size, troop.Value.GetPositionAsVector3(), troop.Value.Owner);
+                    }
+                    else
+                    {
+                        TroopController troopController = currentTroop.GetComponent<TroopController>();
+                        troopController.troopModel.CurrentPosition = troop.Value.GetPositionAsVector3();
+                        troopController.troopModel.Units = troop.Value.Size;
+                        troopController.troopModel.Player = globalLogic.GetPlayer(troop.Value.Owner);
                     }
                 }
             }
