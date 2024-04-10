@@ -19,5 +19,10 @@ namespace Assets.Scripts.Utils
         {
             return random.Next(minValue, maxValue);
         }
+
+        public static string RandomPlayerName()
+        {
+            return "player" + Next(99999);
+        }
     }
 }
