@@ -2,6 +2,7 @@
 using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
+using Assets.Scripts.Utils;
 using HeartsOfInk.SharedLogic;
 using LobbyHOIServer.Models.MapModels;
 using NETCoreServer.Models;
@@ -49,9 +50,15 @@ public class CreateGameController : MonoBehaviour
 
         response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.POST, LobbyHOIControllers.CreateGame, newGame);
 
-        if (string.IsNullOrEmpty(newGame.Name) || string.IsNullOrEmpty(newGame.PlayerName))
+        if (string.IsNullOrEmpty(newGame.Name))
         {
-            infoPanelController.DisplayMessage("Check all the fields", "Cannot be empty data.");
+            infoPanelController.DisplayMessage("Field Empty", "Game name cannot be empty");
+        }
+        else if (string.IsNullOrEmpty(newGame.PlayerName))
+        {
+            infoPanelController.DisplayMessage("Player name Empty", "Random player name asigned, you can set a custom player name in the upper left corner fo the screen.");
+            gameNameText.text = RandomUtils.RandomPlayerName();
+            newGame.PlayerName = gameNameText.text;
         }
         else if (response.internalResultCode == InternalStatusCodes.OKCode)
         {

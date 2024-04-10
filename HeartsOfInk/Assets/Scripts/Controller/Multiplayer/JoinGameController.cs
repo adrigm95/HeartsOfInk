@@ -1,10 +1,12 @@
 ﻿using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
+using Assets.Scripts.Utils;
 using NETCoreServer.Models;
 using NETCoreServer.Models.In;
 using NETCoreServer.Models.Out;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -52,24 +54,24 @@ public class JoinGameController : MonoBehaviour
 
         if (string.IsNullOrEmpty(requestEntryModel.playerName))
         {
-            infoPanelController.DisplayMessage("Invalid player name", "Player name cannot be empty");
+            infoPanelController.DisplayMessage("Player name Empty", "Random player name asigned, you can set a custom player name in the upper left corner fo the screen.");
+            playerName.text = RandomUtils.RandomPlayerName();
+            requestEntryModel.playerName = playerName.text;
         }
-        else
+
+        response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.POST, LobbyHOIControllers.RequestEntry, requestEntryModel);
+        switch (response.internalResultCode)
         {
-            response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.POST, LobbyHOIControllers.RequestEntry, requestEntryModel);
-            switch (response.internalResultCode)
-            {
-                case InternalStatusCodes.OKCode:
-                    configGameController.LoadConfigGame(response.serviceResponse.ConfigLines, gamekey, response.serviceResponse.MapId, false);
-                    break;
-                case InternalStatusCodes.GameNotFind:
-                    infoPanelController.DisplayMessage("Invalid gamekey", "No game find for the introduced gamekey");
-                    break;
-                default:
-                    infoPanelController.DisplayMessage("Unexpected error", "Unexpected error on join game: " + response.internalResultCode);
-                    Debug.LogWarning("[RequestEntryGame] Unexpected result code: " + response.internalResultCode);
-                    break;
-            }
+            case InternalStatusCodes.OKCode:
+                configGameController.LoadConfigGame(response.serviceResponse.ConfigLines, gamekey, response.serviceResponse.MapId, false);
+                break;
+            case InternalStatusCodes.GameNotFind:
+                infoPanelController.DisplayMessage("Invalid gamekey", "No game find for the introduced gamekey");
+                break;
+            default:
+                infoPanelController.DisplayMessage("Unexpected error", "Unexpected error on join game: " + response.internalResultCode);
+                Debug.LogWarning("[RequestEntryGame] Unexpected result code: " + response.internalResultCode);
+                break;
         }
     }
 }
