@@ -15,12 +15,10 @@ public class CityController : MonoBehaviour
     private float recruitmentProgress = 0;
     public Player Owner;
     public bool IsCapital;
-    private FactionScore factionScore;
 
     public void Awake()
     {
         troopsInZone = new List<TroopController>();
-        factionScore = new FactionScore();
     }
 
     // Start is called before the first frame update
@@ -55,7 +53,6 @@ public class CityController : MonoBehaviour
         {
             Debug.LogWarning("Unexpected gametype on CityController");
         }
-        factionScore.AddScore(troopController.troopModel.Units);
     }
 
     private void CleanUnitsInZoneList()
