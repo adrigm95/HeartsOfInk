@@ -29,8 +29,8 @@ public class OptionsSceneController : MonoBehaviour
     }
     public void SaveOptions()
     {
-        OptionsModel optionsPreferences
-        SaveOptionsPreferences();
+        OptionsModel optionsPreferences = new OptionsModel();
+        SaveOptionsPreferences(optionsPreferences);
     }
     public void SaveOptionsPreferences(OptionsModel optionsPreferences)
     {
@@ -43,15 +43,6 @@ public class OptionsSceneController : MonoBehaviour
         if (buttonSelected.isOn && buttonSelected == selectTroopLeftBtn)
         {
             
-        } 
-        else if () 
-        {
-
         }
     }
-    // Update is called once per frame
-    //void Update()
-    //{
-
-    //}
 }
