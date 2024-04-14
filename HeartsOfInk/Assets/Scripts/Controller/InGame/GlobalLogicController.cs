@@ -101,7 +101,7 @@ public class GlobalLogicController : MonoBehaviour
             }
             else
             {
-                ChangeSpeed(GameSpeedConstants.PauseSpeed);
+                ChangeSpeed(GameSpeedConstants.PlaySpeed);
                 //waitingPanel.Show(this);
                 IngameHOIHub.Instance.SuscribeToRoom(gameModel.GameKey, thisPcPlayer.Name);
                 StartGameIngameSignalR.Instance.SendClientReady(gameModel.GameKey);
@@ -130,6 +130,11 @@ public class GlobalLogicController : MonoBehaviour
             string errorMsg = "Unexpected type of game: " + gameModel.Gametype;
             LogManager.SendException(exceptionSender, new Exception(errorMsg));
             Debug.LogWarning(errorMsg);
+        }
+
+        if (IsMultiplayerHost || IsMultiplayerClient)
+        {
+            TroopDeadSignalR.GlobalLogicController = this;
         }
 
         UpdateUnitAnimation();
@@ -840,6 +845,20 @@ public class GlobalLogicController : MonoBehaviour
         }
     }
 
+    public void DestroyUnit(string troopName)
+    {
+        Transform troop = troopsCanvas.transform.Find(troopName);
+
+        if (troop == null)
+        {
+            Debug.LogWarning("Troop not finded: " + troopName);
+        }
+        else
+        {
+            DestroyUnit(troop.gameObject, null);
+        }
+    }
+
     public void DestroyUnit(GameObject unitToDestroy, TroopController destroyer)
     {
         TroopController troopController;
@@ -856,6 +875,11 @@ public class GlobalLogicController : MonoBehaviour
             if (destroyer != null)
             {
                 statisticsController.ReportArmyDefeated(troopController, destroyer);
+            }
+
+            if (IsMultiplayerHost)
+            {
+                TroopDeadSignalR.Instance.SendTroopDead(gameModel.GameKey, unitToDestroy.transform.name);
             }
 
             Destroy(unitToDestroy);

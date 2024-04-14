@@ -81,6 +81,7 @@
     <Compile Include="Assets\Scripts\Utils\CameraUtils.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\CreateMapPanelController.cs" />
+    <Compile Include="Assets\Scripts\Controller\InGame\ScoreDisplay.cs" />
     <Compile Include="Assets\Scripts\Rawgen\RuntimeColliderManager2D.cs" />
     <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialModel.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
@@ -112,7 +113,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
-    <Compile Include="Assets\Scripts\Utils\RandomManagement.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\IObjectAnimator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
@@ -123,6 +123,7 @@
     <Compile Include="Assets\Scripts\Utils\ColorUtils.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\Scripts\Controller\OptionsMenu\OptionsSceneController.cs" />
+    <Compile Include="Assets\Scripts\Utils\RandomUtils.cs" />
     <Compile Include="Assets\Scripts\Data\GlobalInfo\GlobalInfoBonus.cs" />
     <Compile Include="Assets\Scripts\Data\OptionsModel.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Assets\Scripts\Controller\Multiplayer\SubMenuPanelController.cs" />
     <Compile Include="Assets\Scripts\Logic\AILogic.cs" />
     <Compile Include="Assets\Scripts\Rawgen\FPSMetrics.cs" />
+    <Compile Include="Assets\Scripts\Controller\InGame\FactionScore.cs" />
     <Compile Include="Assets\Scripts\Rawgen\Models\CachedCollider2D.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
@@ -180,6 +182,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\Scripts\Logic\LanguageManager.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\EditorCityController.cs" />
+    <Compile Include="Assets\Scripts\Controller\Multiplayer\IngameSignalR\TroopDeadSignalR.cs" />
     <Compile Include="Assets\Scripts\Controller\CameraController.cs" />
     <Compile Include="Assets\Scripts\Data\CombatResults.cs" />
     <Compile Include="Assets\Scripts\Rawgen\Literals\Literal.cs" />
