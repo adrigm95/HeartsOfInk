@@ -93,6 +93,7 @@
     <Compile Include="Assets\Scripts\Controller\Multiplayer\GameItemController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\Scripts\Controller\MainMenu\FactionItemController.cs" />
+    <Compile Include="Assets\Scripts\DataAccess\WebServiceCallerReusable.cs" />
     <Compile Include="Assets\Scripts\Controller\MainMenu\FactionsPanelController.cs" />
     <Compile Include="Assets\Scripts\Data\Log.cs" />
     <Compile Include="Assets\Scripts\Logic\LogManager.cs" />
@@ -122,8 +123,8 @@
     <Compile Include="Assets\Scripts\Data\FactionStatistics.cs" />
     <Compile Include="Assets\Scripts\Utils\ColorUtils.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
-    <Compile Include="Assets\Scripts\Controller\OptionsMenu\OptionsSceneController.cs" />
     <Compile Include="Assets\Scripts\Utils\RandomUtils.cs" />
+    <Compile Include="Assets\Scripts\Controller\OptionsMenu\OptionsSceneController.cs" />
     <Compile Include="Assets\Scripts\Data\GlobalInfo\GlobalInfoBonus.cs" />
     <Compile Include="Assets\Scripts\Data\OptionsModel.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Assets\Scripts\Controller\CameraController.cs" />
     <Compile Include="Assets\Scripts\Data\CombatResults.cs" />
     <Compile Include="Assets\Scripts\Rawgen\Literals\Literal.cs" />
+    <Compile Include="Assets\Scripts\DataAccess\OptionsSceneDAC.cs" />
     <Compile Include="Assets\Scripts\Utils\DropdownIndexer.cs" />
     <Compile Include="Assets\Scripts\Controller\Endgame\GlobalEndgameController.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\MapEditorLogicController.cs" />
@@ -693,6 +695,18 @@
     </Reference>
     <Reference Include="Microsoft.Extensions.Logging">
       <HintPath>Assets\Plugins\SignalR\Microsoft.Extensions.Logging.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Android.Types">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.22f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Types.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Android.Gradle">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.22f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Gradle.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Android.GradleProject">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.22f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.GradleProject.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="netstandard">

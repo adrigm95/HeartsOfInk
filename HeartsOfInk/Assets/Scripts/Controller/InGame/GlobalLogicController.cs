@@ -870,6 +870,7 @@ public class GlobalLogicController : MonoBehaviour
             if (troopController != null)
             {
                 CleanTroopSelection(troopController.troopModel);
+                troopController.DestroyTroopActions(IsMultiplayerHost);
             }
 
             if (destroyer != null)

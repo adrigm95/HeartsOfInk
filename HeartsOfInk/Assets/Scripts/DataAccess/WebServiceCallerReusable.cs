@@ -8,26 +8,48 @@ using UnityEngine;
 
 namespace Assets.Scripts.DataAccess
 {
-    public enum Method { GET, PUT, POST, DELETE }
-
-    public class WebServiceCaller<S>
+    /// <summary>
+    /// Clase para realizar multiples llamadas secuenciales a servicios web del mismo servidor.
+    /// </summary>
+    /// <typeparam name="S"></typeparam>
+    public class WebServiceCallerReusable<S>
     {
-        public async Task<HOIResponseModel<S>> GenericWebServiceCaller(string baseAdress, Method method, string targetRequest)
-        {
-            WebServiceCaller<object, S> webServiceCaller = new WebServiceCaller<object, S>();
+        private WebServiceCallerReusable<object, S> webServiceCaller;
+        public bool MakingCall { get { return webServiceCaller.MakingCall; } }
 
-            return await webServiceCaller.GenericWebServiceCaller(baseAdress, method, targetRequest, null);
+        public WebServiceCallerReusable(string baseAdress)
+        {
+            webServiceCaller = new WebServiceCallerReusable<object, S>(baseAdress);
+        }
+
+        public async Task<HOIResponseModel<S>> GenericWebServiceCaller(Method method, string targetRequest)
+        {
+            return await webServiceCaller.GenericWebServiceCaller(method, targetRequest, null);
         }
     }
 
-    public class WebServiceCaller<T, S>
+    public class WebServiceCallerReusable<T, S>
     {
+        private readonly HttpClient client;
+        private bool makingCall;
+        private float totalExecutionTime;
+        private int callsMaked;
+        public float AverageTimeForCalls { get { return totalExecutionTime / callsMaked; } }
+        public bool MakingCall { get { return makingCall; } }
+
+        public WebServiceCallerReusable(string baseAddress)
+        {
+            makingCall = false;
+            client = new HttpClient();
+            client.BaseAddress = new Uri(baseAddress);
+        }
+
         /// <summary>
         /// Método genérico para llamadas a API.
         /// </summary>
         /// <param name="requestBody"> Request body to serialize as json. </param>
         /// <param name="targetRequest"> Value like "api/Home/GetData". </param>
-        public async Task<HOIResponseModel<S>> GenericWebServiceCaller(string baseAdress, Method method, string targetRequest, T requestBody)
+        public async Task<HOIResponseModel<S>> GenericWebServiceCaller(Method method, string targetRequest, T requestBody)
         {
             HOIResponseModel<S> serverResponse;
             HttpResponseMessage response = null;
@@ -38,46 +60,44 @@ namespace Assets.Scripts.DataAccess
             long end;
             TimeSpan difference;
 
+            makingCall = true;
             try
             {
                 if (requestBody != null)
                 {
                     json = JsonConvert.SerializeObject(requestBody);
 
-                    Debug.Log($"Sending to: {baseAdress + targetRequest} json: {json}");
+                    Debug.Log($"Sending to: {client.BaseAddress + targetRequest} json: {json}");
                 }
                 content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 start = DateTime.Now.Ticks;
-                using (HttpClient client = new HttpClient())
+                switch (method)
                 {
-                    client.BaseAddress = new Uri(baseAdress);
-
-                    switch (method)
-                    {
-                        case Method.POST:
-                            response = await client.PostAsync(targetRequest, content);
-                            break;
-                        case Method.PUT:
-                            response = await client.PutAsync(targetRequest, content);
-                            break;
-                        case Method.DELETE:
-                            response = await client.DeleteAsync(targetRequest);
-                            break;
-                        case Method.GET:
-                            response = await client.GetAsync(targetRequest);
-                            break;
-                    }
-
-                    responseContent = await response.Content.ReadAsStringAsync();
-                    serverResponse = JsonConvert.DeserializeObject<HOIResponseModel<S>>(responseContent);
-                    LogConnectionResponse(response.StatusCode);
-
-                    end = DateTime.Now.Ticks;
-                    difference = TimeSpan.FromTicks(end - start);
+                    case Method.POST:
+                        response = await client.PostAsync(targetRequest, content);
+                        break;
+                    case Method.PUT:
+                        response = await client.PutAsync(targetRequest, content);
+                        break;
+                    case Method.DELETE:
+                        response = await client.DeleteAsync(targetRequest);
+                        break;
+                    case Method.GET:
+                        response = await client.GetAsync(targetRequest);
+                        break;
                 }
 
-                Debug.Log("Start: " + start + " End: " + end + " Difference: " + difference);
+                responseContent = await response.Content.ReadAsStringAsync();
+                serverResponse = JsonConvert.DeserializeObject<HOIResponseModel<S>>(responseContent);
+                LogConnectionResponse(response.StatusCode);
+
+                end = DateTime.Now.Ticks;
+                difference = TimeSpan.FromTicks(end - start);
+
+                totalExecutionTime += difference.Milliseconds + (difference.Seconds * 1000);
+                callsMaked += 1;
+                Debug.Log("Avg: " + AverageTimeForCalls + " (ms); Start: " + start + " End: " + end + " Difference: " + difference);
                 LogServerResponse(serverResponse);
             }
             catch (NullReferenceException ex)
@@ -100,6 +120,10 @@ namespace Assets.Scripts.DataAccess
                 serverResponse = new HOIResponseModel<S>();
                 serverResponse.internalResultCode = InternalStatusCodes.KOConnectionCode;
                 Debug.LogError($"Error on connection: {ex} for response {responseContent}");
+            }
+            finally
+            {
+                makingCall = false;
             }
 
             return serverResponse;

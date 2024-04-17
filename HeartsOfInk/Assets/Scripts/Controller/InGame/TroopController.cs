@@ -197,6 +197,19 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
         //TODO: SEPT-23-008
     }
 
+    /// <summary>
+    /// Se llama cuando la tropa es destruida para realizar operaciones de limpieza.
+    /// </summary>
+    public void DestroyTroopActions(bool isMultiplayerHost)
+    {
+        combatingEnemys.Clear();
+
+        if (isMultiplayerHost)
+        {
+            stateController.TroopDistroyed(this);
+        }
+    }
+
     public void EndSelection()
     {
         EndAnimation();
@@ -380,5 +393,4 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
     {
         combatingEnemys.RemoveAll(item => item == null);
     }
-
 }

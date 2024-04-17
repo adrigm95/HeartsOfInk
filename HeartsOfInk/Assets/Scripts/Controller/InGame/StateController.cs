@@ -20,7 +20,8 @@ public class StateController : MonoBehaviour
     private GameStateModel GameStateModel { get; set; }
     private GlobalLogicController globalLogic { get; set; }
     private float lastStateUpdate = 0;
-    private WebServiceCaller<GameStateModelIn, bool> wsCaller;
+    private WebServiceCallerReusable<GameStateModelIn, bool> wsCallerSend;
+    private WebServiceCallerReusable<GameStateModel> wsCallerReceive;
     public Text txtIsMultiplayer;
 
     // Start is called before the first frame update
@@ -28,7 +29,8 @@ public class StateController : MonoBehaviour
     {
         Debug.Log("Start - State Controller");
 
-        wsCaller = new WebServiceCaller<GameStateModelIn, bool>();
+        wsCallerSend = new WebServiceCallerReusable<GameStateModelIn, bool>(ApiConfig.IngameServerUrl);
+        wsCallerReceive = new WebServiceCallerReusable<GameStateModel>(ApiConfig.IngameServerUrl);
         globalLogic = FindObjectOfType<GlobalLogicController>();
         GameStateModel = new GameStateModel();
         GameStateModel.CitiesStates = new Dictionary<string, CityStateModel>();
@@ -56,16 +58,14 @@ public class StateController : MonoBehaviour
     public async void GetStateGame()
     {
         HOIResponseModel<GameStateModel> response;
-        WebServiceCaller<GameStateModel> wsCaller;
         string serviceParameters;
 
         if (UpdateStateRequired())
         {
             Debug.Log($"lastStateUpdate (as client): {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
             lastStateUpdate = Time.realtimeSinceStartup;
-            wsCaller = new WebServiceCaller<GameStateModel>();
             serviceParameters = $"playername={globalLogic.thisPcPlayer.Name}&gamekey={GameStateModel.Gamekey}";
-            response = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.GET, "api/StateGame?" + serviceParameters);
+            response = await wsCallerReceive.GenericWebServiceCaller(Method.GET, "api/StateGame?" + serviceParameters);
 
             if (response.serviceResponse.TimeSinceStart > GameStateModel.TimeSinceStart)
             {
@@ -109,11 +109,16 @@ public class StateController : MonoBehaviour
         }
     }
 
+    public void TroopDistroyed(TroopController troop)
+    {
+        GameStateModel.TroopsStates.Remove(troop.transform.name);
+    }
+
     public async void SendStateGame()
     {
-        if (UpdateStateRequired())
+        if (UpdateStateRequired() && !wsCallerSend.MakingCall)
         {
-            GameStateModelIn sgm = new GameStateModelIn()
+            GameStateModelIn stateModel = new GameStateModelIn()
             {
                 PlayerName = globalLogic.thisPcPlayer.Name,
                 GameStateModel = GameStateModel
@@ -128,7 +133,7 @@ public class StateController : MonoBehaviour
 
             Debug.Log($"lastStateUpdate (as Host): {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
             lastStateUpdate = Time.realtimeSinceStartup;
-            await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/StateGame", sgm);
+            await wsCallerSend.GenericWebServiceCaller(Method.POST, "api/StateGame", stateModel);
         }
     }
 

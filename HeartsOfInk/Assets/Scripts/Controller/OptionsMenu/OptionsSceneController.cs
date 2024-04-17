@@ -1,4 +1,5 @@
 using Assets.Scripts.Data.GlobalInfo;
+using Assets.Scripts.DataAccess;
 using HeartsOfInk.SharedLogic;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,28 +17,26 @@ public class OptionsSceneController : MonoBehaviour
     public Toggle selectTroopRightBtn;
     public Toggle moveAttackRightBtn;
 
-    // Start is called before the first frame update
-    //void Start()
-    //{
-
-    //}
-    public static OptionsModel LoadOptionsPreferences()
+    public void Start()
     {
-        string optionsPreferencesPath = Application.streamingAssetsPath + OptionsModel.PreferencesInfoFile;
+        OptionsModel optionsModel = OptionsSceneDAC.LoadOptionsPreferences();
 
-        return JsonCustomUtils<OptionsModel>.ReadObjectFromFile(optionsPreferencesPath);
+        if (optionsModel == null)
+        {
+            Debug.LogWarning("No se ha podido cargar el fichero de opciones.");
+        }
+        else
+        {
+            // TODO: Modificar los valores de la pantalla de opciones para que usen los del modelo de opciones.
+        }
     }
+
     public void SaveOptions()
     {
         OptionsModel optionsPreferences = new OptionsModel();
-        SaveOptionsPreferences(optionsPreferences);
+        OptionsSceneDAC.SaveOptionsPreferences(optionsPreferences);
     }
-    public void SaveOptionsPreferences(OptionsModel optionsPreferences)
-    {
-        string optionsPreferencesPath = Application.streamingAssetsPath + OptionsModel.PreferencesInfoFile;
 
-        JsonCustomUtils<OptionsModel>.SaveObjectIntoFile(optionsPreferences, optionsPreferencesPath);
-    }
     public void CheckBtn(Toggle buttonSelected)
     {
         if (buttonSelected.isOn && buttonSelected == selectTroopLeftBtn)

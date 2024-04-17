@@ -9,7 +9,7 @@
 
         // Red Local
         //public const string LobbyHOIServerUrl = "http://192.168.1.134:5000/";
-        //public const string IngameServerUrl = "http://192.168.1.134:7001/";
+        //public const string IngameServerUrl = "http://192.168.1.135:7001/";
         //public const string LoggingServerUrl = "http://192.168.1.134:44356/";
 
         // Preproducción
@@ -22,6 +22,6 @@
         /// <summary>
         /// Delay in seconds between calls to server for update states.
         /// </summary>
-        public const float DelayBetweenStateUpdates = 0.12f;
+        public const float DelayBetweenStateUpdates = 0.010f;
     }
 }
