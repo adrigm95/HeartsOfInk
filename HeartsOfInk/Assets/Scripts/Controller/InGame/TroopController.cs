@@ -178,10 +178,29 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
     {
         animator.gameObject.SetActive(false);
     }
-
+    [Obsolete("Use IsAllyTroop instead")]
     public bool IsSelectable(int owner)
     {
         return troopModel.Player.MapSocketId == owner;
+    }
+
+    public bool IsPcPlayer()
+    {
+        return troopModel.Player.MapSocketId == globalLogic.thisPcPlayer.MapSocketId;
+  
+    }
+    public bool IsAllyTroop()
+    {
+        Debug.Log("Alliance: " + troopModel.Player.Alliance);
+        Debug.Log("Alliance 2: " + globalLogic.thisPcPlayer.Alliance);
+        if (globalLogic.thisPcPlayer.Alliance == 0)
+        {
+            return IsPcPlayer();
+        }
+        else
+        {
+            return troopModel.Player.Alliance == globalLogic.thisPcPlayer.Alliance;
+        }
     }
 
     public GameObject GetGameObject()

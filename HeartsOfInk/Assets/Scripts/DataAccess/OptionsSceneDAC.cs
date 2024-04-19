@@ -21,7 +21,7 @@ namespace Assets.Scripts.DataAccess
             {
                 return null;
             }
-
+            
         }
 
         public static void SaveOptionsPreferences(OptionsModel optionsPreferences)
