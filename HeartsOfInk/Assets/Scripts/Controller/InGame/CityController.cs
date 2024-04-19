@@ -1,9 +1,9 @@
-﻿using Assets.Scripts.Data;
-using Assets.Scripts.Utils;
-using NETCoreServer.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Data;
+using Assets.Scripts.Utils;
+using NETCoreServer.Models;
 using UnityEngine;
 
 public class CityController : MonoBehaviour
@@ -15,6 +15,7 @@ public class CityController : MonoBehaviour
     private float recruitmentProgress = 0;
     public Player Owner;
     public bool IsCapital;
+    public int Faction { get; set; }
 
     public void Awake()
     {
@@ -27,7 +28,7 @@ public class CityController : MonoBehaviour
         globalLogic = FindObjectOfType<GlobalLogicController>();
         stateHolder = FindObjectOfType<StateController>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.color = ColorUtils.GetColorByString(Owner.Color);   
+        spriteRenderer.color = ColorUtils.GetColorByString(Owner.Color);
     }
 
     // Update is called once per frame
@@ -79,9 +80,10 @@ public class CityController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"Error detecting collision for city {this.name} and troop {collision.gameObject.name}, exception: {ex.Message}");
+            Debug.LogError(
+                $"Error detecting collision for city {this.name} and troop {collision.gameObject.name}, exception: {ex.Message}"
+            );
         }
-        
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -102,7 +104,10 @@ public class CityController : MonoBehaviour
         {
             if (troopsInZone[0].troopModel.Player != Owner)
             {
-                if (Owner.Alliance == Player.NoAlliance || troopsInZone[0].troopModel.Player.Alliance != Owner.Alliance)
+                if (
+                    Owner.Alliance == Player.NoAlliance
+                    || troopsInZone[0].troopModel.Player.Alliance != Owner.Alliance
+                )
                 {
                     ChangeOwner(troopsInZone[0].troopModel.Player);
                 }
@@ -159,13 +164,33 @@ public class CityController : MonoBehaviour
 
         if (Owner.Faction.Bonus.BonusId != Bonus.Id.NoArmy)
         {
-            recruitmentProgress += Time.deltaTime * globalLogic.GameSpeed * capitalBonus * recruitmentSpeed;
+            recruitmentProgress +=
+                Time.deltaTime * globalLogic.GameSpeed * capitalBonus * recruitmentSpeed;
         }
 
         if (recruitmentProgress > GlobalConstants.DefaultCompanySize)
         {
-            globalLogic.InstantiateTroopSingleplayer(GlobalConstants.DefaultCompanySize, this.transform.position, Owner);
+            globalLogic.InstantiateTroopSingleplayer(
+                GlobalConstants.DefaultCompanySize,
+                this.transform.position,
+                Owner
+            );
             recruitmentProgress = 0;
         }
+    }
+
+    public List<TroopController> GetTroopsInZone()
+    {
+        return troopsInZone;
+    }
+
+    public int GetTotalUnitsInZone()
+    {
+        int totalUnits = 0;
+        foreach (TroopController troop in troopsInZone)
+        {
+            totalUnits += troop.troopModel.Units;
+        }
+        return totalUnits;
     }
 }
