@@ -1,4 +1,5 @@
 using HeartsOfInk.SharedLogic;
+using System.IO;
 using UnityEngine;
 
 namespace Assets.Scripts.DataAccess
@@ -11,14 +12,22 @@ namespace Assets.Scripts.DataAccess
         public static OptionsModel LoadOptionsPreferences()
         {
             string optionsPreferencesPath = GetOptionsFilePath();
+            if (File.Exists(optionsPreferencesPath))
+            {
+                return JsonCustomUtils<OptionsModel>.ReadObjectFromFile(optionsPreferencesPath);
 
-            return JsonCustomUtils<OptionsModel>.ReadObjectFromFile(optionsPreferencesPath);
+            } 
+            else
+            {
+                return null;
+            }
+
         }
 
         public static void SaveOptionsPreferences(OptionsModel optionsPreferences)
         {
             string optionsPreferencesPath = GetOptionsFilePath();
-
+            Debug.Log(optionsPreferencesPath);
             JsonCustomUtils<OptionsModel>.SaveObjectIntoFile(optionsPreferences, optionsPreferencesPath);
         }
 
