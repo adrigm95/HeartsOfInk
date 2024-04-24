@@ -1721,7 +1721,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -140, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 150, y: 30}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &321013821
 MonoBehaviour:
@@ -7067,6 +7067,7 @@ MonoBehaviour:
   mainMenuButton: {fileID: 0}
   exitToMenuButton: {fileID: 753557355}
   startGame: {fileID: 5135278583460072850}
+  optionsButton: {fileID: 0}
   mapEditorButton: {fileID: 0}
 --- !u!4 &1893032737
 Transform:
