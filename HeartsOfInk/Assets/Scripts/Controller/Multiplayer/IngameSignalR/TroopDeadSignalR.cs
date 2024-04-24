@@ -62,6 +62,8 @@ public class TroopDeadSignalR
     {
         try
         {
+            // Ver si al final se usa esta clase de signalR o simplemente se actualiza el modelo
+            // comprobando en cada frame si la tropa ha sido destruida.
         }
         catch (Exception ex)
         {

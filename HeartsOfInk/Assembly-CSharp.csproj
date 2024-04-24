@@ -9,8 +9,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{7C735C62-2E55-5B97-87B9-B6BF5488B37F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -61,7 +60,6 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.22f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Controller\ChangeCursorController.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\LobbySignalR\LobbyHOIHub.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\EditorTroopController.cs" />
     <Compile Include="Assets\Scripts\Controller\MenuPanelController.cs" />
@@ -85,6 +83,7 @@
     <Compile Include="Assets\Scripts\Controller\MapEditor\CreateMapPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\ScoreDisplay.cs" />
     <Compile Include="Assets\Scripts\Rawgen\RuntimeColliderManager2D.cs" />
+    <Compile Include="Assets\Scripts\Controller\ChangeCursorController.cs" />
     <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialModel.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
@@ -103,6 +102,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\Scripts\Data\MultiplayerStateModels\TroopStateModel.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\ConfigGameController.cs" />
+    <Compile Include="Assets\Scripts\Data\MultiplayerStateModels\AttackTroopModel.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\GamesListController.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\CreateGameController.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\LanguageConstants.cs" />
@@ -149,6 +149,7 @@
     <Compile Include="Assets\Scripts\Controller\InGame\TutorialController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialStep.cs" />
+    <Compile Include="Assets\Scripts\Data\MultiplayerStateModels\MoveTroopModel.cs" />
     <Compile Include="Assets\Scripts\Controller\MapController.cs" />
     <Compile Include="Assets\Scripts\Utils\VectorUtils.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\IngameSignalR\StartGameIngameSignalR.cs" />
@@ -162,10 +163,12 @@
     <Compile Include="Assets\Scripts\Rawgen\Models\CachedCollider2D.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
+    <Compile Include="Assets\Scripts\Controller\Multiplayer\IngameSignalR\AttackTroopSignalR.cs" />
     <Compile Include="Assets\Scripts\Data\EditorModels\EditorConfigLine.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Scripts\Controller\MapEditor\EditorPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\IObjectSelectable.cs" />
+    <Compile Include="Assets\Scripts\Controller\Multiplayer\IngameSignalR\MoveTroopSignalR.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\PlayerPrefsData.cs" />
     <Compile Include="Assets\Scripts\Data\Literals\BonusLiterals.cs" />
     <Compile Include="Assets\Scripts\Data\Literals\LiteralModel.cs" />

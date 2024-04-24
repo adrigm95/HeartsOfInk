@@ -51,6 +51,8 @@ public class IngameHOIHub
                     Debug.Log("Setting signalR connection.ON");
                     StartGameIngameSignalR.Instance.SusbcribeReceiver(this, connection);
                     TroopDeadSignalR.Instance.SusbcribeReceiver(this, connection);
+                    AttackTroopSignalR.Instance.SusbcribeReceiver(this, connection);
+                    MoveTroopSignalR.Instance.SusbcribeReceiver(this, connection);
                     Debug.Log("Starting connection with signalR");
                     await connection.StartAsync();
                     return;
@@ -66,13 +68,13 @@ public class IngameHOIHub
         }
     }
 
-    public async void SuscribeToRoom(string room, string playerName)
+    public async void SuscribeToRoom(string room, byte playerId)
     {
         try
         {
             StartConnection();
 
-            await connection.InvokeAsync("AddToGroup", room, playerName);
+            await connection.InvokeAsync("AddToGroup", room, playerId);
         }
         catch (Exception ex)
         {

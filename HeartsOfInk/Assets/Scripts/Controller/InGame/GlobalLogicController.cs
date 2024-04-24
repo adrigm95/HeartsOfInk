@@ -103,7 +103,9 @@ public class GlobalLogicController : MonoBehaviour
             {
                 ChangeSpeed(GameSpeedConstants.PlaySpeed);
                 //waitingPanel.Show(this);
-                IngameHOIHub.Instance.SuscribeToRoom(gameModel.GameKey, thisPcPlayer.Name);
+
+                Debug.Log("Subscribe to IngameHOIServer with player id: " + thisPcPlayer.MapSocketId);
+                IngameHOIHub.Instance.SuscribeToRoom(gameModel.GameKey, thisPcPlayer.MapSocketId);
                 StartGameIngameSignalR.Instance.SendClientReady(gameModel.GameKey);
             }
         }
@@ -739,7 +741,20 @@ public class GlobalLogicController : MonoBehaviour
                         TroopController selectedTroop = selectedTroopObject.GetComponent<TroopController>();
 
                         Debug.Log("New target for troop: " + newSelection);
-                        selectedTroop.troopModel.SetTarget(newSelection.gameObject, this);
+
+                        if (IsMultiplayerClient)
+                        {
+                            AttackTroopSignalR.Instance.SendAttackTroop(
+                                gameModel.GameKey,
+                                selectedTroop.gameObject.name,
+                                newSelection.gameObject.name,
+                                Time.realtimeSinceStartup
+                                );
+                        }
+                        else
+                        {
+                            selectedTroop.troopModel.SetTarget(newSelection.gameObject, this);
+                        }
                     }
 
                     EndSelection();
@@ -812,9 +827,22 @@ public class GlobalLogicController : MonoBehaviour
                 {
                     TroopController selectedTroop = selectedTroopObject.GetComponent<TroopController>();
 
-                    selectedTroop.troopModel.SetTarget(new GameObject(GlobalConstants.EmptyTargetName), this);
-                    selectedTroop.troopModel.Target.transform.position = mouseClickPosition;
-                    selectedTroop.troopModel.Target.transform.parent = emptyTargetsHolder.transform;
+                    if (IsMultiplayerClient)
+                    {
+                        MoveTroopSignalR.Instance.SendMoveTroop(
+                            gameModel.GameKey,
+                            mouseClickPosition.ToString(),
+                            selectedTroopObject.name,
+                            Time.realtimeSinceStartup
+                            );
+                    }
+                    else
+                    {
+                        selectedTroop.troopModel.SetTarget(new GameObject(GlobalConstants.EmptyTargetName), this);
+                        selectedTroop.troopModel.Target.transform.position = mouseClickPosition;
+                        selectedTroop.troopModel.Target.transform.parent = emptyTargetsHolder.transform;
+                    }
+
                     targetMarkerController.SetTargetPosition(mouseClickPosition, true);
                 }
 

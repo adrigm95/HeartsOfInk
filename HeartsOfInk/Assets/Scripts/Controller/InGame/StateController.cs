@@ -1,9 +1,14 @@
-﻿using Assets.Scripts.Data.Constants;
+﻿using AnalyticsServer.Models;
+using Assets.Scripts.Data;
+using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.MultiplayerStateModels;
 using Assets.Scripts.DataAccess;
+using Assets.Scripts.Utils;
 using NETCoreServer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,11 +22,15 @@ public class StateController : MonoBehaviour
     /// </summary>
     public int LastTroopAdded { get; set; }
 
+    private WebServiceCaller<LogExceptionDto, bool> exceptionSender = new WebServiceCaller<LogExceptionDto, bool>();
+
     private GameStateModel GameStateModel { get; set; }
     private GlobalLogicController globalLogic { get; set; }
     private float lastStateUpdate = 0;
     private WebServiceCallerReusable<GameStateModelIn, bool> wsCallerSend;
     private WebServiceCallerReusable<GameStateModel> wsCallerReceive;
+    private Dictionary<string, AttackTroopModel> attackTroopOrders;
+    private Dictionary<string, MoveTroopModel> moveTroopOrders;
     public Text txtIsMultiplayer;
 
     // Start is called before the first frame update
@@ -38,6 +47,9 @@ public class StateController : MonoBehaviour
         GameStateModel.Gamekey = globalLogic?.gameModel?.GameKey;
         GameStateModel.TimeSinceStart = Time.realtimeSinceStartup;
 
+        attackTroopOrders = new Dictionary<string, AttackTroopModel>();
+        moveTroopOrders = new Dictionary<string, MoveTroopModel>();
+
         Debug.Log("Start - Gamekey from globalLogic: " + globalLogic?.gameModel?.GameKey);
     }
 
@@ -48,6 +60,8 @@ public class StateController : MonoBehaviour
         if (globalLogic.IsMultiplayerHost)
         {
             SendStateGame();
+            ReceiveAttackOrders();
+            ReceiveMoveOrders();
         }
         else if (globalLogic.IsMultiplayerClient)
         {
@@ -205,5 +219,126 @@ public class StateController : MonoBehaviour
         GameStateModel.TroopsStates.TryGetValue(troopName, out result);
 
         return result;
+    }
+
+    private void ReceiveMoveOrders()
+    {
+        foreach (MoveTroopModel moveTroopModel in MoveTroopSignalR.Instance.GetMoveTroopReceived())
+        {
+            ReceiveMoveOrder(moveTroopModel);
+        }
+    }
+
+    public void ReceiveMoveOrder(MoveTroopModel moveTroopModel)
+    {
+        AttackTroopModel currentAttackOrder;
+        MoveTroopModel currentMoveOrder;
+        bool haveAttackOrder;
+        bool haveMoveOrder;
+
+        try
+        {
+            haveAttackOrder = attackTroopOrders.TryGetValue(moveTroopModel.TroopName, out currentAttackOrder);
+            haveMoveOrder = moveTroopOrders.TryGetValue(moveTroopModel.TroopName, out currentMoveOrder);
+
+            if (haveAttackOrder)
+            {
+                if (currentAttackOrder.TimeSinceStart < moveTroopModel.TimeSinceStart)
+                {
+                    attackTroopOrders.Remove(moveTroopModel.TroopName);
+                    moveTroopOrders.Add(moveTroopModel.TroopName, moveTroopModel);
+                }
+            }
+            else if (haveMoveOrder)
+            {
+                if (currentMoveOrder.TimeSinceStart < moveTroopModel.TimeSinceStart)
+                {
+                    moveTroopOrders.Remove(moveTroopModel.TroopName);
+                    moveTroopOrders.Add(moveTroopModel.TroopName, moveTroopModel);
+                }
+            }
+            else
+            {
+                moveTroopOrders.Add(moveTroopModel.TroopName, moveTroopModel);
+            }
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+        }
+    }
+
+    private void ReceiveAttackOrders()
+    {
+        foreach (AttackTroopModel attackTroopModel in AttackTroopSignalR.Instance.GetAttackTroopReceived())
+        {
+            ReceiveAttackOrder(attackTroopModel);
+        }
+    }
+
+    public void ReceiveAttackOrder(AttackTroopModel attackTroopModel)
+    {
+        AttackTroopModel currentAttackOrder;
+        MoveTroopModel currentMoveOrder;
+        bool haveAttackOrder;
+        bool haveMoveOrder;
+
+        try
+        {
+            haveAttackOrder = attackTroopOrders.TryGetValue(attackTroopModel.Attacker, out currentAttackOrder);
+            haveMoveOrder = moveTroopOrders.TryGetValue(attackTroopModel.Attacker, out currentMoveOrder);
+
+            if (haveAttackOrder)
+            {
+                if (currentAttackOrder.TimeSinceStart < attackTroopModel.TimeSinceStart)
+                {
+                    attackTroopOrders.Remove(attackTroopModel.Attacker);
+                    attackTroopOrders.Add(attackTroopModel.Attacker, attackTroopModel);
+                }
+            }
+            else if (haveMoveOrder)
+            {
+                if (currentMoveOrder.TimeSinceStart < attackTroopModel.TimeSinceStart)
+                {
+                    moveTroopOrders.Remove(attackTroopModel.Attacker);
+                    attackTroopOrders.Add(attackTroopModel.Attacker, attackTroopModel);
+                }
+            }
+            else
+            {
+                attackTroopOrders.Add(attackTroopModel.Attacker, attackTroopModel);
+            }
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+        }
+    }
+
+    public void SetTroopOrderInModel(
+        string troopName, 
+        TroopModel troopModel, 
+        GameObject emptyTargetsHolder,
+        TargetPositionMarkerController targetMarkerController)
+    {
+        AttackTroopModel attackedTroop;
+        MoveTroopModel moveTroopModel;
+
+        if (attackTroopOrders.TryGetValue(troopName, out attackedTroop))
+        {
+            //TODO: Buscar la forma de encontrar la tropa deseada.
+            //troopModel.SetTarget(newSelection.gameObject, globalLogic);
+            attackTroopOrders.Remove(troopName);
+        }
+        else if (moveTroopOrders.TryGetValue(troopName, out moveTroopModel))
+        {
+            Vector3 mouseClickPosition = VectorUtils.StringToVector3(moveTroopModel.Position);
+
+            troopModel.SetTarget(new GameObject(GlobalConstants.EmptyTargetName), globalLogic);
+            troopModel.Target.transform.position = mouseClickPosition;
+            troopModel.Target.transform.parent = emptyTargetsHolder.transform;
+            targetMarkerController.SetTargetPosition(mouseClickPosition, false);
+            moveTroopOrders.Remove(troopName);
+        }
     }
 }

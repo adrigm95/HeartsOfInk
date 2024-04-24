@@ -67,6 +67,7 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
             if (globalLogic.IsMultiplayerHost)
             {
                 stateController.SetTroopState(this.name, troopModel.Units, this.transform.position, troopModel.Player);
+                stateController.SetTroopOrderInModel(this.name, troopModel, globalLogic.emptyTargetsHolder, globalLogic.targetMarkerController);
             }
         }
         else if (globalLogic.IsMultiplayerClient)
