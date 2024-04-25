@@ -6,7 +6,7 @@ namespace Assets.Scripts.DataAccess
 {
     internal class GlobalInfoDAC
     {
-        private const string GlobalInfoFile = "/_GlobalInfo.json";
+        public const string GlobalInfoFile = "/_GlobalInfo.json";
 
         public static GlobalInfo LoadGlobalMapInfo()
         {

@@ -159,9 +159,7 @@ public class StartGameController : MonoBehaviour
     private void GetSingleplayerOptions(GameModel gameModel)
     {
         // Singleplayer: newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + player.MapSocketId;
-
-        string globalInfoPath = Application.streamingAssetsPath + "/_GlobalInfo.json";
-        GlobalInfo globalInfo = JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
+        GlobalInfo globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
 
         foreach (Transform holderChild in factionDropdownsHolder)
         {
@@ -200,8 +198,7 @@ public class StartGameController : MonoBehaviour
     private void GetMultiplayerOptions(GameModel gameModel)
     {
         // Multiplayer: string ObjetName = "factionLine" + "_" + configLine.MapSocketId;
-        string globalInfoPath = Application.streamingAssetsPath + "/_GlobalInfo.json";
-        GlobalInfo globalInfo = JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
+        GlobalInfo globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
 
         foreach (ConfigLineModel configLine in configGameController.GetConfigLinesForMultiplayer())
         {

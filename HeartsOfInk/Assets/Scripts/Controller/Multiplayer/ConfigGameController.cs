@@ -15,7 +15,6 @@ using UnityEngine.UI;
 
 public class ConfigGameController : MonoBehaviour
 {
-    private readonly string RootPath = Application.streamingAssetsPath;
     /// <summary>
     /// Tiempo en segundos tras el cual hay que notificar al servidor que aun estamos configurando la partida.
     /// </summary>
@@ -180,7 +179,7 @@ public class ConfigGameController : MonoBehaviour
             {
                 GameKey = gameKey
             });
-            _mapModel = MapDAC.LoadMapInfoById(mapId, RootPath);
+            _mapModel = MapDAC.LoadMapInfoById(mapId, Application.streamingAssetsPath);
             globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
             LobbyHOIHub.Instance.SuscribeToRoom(txtGamekey.text);
             MapController.Instance.UpdateMap(_mapModel.SpritePath);
