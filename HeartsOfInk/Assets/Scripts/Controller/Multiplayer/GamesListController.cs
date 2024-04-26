@@ -20,13 +20,17 @@ public class GamesListController : MonoBehaviour
 
     public Vector2 nextItemPosition;
     public float MinifiedSize;
+    public float TimeClicked;
+    public float TimeToNotifyActive = 2;
     public float OneGreatAndFreeSize;
     public JoinGameController joinGameController;
     public InfoPanelController infoPanelController;
-
+    public Button reloadButton;
+    private float initialYPosition;
     // Start is called before the first frame update
     void Start()
     {
+        initialYPosition = nextItemPosition.y;
         gameItemSelected = null;
         rectTransform = transform.GetComponent<RectTransform>();
         width = rectTransform.sizeDelta.x;
@@ -36,7 +40,7 @@ public class GamesListController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //TODO: Recargar la lista cada cierto tiempo.
+        UnlockButton();
     }
 
     /// <summary>
@@ -65,8 +69,22 @@ public class GamesListController : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        nextItemPosition.y = initialYPosition;
+    }   
+    public void ReloadGamesList()
+    {
+        reloadButton.interactable = false;
+        TimeClicked = Time.realtimeSinceStartup;
+        CleanList();
+        LoadGames();
     }
-
+    public void UnlockButton()
+    {
+        if (Time.realtimeSinceStartup > TimeClicked + TimeToNotifyActive)
+        {
+            reloadButton.interactable = true;
+        }
+    }
     private async void LoadGames()
     {
         WebServiceCaller<List<BasicGameInfo>> wsCaller = new WebServiceCaller<List<BasicGameInfo>>();
