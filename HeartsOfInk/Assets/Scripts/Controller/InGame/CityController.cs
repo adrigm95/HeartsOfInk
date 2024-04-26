@@ -15,7 +15,6 @@ public class CityController : MonoBehaviour
     private float recruitmentProgress = 0;
     public Player Owner;
     public bool IsCapital;
-    public int Faction { get; set; }
 
     public void Awake()
     {
