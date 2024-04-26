@@ -49,4 +49,5 @@ public class ScoreDisplay : MonoBehaviour
             scoreTexts[i].text = "Facción " + (i+1) + ": " + scoreTotal[i];
         }
     }
+
 }
