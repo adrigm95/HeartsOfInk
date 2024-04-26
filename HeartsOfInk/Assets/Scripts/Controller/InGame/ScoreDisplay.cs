@@ -27,14 +27,20 @@ public class ScoreDisplay : MonoBehaviour
 
     void Update()
     {
-        GameObject[] cities = GameObject.FindGameObjectsWithTag("City");
-        foreach (GameObject city in cities)
+        GameObject[] troops = GameObject.FindGameObjectsWithTag("Troop");
+
+        for (int index = 0; index < scoreTotal.Length; index++)
         {
-            CityController cityController = city.GetComponent<CityController>();
-            if (cityController != null)
+            scoreTotal[index] = 0;
+        }
+
+        foreach (GameObject troop in troops)
+        {
+            TroopController troopController = troop.GetComponent<TroopController>();
+            if (troopController != null)
             {
-                int factionIndex = cityController.Faction;
-                scoreTotal[factionIndex] += cityController.GetTotalUnitsInZone();
+                int factionIndex = troopController.troopModel.Player.MapSocketId;
+                scoreTotal[factionIndex] += troopController.troopModel.Units;
             }
         }
 
