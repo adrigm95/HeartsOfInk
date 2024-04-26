@@ -38,7 +38,6 @@ public class OptionsSceneController : MonoBehaviour
         optionsPreferences.SelectTroopPref = OptionsModel.LeftRightEnum.Left;
         optionsPreferences.MusicPref = 1;
         optionsPreferences.SoundEffectsPref = 1;
-        Debug.Log(optionsPreferences);
         OptionsSceneDAC.SaveOptionsPreferences(optionsPreferences);
     }
     public void SaveOptions()

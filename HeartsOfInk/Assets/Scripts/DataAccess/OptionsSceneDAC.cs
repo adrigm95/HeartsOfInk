@@ -27,7 +27,6 @@ namespace Assets.Scripts.DataAccess
         public static void SaveOptionsPreferences(OptionsModel optionsPreferences)
         {
             string optionsPreferencesPath = GetOptionsFilePath();
-            Debug.Log(optionsPreferencesPath);
             JsonCustomUtils<OptionsModel>.SaveObjectIntoFile(optionsPreferences, optionsPreferencesPath);
         }
 
