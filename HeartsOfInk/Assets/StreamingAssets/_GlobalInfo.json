@@ -14,10 +14,12 @@
 				}
 			],
 			"Descriptions": [
-			{
-			  "Language": "ES-es",
-			  "Value": "El pueblo no puede soportar más la opresión, la explotación desmedida para disfrute de unos pocos.\r\n\r\nLos rebeldes son la facción del pueblo, y lucharán sin descanso por un mundo más justo e igualitario.\r\n\r\n¡La revolución está en marcha!"
-			}]
+				{
+					"Language": "ES-es",
+					"Value": "El pueblo no puede soportar más la opresión, la explotación desmedida para disfrute de unos pocos.\r\n\r\nLos rebeldes son la facción del pueblo, y lucharán sin descanso por un mundo más justo e igualitario.\r\n\r\n¡La revolución está en marcha!"
+				}
+			],
+			"IANames": ["Stalindo", "Juana", "Bolivariano"]
 		},
 		{
 			"Id": 1,
@@ -33,10 +35,12 @@
 				}
 			],
 			"Descriptions": [
-			{
-			  "Language": "ES-es",
-			  "Value": "El imperio está en crisis: Los nuevos ideales republicanos, las huelgas obreras... ¡Y ahora también rebeliones en las colonias!\r\n\r\nEl gobierno debe tomar cartas en el asunto, restablecer el orden y la gloria del imperio es ahora más necesario que nunca."
-			}]
+				{
+					"Language": "ES-es",
+					"Value": "El imperio está en crisis: Los nuevos ideales republicanos, las huelgas obreras... ¡Y ahora también rebeliones en las colonias!\r\n\r\nEl gobierno debe tomar cartas en el asunto, restablecer el orden y la gloria del imperio es ahora más necesario que nunca."
+				}
+			],
+			"IANames": [ "De la cuesta", "Mijallo", "Milan Destroy"]
 		},
 		{
 			"Id": 2,
@@ -52,10 +56,12 @@
 				}
 			],
 			"Descriptions": [
-			{
-			  "Language": "ES-es",
-			  "Value": "Los Vukis son una tribu formada a partir de esclavos manumitidos a lo largo de los siglos.\r\n\r\nConforme su número aumentaba, el gobierno y los grandes terratenientes fueron mirandoles con cada vez peores ojos.\r\n\r\n¡Los Vukis jamás volverán a someterse!"
-			}]
+				{
+					"Language": "ES-es",
+					"Value": "Los Vukis son una tribu formada a partir de esclavos manumitidos a lo largo de los siglos.\r\n\r\nConforme su número aumentaba, el gobierno y los grandes terratenientes fueron mirandoles con cada vez peores ojos.\r\n\r\n¡Los Vukis jamás volverán a someterse!"
+				}
+			],
+			"IANames": [ "Diagne", "Ndiaye", "Diop" ]
 		},
 		{
 			"Id": 3,
@@ -71,10 +77,12 @@
 				}
 			],
 			"Descriptions": [
-			{
-			  "Language": "ES-es",
-			  "Value": "Los nómadas del desierto son un conjunto de clanes muy beligerantes que existen desde antes de la llegada del imperio. Una vez que el imperio abandonó la tentativa de conquistar el desierto, establecieron fructiferas relaciones comerciales.\r\n\r\nAhora que soplan vientos de cambio ¿En que bando se posicionarán los nómadas?"
-			}]
+				{
+					"Language": "ES-es",
+					"Value": "Los nómadas del desierto son un conjunto de clanes muy beligerantes que existen desde antes de la llegada del imperio. Una vez que el imperio abandonó la tentativa de conquistar el desierto, establecieron fructiferas relaciones comerciales.\r\n\r\nAhora que soplan vientos de cambio ¿En que bando se posicionarán los nómadas?"
+				}
+			],
+			"IANames": [ "Abdulasis", "Ahmed", "Gingivitis Khan" ]
 		},
 		{
 			"Id": 4,
@@ -90,10 +98,12 @@
 				}
 			],
 			"Descriptions": [
-			{
-			  "Language": "ES-es",
-			  "Value": "Reino de España"
-			}]
+				{
+					"Language": "ES-es",
+					"Value": "Reino de España"
+				}
+			],
+			"IANames": ["González", "De la vega", "García Pérez"]
 		},
 		{
 			"Id": 5,
@@ -109,10 +119,12 @@
 				}
 			],
 			"Descriptions": [
-			{
-			  "Language": "ES-es",
-			  "Value": "Marruecos"
-			}]
+				{
+					"Language": "ES-es",
+					"Value": "Marruecos"
+				}
+			],
+			"IANames": [ "Belkhayat", "El Hachimi", "Benabdallah" ]
 		},
 		{
 			"Id": 6,
@@ -128,10 +140,12 @@
 				}
 			],
 			"Descriptions": [
-			{
-			  "Language": "ES-es",
-			  "Value": "Tunisia"
-			}]
+				{
+					"Language": "ES-es",
+					"Value": "Tunisia"
+				}
+			],
+			"IANames": [ "Ben Amor", "Ben Youssef", "Ben Mansour" ]
 		},
 		{
 			"Id": 7,
@@ -147,10 +161,12 @@
 				}
 			],
 			"Descriptions": [
-			{
-			  "Language": "ES-es",
-			  "Value": "Italia"
-			}]
+				{
+					"Language": "ES-es",
+					"Value": "Italia"
+				}
+			],
+			"IANames": [ "Ben Amor", "Ben Youssef", "Ben Mansour" ]
 		},
 		{
 			"Id": 8,
@@ -166,10 +182,12 @@
 				}
 			],
 			"Descriptions": [
-			{
-			  "Language": "ES-es",
-			  "Value": "Las facción de las ciudades libres es la facción que reune a las ciudades que son neutrales al inicio de la partida.\r\n\r\nEsta facción no es seleccionable por parte de los jugadores."
-			}]
+				{
+					"Language": "ES-es",
+					"Value": "Las facción de las ciudades libres es la facción que reune a las ciudades que son neutrales al inicio de la partida.\r\n\r\nEsta facción no es seleccionable por parte de los jugadores."
+				}
+			],
+			"IANames": [ "Flowerson", "Margarita"]
 		}
 	],
 	"Bonus" : [
