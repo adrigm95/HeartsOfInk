@@ -20,9 +20,9 @@ public class CreateGameController : MonoBehaviour
     private InfoPanelController infoPanelController;
     public GamesListController gamesListPanel;
     public Button btnCreateGame;
-    public InputField gameNameText;
+    public InputField inpNewGameName;
     public Dropdown cbMaps;
-    public InputField creatorNick;
+    public InputField inpNick;
     public GameObject configGamePanel;
     public Toggle checkIsPrivate;
 
@@ -43,12 +43,10 @@ public class CreateGameController : MonoBehaviour
         CreateGameModelIn newGame = new CreateGameModelIn
         {
             IsPublic = !checkIsPrivate.isOn,
-            Name = gameNameText.text,
+            Name = inpNewGameName.text,
             MapId = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).MapId,
-            PlayerName = creatorNick.text
+            PlayerName = inpNick.text
         };
-
-        response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.POST, LobbyHOIControllers.CreateGame, newGame);
 
         if (string.IsNullOrEmpty(newGame.Name))
         {
@@ -57,10 +55,13 @@ public class CreateGameController : MonoBehaviour
         else if (string.IsNullOrEmpty(newGame.PlayerName))
         {
             infoPanelController.DisplayMessage("Player name Empty", "Random player name asigned, you can set a custom player name in the upper left corner fo the screen.");
-            gameNameText.text = RandomUtils.RandomPlayerName();
-            newGame.PlayerName = gameNameText.text;
+            inpNick.text = RandomUtils.RandomPlayerName();
+            newGame.PlayerName = inpNick.text;
         }
-        else if (response.internalResultCode == InternalStatusCodes.OKCode)
+
+        response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.POST, LobbyHOIControllers.CreateGame, newGame);
+        
+        if (response.internalResultCode == InternalStatusCodes.OKCode)
         {
             CreateGameModelOut responseModel = response.serviceResponse;
 
@@ -83,7 +84,7 @@ public class CreateGameController : MonoBehaviour
     public void EnableDisableCreateGame(bool enable)
     {
         btnCreateGame.interactable = enable;
-        gameNameText.gameObject.SetActive(enable);
+        inpNewGameName.gameObject.SetActive(enable);
     }
 
     private void AddPlayerToDropdowns()
@@ -97,7 +98,7 @@ public class CreateGameController : MonoBehaviour
                 if (dropdownController != null && dropdownController.dropType == DropdownController.DropType.PlayerSelector)
                 {
                     Dropdown dropdown = childFile.GetComponent<Dropdown>();
-                    Dropdown.OptionData newOption = new Dropdown.OptionData(creatorNick.text);
+                    Dropdown.OptionData newOption = new Dropdown.OptionData(inpNick.text);
 
                     dropdown.options.Add(newOption);
 

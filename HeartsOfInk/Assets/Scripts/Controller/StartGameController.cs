@@ -206,7 +206,7 @@ public class StartGameController : MonoBehaviour
             player.Faction.Bonus = new Bonus((Bonus.Id)globalInfo.Factions.Find(item => item.Id == player.Faction.Id).BonusId);
 
             gameModel.Players.Add(player);
-            Debug.Log("GetMultiplayerOptions - player: " + player.Name);
+            Debug.Log("GetMultiplayerOptions - player: " + player.Name + " MapSocketId: " + player.MapSocketId + " color: " + player.Color);
         }
     }
 }

@@ -1254,9 +1254,9 @@ RectTransform:
   m_Father: {fileID: 501312379}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 50}
-  m_SizeDelta: {x: 0, y: 20}
+  m_SizeDelta: {x: -17, y: 20}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &235943789
 MonoBehaviour:
@@ -2233,7 +2233,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &501312379
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3841,9 +3841,9 @@ RectTransform:
   m_Father: {fileID: 501312379}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -17, y: -67}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &826515995
 MonoBehaviour:
@@ -4399,7 +4399,7 @@ RectTransform:
   m_Father: {fileID: 1144026451}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5130,7 +5130,7 @@ RectTransform:
   m_Father: {fileID: 988414110}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -6862,9 +6862,9 @@ RectTransform:
   m_Father: {fileID: 501312379}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -380, y: 0}
+  m_SizeDelta: {x: -380, y: -67}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1800534178
 MonoBehaviour:
@@ -7881,9 +7881,9 @@ MonoBehaviour:
   infoPanelController: {fileID: 829216849}
   gamesListPanel: {fileID: 826515998}
   btnCreateGame: {fileID: 2109189093}
-  gameNameText: {fileID: 451439028}
+  inpNewGameName: {fileID: 451439028}
   cbMaps: {fileID: 680077416}
-  creatorNick: {fileID: 1048713331}
+  inpNick: {fileID: 1048713331}
   configGamePanel: {fileID: 5135278583319347477}
   checkIsPrivate: {fileID: 1881974250}
 --- !u!1 &3589996446012058673
@@ -8750,7 +8750,7 @@ MonoBehaviour:
   factionDescription: {fileID: 5135278582474188539}
   bonusDescription: {fileID: 5135278582095824233}
   txtBtnReady: {fileID: 5135278582453085103}
-  playerName: {fileID: 1048713331}
+  inpNick: {fileID: 1048713331}
   startGameController: {fileID: 5135278583460072854}
 --- !u!114 &5135278583319347560
 MonoBehaviour:

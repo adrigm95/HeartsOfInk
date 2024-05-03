@@ -41,7 +41,7 @@ public class ConfigGameController : MonoBehaviour
     public Text factionDescription;
     public Text bonusDescription;
     public Text txtBtnReady;
-    public InputField playerName;
+    public InputField inpNick;
     public StartGameController startGameController;
 
     // Start is called before the first frame update
@@ -189,7 +189,7 @@ public class ConfigGameController : MonoBehaviour
             if (configLines == null)
             {
                 configLines = LoadConfigLinesFromMap(true);
-                configLines[0].PlayerName = playerName.text;
+                configLines[0].PlayerName = inpNick.text;
                 Debug.Log("ConfigLines received empty, this is ok if are creating game.");
             }
 
@@ -203,7 +203,7 @@ public class ConfigGameController : MonoBehaviour
                 }
             }
 
-            ownLine = configLines.Find(item => item.PlayerName == playerName.text).MapSocketId;
+            ownLine = configLines.Find(item => item.PlayerName == inpNick.text).MapSocketId;
             for (int index = 0; index < configLines.Count; index++)
             {
                 bool lineEnabled = isGameHost || ownLine == configLines[index].MapSocketId;
@@ -231,6 +231,23 @@ public class ConfigGameController : MonoBehaviour
     {
         List<ConfigLineModel> allLines;
 
+        foreach (var configLine in _configLinesState)
+        {
+            if (configLine.PlayerType == Player.IA.PLAYER)
+            {
+                if (string.IsNullOrEmpty(configLine.PlayerName))
+                {
+                    configLine.PlayerType = Player.IA.IA;
+                }
+                else if (configLine.PlayerName != inpNick.text)
+                {
+                    Debug.Log("Player name different: configLine.PlayerName: " + configLine.PlayerName + " inpNick.name: " + inpNick.text);
+                    configLine.PlayerType = Player.IA.OTHER_PLAYER;
+                }
+            }
+        }
+
+        // Cargamos las facciones no jugables (ciudades libres).
         allLines = LoadConfigLinesFromMap(false);
         allLines.AddRange(_configLinesState);
 
