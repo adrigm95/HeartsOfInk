@@ -150,6 +150,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\Scripts\Data\TutorialModels\TutorialStep.cs" />
     <Compile Include="Assets\Scripts\Data\MultiplayerStateModels\MoveTroopModel.cs" />
+    <Compile Include="Assets\Scripts\DataAccess\AcceptTermsDAC.cs" />
     <Compile Include="Assets\Scripts\Controller\MapController.cs" />
     <Compile Include="Assets\Scripts\Utils\VectorUtils.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\IngameSignalR\StartGameIngameSignalR.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\Controller\ScoreFactionController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\WaitingPanelController.cs" />
+    <Compile Include="Assets\Scripts\Controller\AcceptPolicy\AcceptTermsController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TargetPositionMarkerController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\Scripts\Logic\LanguageManager.cs" />

@@ -24,5 +24,12 @@ namespace Assets.Scripts.Utils
         {
             return "player" + Next(99999);
         }
+
+        public static string RandomStringValue(List<string> values)
+        {
+            int randomValue = Next(0, values.Count - 1);
+
+            return values[randomValue];
+        }
     }
 }

@@ -246,6 +246,7 @@ public class EditorPanelController : MonoBehaviour
         Image btnColorFaction;
         Toggle tgIsPlayable;
         Text txtAlliance;
+        GlobalInfoFaction globalInfoFaction;
 
         foreach (Dropdown cbFaction in factions)
         {
@@ -266,9 +267,14 @@ public class EditorPanelController : MonoBehaviour
             tgIsPlayable = lineObject.Find("tgIsPlayable").GetComponent<Toggle>();
             txtAlliance = lineObject.Find("btnAlliance").GetComponentInChildren<Text>();
 
+            globalInfoFaction = globalInfo.Factions.Find(item =>
+            item.NameLiteral == cbFaction.options[cbFaction.value].text);
+
+            playerModel.Name = string.IsNullOrEmpty(playerModel.Name) 
+                ? RandomUtils.RandomStringValue(globalInfoFaction.IANames)
+                : playerModel.Name;
             playerModel.IaId = cbPlayerType.value;
-            playerModel.FactionId = globalInfo.Factions.Find(item =>
-            item.NameLiteral == cbFaction.options[cbFaction.value].text).Id;
+            playerModel.FactionId = globalInfoFaction.Id;
             playerModel.Alliance = StringUtils.ToInt32(txtAlliance.text);
             
             playerModel.IsPlayable = tgIsPlayable.isOn;
