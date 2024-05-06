@@ -8,6 +8,7 @@ using NETCoreServer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -83,42 +84,95 @@ public class StateController : MonoBehaviour
 
             if (response.serviceResponse.TimeSinceStart > GameStateModel.TimeSinceStart)
             {
-                GameStateModel = response.serviceResponse;
-                Debug.Log("GetStateGame - updated state; cities: " + GameStateModel.CitiesStates.Count + "; troops:" + GameStateModel.TroopsStates.Count);
-
-                foreach (var city in GameStateModel.CitiesStates)
-                {
-                    GameObject currentCity = GameObject.Find(city.Key);
-                    if (currentCity == null)
-                    {
-
-                    }
-                    else
-                    {
-                        CityController cityController = currentCity.GetComponent<CityController>();
-                        cityController.Owner = globalLogic.GetPlayer(city.Value.Owner);
-                    }
-                }
-
-                foreach (var troop in GameStateModel.TroopsStates)
-                {
-                    GameObject currentTroop = GameObject.Find(troop.Key);
-                    if (currentTroop == null)
-                    {
-                        globalLogic.InstantiateTroopMultiplayer(troop.Key, troop.Value.Size, troop.Value.GetPositionAsVector3(), troop.Value.Owner);
-                    }
-                    else
-                    {
-                        TroopController troopController = currentTroop.GetComponent<TroopController>();
-                        troopController.troopModel.CurrentPosition = troop.Value.GetPositionAsVector3();
-                        troopController.troopModel.Units = troop.Value.Size;
-                        troopController.troopModel.Player = globalLogic.GetPlayer(troop.Value.Owner);
-                    }
-                }
+                //UpdateStateModelV1(response);
+                UpdateStateModelV2(response);
             }
             else
             {
                 Debug.LogWarning("GetStateGame - Received state is previous than current; received: " + response.serviceResponse.TimeSinceStart + " current: " + GameStateModel.TimeSinceStart);
+            }
+        }
+    }
+
+    private void UpdateStateModelV2(HOIResponseModel<GameStateModel> response)
+    {
+        Dictionary<string, TroopStateModel> updatedTroops = new Dictionary<string, TroopStateModel>();
+        GameStateModel = response.serviceResponse;
+
+        // Actualizar ciudades.
+        foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag(Tags.City))
+        {
+            CityStateModel city;
+
+            if (GameStateModel.CitiesStates.TryGetValue(gameObject.name, out city))
+            {
+                CityController cityController = gameObject.GetComponent<CityController>();
+                cityController.Owner = globalLogic.GetPlayer(city.Owner);
+            }
+        }
+
+        // Actualizar tropas y eliminar las que ya no estén en el modelo.
+        foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag(Tags.Troop))
+        {
+            TroopStateModel troop;
+
+            if (GameStateModel.TroopsStates.TryGetValue(gameObject.name, out troop))
+            {
+                TroopController troopController = gameObject.GetComponent<TroopController>();
+                updatedTroops.Add(gameObject.name, troop);
+                troopController.troopModel.CurrentPosition = troop.GetPositionAsVector3();
+                troopController.troopModel.Units = troop.Size;
+                troopController.troopModel.Player = globalLogic.GetPlayer(troop.Owner);
+            }
+            else
+            {
+                globalLogic.DestroyUnit(gameObject, null);
+            }
+        }
+
+        // Añadir las tropas nuevas.
+        foreach (var troop in GameStateModel.TroopsStates)
+        {
+            if (!updatedTroops.ContainsKey(troop.Key))
+            {
+                globalLogic.InstantiateTroopMultiplayer(troop.Key, troop.Value.Size, troop.Value.GetPositionAsVector3(), troop.Value.Owner);
+            }
+        }
+    }
+
+    [Obsolete("Obsoleto, comprobar si funciona el V2 y si es así borrar este método.")]
+    private void UpdateStateModelV1(HOIResponseModel<GameStateModel> response)
+    {
+        GameStateModel = response.serviceResponse;
+        Debug.Log("GetStateGame - updated state; cities: " + GameStateModel.CitiesStates.Count + "; troops:" + GameStateModel.TroopsStates.Count);
+
+        foreach (var city in GameStateModel.CitiesStates)
+        {
+            GameObject currentCity = GameObject.Find(city.Key);
+            if (currentCity == null)
+            {
+
+            }
+            else
+            {
+                CityController cityController = currentCity.GetComponent<CityController>();
+                cityController.Owner = globalLogic.GetPlayer(city.Value.Owner);
+            }
+        }
+
+        foreach (var troop in GameStateModel.TroopsStates)
+        {
+            GameObject currentTroop = GameObject.Find(troop.Key);
+            if (currentTroop == null)
+            {
+                globalLogic.InstantiateTroopMultiplayer(troop.Key, troop.Value.Size, troop.Value.GetPositionAsVector3(), troop.Value.Owner);
+            }
+            else
+            {
+                TroopController troopController = currentTroop.GetComponent<TroopController>();
+                troopController.troopModel.CurrentPosition = troop.Value.GetPositionAsVector3();
+                troopController.troopModel.Units = troop.Value.Size;
+                troopController.troopModel.Player = globalLogic.GetPlayer(troop.Value.Owner);
             }
         }
     }

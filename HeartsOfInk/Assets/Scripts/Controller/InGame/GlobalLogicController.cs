@@ -908,7 +908,7 @@ public class GlobalLogicController : MonoBehaviour
 
             if (IsMultiplayerHost)
             {
-                TroopDeadSignalR.Instance.SendTroopDead(gameModel.GameKey, unitToDestroy.transform.name);
+                //TroopDeadSignalR.Instance.SendTroopDead(gameModel.GameKey, unitToDestroy.transform.name);
             }
 
             Destroy(unitToDestroy);

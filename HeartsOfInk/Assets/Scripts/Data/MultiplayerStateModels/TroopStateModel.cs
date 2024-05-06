@@ -37,5 +37,10 @@ namespace Assets.Scripts.Data.MultiplayerStateModels
         {
             Position = newValue.x + ";" + newValue.y + ";" + newValue.z;
         }
+
+        public override string ToString()
+        {
+            return "Position: " + Position + " Size: " + Size + " Owner: " + Owner;
+        }
     }
 }
