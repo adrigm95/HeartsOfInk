@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +15,9 @@ namespace Assets.Scripts.Utils
             Vector3 vectorPosition;
             string[] splittedPosition;
 
+            position = position.Replace("(", "").Replace(")", "");
             splittedPosition = position.Split(',');
-            vectorPosition = new Vector3(Convert.ToSingle(splittedPosition[0]), Convert.ToSingle(splittedPosition[1]));
+            vectorPosition = new Vector3(Convert.ToSingle(splittedPosition[0], CultureInfo.InvariantCulture), Convert.ToSingle(splittedPosition[1], CultureInfo.InvariantCulture));
 
             return vectorPosition;
         }
