@@ -23,6 +23,12 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
     private AILogic aiLogic;
     private float lastAttack = 0;
     private float reloadTime = 3f;
+
+    /// <summary>
+    /// En algunos casos, se llama al método update en lo que la tropa está siendo destruida, si una tropa está en proceso de ser destruida no debe realizar acciones.
+    /// </summary>
+    private bool isInDestruction;
+
     public CircleCollider2D circleCollider;
     public CombatLogic combatLogic = new CombatLogic();
     public TroopModel troopModel;
@@ -41,6 +47,7 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
         unitsText.SetText(troopModel.Units.ToString());
         UpdateColliderSize();
         unitsText.color = ColorUtils.GetColorByString(troopModel.Player.Color);
+        isInDestruction = false;
     }
 
     // Update is called once per frame
@@ -64,7 +71,7 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
                 AITroopUpdate();
             }
 
-            if (globalLogic.IsMultiplayerHost)
+            if (globalLogic.IsMultiplayerHost && !isInDestruction)
             {
                 stateController.SetTroopState(this.name, troopModel.Units, this.transform.position, troopModel.Player);
                 stateController.SetTroopOrderInModel(this.name, troopModel, globalLogic.emptyTargetsHolder, globalLogic.targetMarkerController);
@@ -83,6 +90,7 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
             {
                 Debug.Log("TroopController multiplayer client logic: " + this.name + " troopModel: " + troopModel + " troopState: " + troopStateModel);
                 troopModel.Units = troopStateModel.Size;
+                unitsText.text = troopModel.Units.ToString();
                 this.transform.position = troopStateModel.GetPositionAsVector3();
             }
         }
@@ -223,9 +231,11 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
     public void DestroyTroopActions(bool isMultiplayerHost)
     {
         combatingEnemys.Clear();
+        isInDestruction = true;
 
         if (isMultiplayerHost)
         {
+            Debug.Log("DestroyTroopActions called for troop: " + this.name);
             stateController.TroopDistroyed(this);
         }
     }
