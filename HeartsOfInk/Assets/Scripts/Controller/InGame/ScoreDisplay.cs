@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Assets.Scripts.Data;
 using Assets.Scripts.Utils;
 using NETCoreServer.Models;
 using TMPro;
@@ -41,7 +42,7 @@ public class ScoreDisplay : MonoBehaviour
 
     void Update()
     {
-        GameObject[] troops = GameObject.FindGameObjectsWithTag("Troop");
+        GameObject[] troops = GameObject.FindGameObjectsWithTag(Tags.Troop);
 
         for (int index = 0; index < scoreTotal.Length; index++)
         {
