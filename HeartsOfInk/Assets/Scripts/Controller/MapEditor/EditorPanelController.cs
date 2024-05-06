@@ -64,6 +64,7 @@ public class EditorPanelController : MonoBehaviour
         _mapEditorLogic.ResetSelection();
         mapModelHeader = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text);
         mapModel = MapDAC.LoadMapInfoByName(mapModelHeader.DefinitionName, GlobalConstants.RootPath);
+        ValidateAndCorrectMap(mapModel);
         globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
 
         mapName.text = mapModel.DisplayName;
@@ -80,7 +81,13 @@ public class EditorPanelController : MonoBehaviour
         Color startColor = ColorUtils.NextColor(Color.black, globalInfo.AvailableColors);
 
         mapModel.Players.ForEach(player => maxSocketId = player.MapSocketId > maxSocketId ? player.MapSocketId : maxSocketId);
-        maxSocketId++;
+
+        // El primer registro necesitamos que su mapSocketId sea 0 para no romper la lógica del panel de puntuaciones.
+        if (maxSocketId != 0)
+        {
+            maxSocketId++;
+        }
+        
         playerModel = new MapPlayerModel(maxSocketId);
         playerModel.Color = ColorUtils.GetStringByColor(startColor);
         mapModel.Players.Add(playerModel);
@@ -102,11 +109,6 @@ public class EditorPanelController : MonoBehaviour
         foreach (MapPlayerModel player in mapModel.Players)
         {
             LoadFactionLine(player);
-        }
-
-        if (mapModel.Players.Count == 0)
-        {
-            AddNewFactionLine();
         }
     }
 
@@ -327,5 +329,59 @@ public class EditorPanelController : MonoBehaviour
         }
 
         factions.Clear();
+    }
+
+    /// <summary>
+    /// Este método analiza el mapa cargado para comprobar que todos sus datos son correctos, y si hay algo que no está bien trata de corregirlo.
+    /// </summary>
+    private void ValidateAndCorrectMap(MapModel mapModel)
+    {
+        // Todos los mapas deben tener al menos una facción.
+        if (mapModel.Players.Count == 0)
+        {
+            AddNewFactionLine();
+        }
+
+        // El jugador de las ciudades es válido
+        //ValidateCitiesPlayer(mapModel);
+
+        // El jugador de las tropas es válido
+        //ValidateTroopsPlayer(mapModel);
+
+        // El MapSocketId debe comenzar en 0 y ser correlativo.
+        if (mapModel.Players.Min(p => p.MapSocketId) != 0)
+        {
+            MakeMapSocketIdCorrelative(mapModel);
+        }
+    }
+
+    /// <summary>
+    /// Comprobar que el MapSocketId de las ciudades coincide con alguno de los de mapModel.Players.
+    /// </summary>
+    /// <param name="mapModel"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void ValidateCitiesPlayer(MapModel mapModel)
+    {
+        throw new NotImplementedException();
+    }
+
+    // <summary>
+    /// Comprobar que el MapSocketId de las tropas coincide con alguno de los de mapModel.Players.
+    /// </summary>
+    /// <param name="mapModel"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void ValidateTroopsPlayer(MapModel mapModel)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Este método tiene que asegurarse de que el valor de MapSocketId de mapModel.Players comience en 0 y sea correlativo, (por ejemplo: para un mapa de 4 jugadores seria 0, 1, 2, 3).
+    /// 
+    /// El método no solo tiene que actualizar el MapSoccketId en mapModel.Players, sino también en mapModel.Cities y mapModel.troops.
+    /// </summary>
+    private void MakeMapSocketIdCorrelative(MapModel mapModel)
+    {
+        throw new NotImplementedException();
     }
 }
