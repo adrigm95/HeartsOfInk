@@ -27,6 +27,8 @@ public class OptionsSceneController : MonoBehaviour
         }
         else
         {
+            LanguageManager.Language = optionsModel.Language;
+
             // TODO: Modificar los valores de la pantalla de opciones para que usen los del modelo de opciones.
         }
     }
@@ -38,8 +40,10 @@ public class OptionsSceneController : MonoBehaviour
         optionsPreferences.SelectTroopPref = OptionsModel.LeftRightEnum.Left;
         optionsPreferences.MusicPref = 1;
         optionsPreferences.SoundEffectsPref = 1;
+        optionsPreferences.Language = LanguageManager.DefaultLanguage;
         OptionsSceneDAC.SaveOptionsPreferences(optionsPreferences);
     }
+
     public void SaveOptions()
     {
         OptionsModel optionsPreferences = new OptionsModel();

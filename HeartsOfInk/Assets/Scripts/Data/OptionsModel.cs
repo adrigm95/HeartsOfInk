@@ -1,4 +1,6 @@
 
+using Assets.Scripts.Data.Literals;
+
 public class OptionsModel
 {
     public const string PreferencesInfoFile = "/optionsPreferences.json";
@@ -7,6 +9,7 @@ public class OptionsModel
     public float SoundEffectsPref { get; set; }
     public LeftRightEnum SelectTroopPref { get; set; }
     public LeftRightEnum MoveAttackPref { get; set; }
+    public string Language { get; set; }
     
     public string toString()
     {
