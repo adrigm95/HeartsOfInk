@@ -1,10 +1,12 @@
 ﻿using Assets.Scripts.Data.Literals;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class LanguageManager
 {
-    private const string DefaultLanguage = "ES-es";
+    //public const string DefaultLanguage = "CA-va";
+    public const string DefaultLanguage = "ES-es";
     private static string _language;
 
     public static string Language { 
@@ -32,7 +34,14 @@ public class LanguageManager
 
         if (literal == null)
         {
+            // Si no encuentra literal del idioma requerido, busca del idioma por defecto.
             literal = literals.Find(lit => lit.Language == DefaultLanguage);
+
+            if (literal == null)
+            {
+                // Si el idioma por defecto tampoco tiene literal, se devuelve el primero que haya.
+                literal = literals.First();
+            }
         }
 
         return literal.Value;

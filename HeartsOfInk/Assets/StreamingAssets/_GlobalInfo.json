@@ -11,15 +11,27 @@
 				{
 					"Language": "EN",
 					"Value": "Rebels"
+				},
+				{
+					"Language": "CA-va",
+					"Value": "Rebels"
 				}
 			],
 			"Descriptions": [
 				{
 					"Language": "ES-es",
 					"Value": "El pueblo no puede soportar más la opresión, la explotación desmedida para disfrute de unos pocos.\r\n\r\nLos rebeldes son la facción del pueblo, y lucharán sin descanso por un mundo más justo e igualitario.\r\n\r\n¡La revolución está en marcha!"
+				},
+				{
+					"Language": "CA-va",
+					"Value": "El poble no pot soportar mes l'opresió, l'explotació sense mesura pel profit d'uns pocs'.\r\n\r\nEls rebels son la facció del poble, y lluitaran sin treva pre un mon mes igualitari.\r\n\r\n¡La revolució esta en marxa!"
+				},
+				{
+					"Language": "EN",
+					"Value": "A rebel faction. (traduction in progress)"
 				}
 			],
-			"IANames": ["Stalindo", "Juana", "Bolivariano"]
+			"IANames": ["Estalindo", "Juana", "Bolivariano"]
 		},
 		{
 			"Id": 1,
@@ -32,12 +44,20 @@
 				{
 					"Language": "EN",
 					"Value": "Government"
+				},
+				{
+					"Language": "CA-va",
+					"Value": "Govern"
 				}
 			],
 			"Descriptions": [
 				{
 					"Language": "ES-es",
 					"Value": "El imperio está en crisis: Los nuevos ideales republicanos, las huelgas obreras... ¡Y ahora también rebeliones en las colonias!\r\n\r\nEl gobierno debe tomar cartas en el asunto, restablecer el orden y la gloria del imperio es ahora más necesario que nunca."
+				},
+				{
+					"Language": "CA-va",
+					"Value": "L'Imperi está en crisi: Els nous ideals republicans, les vagues obreres... ¡I ara també rebelions a les colonies!\r\n\r\nEl gobierno debe tomar cartas en el asunto, restablecer el orden y la gloria del imperio es ahora más necesario que nunca."
 				}
 			],
 			"IANames": [ "De la cuesta", "Mijallo", "Milan Destroy"]
@@ -53,12 +73,20 @@
 				{
 					"Language": "EN",
 					"Value": "Vukis"
+				},
+				{
+					"Language": "CA-va",
+					"Value": "Vukis"
 				}
 			],
 			"Descriptions": [
 				{
 					"Language": "ES-es",
 					"Value": "Los Vukis son una tribu formada a partir de esclavos manumitidos a lo largo de los siglos.\r\n\r\nConforme su número aumentaba, el gobierno y los grandes terratenientes fueron mirandoles con cada vez peores ojos.\r\n\r\n¡Los Vukis jamás volverán a someterse!"
+				},
+				{
+					"Language": "CA-va",
+					"Value": "Els Vukis son una tribu formada a partir de esclaus alliberats a lo largo de los siglos.\r\n\r\nConforme su número aumentaba, el gobierno y los grandes terratenientes fueron mirandoles con cada vez peores ojos.\r\n\r\n¡Los Vukis jamás volverán a someterse!"
 				}
 			],
 			"IANames": [ "Diagne", "Ndiaye", "Diop" ]
@@ -74,12 +102,20 @@
 				{
 					"Language": "EN",
 					"Value": "Nomads"
+				},
+				{
+					"Language": "CA-va",
+					"Value": "Nomades"
 				}
 			],
 			"Descriptions": [
 				{
 					"Language": "ES-es",
 					"Value": "Los nómadas del desierto son un conjunto de clanes muy beligerantes que existen desde antes de la llegada del imperio. Una vez que el imperio abandonó la tentativa de conquistar el desierto, establecieron fructiferas relaciones comerciales.\r\n\r\nAhora que soplan vientos de cambio ¿En que bando se posicionarán los nómadas?"
+				},
+				{
+					"Language": "CA-va",
+					"Value": "Els nomades del desert son un conjunt de clans molt beligerants que existixen avans que l'imperi arribara. Una vegada que l'imperi va abandonar la tentativa de conquerir el desert, establiren fructiferes relacions comercials.\r\n\r\nAra que cambien les cosses ¿Amb qui es posicionaran els nomades?"
 				}
 			],
 			"IANames": [ "Abdulasis", "Ahmed", "Gingivitis Khan" ]
@@ -95,12 +131,20 @@
 				{
 					"Language": "EN",
 					"Value": "Spain"
+				},
+				{
+					"Language": "CA-va",
+					"Value": "Espanya"
 				}
 			],
 			"Descriptions": [
 				{
 					"Language": "ES-es",
 					"Value": "Reino de España"
+				},
+				{
+					"Language": "CA-va",
+					"Value": "Regne d'espanya"
 				}
 			],
 			"IANames": ["González", "De la vega", "García Pérez"]
