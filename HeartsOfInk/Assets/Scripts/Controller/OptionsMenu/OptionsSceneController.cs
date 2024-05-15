@@ -19,7 +19,7 @@ public class OptionsSceneController : MonoBehaviour
 
     public void Start()
     {
-        OptionsModel optionsModel = OptionsSceneDAC.LoadOptionsPreferences();
+        OptionsModel optionsModel = OptionsManager.Instance.OptionsModel;
 
         if (optionsModel == null)
         {
@@ -31,17 +31,6 @@ public class OptionsSceneController : MonoBehaviour
 
             // TODO: Modificar los valores de la pantalla de opciones para que usen los del modelo de opciones.
         }
-    }
-
-    public void SaveDefaultOptions()
-    {
-        OptionsModel optionsPreferences = new OptionsModel();
-        optionsPreferences.MoveAttackPref = OptionsModel.LeftRightEnum.Right;
-        optionsPreferences.SelectTroopPref = OptionsModel.LeftRightEnum.Left;
-        optionsPreferences.MusicPref = 1;
-        optionsPreferences.SoundEffectsPref = 1;
-        optionsPreferences.Language = LanguageManager.DefaultLanguage;
-        OptionsSceneDAC.SaveOptionsPreferences(optionsPreferences);
     }
 
     public void SaveOptions()

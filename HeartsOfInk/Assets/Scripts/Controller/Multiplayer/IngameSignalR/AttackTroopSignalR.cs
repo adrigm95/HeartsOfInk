@@ -12,7 +12,6 @@ public class AttackTroopSignalR
     private const string SenderKey = "AttackTroop";
     private const string ReceiverKey = "ReceiveAttackTroop";
     
-
     // Singleton variables
     private static readonly Lazy<AttackTroopSignalR> _singletonReference = new(() => new AttackTroopSignalR());
     public static AttackTroopSignalR Instance => _singletonReference.Value;

@@ -6,5 +6,6 @@
         public const string Portuguese_Brazil = "PT-br";
         public const string Spanish_Spain = "ES-es";
         public const string Valencian = "CA-va";
+        public const string Catalonian = "CA";
     }
 }

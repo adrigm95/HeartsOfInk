@@ -245,7 +245,7 @@ GameObject:
   - component: {fileID: 233464710}
   - component: {fileID: 233464709}
   m_Layer: 5
-  m_Name: Text
+  m_Name: txtBtnOptions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 432202911}
   - component: {fileID: 432202910}
   m_Layer: 5
-  m_Name: Text
+  m_Name: txtBtnEditor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -505,7 +505,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 30, y: -460}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 200, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &467237540
 MonoBehaviour:
@@ -2113,6 +2113,60 @@ MonoBehaviour:
   currentPosition: {x: 0, y: 0}
   target: {x: 8, y: 0}
   speed: 0.01
+--- !u!1 &1138979495
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1138979497}
+  - component: {fileID: 1138979496}
+  m_Layer: 0
+  m_Name: MainMenuLiteralsController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1138979496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138979495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c4db033305250b4c9c1d6ad99442535, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  txtBtnFastGame: {fileID: 13209876}
+  txtBtnLevels: {fileID: 1319463466}
+  txtBtnMultiplayer: {fileID: 1322434322}
+  txtBtnOptions: {fileID: 233464709}
+  txtBtnEditor: {fileID: 432202910}
+  txtBtnCredits: {fileID: 1550573570}
+  txtBtnExitGame: {fileID: 1257775070}
+  txtChooseMap: {fileID: 1526669821}
+  txtYourFactionTitle: {fileID: 461222262}
+  txtYourFactionBonusTitle: {fileID: 467237540}
+--- !u!4 &1138979497
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138979495}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1156743133
 GameObject:
   m_ObjectHideFlags: 0
@@ -2491,7 +2545,7 @@ GameObject:
   - component: {fileID: 1257775071}
   - component: {fileID: 1257775070}
   m_Layer: 5
-  m_Name: Text
+  m_Name: txtBtnExitGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2649,7 +2703,7 @@ GameObject:
   - component: {fileID: 1322434323}
   - component: {fileID: 1322434322}
   m_Layer: 5
-  m_Name: Text
+  m_Name: txtBtnMultiplayerGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2882,7 +2936,7 @@ GameObject:
   - component: {fileID: 1550573571}
   - component: {fileID: 1550573570}
   m_Layer: 5
-  m_Name: Text
+  m_Name: txtBtnCredits
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4555,3 +4609,4 @@ SceneRoots:
   - {fileID: 741012068}
   - {fileID: 952184620}
   - {fileID: 1593922983}
+  - {fileID: 1138979497}

@@ -705,18 +705,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1642865761}
-        m_TargetAssemblyTypeName: OptionsSceneController, Assembly-CSharp
-        m_MethodName: SaveDefaultOptions
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 689156827}
         m_TargetAssemblyTypeName: SceneChangeController, Assembly-CSharp
         m_MethodName: ChangeScene
@@ -1001,56 +989,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1139258049}
   m_CullTransparentMesh: 0
---- !u!1 &1642865760
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1642865762}
-  - component: {fileID: 1642865761}
-  m_Layer: 0
-  m_Name: SetOptionsPreferences
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1642865761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1642865760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 917a3ce9ea7bebe47b5836a04f508b44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  musicVolumeScrollbar: {fileID: 0}
-  effectsVolumeScrollbar: {fileID: 0}
-  selectTroopLeftBtn: {fileID: 0}
-  moveAttackLeftBtn: {fileID: 0}
-  selectTroopRightBtn: {fileID: 0}
-  moveAttackRightBtn: {fileID: 0}
---- !u!4 &1642865762
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1642865760}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 462.9153, y: 321.25104, z: -2.4772887}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1691352640
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,5 +1188,4 @@ SceneRoots:
   - {fileID: 396821880}
   - {fileID: 2145490877}
   - {fileID: 689156826}
-  - {fileID: 1642865762}
   - {fileID: 1691352642}

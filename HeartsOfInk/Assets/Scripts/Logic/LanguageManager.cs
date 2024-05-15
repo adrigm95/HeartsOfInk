@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Data.Literals;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 public class LanguageManager
@@ -51,8 +52,15 @@ public class LanguageManager
     {
         if (string.IsNullOrWhiteSpace(_language))
         {
-            // TODO: obtener el idioma de las preferencias de usuario.
-            _language = "ES-es";
+            string optionsLanguage = OptionsManager.Instance.OptionsModel.Language;
+            if (ValidateLanguage(optionsLanguage))
+            {
+                _language = optionsLanguage;
+            }
+            else 
+            {
+                _language = "ES-es";
+            }
         }
 
         return _language;
@@ -64,9 +72,10 @@ public class LanguageManager
         {
             case LanguageConstants.English:
             case LanguageConstants.Spanish_Spain:
-            case LanguageConstants.Portuguese_Brazil:
             case LanguageConstants.Valencian:
+            case LanguageConstants.Catalonian:
                 return true;
+            case LanguageConstants.Portuguese_Brazil:
             default:
                 return false;
         }
