@@ -1,4 +1,8 @@
-﻿using Assets.Scripts.Controller.InGame;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AnalyticsServer.Models;
+using Assets.Scripts.Controller.InGame;
 using Assets.Scripts.Data;
 using Assets.Scripts.Data.Constants;
 using Assets.Scripts.DataAccess;
@@ -6,21 +10,19 @@ using Assets.Scripts.Utils;
 using HeartsOfInk.SharedLogic;
 using LobbyHOIServer.Models.MapModels;
 using NETCoreServer.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using AnalyticsServer.Models;
-using static SceneChangeController;
 using UnityEngine.UI;
+using static SceneChangeController;
 
 public class GlobalLogicController : MonoBehaviour
 {
     private float LastGameSpeed = 1f;
     private SelectionModel selection;
     private WebServiceCaller<LogDto, bool> logSender = new WebServiceCaller<LogDto, bool>();
-    private WebServiceCaller<LogExceptionDto, bool> exceptionSender = new WebServiceCaller<LogExceptionDto, bool>();
-    private WebServiceCaller<LogAnalyticsDto, bool> analyticSender = new WebServiceCaller<LogAnalyticsDto, bool>();
+    private WebServiceCaller<LogExceptionDto, bool> exceptionSender =
+        new WebServiceCaller<LogExceptionDto, bool>();
+    private WebServiceCaller<LogAnalyticsDto, bool> analyticSender =
+        new WebServiceCaller<LogAnalyticsDto, bool>();
 
     /// <summary>
     /// Contador que se utiliza para que las unidades clonadas no tengan el mismo nombre.
@@ -37,9 +39,18 @@ public class GlobalLogicController : MonoBehaviour
     [NonSerialized]
     public GameModel gameModel;
 
-    public bool IsMultiplayerHost { get { return gameModel.Gametype == GameModel.GameType.MultiplayerHost; } }
-    public bool IsMultiplayerClient { get { return gameModel.Gametype == GameModel.GameType.MultiplayerClient; } }
-    public bool IsSingleplayer { get { return gameModel.Gametype == GameModel.GameType.Single; } }
+    public bool IsMultiplayerHost
+    {
+        get { return gameModel.Gametype == GameModel.GameType.MultiplayerHost; }
+    }
+    public bool IsMultiplayerClient
+    {
+        get { return gameModel.Gametype == GameModel.GameType.MultiplayerClient; }
+    }
+    public bool IsSingleplayer
+    {
+        get { return gameModel.Gametype == GameModel.GameType.Single; }
+    }
 
     [SerializeField]
     public TargetPositionMarkerController targetMarkerController;
@@ -104,7 +115,9 @@ public class GlobalLogicController : MonoBehaviour
                 ChangeSpeed(GameSpeedConstants.PlaySpeed);
                 //waitingPanel.Show(this);
 
-                Debug.Log("Subscribe to IngameHOIServer with player id: " + thisPcPlayer.MapSocketId);
+                Debug.Log(
+                    "Subscribe to IngameHOIServer with player id: " + thisPcPlayer.MapSocketId
+                );
                 IngameHOIHub.Instance.SuscribeToRoom(gameModel.GameKey, thisPcPlayer.MapSocketId);
                 StartGameIngameSignalR.Instance.SendClientReady(gameModel.GameKey);
             }
@@ -146,14 +159,20 @@ public class GlobalLogicController : MonoBehaviour
 
     /// <summary>
     /// Lógica de multiselección.
-    /// 
+    ///
     /// Multiplayer/singleplayer: Sirve para ambos.
     /// </summary>
     private void UpdateMultiselect()
     {
         try
         {
-            if (selection.UpdateMultiselect(cameraController.ScreenToWorldPoint(), troopsCanvas.transform, thisPcPlayer.MapSocketId))
+            if (
+                selection.UpdateMultiselect(
+                    cameraController.ScreenToWorldPoint(),
+                    troopsCanvas.transform,
+                    thisPcPlayer.MapSocketId
+                )
+            )
             {
                 UpdateTargetMarker();
             }
@@ -187,7 +206,10 @@ public class GlobalLogicController : MonoBehaviour
                             allTargetEquals = false;
                             break;
                         }
-                        else if (target.transform.position != troopController.troopModel.Target.transform.position)
+                        else if (
+                            target.transform.position
+                            != troopController.troopModel.Target.transform.position
+                        )
                         {
                             allTargetEquals = false;
                             break;
@@ -210,17 +232,37 @@ public class GlobalLogicController : MonoBehaviour
             Debug.LogError($"Error on UpdateTargetMarker, message: {ex.Message};");
             Debug.LogError($"Error on UpdateTargetMarker, stacktrace: {ex.StackTrace};");
             Debug.LogError($"Error on UpdateTargetMarker, variable Target: {target};");
-            Debug.LogError($"Error on UpdateTargetMarker, variable allTargetEquals: {allTargetEquals};");
-            Debug.LogError($"Error on UpdateTargetMarker, variable troopController: {troopController};");
-            LogManager.SendException(exceptionSender, ex, $"allTargetEquals: {allTargetEquals}, target: {target}, troopController: {troopController}");
+            Debug.LogError(
+                $"Error on UpdateTargetMarker, variable allTargetEquals: {allTargetEquals};"
+            );
+            Debug.LogError(
+                $"Error on UpdateTargetMarker, variable troopController: {troopController};"
+            );
+            LogManager.SendException(
+                exceptionSender,
+                ex,
+                $"allTargetEquals: {allTargetEquals}, target: {target}, troopController: {troopController}"
+            );
             Debug.LogException(ex);
         }
     }
 
+    // public Player GetPlayer(byte mapSocketId)
+    // {
+    //     return gameModel.Players.First(pl => pl.MapSocketId == mapSocketId);
+    // }
     public Player GetPlayer(byte mapSocketId)
     {
-        return gameModel.Players.First(pl => pl.MapSocketId == mapSocketId);
+        if (gameModel.Players.Any(player => player.MapSocketId == mapSocketId))
+        {
+            return gameModel.Players.First(player => player.MapSocketId == mapSocketId);
+        }
+        else
+        {
+            throw new Exception("No player found with MapSocketId " + mapSocketId);
+        }
     }
+
     public Player GetPlayer(string name)
     {
         return gameModel.Players.First(pl => pl.Name == name);
@@ -313,12 +355,18 @@ public class GlobalLogicController : MonoBehaviour
             {
                 troop = mapModel.Troops[index];
                 Player troopOwner = GetPlayer(troop.MapSocketId);
-                InstantiateTroopSingleplayer(troop.Units, VectorUtils.FloatVectorToVector3(troop.Position), troopOwner);
+                InstantiateTroopSingleplayer(
+                    troop.Units,
+                    VectorUtils.FloatVectorToVector3(troop.Position),
+                    troopOwner
+                );
             }
         }
         catch (InvalidOperationException ex)
         {
-            Debug.LogError($"Any city or troop has an invalid MapSocketId: {ex.Message}; array index {index}");
+            Debug.LogError(
+                $"Any city or troop has an invalid MapSocketId: {ex.Message}; array index {index}"
+            );
 
             if (troop == null)
             {
@@ -336,12 +384,14 @@ public class GlobalLogicController : MonoBehaviour
         CityController newObject;
         string prefabName = cityModel.Type == 0 ? "Prefabs/Capital" : "Prefabs/CityPrefab";
 
-        newObject = ((GameObject)Instantiate(
-            Resources.Load(prefabName),
-            VectorUtils.FloatVectorToVector3(cityModel.Position),
-            citiesCanvas.transform.rotation,
-            citiesCanvas.transform)
-            ).GetComponent<CityController>();
+        newObject = (
+            (GameObject)Instantiate(
+                Resources.Load(prefabName),
+                VectorUtils.FloatVectorToVector3(cityModel.Position),
+                citiesCanvas.transform.rotation,
+                citiesCanvas.transform
+            )
+        ).GetComponent<CityController>();
         newObject.name = cityModel.Name + "_" + citiesCounter;
         newObject.Owner = cityOwner;
 
@@ -367,7 +417,12 @@ public class GlobalLogicController : MonoBehaviour
         }
     }
 
-    public void InstantiateTroopMultiplayer(string name, int units, Vector3 position, byte mapSocketId)
+    public void InstantiateTroopMultiplayer(
+        string name,
+        int units,
+        Vector3 position,
+        byte mapSocketId
+    )
     {
         InstantiateTroop(units, position, GetPlayer(mapSocketId), name);
     }
@@ -378,13 +433,14 @@ public class GlobalLogicController : MonoBehaviour
 
         try
         {
-
-            newObject = ((GameObject)Instantiate(
-                Resources.Load("Prefabs/Troop"),
-                position,
-                troopsCanvas.transform.rotation,
-                troopsCanvas.transform)
-                ).GetComponent<TroopController>();
+            newObject = (
+                (GameObject)Instantiate(
+                    Resources.Load("Prefabs/Troop"),
+                    position,
+                    troopsCanvas.transform.rotation,
+                    troopsCanvas.transform
+                )
+            ).GetComponent<TroopController>();
             newObject.name = troopId;
             newObject.troopModel = new TroopModel(troopOwner);
             newObject.troopModel.Units = units;
@@ -435,7 +491,7 @@ public class GlobalLogicController : MonoBehaviour
 
     /// <summary>
     /// Lógica de control de imputs.
-    /// 
+    ///
     /// Multiplayer/singleplayer: Valida para singleplayer y para el host del multiplayer.
     /// </summary>
     public void HostInputManagement()
@@ -654,7 +710,11 @@ public class GlobalLogicController : MonoBehaviour
             if (Time.timeScale != LastGameSpeed)
             {
                 LastGameSpeed = Time.timeScale;
-                LogManager.LogAnalytic(analyticSender, "TimeManagement", $"New game speed: {Time.timeScale}");
+                LogManager.LogAnalytic(
+                    analyticSender,
+                    "TimeManagement",
+                    $"New game speed: {Time.timeScale}"
+                );
             }
         }
         catch (Exception ex)
@@ -666,7 +726,7 @@ public class GlobalLogicController : MonoBehaviour
 
     /// <summary>
     /// Actualiza el estado de la animación de parpadeo de la unidad seleccionada.
-    /// 
+    ///
     /// Lógica para multiplayer y singleplayer.
     /// </summary>
     public void UpdateUnitAnimation()
@@ -681,7 +741,8 @@ public class GlobalLogicController : MonoBehaviour
                 {
                     try
                     {
-                        IObjectAnimator selectedTroop = selectedTroopObject.GetComponent<IObjectAnimator>();
+                        IObjectAnimator selectedTroop =
+                            selectedTroopObject.GetComponent<IObjectAnimator>();
 
                         if (selectedTroop != null)
                         {
@@ -738,7 +799,8 @@ public class GlobalLogicController : MonoBehaviour
                 {
                     foreach (GameObject selectedTroopObject in selection.SelectionObjects)
                     {
-                        TroopController selectedTroop = selectedTroopObject.GetComponent<TroopController>();
+                        TroopController selectedTroop =
+                            selectedTroopObject.GetComponent<TroopController>();
 
                         Debug.Log("New target for troop: " + newSelection);
 
@@ -749,7 +811,7 @@ public class GlobalLogicController : MonoBehaviour
                                 selectedTroop.gameObject.name,
                                 newSelection.gameObject.name,
                                 Time.realtimeSinceStartup
-                                );
+                            );
                         }
                         else
                         {
@@ -776,7 +838,10 @@ public class GlobalLogicController : MonoBehaviour
             {
                 case KeyCode.Mouse0: // Left mouse button
                     EndSelection();
-                    selection.StartMultiselect(cameraController.ScreenToWorldPoint(), typeof(TroopController));
+                    selection.StartMultiselect(
+                        cameraController.ScreenToWorldPoint(),
+                        typeof(TroopController)
+                    );
                     targetMarkerController.RemoveTargetPosition();
                     Debug.Log($"MultiselectOrigin assignated {selection.MultiselectOrigin}");
                     break;
@@ -803,7 +868,12 @@ public class GlobalLogicController : MonoBehaviour
         {
             if (newSelection.troopModel.Player == thisPcPlayer)
             {
-                selection.SetObjectSelected(newSelection, isMultiselect, typeof(TroopController), thisPcPlayer.MapSocketId);
+                selection.SetObjectSelected(
+                    newSelection,
+                    isMultiselect,
+                    typeof(TroopController),
+                    thisPcPlayer.MapSocketId
+                );
                 targetMarkerController.SetTargetPosition(newSelection.troopModel.Target, false);
             }
         }
@@ -825,7 +895,8 @@ public class GlobalLogicController : MonoBehaviour
 
                 foreach (GameObject selectedTroopObject in selection.SelectionObjects)
                 {
-                    TroopController selectedTroop = selectedTroopObject.GetComponent<TroopController>();
+                    TroopController selectedTroop =
+                        selectedTroopObject.GetComponent<TroopController>();
 
                     if (IsMultiplayerClient)
                     {
@@ -834,13 +905,17 @@ public class GlobalLogicController : MonoBehaviour
                             mouseClickPosition.ToString(),
                             selectedTroopObject.name,
                             Time.realtimeSinceStartup
-                            );
+                        );
                     }
                     else
                     {
-                        selectedTroop.troopModel.SetTarget(new GameObject(GlobalConstants.EmptyTargetName), this);
+                        selectedTroop.troopModel.SetTarget(
+                            new GameObject(GlobalConstants.EmptyTargetName),
+                            this
+                        );
                         selectedTroop.troopModel.Target.transform.position = mouseClickPosition;
-                        selectedTroop.troopModel.Target.transform.parent = emptyTargetsHolder.transform;
+                        selectedTroop.troopModel.Target.transform.parent =
+                            emptyTargetsHolder.transform;
                     }
 
                     targetMarkerController.SetTargetPosition(mouseClickPosition, true);
@@ -860,8 +935,10 @@ public class GlobalLogicController : MonoBehaviour
     {
         try
         {
-            if (selectedTroop.Target != null
-                && selectedTroop.Target.name.Contains(GlobalConstants.EmptyTargetName))
+            if (
+                selectedTroop.Target != null
+                && selectedTroop.Target.name.Contains(GlobalConstants.EmptyTargetName)
+            )
             {
                 DestroyUnit(selectedTroop.Target, null);
             }
