@@ -261,7 +261,7 @@ public class MapEditorLogicController : MonoBehaviour
         }
 
         Debug.Log($"Total players {editorPanelController.MapModel.Players.Count}");
-        Debug.Log($"Getted owner {nextOwner.FactionId}");
+        Debug.Log($"Getted owner {nextOwner.MapSocketId}");
         return nextOwner;
     }
 
