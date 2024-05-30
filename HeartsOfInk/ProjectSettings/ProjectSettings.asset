@@ -14,7 +14,7 @@ PlayerSettings:
   accelerometerFrequency: 60
   companyName: FridayDuckGames
   productName: HeartsOfInk
-  defaultCursor: {fileID: 2800000, guid: 5389d6b4366cde1439c0396cc716a3b9, type: 3}
+  defaultCursor: {fileID: 2800000, guid: d7ff57222936a924182007adb6a5c837, type: 3}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
   m_ShowUnitySplashScreen: 1
