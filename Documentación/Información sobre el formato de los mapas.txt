@@ -1,0 +1,57 @@
+Versiones de definición de mapas.
+
+Versión 0.1 
+Se incluyen dos extensiones para los mapas, .rgmd y .rgmh
+
+.rgmd significa "Rawgen Map Definition" y contiene la definición completa del mapa.
+.rgmh significa "Rawgen Map Header" y contiene solo la cabecera del mapa con datos básicos como el nombre. Este segundo fichero existe para tareas en las que hay que cargar información de todos los mapas, y si hubiera que cargar todos los mapas al completo sería muy pesado.
+
+Ejemplo de contenido de un fichero .rgmd (interpertar como un json)
+
+{
+"MapId": "0",
+"DefinitionName": "0_Cartarena",
+"DisplayName": "(4) Cartarena",
+"SpritePath": "MapSprites/0_Cartarena.png",
+"AvailableForMultiplayer": true,
+"AvailableForSingleplayer": true,
+"Players": [
+	{
+		"MapSocketId": 0,
+		"FactionId": 0,
+		"IaId": 0,
+		"Alliance": 0,
+		"Name": "Gonzalez",
+		"Color": "255,0,46",
+		"IsPlayable": true
+	}],
+"Cities": [
+	{
+		"Name": "Cartarena",
+		"Position": [
+			1.012,
+			0.554
+		],
+		"Type": 0,
+		"MapSocketId": 0
+	}]
+}
+
+Ejemplo de contenido de un fichero .rgmh (interpretar como un json)
+{
+    "MapId": "0",
+    "DefinitionName": "0_Cartarena",
+    "DisplayName": "(4) Cartarena",
+    "SpritePath": "MapSprites/0_Cartarena.png",
+    "AvailableForMultiplayer": true,
+    "AvailableForSingleplayer": true
+}
+
+Versión 0.2
+
+Se modifican las siguientes variables
+
+'Players' pasa a llamarse 'PlayerSlots'
+'Players.MapSocketId' pasa a ser 'PlayerSlots.Id'
+'Cities.MapSocketId' pasa a ser 'Cities.MapPlayerSlotId'
+'Troops.MapSocketId' pasa a ser 'Troops.MapPlayerSlotId'
