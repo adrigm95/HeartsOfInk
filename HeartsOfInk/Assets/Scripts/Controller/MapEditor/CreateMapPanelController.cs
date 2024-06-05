@@ -74,7 +74,7 @@ public class CreateMapPanelController : MonoBehaviour
             SpritePath = "MapSprites/" + background.options[background.value].text,
             AvailableForMultiplayer = isForMultiplayer.isOn,
             AvailableForSingleplayer = isForSingleplayer.isOn,
-            Players = new List<MapPlayerModel>(),
+            PlayerSlots = new List<MapPlayerSlotModel>(),
             Cities = new List<MapCityModel>(),
             Troops = new List<MapTroopModel>()
         };

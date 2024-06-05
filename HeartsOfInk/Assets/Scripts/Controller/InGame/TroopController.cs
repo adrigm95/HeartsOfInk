@@ -190,12 +190,12 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
     [Obsolete("Use IsAllyTroop instead")]
     public bool IsSelectable(int owner)
     {
-        return troopModel.Player.MapSocketId == owner;
+        return troopModel.Player.MapPlayerSlotId == owner;
     }
 
     public bool IsPcPlayer()
     {
-        return troopModel.Player.MapSocketId == globalLogic.thisPcPlayer.MapSocketId;
+        return troopModel.Player.MapPlayerSlotId == globalLogic.thisPcPlayer.MapPlayerSlotId;
   
     }
     public bool IsAllyTroop()

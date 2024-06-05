@@ -54,7 +54,7 @@ public class ScoreDisplay : MonoBehaviour
             TroopController troopController = troop.GetComponent<TroopController>();
             if (troopController != null)
             {
-                int factionIndex = troopController.troopModel.Player.MapSocketId;
+                int factionIndex = troopController.troopModel.Player.MapPlayerSlotId;
                 
                 scoreTotal[factionIndex] += troopController.troopModel.Units;
             }

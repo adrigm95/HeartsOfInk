@@ -158,7 +158,6 @@ public class StartGameController : MonoBehaviour
 
     private void GetSingleplayerOptions(GameModel gameModel)
     {
-        // Singleplayer: newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + player.MapSocketId;
         GlobalInfo globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
 
         foreach (Transform holderChild in factionDropdownsHolder)
@@ -175,7 +174,7 @@ public class StartGameController : MonoBehaviour
 
                 player.Faction.Id = Convert.ToInt32(factionId);
                 player.Faction.Bonus = new Bonus((Bonus.Id) globalInfo.Factions.Find(item => item.Id == player.Faction.Id).BonusId);
-                player.MapSocketId = Convert.ToByte(mapSocketId);
+                player.MapPlayerSlotId = Convert.ToByte(mapSocketId);
                 player.IaId = (Player.IA)(Convert.ToInt32(iaSelector.value));
                 player.Color = ColorUtils.GetStringByColor(btnColorFaction.color);
                 player.Alliance = string.IsNullOrEmpty(txtBtnAlliance.text) ? (byte) 0 : Convert.ToByte(txtBtnAlliance.text);
@@ -206,7 +205,7 @@ public class StartGameController : MonoBehaviour
             player.Faction.Bonus = new Bonus((Bonus.Id)globalInfo.Factions.Find(item => item.Id == player.Faction.Id).BonusId);
 
             gameModel.Players.Add(player);
-            Debug.Log("GetMultiplayerOptions - player: " + player.Name + " MapSocketId: " + player.MapSocketId + " color: " + player.Color);
+            Debug.Log("GetMultiplayerOptions - player: " + player.Name + " MapSocketId: " + player.MapPlayerSlotId + " color: " + player.Color);
         }
     }
 }

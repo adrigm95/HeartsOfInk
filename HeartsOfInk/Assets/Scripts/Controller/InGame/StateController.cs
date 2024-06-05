@@ -107,7 +107,7 @@ public class StateController : MonoBehaviour
             if (GameStateModel.CitiesStates.TryGetValue(gameObject.name, out city))
             {
                 CityController cityController = gameObject.GetComponent<CityController>();
-                cityController.Owner = globalLogic.GetPlayer(city.Owner);
+                cityController.Owner = globalLogic.GetPlayer(city.MapPlayerSlotId);
             }
         }
 
@@ -122,7 +122,7 @@ public class StateController : MonoBehaviour
                 updatedTroops.Add(gameObject.name, troop);
                 troopController.troopModel.CurrentPosition = troop.GetPositionAsVector3();
                 troopController.troopModel.Units = troop.Size;
-                troopController.troopModel.Player = globalLogic.GetPlayer(troop.Owner);
+                troopController.troopModel.Player = globalLogic.GetPlayer(troop.MapPlayerSlotId);
             }
             else
             {
@@ -135,7 +135,7 @@ public class StateController : MonoBehaviour
         {
             if (!updatedTroops.ContainsKey(troop.Key))
             {
-                globalLogic.InstantiateTroopMultiplayer(troop.Key, troop.Value.Size, troop.Value.GetPositionAsVector3(), troop.Value.Owner);
+                globalLogic.InstantiateTroopMultiplayer(troop.Key, troop.Value.Size, troop.Value.GetPositionAsVector3(), troop.Value.MapPlayerSlotId);
             }
         }
     }
@@ -156,7 +156,7 @@ public class StateController : MonoBehaviour
             else
             {
                 CityController cityController = currentCity.GetComponent<CityController>();
-                cityController.Owner = globalLogic.GetPlayer(city.Value.Owner);
+                cityController.Owner = globalLogic.GetPlayer(city.Value.MapPlayerSlotId);
             }
         }
 
@@ -165,14 +165,14 @@ public class StateController : MonoBehaviour
             GameObject currentTroop = GameObject.Find(troop.Key);
             if (currentTroop == null)
             {
-                globalLogic.InstantiateTroopMultiplayer(troop.Key, troop.Value.Size, troop.Value.GetPositionAsVector3(), troop.Value.Owner);
+                globalLogic.InstantiateTroopMultiplayer(troop.Key, troop.Value.Size, troop.Value.GetPositionAsVector3(), troop.Value.MapPlayerSlotId);
             }
             else
             {
                 TroopController troopController = currentTroop.GetComponent<TroopController>();
                 troopController.troopModel.CurrentPosition = troop.Value.GetPositionAsVector3();
                 troopController.troopModel.Units = troop.Value.Size;
-                troopController.troopModel.Player = globalLogic.GetPlayer(troop.Value.Owner);
+                troopController.troopModel.Player = globalLogic.GetPlayer(troop.Value.MapPlayerSlotId);
             }
         }
     }
@@ -216,13 +216,13 @@ public class StateController : MonoBehaviour
 
         if (GameStateModel.CitiesStates.TryGetValue(cityName, out cityStateModel))
         {
-            cityStateModel.Owner = owner.MapSocketId;
+            cityStateModel.MapPlayerSlotId = owner.MapPlayerSlotId;
         }
         else
         {
             GameStateModel.CitiesStates.Add(cityName, new CityStateModel()
             {
-                Owner = owner.MapSocketId
+                MapPlayerSlotId = owner.MapPlayerSlotId
             });
             Debug.LogWarning("City not finded at GetCityOwner: " + cityName);
         }
@@ -235,7 +235,7 @@ public class StateController : MonoBehaviour
 
         if (GameStateModel.CitiesStates.TryGetValue(cityName, out cityStateModel))
         {
-            owner = globalLogic.gameModel.Players.Find(player => player.MapSocketId == cityStateModel.Owner);
+            owner = globalLogic.gameModel.Players.Find(player => player.MapPlayerSlotId == cityStateModel.MapPlayerSlotId);
         }
         else
         {
@@ -253,7 +253,7 @@ public class StateController : MonoBehaviour
         {
             troopState = new TroopStateModel()
             {
-                Owner = player.MapSocketId,
+                MapPlayerSlotId = player.MapPlayerSlotId,
                 Size = size
             };
             troopState.SetPosition(position);

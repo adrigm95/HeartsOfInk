@@ -81,10 +81,10 @@ public class ConfigGameController : MonoBehaviour
             try
             {
                 Debug.Log("UpdateConfigLines - Start - Player modification received: " + configLine.PlayerName);
-                ConfigLineModel localConfigLine = _configLinesState.Find(item => item.MapSocketId == configLine.MapSocketId);
+                ConfigLineModel localConfigLine = _configLinesState.Find(item => item.MapPlayerSlotId == configLine.MapPlayerSlotId);
 
                 faction = globalInfo.Factions.Find(item => item.Id == configLine.FactionId);
-                string objectName = "factionLine" + "_" + configLine.MapSocketId;
+                string objectName = "factionLine" + "_" + configLine.MapPlayerSlotId;
                 GetObjectLineReferences(ref objectLine, out cbPlayerType, out colorFactionImage, out btnColorFaction, 
                     out txtPlayerName, out btnAlliance, out txtAlliance, out tglIsReady, objectName);
                 cbPlayerType.value = (int)configLine.PlayerType;
@@ -92,7 +92,7 @@ public class ConfigGameController : MonoBehaviour
                 localConfigLine.PlayerType = configLine.PlayerType;
                 localConfigLine.Color = configLine.Color;
 
-                if (configLine.MapSocketId == ownLine)
+                if (configLine.MapPlayerSlotId == ownLine)
                 {
                     if (!tglIsReady.isOn)
                     {
@@ -203,10 +203,10 @@ public class ConfigGameController : MonoBehaviour
                 }
             }
 
-            ownLine = configLines.Find(item => item.PlayerName == inpNick.text).MapSocketId;
+            ownLine = configLines.Find(item => item.PlayerName == inpNick.text).MapPlayerSlotId;
             for (int index = 0; index < configLines.Count; index++)
             {
-                bool lineEnabled = isGameHost || ownLine == configLines[index].MapSocketId;
+                bool lineEnabled = isGameHost || ownLine == configLines[index].MapPlayerSlotId;
 
                 LoadFactionLine(configLines, index, lineEnabled);
             }
@@ -257,24 +257,24 @@ public class ConfigGameController : MonoBehaviour
     private List<ConfigLineModel> LoadConfigLinesFromMap(bool getPlayables)
     {
         List<ConfigLineModel> configLines = new List<ConfigLineModel>();
-        List<MapPlayerModel> loadedLines;
+        List<MapPlayerSlotModel> loadedLines;
 
         if (getPlayables)
         {
-            loadedLines = _mapModel.Players.FindAll(p => p.IsPlayable);
+            loadedLines = _mapModel.PlayerSlots.FindAll(p => p.IsPlayable);
         }
         else
         {
-            loadedLines = _mapModel.Players.FindAll(p => !p.IsPlayable);
+            loadedLines = _mapModel.PlayerSlots.FindAll(p => !p.IsPlayable);
         }
 
-        foreach (MapPlayerModel player in loadedLines)
+        foreach (MapPlayerSlotModel playerSlot in loadedLines)
         {
             configLines.Add(new ConfigLineModel()
             {
-                Color = player.Color,
-                FactionId = player.FactionId,
-                MapSocketId = player.MapSocketId,
+                Color = playerSlot.Color,
+                FactionId = playerSlot.FactionId,
+                MapPlayerSlotId = playerSlot.Id,
                 PlayerName = string.Empty,
                 PlayerType = (int) Player.IA.PLAYER
             });
@@ -315,11 +315,11 @@ public class ConfigGameController : MonoBehaviour
         cbFaction = factionLine.Find("cbFaction").GetComponent<Dropdown>();
 
         string[] splittedName = factionLine.name.Split('_');
-        int mapSocketId = Convert.ToInt32(splittedName[1]);
-        ConfigLineModel configLine = _configLinesState.Find(item => item.MapSocketId == mapSocketId);
+        int mapPlayerSlotId = Convert.ToInt32(splittedName[1]);
+        ConfigLineModel configLine = _configLinesState.Find(item => item.MapPlayerSlotId == mapPlayerSlotId);
         Debug.Log("Pre-modified configLine || Playername: " + configLine.PlayerName);
 
-        if (isGameHost || configLine.MapSocketId == ownLine)
+        if (isGameHost || configLine.MapPlayerSlotId == ownLine)
         {
             configLine.FactionId = globalInfo.Factions.Find(item =>
                     item.NameLiteral == cbFaction.options[cbFaction.value].text).Id;
@@ -360,7 +360,7 @@ public class ConfigGameController : MonoBehaviour
             position = new Vector3(0, startLines);
             position.y -= spacing * index;
             newObject = ((GameObject)Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
-            newObject.name = "factionLine" + "_" + configLine.MapSocketId;
+            newObject.name = "factionLine" + "_" + configLine.MapPlayerSlotId;
             newObject.SetParent(this.transform, false);
 
             LoadFactionsCombo(configLine, newObject.Find("cbFaction").GetComponent<Dropdown>(), isEnabled);

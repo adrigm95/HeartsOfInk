@@ -116,9 +116,9 @@ public class GlobalLogicController : MonoBehaviour
                 //waitingPanel.Show(this);
 
                 Debug.Log(
-                    "Subscribe to IngameHOIServer with player id: " + thisPcPlayer.MapSocketId
+                    "Subscribe to IngameHOIServer with player id: " + thisPcPlayer.MapPlayerSlotId
                 );
-                IngameHOIHub.Instance.SuscribeToRoom(gameModel.GameKey, thisPcPlayer.MapSocketId);
+                IngameHOIHub.Instance.SuscribeToRoom(gameModel.GameKey, thisPcPlayer.MapPlayerSlotId);
                 StartGameIngameSignalR.Instance.SendClientReady(gameModel.GameKey);
             }
         }
@@ -170,7 +170,7 @@ public class GlobalLogicController : MonoBehaviour
                 selection.UpdateMultiselect(
                     cameraController.ScreenToWorldPoint(),
                     troopsCanvas.transform,
-                    thisPcPlayer.MapSocketId
+                    thisPcPlayer.MapPlayerSlotId
                 )
             )
             {
@@ -247,19 +247,15 @@ public class GlobalLogicController : MonoBehaviour
         }
     }
 
-    // public Player GetPlayer(byte mapSocketId)
-    // {
-    //     return gameModel.Players.First(pl => pl.MapSocketId == mapSocketId);
-    // }
-    public Player GetPlayer(byte mapSocketId)
+    public Player GetPlayer(byte mapPlayerSlotId)
     {
-        if (gameModel.Players.Any(player => player.MapSocketId == mapSocketId))
+        if (gameModel.Players.Any(player => player.MapPlayerSlotId == mapPlayerSlotId))
         {
-            return gameModel.Players.First(player => player.MapSocketId == mapSocketId);
+            return gameModel.Players.First(player => player.MapPlayerSlotId == mapPlayerSlotId);
         }
         else
         {
-            throw new Exception("No player found with MapSocketId " + mapSocketId);
+            throw new Exception("No player found with MapPlayerSlotId " + mapPlayerSlotId);
         }
     }
 
@@ -278,7 +274,7 @@ public class GlobalLogicController : MonoBehaviour
             Player player = new Player();
             string factionId = Convert.ToString(index);
             player.Faction.Id = Convert.ToInt32(factionId);
-            player.MapSocketId = Convert.ToByte(index);
+            player.MapPlayerSlotId = Convert.ToByte(index);
             player.Faction.Bonus = new Bonus(Bonus.Id.None);
 
             switch (index)
@@ -347,14 +343,14 @@ public class GlobalLogicController : MonoBehaviour
             for (index = 0; index < mapModel.Cities.Count; index++)
             {
                 city = mapModel.Cities[index];
-                Player cityOwner = GetPlayer(city.MapSocketId);
+                Player cityOwner = GetPlayer(city.MapPlayerSlotId);
                 InstantiateCity(city, cityOwner);
             }
 
             for (index = 0; index < mapModel.Troops.Count; index++)
             {
                 troop = mapModel.Troops[index];
-                Player troopOwner = GetPlayer(troop.MapSocketId);
+                Player troopOwner = GetPlayer(troop.MapPlayerSlotId);
                 InstantiateTroopSingleplayer(
                     troop.Units,
                     VectorUtils.FloatVectorToVector3(troop.Position),
@@ -365,7 +361,7 @@ public class GlobalLogicController : MonoBehaviour
         catch (InvalidOperationException ex)
         {
             Debug.LogError(
-                $"Any city or troop has an invalid MapSocketId: {ex.Message}; array index {index}"
+                $"Any city or troop has an invalid MapPlayerSlotId: {ex.Message}; array index {index}"
             );
 
             if (troop == null)
@@ -421,10 +417,10 @@ public class GlobalLogicController : MonoBehaviour
         string name,
         int units,
         Vector3 position,
-        byte mapSocketId
+        byte mapPlayerSlotId
     )
     {
-        InstantiateTroop(units, position, GetPlayer(mapSocketId), name);
+        InstantiateTroop(units, position, GetPlayer(mapPlayerSlotId), name);
     }
 
     private void InstantiateTroop(int units, Vector3 position, Player troopOwner, string troopId)
@@ -490,7 +486,7 @@ public class GlobalLogicController : MonoBehaviour
     }
 
     /// <summary>
-    /// Lógica de control de imputs.
+    /// Lógica de control de inputs.
     ///
     /// Multiplayer/singleplayer: Valida para singleplayer y para el host del multiplayer.
     /// </summary>
@@ -872,7 +868,7 @@ public class GlobalLogicController : MonoBehaviour
                     newSelection,
                     isMultiselect,
                     typeof(TroopController),
-                    thisPcPlayer.MapSocketId
+                    thisPcPlayer.MapPlayerSlotId
                 );
                 targetMarkerController.SetTargetPosition(newSelection.troopModel.Target, false);
             }

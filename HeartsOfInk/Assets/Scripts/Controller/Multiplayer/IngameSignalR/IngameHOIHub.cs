@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class IngameHOIHub
 {
+    private static string LastRoomConnected;
     // Singleton variables
     private static readonly Lazy<IngameHOIHub> _singletonReference = new Lazy<IngameHOIHub>(() => new IngameHOIHub());
     public static IngameHOIHub Instance => _singletonReference.Value;
@@ -21,7 +22,7 @@ public class IngameHOIHub
             .Build();
         connection.Closed += async (error) =>
         {
-            Debug.LogWarning($"Connection with SignalR closed, restarting; url {ApiConfig.IngameServerUrl}");
+            Debug.LogWarning($"Connection with SignalR closed, restarting; url {ApiConfig.IngameServerUrl}; error {error}");
             await Task.Delay(1000); // don't want to hammer the network
             await connection.StartAsync();
         };
@@ -72,6 +73,7 @@ public class IngameHOIHub
     {
         try
         {
+            LastRoomConnected = room;
             StartConnection();
 
             await connection.InvokeAsync("AddToGroup", room, playerId);

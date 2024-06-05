@@ -16,9 +16,9 @@ namespace Assets.Scripts.Data.MultiplayerStateModels
         public int Size { get; set; }
 
         /// <summary>
-        /// Identificador del dueño actual de la tropa. Se corresponde con el mapSocketId de Player.
+        /// Identificador del dueño actual de la tropa.
         /// </summary>
-        public byte Owner { get; set; }
+        public byte MapPlayerSlotId { get; set; }
 
         public Vector3 GetPositionAsVector3()
         {
@@ -40,7 +40,7 @@ namespace Assets.Scripts.Data.MultiplayerStateModels
 
         public override string ToString()
         {
-            return "Position: " + Position + " Size: " + Size + " Owner: " + Owner;
+            return "Position: " + Position + " Size: " + Size + " Owner: " + MapPlayerSlotId;
         }
     }
 }

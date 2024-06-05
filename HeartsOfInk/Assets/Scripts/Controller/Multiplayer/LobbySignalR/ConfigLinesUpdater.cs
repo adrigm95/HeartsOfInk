@@ -34,7 +34,7 @@ public class ConfigLinesUpdater
     {
         connection.On<ConfigLineModel>(ReceiverKey, (receivedObject) =>
         {
-            receivedConfigLines.Add(receivedObject.MapSocketId, receivedObject);
+            receivedConfigLines.Add(receivedObject.MapPlayerSlotId, receivedObject);
         });
 
         this.signalRController = signalRController;
