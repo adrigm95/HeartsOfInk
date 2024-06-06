@@ -27,6 +27,9 @@ public class ScoreDisplay : MonoBehaviour
         width = rectTransform.sizeDelta.x;
 
         ActivatePanel(scorePanel);
+
+        // Todo: Instanciar dinamicamente tantos textos como playerSlots tenga el mapa, obviando las facciones no jugables.
+
         for (int i = 0; i < scoreTotal.Length; i++)
         {
             if (scoreTexts[i] != null)
@@ -44,11 +47,13 @@ public class ScoreDisplay : MonoBehaviour
     {
         GameObject[] troops = GameObject.FindGameObjectsWithTag(Tags.Troop);
 
+        // Reseteo a cero de la puntuación.
         for (int index = 0; index < scoreTotal.Length; index++)
         {
             scoreTotal[index] = 0;
         }
 
+        // Sumamos a cada facción el tamaño de cada una de las tropas.
         foreach (GameObject troop in troops)
         {
             TroopController troopController = troop.GetComponent<TroopController>();
@@ -60,11 +65,12 @@ public class ScoreDisplay : MonoBehaviour
             }
         }
 
+        // Actualizamos los textos del panel indicando nombre y puntuación.
         for (int i = 0; i < scoreTotal.Length; i++)
         {
             Player player = globalLogicController.GetPlayer((byte)i);
             Color color = ColorUtils.GetColorByString(player.Color);
-            scoreTexts[i].text = player.Name  + ": " + scoreTotal[i];
+            scoreTexts[i].text = player.Name + ": " + scoreTotal[i];
             scoreTexts[i].GetComponent<TextMeshProUGUI>().color = color;
         }
     }
