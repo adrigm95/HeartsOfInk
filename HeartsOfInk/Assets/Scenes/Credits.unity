@@ -249,6 +249,7 @@ MonoBehaviour:
   mainMenuButton: {fileID: 647490091}
   exitToMenuButton: {fileID: 0}
   startGame: {fileID: 0}
+  optionsButton: {fileID: 0}
   mapEditorButton: {fileID: 0}
 --- !u!4 &343524254
 Transform:
@@ -942,7 +943,7 @@ GameObject:
   - component: {fileID: 1784396801}
   - component: {fileID: 1784396800}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: CreditsPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

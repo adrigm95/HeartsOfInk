@@ -1,22 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Utils;
 using UnityEngine;
 
+/// <summary>
+/// Controlador que maneja el panel de créditos (CreditsPanel) en la pantalla de créditos.
+/// </summary>
 public class CreditsController : MonoBehaviour
 {
     public SceneChangeController sceneChangeController;
+
+    /// <summary>
+    /// Velocidad a la que se mueve el texto verticalmente.
+    /// </summary>
     public float Speed;
+
+    /// <summary>
+    /// Posición que, una vez alcanzada, hace que se salga de la pantalla de créditos para volver al menú principal.
+    /// </summary>
     public float EndPosition;
 
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
+        TimeUtils.SetTimeToDefualt();
+
         float newYPosition = transform.position.y + Speed * Time.deltaTime;
 
         if (newYPosition > EndPosition)
@@ -26,6 +36,7 @@ public class CreditsController : MonoBehaviour
         }
         else
         {
+            Debug.Log("newYPosition: " + newYPosition);
             transform.position = new Vector3(transform.position.x, newYPosition, transform.position.z);
         }
     }
