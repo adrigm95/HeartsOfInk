@@ -327,6 +327,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorTexture: {fileID: 2800000, guid: b9e277c139b8e8345888f4dcf688975f, type: 3}
-  cursorTextureDefault: {fileID: 2800000, guid: 5389d6b4366cde1439c0396cc716a3b9, type: 3}
+  cursorTextureDefault: {fileID: 2800000, guid: 99f65a12b99d8f84f98966a3bb05face, type: 3}
   cursorHotspot: {x: 16, y: 16}
   troopController: {fileID: 3372899479411800775}
