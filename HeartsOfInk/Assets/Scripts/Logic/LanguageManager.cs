@@ -6,9 +6,15 @@ using System.Linq;
 
 public class LanguageManager
 {
-    //public const string DefaultLanguage = "CA-va";
-    public const string DefaultLanguage = "ES-es";
     private static string _language;
+
+    public static string DefaultLanguage
+    {
+        get
+        {
+            return LanguageConstants.Spanish_Spain;
+        }
+    }
 
     public static string Language { 
         get

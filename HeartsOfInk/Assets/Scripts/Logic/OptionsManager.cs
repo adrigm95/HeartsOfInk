@@ -3,6 +3,7 @@ using Assets.Scripts.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class OptionsManager
 {
@@ -31,7 +32,24 @@ public class OptionsManager
         optionsModel.SelectTroopPref = OptionsModel.LeftRightEnum.Left;
         optionsModel.MusicPref = 1;
         optionsModel.SoundEffectsPref = 1;
-        optionsModel.Language = LanguageManager.DefaultLanguage;
+        optionsModel.Language = GetDefaultLanguage();
         OptionsSceneDAC.SaveOptionsPreferences(optionsModel);
+    }
+
+    private string GetDefaultLanguage()
+    {
+        Debug.Log("Application.systemLanguage" + Application.systemLanguage);
+
+        switch (Application.systemLanguage)
+        {
+            case SystemLanguage.Spanish:
+                return LanguageConstants.Spanish_Spain;
+            case SystemLanguage.English:
+                return LanguageConstants.English;
+            case SystemLanguage.Catalan:
+                return LanguageConstants.Catalonian;
+            default:
+                return LanguageManager.DefaultLanguage;
+        } 
     }
 }
