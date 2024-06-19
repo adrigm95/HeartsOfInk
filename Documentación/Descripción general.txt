@@ -1,0 +1,17 @@
+¿Que es Hearts of ink?
+
+Hearts of Ink es un juego de estrategia sencillo, donde únicamente tienes tropas y ciudades. Con las tropas conquistas las ciudades y teniendo todas las ciudades ganas la partida.
+
+Hay un único tipo de tropa, el cual se verá afectado por bonus según la facción que selecciones. 
+
+Hay dos tipos de ciudades: capital y normal. La capital da refuerzos cada menos tiempo que las ciudades normales.
+
+¿Para que plataformas está disponible?
+Ahora mismo está disponible para windows y hay también una versión para linux, la cual temporalmente no tiene soporte. Hay planes para portar el juego a Android y Web
+
+¿Donde se puede descargar Hearts of Ink?
+Se puede descargar desde itch.io siguiendo este enlace: https://rawgen.itch.io/hearts-of-ink
+A futuro esperamos que esté disponible en steam
+
+¿Puedo crear mis propios mapas en hearts of ink? 
+Si, puedes crearlos desde el editor de mapas. Para ello tendrás que agregar una imágen de fondo a la carpeta que te indique el propio editor de mapas, y una vez lo hayas hecho te aparecerá disponible para crear un mapa usando esa imágen.

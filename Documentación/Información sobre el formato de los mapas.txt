@@ -1,4 +1,4 @@
-Versiones de definición de mapas.
+Esto documento incluye información sobre el formato de mapas que usa hearts of ink.
 
 Versión 0.1 
 Se incluyen dos extensiones para los mapas, .rgmd y .rgmh
