@@ -76,3 +76,4 @@ crashlytics-build.properties
 # Custom folders
 /Hearts of Ink/*
 /HeartsOfInk/Logs
+/HeartsOfInk/UserSettings
