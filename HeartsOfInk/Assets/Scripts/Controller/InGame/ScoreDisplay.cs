@@ -1,72 +1,73 @@
-using System.Collections.Generic;
 using Assets.Scripts.Data;
 using Assets.Scripts.Utils;
 using NETCoreServer.Models;
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ScoreDisplay : MonoBehaviour
 {
-    //GameObject[] cities = GameObject.FindGameObjectsWithTag("City");
-    public TextMeshProUGUI[] scoreTexts = new TextMeshProUGUI[4]; // Asignar en el editor de unity
     private float width;
     private RectTransform rectTransform;
-    private GameObject activePanel;
 
+    /// <summary>
+    /// Listado de puntuaciones de cada jugador. La posición en la lista se corresponde con el MapPlayerSlotId.
+    /// </summary>
+    private List<int> scoreTotal;
+
+    [SerializeField]
+    private GlobalLogicController globalLogicController;
+
+    /// <summary>
+    /// Listado con todas las líneas de puntuación.
+    /// </summary>
+    public List<TextMeshProUGUI> scoreTexts;
+
+    /// <summary>
+    /// Tamaño que tiene el panel cuando no está desplegado.
+    /// </summary>
     public float SizeClosed;
-    public float SizeOpen;
+
+    /// <summary>
+    /// Tamaño mínimo que tiene el panel cuando está desplegado.
+    /// </summary>
+    public float MinSizeOpen;
+
+    /// <summary>
+    /// Referencia al panel de puntuaciones.
+    /// </summary>
     public GameObject scorePanel;
-    private int[] scoreTotal = new int[4]; // se asume que hay 4 facciones pero habría que ajustarlo para que las detecte automáticamente
-    public FactionScore factionScore;
-    public GlobalLogicController globalLogicController;
+
+    /// <summary>
+    /// Tamaño que ocupa una línea de puntuación.
+    /// </summary>
+    public int ScoreLineSize;
+
     void Start()
     {
-    
         rectTransform = transform.GetComponent<RectTransform>();
         width = rectTransform.sizeDelta.x;
 
-        ActivatePanel(scorePanel);
-
-        // Todo: Instanciar dinamicamente tantos textos como playerSlots tenga el mapa, obviando las facciones no jugables.
-
-        for (int i = 0; i < scoreTotal.Length; i++)
-        {
-            if (scoreTexts[i] != null)
-            {
-                scoreTexts[i].text = "Facción " + (i + 1) + ": " + scoreTotal[i];
-            }
-            else
-            {
-                Debug.LogError("scoreTexts[" + (i + 1) + "] nulo");
-            }
-        }
+        Hide();
+        scoreTotal = new List<int>() { 0 }; // Siempre va a haber al menos una línea de puntuación, por eso agregamos un valor inicial, para que la lista tenga un registro.
     }
 
     void Update()
     {
         GameObject[] troops = GameObject.FindGameObjectsWithTag(Tags.Troop);
 
-        // Reseteo a cero de la puntuación.
-        for (int index = 0; index < scoreTotal.Length; index++)
-        {
-            scoreTotal[index] = 0;
-        }
+        ResetScore();
+        CalculateScore(troops);
+        UpdateScoresInFront();
+    }
 
-        // Sumamos a cada facción el tamaño de cada una de las tropas.
-        foreach (GameObject troop in troops)
-        {
-            TroopController troopController = troop.GetComponent<TroopController>();
-            if (troopController != null)
-            {
-                int factionIndex = troopController.troopModel.Player.MapPlayerSlotId;
-                
-                scoreTotal[factionIndex] += troopController.troopModel.Units;
-            }
-        }
-
-        // Actualizamos los textos del panel indicando nombre y puntuación.
-        for (int i = 0; i < scoreTotal.Length; i++)
+    /// <summary>
+    /// Actualizamos los textos del panel indicando nombre y puntuación.
+    /// </summary>
+    private void UpdateScoresInFront()
+    {
+        for (int i = 0; i < scoreTotal.Count; i++)
         {
             Player player = globalLogicController.GetPlayer((byte)i);
             Color color = ColorUtils.GetColorByString(player.Color);
@@ -75,18 +76,65 @@ public class ScoreDisplay : MonoBehaviour
         }
     }
 
-    private void ActivatePanel(GameObject gameObject)
+    /// <summary>
+    /// Calcula la puntuación para los distintos jugadores y añade al panel los que falten.
+    /// </summary>
+    /// <param name="troops"> Array con todas las tropas existentes en la partida.</param>
+    private void CalculateScore(GameObject[] troops)
     {
-        if (activePanel != null)
+        foreach (GameObject troop in troops)
         {
-            activePanel.SetActive(false);
-            activePanel.SetActive(true);
-        }
-        else if (activePanel == null)
-        {
-            ToggleVisibility();
+            TroopController troopController = troop.GetComponent<TroopController>();
+            if (troopController != null)
+            {
+                int factionIndex = troopController.troopModel.Player.MapPlayerSlotId;
+
+                if (factionIndex >= scoreTotal.Count)
+                {
+                    InstantiateScoreLine(factionIndex);
+                }
+
+                scoreTotal[factionIndex] += troopController.troopModel.Units;
+            }
         }
     }
+
+    /// <summary>
+    /// Añade una facción más al panel de puntuaciones.
+    /// </summary>
+    private void InstantiateScoreLine(int factionIndex)
+    {
+        while (scoreTexts.Count <= factionIndex)
+        {
+            GameObject newLine = Instantiate(scoreTexts[0].gameObject, scoreTexts[0].gameObject.transform.parent);
+            Debug.Log("Instantiated object: " + newLine.name + " parent: " + newLine.transform.parent.name);
+
+            RectTransform rectTransform = newLine.GetComponent<RectTransform>();
+            float newYPosition = rectTransform.localPosition.y - (scoreTexts.Count * ScoreLineSize);
+            Vector3 newPosition = new Vector3(rectTransform.localPosition.x, newYPosition, rectTransform.localPosition.z);
+            rectTransform.localPosition = newPosition;
+
+            scoreTexts.Add(newLine.GetComponent<TextMeshProUGUI>());
+            scoreTotal.Add(0);
+        }
+
+        Debug.Log($"InstantiateScoreLine. Current size of list: {scoreTexts.Count}:{scoreTotal.Count}; factionIndex required {factionIndex}");
+    }
+
+    /// <summary>
+    /// Reseteo a cero de la puntuación.
+    /// </summary>
+    private void ResetScore()
+    {
+        for (int index = 0; index < scoreTotal.Count; index++)
+        {
+            scoreTotal[index] = 0;
+        }
+    }
+
+    /// <summary>
+    /// Controla si se tiene que mostrar u ocultar el panel de puntuaciones.
+    /// </summary>
     public void ToggleVisibility()
     {
         if (rectTransform.sizeDelta.y == SizeClosed)
@@ -98,11 +146,20 @@ public class ScoreDisplay : MonoBehaviour
             Hide();
         }
     }
+
+    /// <summary>
+    /// Despliega el panel de puntuaciones.
+    /// </summary>
     private void Show()
     {
-        rectTransform.sizeDelta = new Vector2(width, SizeOpen);
+        float sizeOpen = MinSizeOpen + (scoreTexts.Count * ScoreLineSize);
+        rectTransform.sizeDelta = new Vector2(width, sizeOpen);
         scorePanel.SetActive(true);
     }
+
+    /// <summary>
+    /// Oculta el panel de puntuaciones.
+    /// </summary>
     private void Hide()
     {
         rectTransform.sizeDelta = new Vector2(width, SizeClosed);

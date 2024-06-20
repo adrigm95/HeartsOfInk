@@ -161,9 +161,9 @@
     <Compile Include="Assets\Scripts\Controller\Multiplayer\SubMenuPanelController.cs" />
     <Compile Include="Assets\Scripts\Logic\AILogic.cs" />
     <Compile Include="Assets\Scripts\Rawgen\FPSMetrics.cs" />
-    <Compile Include="Assets\Scripts\Controller\InGame\FactionScore.cs" />
     <Compile Include="Assets\Scripts\Rawgen\Models\CachedCollider2D.cs" />
     <Compile Include="Assets\Scripts\Data\Constants\Tags.cs" />
+    <Compile Include="Assets\Scripts\Utils\TimeUtils.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\Scripts\Controller\Multiplayer\IngameSignalR\AttackTroopSignalR.cs" />
@@ -183,7 +183,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\Controller\MainMenu\MainMenuLiteralsController.cs" />
     <Compile Include="Assets\Scripts\Logic\OptionsManager.cs" />
-    <Compile Include="Assets\Scripts\Controller\ScoreFactionController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\WaitingPanelController.cs" />
     <Compile Include="Assets\Scripts\Controller\AcceptPolicy\AcceptTermsController.cs" />
     <Compile Include="Assets\Scripts\Controller\InGame\TargetPositionMarkerController.cs" />
@@ -209,7 +208,6 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
-    <None Include="Assets\Fonts\License.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Oswald-Bold - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Anton OFL.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
@@ -221,12 +219,10 @@
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
-    <None Include="Assets\Fonts\OFL.txt" />
     <None Include="Assets\Music\SoundEffects\Créditos_SoundEffects.txt" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Scripts\Rawgen\LICENSE.txt" />
     <None Include="Assets\Music\Oriental\Creditos_oriental.txt" />
-    <None Include="Assets\Fonts\unfair_shares\License.txt" />
     <None Include="Assets\Music\Occidental\Creditos_Occidental.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
