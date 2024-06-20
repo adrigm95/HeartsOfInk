@@ -5,44 +5,6 @@
     "SpritePath": "MapSprites/3_aburicu-flatlands.png",
     "AvailableForMultiplayer": true,
     "AvailableForSingleplayer": true,
-    "Players": [
-        {
-            "MapSocketId": 0,
-            "FactionId": 1,
-            "IaId": 0,
-            "Alliance": 1,
-            "Name": "De la cuesta",
-            "Color": "88,212,255",
-            "IsPlayable": true
-        },
-        {
-            "MapSocketId": 1,
-            "FactionId": 2,
-            "IaId": 1,
-            "Alliance": 1,
-            "Name": "Mijallo",
-            "Color": "30,60,180",
-            "IsPlayable": true
-        },
-        {
-            "MapSocketId": 2,
-            "FactionId": 2,
-            "IaId": 1,
-            "Alliance": 2,
-            "Name": "Mijallo",
-            "Color": "0,234,61",
-            "IsPlayable": true
-        },
-        {
-            "MapSocketId": 3,
-            "FactionId": 2,
-            "IaId": 1,
-            "Alliance": 2,
-            "Name": "De la cuesta",
-            "Color": "65,160,95",
-            "IsPlayable": true
-        }
-    ],
     "Cities": [
         {
             "Name": "New City",
@@ -51,7 +13,7 @@
                 -0.474520683
             ],
             "Type": 1,
-            "MapSocketId": 0
+            "MapPlayerSlotId": 0
         },
         {
             "Name": "New City",
@@ -60,7 +22,7 @@
                 -0.09897691
             ],
             "Type": 1,
-            "MapSocketId": 0
+            "MapPlayerSlotId": 0
         },
         {
             "Name": "New City",
@@ -69,7 +31,7 @@
                 4.921905
             ],
             "Type": 1,
-            "MapSocketId": 1
+            "MapPlayerSlotId": 1
         },
         {
             "Name": "New City",
@@ -78,7 +40,7 @@
                 3.88989258
             ],
             "Type": 1,
-            "MapSocketId": 1
+            "MapPlayerSlotId": 1
         },
         {
             "Name": "New City",
@@ -87,7 +49,7 @@
                 0.782318354
             ],
             "Type": 0,
-            "MapSocketId": 1
+            "MapPlayerSlotId": 1
         },
         {
             "Name": "New City",
@@ -96,7 +58,7 @@
                 0.441030771
             ],
             "Type": 1,
-            "MapSocketId": 1
+            "MapPlayerSlotId": 1
         },
         {
             "Name": "New City",
@@ -105,7 +67,7 @@
                 -1.8435092
             ],
             "Type": 1,
-            "MapSocketId": 1
+            "MapPlayerSlotId": 1
         },
         {
             "Name": "New City",
@@ -114,7 +76,7 @@
                 -3.0342927
             ],
             "Type": 1,
-            "MapSocketId": 0
+            "MapPlayerSlotId": 0
         },
         {
             "Name": "New City",
@@ -123,7 +85,7 @@
                 -4.41030931
             ],
             "Type": 0,
-            "MapSocketId": 0
+            "MapPlayerSlotId": 0
         },
         {
             "Name": "New City",
@@ -132,7 +94,7 @@
                 -3.634095
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 3
         },
         {
             "Name": "New City",
@@ -141,7 +103,7 @@
                 -2.258078
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 3
         },
         {
             "Name": "New City",
@@ -150,7 +112,7 @@
                 -4.392668
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 3
         },
         {
             "Name": "New City",
@@ -159,7 +121,7 @@
                 -1.1907835
             ],
             "Type": 0,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 3
         },
         {
             "Name": "New City",
@@ -168,7 +130,7 @@
                 2.222796
             ],
             "Type": 1,
-            "MapSocketId": 2
+            "MapPlayerSlotId": 2
         },
         {
             "Name": "New City",
@@ -177,7 +139,7 @@
                 4.55143929
             ],
             "Type": 0,
-            "MapSocketId": 2
+            "MapPlayerSlotId": 2
         },
         {
             "Name": "New City",
@@ -186,7 +148,7 @@
                 3.61645341
             ],
             "Type": 1,
-            "MapSocketId": 2
+            "MapPlayerSlotId": 2
         },
         {
             "Name": "New City",
@@ -195,7 +157,7 @@
                 4.57790041
             ],
             "Type": 1,
-            "MapSocketId": 2
+            "MapPlayerSlotId": 2
         },
         {
             "Name": "New City",
@@ -204,7 +166,7 @@
                 1.27016938
             ],
             "Type": 1,
-            "MapSocketId": 0
+            "MapPlayerSlotId": 0
         }
     ],
     "Troops": [
@@ -214,7 +176,7 @@
                 -0.332501054,
                 0.9765701
             ],
-            "MapSocketId": 0
+            "MapPlayerSlotId": 0
         },
         {
             "Units": 100,
@@ -222,7 +184,7 @@
                 -0.09434466,
                 -0.05544293
             ],
-            "MapSocketId": 0
+            "MapPlayerSlotId": 0
         },
         {
             "Units": 300,
@@ -230,7 +192,7 @@
                 2.49872541,
                 -4.167512
             ],
-            "MapSocketId": 0
+            "MapPlayerSlotId": 0
         },
         {
             "Units": 30,
@@ -238,7 +200,7 @@
                 1.1616863,
                 4.503156
             ],
-            "MapSocketId": 1
+            "MapPlayerSlotId": 1
         },
         {
             "Units": 50,
@@ -246,7 +208,7 @@
                 3.04047823,
                 0.260437965
             ],
-            "MapSocketId": 1
+            "MapPlayerSlotId": 1
         },
         {
             "Units": 200,
@@ -254,7 +216,7 @@
                 -1.671669,
                 -3.56166458
             ],
-            "MapSocketId": 3
+            "MapPlayerSlotId": 3
         },
         {
             "Units": 50,
@@ -262,7 +224,7 @@
                 -1.31002283,
                 4.66331768
             ],
-            "MapSocketId": 2
+            "MapPlayerSlotId": 2
         },
         {
             "Units": 200,
@@ -270,7 +232,7 @@
                 -5.23519659,
                 4.00658369
             ],
-            "MapSocketId": 2
+            "MapPlayerSlotId": 2
         },
         {
             "Units": 130,
@@ -278,7 +240,7 @@
                 -6.981679,
                 -1.56804729
             ],
-            "MapSocketId": 3
+            "MapPlayerSlotId": 3
         },
         {
             "Units": 80,
@@ -286,7 +248,7 @@
                 -4.097337,
                 -1.79738379
             ],
-            "MapSocketId": 3
+            "MapPlayerSlotId": 3
         },
         {
             "Units": 20,
@@ -294,7 +256,45 @@
                 -4.070874,
                 3.345034
             ],
-            "MapSocketId": 2
+            "MapPlayerSlotId": 2
+        }
+    ],
+    "PlayerSlots": [
+        {
+            "FactionId": 1,
+            "IaId": 0,
+            "Alliance": 1,
+            "Name": "De la cuesta",
+            "Color": "88,212,255",
+            "IsPlayable": true,
+            "Id": 0
+        },
+        {
+            "FactionId": 2,
+            "IaId": 1,
+            "Alliance": 1,
+            "Name": "Mijallo",
+            "Color": "30,60,180",
+            "IsPlayable": true,
+            "Id": 1
+        },
+        {
+            "FactionId": 2,
+            "IaId": 1,
+            "Alliance": 2,
+            "Name": "Mijallo",
+            "Color": "0,234,61",
+            "IsPlayable": true,
+            "Id": 2
+        },
+        {
+            "FactionId": 2,
+            "IaId": 1,
+            "Alliance": 2,
+            "Name": "De la cuesta",
+            "Color": "65,160,95",
+            "IsPlayable": true,
+            "Id": 3
         }
     ]
 }
