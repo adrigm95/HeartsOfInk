@@ -1018,6 +1018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 009817cf0f31f594284df3a60355c007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SceneChangeController: {fileID: 689156827}
 --- !u!4 &1691352642
 Transform:
   m_ObjectHideFlags: 0
