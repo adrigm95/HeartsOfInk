@@ -5,44 +5,15 @@
     "SpritePath": "MapSprites/Asedio.png",
     "AvailableForMultiplayer": true,
     "AvailableForSingleplayer": true,
-    "Players": [
-        {
-            "MapSocketId": 1,
-            "FactionId": 1,
-            "IaId": 0,
-            "Alliance": 0,
-            "Name": "De la cuesta",
-            "Color": "255,0,46",
-            "IsPlayable": true
-        },
-        {
-            "MapSocketId": 2,
-            "FactionId": 2,
-            "IaId": 3,
-            "Alliance": 0,
-            "Name": "Mijallo",
-            "Color": "65,160,95",
-            "IsPlayable": true
-        },
-        {
-            "MapSocketId": 3,
-            "FactionId": 8,
-            "IaId": 2,
-            "Alliance": 0,
-            "Name": "Flowerson",
-            "Color": "200,200,200",
-            "IsPlayable": false
-        }
-    ],
     "Cities": [
         {
-            "Name": "Bastión",
+            "Name": "Basti\u00f3n",
             "Position": [
                 -5.46845436,
                 3.39887834
             ],
             "Type": 0,
-            "MapSocketId": 1
+            "MapPlayerSlotId": 0
         },
         {
             "Name": "",
@@ -51,7 +22,7 @@
                 3.73994184
             ],
             "Type": 1,
-            "MapSocketId": 1
+            "MapPlayerSlotId": 0
         },
         {
             "Name": "Murallas",
@@ -60,7 +31,7 @@
                 2.187513
             ],
             "Type": 1,
-            "MapSocketId": 1
+            "MapPlayerSlotId": 0
         },
         {
             "Name": "Playariba",
@@ -69,7 +40,7 @@
                 4.98659
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 2
         },
         {
             "Name": "Sambero",
@@ -78,7 +49,7 @@
                 4.43383074
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 2
         },
         {
             "Name": "Segado",
@@ -87,7 +58,7 @@
                 2.98724961
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 2
         },
         {
             "Name": "Milantro",
@@ -96,16 +67,16 @@
                 1.352495
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 2
         },
         {
-            "Name": "Cráñamo",
+            "Name": "Cr\u00e1\u00f1amo",
             "Position": [
                 -0.83468914,
                 0.223455876
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 2
         },
         {
             "Name": "Tamargo",
@@ -114,7 +85,7 @@
                 -2.222796
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 2
         },
         {
             "Name": "Fomento",
@@ -123,16 +94,16 @@
                 -4.46911335
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 2
         },
         {
-            "Name": "Rigolí",
+            "Name": "Rigol\u00ed",
             "Position": [
                 0.882392049,
                 -4.04572344
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 2
         },
         {
             "Name": "San Lucas",
@@ -141,7 +112,7 @@
                 -1.63475478
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 2
         },
         {
             "Name": "Gasunto",
@@ -150,7 +121,7 @@
                 0.399868339
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 2
         },
         {
             "Name": "Rochela",
@@ -159,7 +130,7 @@
                 2.34040356
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 2
         },
         {
             "Name": "Nocela",
@@ -168,7 +139,7 @@
                 -1.47010326
             ],
             "Type": 1,
-            "MapSocketId": 3
+            "MapPlayerSlotId": 2
         },
         {
             "Name": "Campamento",
@@ -177,7 +148,7 @@
                 -4.09276724
             ],
             "Type": 0,
-            "MapSocketId": 2
+            "MapPlayerSlotId": 1
         },
         {
             "Name": "Puerto",
@@ -186,7 +157,7 @@
                 1.50538576
             ],
             "Type": 1,
-            "MapSocketId": 1
+            "MapPlayerSlotId": 0
         },
         {
             "Name": "Ribaplaya",
@@ -195,7 +166,7 @@
                 3.05781412
             ],
             "Type": 1,
-            "MapSocketId": 1
+            "MapPlayerSlotId": 0
         }
     ],
     "Troops": [
@@ -205,7 +176,7 @@
                 7.246313,
                 -4.45241833
             ],
-            "MapSocketId": 2
+            "MapPlayerSlotId": 1
         },
         {
             "Units": 200,
@@ -213,7 +184,36 @@
                 5.999665,
                 -5.05221748
             ],
-            "MapSocketId": 2
+            "MapPlayerSlotId": 1
+        }
+    ],
+    "PlayerSlots": [
+        {
+            "FactionId": 1,
+            "IaId": 0,
+            "Alliance": 0,
+            "Name": "De la cuesta",
+            "Color": "255,0,46",
+            "IsPlayable": true,
+            "Id": 0
+        },
+        {
+            "FactionId": 2,
+            "IaId": 3,
+            "Alliance": 0,
+            "Name": "Mijallo",
+            "Color": "65,160,95",
+            "IsPlayable": true,
+            "Id": 1
+        },
+        {
+            "FactionId": 8,
+            "IaId": 2,
+            "Alliance": 0,
+            "Name": "Flowerson",
+            "Color": "200,200,200",
+            "IsPlayable": false,
+            "Id": 2
         }
     ]
 }

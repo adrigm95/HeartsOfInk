@@ -408,6 +408,7 @@ public class EditorPanelController : MonoBehaviour
     /// </summary>
     private void MakeMapPlayerSlotIdCorrelative(MapModel mapModel)
     {
-        throw new NotImplementedException();
+        Debug.LogWarning("Call to method MakeMapPlayerSlotIdCorrelative. This method isn't implemented yet.");
+        //throw new NotImplementedException();
     }
 }
