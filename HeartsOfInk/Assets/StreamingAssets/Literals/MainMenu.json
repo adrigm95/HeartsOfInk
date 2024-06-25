@@ -1,0 +1,146 @@
+{
+	"FastGame": [
+		{
+			"Language": "ES-es",
+			"Value": "Partida rápida"
+		},
+		{
+			"Language": "EN",
+			"Value": "Quick game"
+		},
+		{
+			"Language": "CA-va",
+			"Value": "Partida ràpida"
+		}
+	],
+	"Levels": [
+		{
+			"Language": "ES-es",
+			"Value": "Niveles"
+		},
+		{
+			"Language": "EN",
+			"Value": "Levels"
+		},
+		{
+			"Language": "CA-va",
+			"Value": "Nivels"
+		}
+	],
+	"Multiplayer": [
+	{
+			"Language": "ES-es",
+			"Value": "Multijugador"
+		},
+		{
+			"Language": "EN",
+			"Value": "Multiplayer"
+		},
+		{
+			"Language": "CA-va",
+			"Value": "Multijugador"
+		}
+	],
+	"Options": [
+		{
+			"Language": "ES-es",
+			"Value": "Opciones"
+		},
+		{
+			"Language": "EN",
+			"Value": "Options"
+		},
+		{
+			"Language": "CA-va",
+			"Value": "Opcions"
+		}
+	],
+	"Editor": [
+		{
+			"Language": "ES-es",
+			"Value": "Editor de mapas"
+		},
+		{
+			"Language": "EN",
+			"Value": "Map editor"
+		},
+		{
+			"Language": "CA-va",
+			"Value": "Editor de mapes"
+		}
+	],
+	"Credits": [
+		{
+			"Language": "ES-es",
+			"Value": "Créditos"
+		},
+		{
+			"Language": "EN",
+			"Value": "Credits"
+		},
+		{
+			"Language": "CA-va",
+			"Value": "Credits"
+		}
+	],
+	"ExitGame": [
+		{
+			"Language": "ES-es",
+			"Value": "Salir del juego"
+		},
+		{
+			"Language": "EN",
+			"Value": "Exit game"
+		},
+		{
+			"Language": "CA-va",
+			"Value": "Sortir del joc"
+		},
+		{
+			"Language": "CA",
+			"Value": "Sortir del joc"
+		}
+	],
+	"TxtChooseMap": [
+		{
+			"Language": "ES-es",
+			"Value": "Mapa"
+		},
+		{
+			"Language": "EN",
+			"Value": "Map"
+		},
+		{
+			"Language": "CA-va",
+			"Value": "Mapa"
+		}
+	],
+	"TxtYourFactionTitle": [
+		{
+			"Language": "ES-es",
+			"Value": "Tu facción"
+		},
+		{
+			"Language": "EN",
+			"Value": "Your faction"
+		},
+		{
+			"Language": "CA-va",
+			"Value": "La teva facció"
+		}
+	],
+	"TxtFactionBonusTitle": [
+		{
+			"Language": "ES-es",
+			"Value": "Bonus de tu facción"
+		},
+		{
+			"Language": "EN",
+			"Value": "Bonus of your faction"
+		},
+		{
+			"Language": "CA-va",
+			"Value": "Bonus de la teva facció"
+		}
+	]
+}

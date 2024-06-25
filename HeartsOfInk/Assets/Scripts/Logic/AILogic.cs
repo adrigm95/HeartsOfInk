@@ -37,7 +37,7 @@ public class AILogic
     {
         GameObject target = null;
         Vector2 currentPos = troopModel.CurrentPosition;
-        GameObject[] cities = GameObject.FindGameObjectsWithTag("City");
+        GameObject[] cities = GameObject.FindGameObjectsWithTag(Tags.City);
         Dictionary<int, float> distances = new Dictionary<int, float>(); 
 
         for (int index = 0; index < cities.Length; index++)

@@ -11,8 +11,17 @@ namespace Assets.Scripts.Data.GlobalInfo
     {
         public int Id { get; set; }
         public int BonusId { get; set; }
+
+        /// <summary>
+        /// Es el nombre de la facción, por ejemplo: "Rebeldes"
+        /// </summary>
         public List<LiteralModel> Names { get; set; }
         public List<LiteralModel> Descriptions { get; set; }
+
+        /// <summary>
+        /// Nombre del general si la facción la maneja la IA.
+        /// </summary>
+        public List<string> IANames { get; set; }
 
         public string NameLiteral 
         { 

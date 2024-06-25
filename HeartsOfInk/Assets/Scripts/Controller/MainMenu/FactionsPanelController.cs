@@ -43,9 +43,9 @@ public class FactionsPanelController : MonoBehaviour
         globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
 
         CleanFactionLines();
-        foreach (MapPlayerModel player in mapModel.Players)
+        foreach (MapPlayerSlotModel playerSlot in mapModel.PlayerSlots)
         {
-            LoadFactionLine(player);
+            LoadFactionLine(playerSlot);
         }
         MapController.Instance.UpdateMap(mapModel.SpritePath);
     }
@@ -70,7 +70,7 @@ public class FactionsPanelController : MonoBehaviour
         return availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text).MapId;
     }
 
-    public void LoadFactionLine(MapPlayerModel player)
+    public void LoadFactionLine(MapPlayerSlotModel playerSlot)
     {
         string prefabPath = "Prefabs/fileFactionSingleplayer";
         Transform newObject;
@@ -81,29 +81,29 @@ public class FactionsPanelController : MonoBehaviour
         GlobalInfoFaction faction;
         Text txtAlliance;
 
-        faction = globalInfo.Factions.Find(item => item.Id == player.FactionId);
+        faction = globalInfo.Factions.Find(item => item.Id == playerSlot.FactionId);
         position = new Vector3(0, startFactionLines);
         position.y -= spacing * factions.Count;
         newObject = ((GameObject) Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
-        newObject.name = "factionLine" + faction.NameLiteral + "_" + faction.Id + "_" + player.MapSocketId;
+        newObject.name = "factionLine" + faction.NameLiteral + "_" + faction.Id + "_" + playerSlot.Id;
         newObject.SetParent(this.transform, false);
-        newObject.gameObject.SetActive(player.IsPlayable);
+        newObject.gameObject.SetActive(playerSlot.IsPlayable);
 
         cbFaction = newObject.Find("cbFaction").GetComponent<Dropdown>();
         txtFaction = newObject.Find("txtFaction").GetComponent<Text>();
         btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
         txtAlliance = newObject.Find("btnAlliance").GetComponentInChildren<Text>();
 
-        Player.IA slotPlayerType = (Player.IA)player.IaId;
-        cbFaction.value = slotPlayerType == Player.IA.OTHER_PLAYER ? (int) Player.IA.IA : player.IaId;
+        Player.IA slotPlayerType = (Player.IA)playerSlot.IaId;
+        cbFaction.value = slotPlayerType == Player.IA.OTHER_PLAYER ? (int) Player.IA.IA : playerSlot.IaId;
         cbFaction.onValueChanged.AddListener(delegate { CbFaction_OnValueChange(cbFaction); });
         txtFaction.text = faction.NameLiteral;
-        btnColorFaction.color = ColorUtils.GetColorByString(player.Color);
-        txtAlliance.text = AllianceUtils.ConvertToString(player.Alliance);
+        btnColorFaction.color = ColorUtils.GetColorByString(playerSlot.Color);
+        txtAlliance.text = AllianceUtils.ConvertToString(playerSlot.Alliance);
 
         factions.Add(cbFaction);
 
-        if (player.IaId == PlayerOwnerValue)
+        if (playerSlot.IaId == PlayerOwnerValue)
         {
             ChangeFactionDescriptions(faction);
         }

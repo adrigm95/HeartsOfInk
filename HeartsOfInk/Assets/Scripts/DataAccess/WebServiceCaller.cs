@@ -1,10 +1,7 @@
-﻿using Assets.Scripts.Data.Constants;
-using NETCoreServer.Models;
+﻿using NETCoreServer.Models;
 using Newtonsoft.Json;
 using System;
-using System.IO;
 using System.Net.Http;
-using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -32,7 +29,6 @@ namespace Assets.Scripts.DataAccess
         /// <param name="targetRequest"> Value like "api/Home/GetData". </param>
         public async Task<HOIResponseModel<S>> GenericWebServiceCaller(string baseAdress, Method method, string targetRequest, T requestBody)
         {
-            HttpClient client = new HttpClient();
             HOIResponseModel<S> serverResponse;
             HttpResponseMessage response = null;
             HttpContent content;
@@ -44,42 +40,45 @@ namespace Assets.Scripts.DataAccess
 
             try
             {
-                start = DateTime.Now.Ticks;
-                client.BaseAddress = new Uri(baseAdress);
-
                 if (requestBody != null)
                 {
                     json = JsonConvert.SerializeObject(requestBody);
 
-                    Debug.Log($"Sending to: {baseAdress+targetRequest} json: {json}");
+                    Debug.Log($"Sending to: {baseAdress + targetRequest} json: {json}");
                 }
-
                 content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                switch (method)
+                start = DateTime.Now.Ticks;
+                using (HttpClient client = new HttpClient())
                 {
-                    case Method.POST:
-                        response = await client.PostAsync(targetRequest, content);
-                        break;
-                    case Method.PUT:
-                        response = await client.PutAsync(targetRequest, content);
-                        break;
-                    case Method.DELETE:
-                        response = await client.DeleteAsync(targetRequest);
-                        break;
-                    case Method.GET:
-                        response = await client.GetAsync(targetRequest);
-                        break;
+                    client.BaseAddress = new Uri(baseAdress);
+
+                    switch (method)
+                    {
+                        case Method.POST:
+                            response = await client.PostAsync(targetRequest, content);
+                            break;
+                        case Method.PUT:
+                            response = await client.PutAsync(targetRequest, content);
+                            break;
+                        case Method.DELETE:
+                            response = await client.DeleteAsync(targetRequest);
+                            break;
+                        case Method.GET:
+                            response = await client.GetAsync(targetRequest);
+                            break;
+                    }
+
+                    responseContent = await response.Content.ReadAsStringAsync();
+                    serverResponse = JsonConvert.DeserializeObject<HOIResponseModel<S>>(responseContent);
+                    LogConnectionResponse(response.StatusCode);
+
+                    end = DateTime.Now.Ticks;
+                    difference = TimeSpan.FromTicks(end - start);
                 }
 
-                responseContent = await response.Content.ReadAsStringAsync();
-                serverResponse = JsonConvert.DeserializeObject<HOIResponseModel<S>>(responseContent);
-                end = DateTime.Now.Ticks;
-                difference = TimeSpan.FromTicks(end - start);
                 Debug.Log("Start: " + start + " End: " + end + " Difference: " + difference);
-
                 LogServerResponse(serverResponse);
-                LogConnectionResponse(response.StatusCode);
             }
             catch (NullReferenceException ex)
             {

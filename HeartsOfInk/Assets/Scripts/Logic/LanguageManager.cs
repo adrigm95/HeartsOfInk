@@ -1,11 +1,20 @@
 ﻿using Assets.Scripts.Data.Literals;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 public class LanguageManager
 {
-    private const string DefaultLanguage = "ES-es";
     private static string _language;
+
+    public static string DefaultLanguage
+    {
+        get
+        {
+            return LanguageConstants.Spanish_Spain;
+        }
+    }
 
     public static string Language { 
         get
@@ -32,7 +41,14 @@ public class LanguageManager
 
         if (literal == null)
         {
+            // Si no encuentra literal del idioma requerido, busca del idioma por defecto.
             literal = literals.Find(lit => lit.Language == DefaultLanguage);
+
+            if (literal == null)
+            {
+                // Si el idioma por defecto tampoco tiene literal, se devuelve el primero que haya.
+                literal = literals.First();
+            }
         }
 
         return literal.Value;
@@ -42,8 +58,15 @@ public class LanguageManager
     {
         if (string.IsNullOrWhiteSpace(_language))
         {
-            // TODO: obtener el idioma de las preferencias de usuario.
-            _language = "ES-es";
+            string optionsLanguage = OptionsManager.Instance.OptionsModel.Language;
+            if (ValidateLanguage(optionsLanguage))
+            {
+                _language = optionsLanguage;
+            }
+            else 
+            {
+                _language = "ES-es";
+            }
         }
 
         return _language;
@@ -55,9 +78,10 @@ public class LanguageManager
         {
             case LanguageConstants.English:
             case LanguageConstants.Spanish_Spain:
-            case LanguageConstants.Portuguese_Brazil:
             case LanguageConstants.Valencian:
+            case LanguageConstants.Catalonian:
                 return true;
+            case LanguageConstants.Portuguese_Brazil:
             default:
                 return false;
         }

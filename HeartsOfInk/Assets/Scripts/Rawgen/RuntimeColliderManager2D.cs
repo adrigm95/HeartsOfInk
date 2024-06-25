@@ -6,6 +6,11 @@ using Rawgen_DataAccess;
 using Assets.Scripts.Rawgen.Models;
 using System.Linq;
 
+/// <summary>
+/// Gestiona colliders dinámicos en 2D.
+/// 
+/// Nota: No funciona en Android debido al uso de streamingAssets.
+/// </summary>
 public class RuntimeColliderManager2D : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;

@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Controller.InGame;
+using System;
 using UnityEngine;
 
 public class EditorTroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
@@ -24,7 +25,7 @@ public class EditorTroopController : MonoBehaviour, IObjectAnimator, IObjectSele
         editorLogicController.ClickReceivedFromTroop(this);
         Debug.Log("On left click: " + this);
     }
-
+    
     public bool IsSelectable(int owner)
     {
         return true;

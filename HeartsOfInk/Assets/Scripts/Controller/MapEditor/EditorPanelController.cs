@@ -1,12 +1,12 @@
-﻿using Assets.Scripts.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts.Data;
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
 using HeartsOfInk.SharedLogic;
 using LobbyHOIServer.Models.MapModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,20 +30,25 @@ public class EditorPanelController : MonoBehaviour
     public int startFactionLines;
     public int spacing;
 
-    public MapModel MapModel { get { return mapModel; } }
+    public MapModel MapModel
+    {
+        get { return mapModel; }
+    }
 
     void Start()
     {
         factions = new List<Dropdown>();
         LoadAvailableMaps(string.Empty);
-        cbMaps.onValueChanged.AddListener(delegate { LoadMap(); });
+        cbMaps.onValueChanged.AddListener(
+            delegate
+            {
+                LoadMap();
+            }
+        );
         LoadMap();
     }
 
-    void Update()
-    {
-        
-    }
+    void Update() { }
 
     public void LoadAvailableMaps(string firstMap)
     {
@@ -62,8 +67,14 @@ public class EditorPanelController : MonoBehaviour
     {
         Debug.Log("Loading map: " + cbMaps.itemText.text);
         _mapEditorLogic.ResetSelection();
-        mapModelHeader = availableMaps.Find(map => map.DisplayName == cbMaps.options[cbMaps.value].text);
-        mapModel = MapDAC.LoadMapInfoByName(mapModelHeader.DefinitionName, GlobalConstants.RootPath);
+        mapModelHeader = availableMaps.Find(map =>
+            map.DisplayName == cbMaps.options[cbMaps.value].text
+        );
+        mapModel = MapDAC.LoadMapInfoByName(
+            mapModelHeader.DefinitionName,
+            GlobalConstants.RootPath
+        );
+        ValidateAndCorrectMap(mapModel);
         globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
 
         mapName.text = mapModel.DisplayName;
@@ -75,15 +86,20 @@ public class EditorPanelController : MonoBehaviour
 
     public void AddNewFactionLine()
     {
-        byte maxSocketId = 0;
-        MapPlayerModel playerModel;
+        int playerSlotId = 0;
+        MapPlayerSlotModel playerModel;
         Color startColor = ColorUtils.NextColor(Color.black, globalInfo.AvailableColors);
 
-        mapModel.Players.ForEach(player => maxSocketId = player.MapSocketId > maxSocketId ? player.MapSocketId : maxSocketId);
-        maxSocketId++;
-        playerModel = new MapPlayerModel(maxSocketId);
+        playerSlotId = mapModel.PlayerSlots.Count;
+
+        while (mapModel.PlayerSlots.Any(player => player.Id == playerSlotId))
+        {
+            playerSlotId++;
+        }
+
+        playerModel = new MapPlayerSlotModel(Convert.ToByte(playerSlotId));
         playerModel.Color = ColorUtils.GetStringByColor(startColor);
-        mapModel.Players.Add(playerModel);
+        mapModel.PlayerSlots.Add(playerModel);
         LoadFactionLine(playerModel);
         LoadFactionLines();
     }
@@ -99,18 +115,13 @@ public class EditorPanelController : MonoBehaviour
     {
         CleanFactionLines();
 
-        foreach (MapPlayerModel player in mapModel.Players)
+        foreach (MapPlayerSlotModel player in mapModel.PlayerSlots)
         {
             LoadFactionLine(player);
         }
-
-        if (mapModel.Players.Count == 0)
-        {
-            AddNewFactionLine();
-        }
     }
 
-    private void LoadFactionLine(MapPlayerModel player)
+    private void LoadFactionLine(MapPlayerSlotModel playerSlot)
     {
         string prefabPath = "Prefabs/editorFactionLine";
         Transform newObject;
@@ -123,11 +134,13 @@ public class EditorPanelController : MonoBehaviour
         Toggle tgIsPlayable;
         Text txtAlliance;
 
-        faction = globalInfo.Factions.Find(item => item.Id == player.FactionId);
+        faction = globalInfo.Factions.Find(item => item.Id == playerSlot.FactionId);
         position = new Vector3(0, startFactionLines);
         position.y -= spacing * factions.Count;
-        newObject = ((GameObject)Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
-        newObject.name = "factionLine_" + player.MapSocketId;
+        newObject = (
+            (GameObject)Instantiate(Resources.Load(prefabPath), position, transform.rotation)
+        ).transform;
+        newObject.name = "factionLine_" + playerSlot.Id;
         newObject.SetParent(this.transform, false);
 
         cbFaction = newObject.Find("cbFaction").GetComponent<Dropdown>();
@@ -137,12 +150,17 @@ public class EditorPanelController : MonoBehaviour
         txtAlliance = newObject.Find("btnAlliance").GetComponentInChildren<Text>();
         tgIsPlayable = newObject.Find("tgIsPlayable").GetComponent<Toggle>();
 
-        btnColorFaction.onClick.AddListener(delegate { OnClick_PlayerColor(colorFactionImage); });
-        cbPlayerType.value = player.IaId;
-        colorFactionImage.color = ColorUtils.GetColorByString(player.Color);
-        LoadFactionsCombo(cbFaction, player.FactionId);
-        txtAlliance.text = AllianceUtils.ConvertToString(player.Alliance);
-        tgIsPlayable.isOn = player.IsPlayable;
+        btnColorFaction.onClick.AddListener(
+            delegate
+            {
+                OnClick_PlayerColor(colorFactionImage);
+            }
+        );
+        cbPlayerType.value = playerSlot.IaId;
+        colorFactionImage.color = ColorUtils.GetColorByString(playerSlot.Color);
+        LoadFactionsCombo(cbFaction, playerSlot.FactionId);
+        txtAlliance.text = AllianceUtils.ConvertToString(playerSlot.Alliance);
+        tgIsPlayable.isOn = playerSlot.IsPlayable;
 
         factions.Add(cbFaction);
     }
@@ -207,10 +225,7 @@ public class EditorPanelController : MonoBehaviour
 
         foreach (GlobalInfoFaction factionInfo in globalInfo.Factions)
         {
-            dropdownOptions.Add(new Dropdown.OptionData()
-            {
-                text = factionInfo.NameLiteral
-            });
+            dropdownOptions.Add(new Dropdown.OptionData() { text = factionInfo.NameLiteral });
         }
 
         factionsCombo.AddOptions(dropdownOptions);
@@ -241,38 +256,45 @@ public class EditorPanelController : MonoBehaviour
     private void SaveFactionsInModel()
     {
         Transform lineObject;
-        MapPlayerModel playerModel;
+        MapPlayerSlotModel playerSlot;
         Dropdown cbPlayerType;
         Image btnColorFaction;
         Toggle tgIsPlayable;
         Text txtAlliance;
+        GlobalInfoFaction globalInfoFaction;
 
         foreach (Dropdown cbFaction in factions)
         {
-            byte mapSocketId;
+            byte mapPlayerSlotId;
 
             lineObject = cbFaction.transform.parent;
-            mapSocketId = Convert.ToByte(lineObject.name.Split('_')[1]);
-            playerModel = mapModel.Players.Find(item => item.MapSocketId == mapSocketId);
+            mapPlayerSlotId = Convert.ToByte(lineObject.name.Split('_')[1]);
+            playerSlot = mapModel.PlayerSlots.Find(item => item.Id == mapPlayerSlotId);
 
-            if (playerModel == null)
+            if (playerSlot == null)
             {
-                playerModel = new MapPlayerModel(mapSocketId);
-                mapModel.Players.Add(playerModel);
+                playerSlot = new MapPlayerSlotModel(mapPlayerSlotId);
+                mapModel.PlayerSlots.Add(playerSlot);
             }
-            
+
             cbPlayerType = lineObject.Find("cbPlayerType").GetComponent<Dropdown>();
             btnColorFaction = lineObject.Find("btnColorFaction").GetComponent<Image>();
             tgIsPlayable = lineObject.Find("tgIsPlayable").GetComponent<Toggle>();
             txtAlliance = lineObject.Find("btnAlliance").GetComponentInChildren<Text>();
 
-            playerModel.IaId = cbPlayerType.value;
-            playerModel.FactionId = globalInfo.Factions.Find(item =>
-            item.NameLiteral == cbFaction.options[cbFaction.value].text).Id;
-            playerModel.Alliance = StringUtils.ToInt32(txtAlliance.text);
-            
-            playerModel.IsPlayable = tgIsPlayable.isOn;
-            playerModel.Color = ColorUtils.GetStringByColor(btnColorFaction.color);
+            globalInfoFaction = globalInfo.Factions.Find(item =>
+                item.NameLiteral == cbFaction.options[cbFaction.value].text
+            );
+
+            playerSlot.Name = string.IsNullOrEmpty(playerSlot.Name)
+                ? RandomUtils.RandomStringValue(globalInfoFaction.IANames)
+                : playerSlot.Name;
+            playerSlot.IaId = cbPlayerType.value;
+            playerSlot.FactionId = globalInfoFaction.Id;
+            playerSlot.Alliance = StringUtils.ToInt32(txtAlliance.text);
+
+            playerSlot.IsPlayable = tgIsPlayable.isOn;
+            playerSlot.Color = ColorUtils.GetStringByColor(btnColorFaction.color);
         }
     }
 
@@ -284,13 +306,19 @@ public class EditorPanelController : MonoBehaviour
         {
             EditorCityController editorCity = city.GetComponent<EditorCityController>();
 
-            mapModel.Cities.Add(new MapCityModel()
-            {
-                MapSocketId = Convert.ToByte(editorCity.ownerSocketId),
-                Name = editorCity.name,
-                Position = new float[] { editorCity.transform.position.x, editorCity.transform.position.y },
-                Type = editorCity.isCapital ? 0 : 1
-            });
+            mapModel.Cities.Add(
+                new MapCityModel()
+                {
+                    MapPlayerSlotId = Convert.ToByte(editorCity.ownerSocketId),
+                    Name = editorCity.name,
+                    Position = new float[]
+                    {
+                        editorCity.transform.position.x,
+                        editorCity.transform.position.y
+                    },
+                    Type = editorCity.isCapital ? 0 : 1
+                }
+            );
         }
     }
 
@@ -304,12 +332,18 @@ public class EditorPanelController : MonoBehaviour
             EditorTroopController editorCity = troop.GetComponent<EditorTroopController>();
             unitsText = troop.GetComponent<TextMeshProUGUI>();
 
-            mapModel.Troops.Add(new MapTroopModel()
-            {
-                MapSocketId = Convert.ToByte(editorCity.ownerSocketId),
-                Position = new float[] { editorCity.transform.position.x, editorCity.transform.position.y },
-                Units = Convert.ToInt32(unitsText.text)
-            });
+            mapModel.Troops.Add(
+                new MapTroopModel()
+                {
+                    MapPlayerSlotId = Convert.ToByte(editorCity.ownerSocketId),
+                    Position = new float[]
+                    {
+                        editorCity.transform.position.x,
+                        editorCity.transform.position.y
+                    },
+                    Units = Convert.ToInt32(unitsText.text)
+                }
+            );
         }
     }
 
@@ -321,5 +355,60 @@ public class EditorPanelController : MonoBehaviour
         }
 
         factions.Clear();
+    }
+
+    /// <summary>
+    /// Este método analiza el mapa cargado para comprobar que todos sus datos son correctos, y si hay algo que no está bien trata de corregirlo.
+    /// </summary>
+    private void ValidateAndCorrectMap(MapModel mapModel)
+    {
+        // Todos los mapas deben tener al menos una facción.
+        if (mapModel.PlayerSlots.Count == 0)
+        {
+            AddNewFactionLine();
+        }
+
+        // El jugador de las ciudades es válido
+        //ValidateCitiesPlayer(mapModel);
+
+        // El jugador de las tropas es válido
+        //ValidateTroopsPlayer(mapModel);
+
+        // El Id debe comenzar en 0 y ser correlativo.
+        if (mapModel.PlayerSlots.Min(p => p.Id) != 0)
+        {
+            MakeMapPlayerSlotIdCorrelative(mapModel);
+        }
+    }
+
+    /// <summary>
+    /// Comprobar que el MapPlayerSlotId de las ciudades coincide con alguno de los de mapModel.Players.
+    /// </summary>
+    /// <param name="mapModel"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void ValidateCitiesPlayer(MapModel mapModel)
+    {
+        throw new NotImplementedException();
+    }
+
+    // <summary>
+    /// Comprobar que el MapPlayerSlotId de las tropas coincide con alguno de los de mapModel.Players.
+    /// </summary>
+    /// <param name="mapModel"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void ValidateTroopsPlayer(MapModel mapModel)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Este método tiene que asegurarse de que el Id de mapModel.Players comience en 0 y sea correlativo, (por ejemplo: para un mapa de 4 jugadores seria 0, 1, 2, 3).
+    ///
+    /// El método no solo tiene que actualizar el Id en mapModel.Players, sino también el valor de MapPlayerSlotId en mapModel.Cities y mapModel.troops.
+    /// </summary>
+    private void MakeMapPlayerSlotIdCorrelative(MapModel mapModel)
+    {
+        Debug.LogWarning("Call to method MakeMapPlayerSlotIdCorrelative. This method isn't implemented yet.");
+        //throw new NotImplementedException();
     }
 }

@@ -76,18 +76,18 @@ public class EditorEntitiesController : MonoBehaviour
     public void CbFaction_OnValueChange()
     {
         string parsedColor = ColorUtils.GetStringByColor(ownerColor.color);
-        MapPlayerModel playerModel = logicController.GetNextOwner(parsedColor);
-        Color newColor = ColorUtils.GetColorByString(playerModel.Color);
+        MapPlayerSlotModel playerSlot = logicController.GetNextOwner(parsedColor);
+        Color newColor = ColorUtils.GetColorByString(playerSlot.Color);
         ownerColor.color = newColor;
     }
 
-    private void SetOwner(byte mapSocketId)
+    private void SetOwner(byte mapPlayerSlotId)
     {
-        MapPlayerModel playerModel = logicController.GetSocketOwner(mapSocketId);
+        MapPlayerSlotModel playerModel = logicController.GetSocketOwner(mapPlayerSlotId);
         ownerColor.color = ColorUtils.GetColorByString(playerModel.Color);
     }
 
-    private MapPlayerModel GetOwner(Color ownerColor)
+    private MapPlayerSlotModel GetOwner(Color ownerColor)
     {
         string parsedColor = ColorUtils.GetStringByColor(ownerColor);
         return logicController.GetSocketOwner(parsedColor);
@@ -97,7 +97,7 @@ public class EditorEntitiesController : MonoBehaviour
     {
         if (selectionModel != null)
         {
-            MapPlayerModel owner = GetOwner(ownerColor.color);
+            MapPlayerSlotModel owner = GetOwner(ownerColor.color);
             SpriteRenderer spriteRenderer = null;
 
             if (selectionModel.SelectionType == typeof(EditorCityController))
@@ -107,7 +107,7 @@ public class EditorEntitiesController : MonoBehaviour
 
                 editorCityController.isCapital = isCapital.isOn;
                 editorCityController.name = entityName.text;
-                editorCityController.ownerSocketId = owner.MapSocketId;
+                editorCityController.ownerSocketId = owner.Id;
 
                 spriteName = editorCityController.isCapital ? "Textures/Capital" : "Textures/City";
                 spriteRenderer = editorCityController.GetComponent<SpriteRenderer>();
@@ -120,7 +120,7 @@ public class EditorEntitiesController : MonoBehaviour
                 EditorTroopController editorTroopController = selectionModel.SelectionObjects.FirstOrDefault().GetComponent<EditorTroopController>();
 
                 editorTroopController.name = entityName.text;
-                editorTroopController.ownerSocketId = owner.MapSocketId;
+                editorTroopController.ownerSocketId = owner.Id;
 
                 unitsText = editorTroopController.GetComponent<TextMeshProUGUI>();
                 unitsText.text = troopSize.text;

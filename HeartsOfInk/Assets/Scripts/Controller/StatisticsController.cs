@@ -1,6 +1,5 @@
 ﻿using Assets.Scripts.Data;
 using NETCoreServer.Models;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,6 +41,7 @@ public class StatisticsController : MonoBehaviour
             return null;
         }
     }
+
     public void ReportArmyDefeated(TroopController destroyed, TroopController destroyer)
     {
         Player destroyedFaction = destroyed.troopModel.Player;

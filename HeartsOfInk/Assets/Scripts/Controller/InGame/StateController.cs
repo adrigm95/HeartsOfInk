@@ -1,18 +1,17 @@
-﻿using Assets.Scripts.Data;
+﻿using AnalyticsServer.Models;
+using Assets.Scripts.Data;
 using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.MultiplayerStateModels;
-using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
+using Assets.Scripts.Utils;
 using NETCoreServer.Models;
-using NETCoreServer.Models.In;
-using NETCoreServer.Models.Out;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.UI.GridLayoutGroup;
-
-//Todo: SEPT-23-001 Completar modelo y lógica.
 
 /// <summary>
 /// Contiene la información actualizada del estado de ciudades y tropas en las partidas multiplayer. No se usa en las partidas singleplayer.
@@ -24,9 +23,15 @@ public class StateController : MonoBehaviour
     /// </summary>
     public int LastTroopAdded { get; set; }
 
+    private WebServiceCaller<LogExceptionDto, bool> exceptionSender = new WebServiceCaller<LogExceptionDto, bool>();
+
     private GameStateModel GameStateModel { get; set; }
     private GlobalLogicController globalLogic { get; set; }
     private float lastStateUpdate = 0;
+    private WebServiceCallerReusable<GameStateModelIn, bool> wsCallerSend;
+    private WebServiceCallerReusable<GameStateModel> wsCallerReceive;
+    private Dictionary<string, AttackTroopModel> attackTroopOrders;
+    private Dictionary<string, MoveTroopModel> moveTroopOrders;
     public Text txtIsMultiplayer;
 
     // Start is called before the first frame update
@@ -34,12 +39,17 @@ public class StateController : MonoBehaviour
     {
         Debug.Log("Start - State Controller");
 
+        wsCallerSend = new WebServiceCallerReusable<GameStateModelIn, bool>(ApiConfig.IngameServerUrl);
+        wsCallerReceive = new WebServiceCallerReusable<GameStateModel>(ApiConfig.IngameServerUrl);
         globalLogic = FindObjectOfType<GlobalLogicController>();
         GameStateModel = new GameStateModel();
-        GameStateModel.citiesStates = new Dictionary<string, CityStateModel>();
-        GameStateModel.troopsStates = new Dictionary<string, TroopStateModel>();
-        GameStateModel.gamekey = globalLogic?.gameModel?.GameKey;
-        GameStateModel.timeSinceStart = Time.realtimeSinceStartup;
+        GameStateModel.CitiesStates = new Dictionary<string, CityStateModel>();
+        GameStateModel.TroopsStates = new Dictionary<string, TroopStateModel>();
+        GameStateModel.Gamekey = globalLogic?.gameModel?.GameKey;
+        GameStateModel.TimeSinceStart = Time.realtimeSinceStartup;
+
+        attackTroopOrders = new Dictionary<string, AttackTroopModel>();
+        moveTroopOrders = new Dictionary<string, MoveTroopModel>();
 
         Debug.Log("Start - Gamekey from globalLogic: " + globalLogic?.gameModel?.GameKey);
     }
@@ -51,6 +61,8 @@ public class StateController : MonoBehaviour
         if (globalLogic.IsMultiplayerHost)
         {
             SendStateGame();
+            ReceiveAttackOrders();
+            ReceiveMoveOrders();
         }
         else if (globalLogic.IsMultiplayerClient)
         {
@@ -61,81 +73,156 @@ public class StateController : MonoBehaviour
     public async void GetStateGame()
     {
         HOIResponseModel<GameStateModel> response;
-        WebServiceCaller<GameStateModel> wsCaller;
         string serviceParameters;
 
-        if (GetIfUpdateStateRequired())
+        if (UpdateStateRequired())
         {
             Debug.Log($"lastStateUpdate (as client): {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
             lastStateUpdate = Time.realtimeSinceStartup;
-            wsCaller = new WebServiceCaller<GameStateModel>();
-            serviceParameters = $"playername={globalLogic.thisPcPlayer.Name}&gamekey={GameStateModel.gamekey}";
-            response = await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.GET, "api/StateGame?" + serviceParameters);
+            serviceParameters = $"playername={globalLogic.thisPcPlayer.Name}&gamekey={GameStateModel.Gamekey}";
+            response = await wsCallerReceive.GenericWebServiceCaller(Method.GET, "api/StateGame?" + serviceParameters);
 
-            if (response.serviceResponse.timeSinceStart > GameStateModel.timeSinceStart)
+            if (response.serviceResponse.TimeSinceStart > GameStateModel.TimeSinceStart)
             {
-                GameStateModel = response.serviceResponse;
-                Debug.Log("GetStateGame - updated state; cities: " + GameStateModel.citiesStates.Count + "; troops:" + GameStateModel.troopsStates.Count);
-
-                foreach (var troop in GameStateModel.troopsStates)
-                {
-                    GameObject currentTroop = GameObject.Find(troop.Key);
-                    if (currentTroop == null)
-                    {
-                        //globalLogic.InstantiateTroopSingleplayer(troop.Value.size, troop.Value.position, troop.Value.o);
-                    }
-                }
+                //UpdateStateModelV1(response);
+                UpdateStateModelV2(response);
             }
             else
             {
-                Debug.LogWarning("GetStateGame - Received state is previous than current; received: " + response.serviceResponse.timeSinceStart + " current: " + GameStateModel.timeSinceStart);
+                Debug.LogWarning("GetStateGame - Received state is previous than current; received: " + response.serviceResponse.TimeSinceStart + " current: " + GameStateModel.TimeSinceStart);
             }
         }
+    }
+
+    private void UpdateStateModelV2(HOIResponseModel<GameStateModel> response)
+    {
+        Dictionary<string, TroopStateModel> updatedTroops = new Dictionary<string, TroopStateModel>();
+        GameStateModel = response.serviceResponse;
+
+        // Actualizar ciudades.
+        foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag(Tags.City))
+        {
+            CityStateModel city;
+
+            if (GameStateModel.CitiesStates.TryGetValue(gameObject.name, out city))
+            {
+                CityController cityController = gameObject.GetComponent<CityController>();
+                cityController.Owner = globalLogic.GetPlayer(city.MapPlayerSlotId);
+            }
+        }
+
+        // Actualizar tropas y eliminar las que ya no estén en el modelo.
+        foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag(Tags.Troop))
+        {
+            TroopStateModel troop;
+
+            if (GameStateModel.TroopsStates.TryGetValue(gameObject.name, out troop))
+            {
+                TroopController troopController = gameObject.GetComponent<TroopController>();
+                updatedTroops.Add(gameObject.name, troop);
+                troopController.troopModel.CurrentPosition = troop.GetPositionAsVector3();
+                troopController.troopModel.Units = troop.Size;
+                troopController.troopModel.Player = globalLogic.GetPlayer(troop.MapPlayerSlotId);
+            }
+            else
+            {
+                globalLogic.DestroyUnit(gameObject, null);
+            }
+        }
+
+        // Añadir las tropas nuevas.
+        foreach (var troop in GameStateModel.TroopsStates)
+        {
+            if (!updatedTroops.ContainsKey(troop.Key))
+            {
+                globalLogic.InstantiateTroopMultiplayer(troop.Key, troop.Value.Size, troop.Value.GetPositionAsVector3(), troop.Value.MapPlayerSlotId);
+            }
+        }
+    }
+
+    [Obsolete("Obsoleto, comprobar si funciona el V2 y si es así borrar este método.")]
+    private void UpdateStateModelV1(HOIResponseModel<GameStateModel> response)
+    {
+        GameStateModel = response.serviceResponse;
+        Debug.Log("GetStateGame - updated state; cities: " + GameStateModel.CitiesStates.Count + "; troops:" + GameStateModel.TroopsStates.Count);
+
+        foreach (var city in GameStateModel.CitiesStates)
+        {
+            GameObject currentCity = GameObject.Find(city.Key);
+            if (currentCity == null)
+            {
+
+            }
+            else
+            {
+                CityController cityController = currentCity.GetComponent<CityController>();
+                cityController.Owner = globalLogic.GetPlayer(city.Value.MapPlayerSlotId);
+            }
+        }
+
+        foreach (var troop in GameStateModel.TroopsStates)
+        {
+            GameObject currentTroop = GameObject.Find(troop.Key);
+            if (currentTroop == null)
+            {
+                globalLogic.InstantiateTroopMultiplayer(troop.Key, troop.Value.Size, troop.Value.GetPositionAsVector3(), troop.Value.MapPlayerSlotId);
+            }
+            else
+            {
+                TroopController troopController = currentTroop.GetComponent<TroopController>();
+                troopController.troopModel.CurrentPosition = troop.Value.GetPositionAsVector3();
+                troopController.troopModel.Units = troop.Value.Size;
+                troopController.troopModel.Player = globalLogic.GetPlayer(troop.Value.MapPlayerSlotId);
+            }
+        }
+    }
+
+    public void TroopDistroyed(TroopController troop)
+    {
+        GameStateModel.TroopsStates.Remove(troop.transform.name);
     }
 
     public async void SendStateGame()
     {
-        WebServiceCaller<StateGameModelIn, bool> wsCaller;
-        StateGameModelIn sgm = new StateGameModelIn()
+        if (UpdateStateRequired() && !wsCallerSend.MakingCall)
         {
-            playerName = globalLogic.thisPcPlayer.Name,
-            gameStateModel = GameStateModel
-        };
+            GameStateModelIn stateModel = new GameStateModelIn()
+            {
+                PlayerName = globalLogic.thisPcPlayer.Name,
+                GameStateModel = GameStateModel
+            };
 
-        if (GameStateModel.gamekey == null)
-        {
-            GameStateModel.gamekey = globalLogic.gameModel.GameKey;
-        }
+            if (GameStateModel.Gamekey == null)
+            {
+                GameStateModel.Gamekey = globalLogic.gameModel.GameKey;
+            }
 
-        GameStateModel.timeSinceStart = Time.realtimeSinceStartup;
+            GameStateModel.TimeSinceStart = Time.realtimeSinceStartup;
 
-        if (GetIfUpdateStateRequired())
-        {
             Debug.Log($"lastStateUpdate (as Host): {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
             lastStateUpdate = Time.realtimeSinceStartup;
-            wsCaller = new WebServiceCaller<StateGameModelIn, bool>();
-            await wsCaller.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/StateGame", sgm);
+            await wsCallerSend.GenericWebServiceCaller(Method.POST, "api/StateGame", stateModel);
         }
     }
 
-    private bool GetIfUpdateStateRequired()
+    private bool UpdateStateRequired()
     {
-        return lastStateUpdate + (1 / ApiConfig.DelayBetweenStateUpdates) <= Time.realtimeSinceStartup;
+        return lastStateUpdate + ApiConfig.DelayBetweenStateUpdates < Time.realtimeSinceStartup;
     }
 
     public void SetCityOwner(string cityName, Player owner)
     {
         CityStateModel cityStateModel;
 
-        if (GameStateModel.citiesStates.TryGetValue(cityName, out cityStateModel))
+        if (GameStateModel.CitiesStates.TryGetValue(cityName, out cityStateModel))
         {
-            cityStateModel.Owner = owner.MapSocketId;
+            cityStateModel.MapPlayerSlotId = owner.MapPlayerSlotId;
         }
         else
         {
-            GameStateModel.citiesStates.Add(cityName, new CityStateModel()
+            GameStateModel.CitiesStates.Add(cityName, new CityStateModel()
             {
-                Owner = owner.MapSocketId
+                MapPlayerSlotId = owner.MapPlayerSlotId
             });
             Debug.LogWarning("City not finded at GetCityOwner: " + cityName);
         }
@@ -146,9 +233,9 @@ public class StateController : MonoBehaviour
         CityStateModel cityStateModel;
         Player owner = null;
 
-        if (GameStateModel.citiesStates.TryGetValue(cityName, out cityStateModel))
+        if (GameStateModel.CitiesStates.TryGetValue(cityName, out cityStateModel))
         {
-            owner = globalLogic.gameModel.Players.Find(player => player.MapSocketId == cityStateModel.Owner);
+            owner = globalLogic.gameModel.Players.Find(player => player.MapPlayerSlotId == cityStateModel.MapPlayerSlotId);
         }
         else
         {
@@ -158,27 +245,154 @@ public class StateController : MonoBehaviour
         return owner;
     }
 
-    public void SetTroopState(string troopName, int size, Vector3 position)
+    public void SetTroopState(string troopName, int size, Vector3 position, Player player)
     {
         TroopStateModel troopState;
 
-        if (!GameStateModel.troopsStates.TryGetValue(troopName, out troopState))
+        if (!GameStateModel.TroopsStates.TryGetValue(troopName, out troopState))
         {
-            troopState = new TroopStateModel();
-            GameStateModel.troopsStates.Add(troopName, troopState);
+            troopState = new TroopStateModel()
+            {
+                MapPlayerSlotId = player.MapPlayerSlotId,
+                Size = size
+            };
+            troopState.SetPosition(position);
+
+            GameStateModel.TroopsStates.Add(troopName, troopState);
             Debug.LogWarning("Owner not finded at SetTroopState: " + troopName);
         }
 
         troopState.SetPosition(position);
-        troopState.size = size;
+        troopState.Size = size;
     }
 
     public TroopStateModel GetTroopState(string troopName)
     {
         TroopStateModel result;
 
-        GameStateModel.troopsStates.TryGetValue(troopName, out result);
+        GameStateModel.TroopsStates.TryGetValue(troopName, out result);
 
         return result;
+    }
+
+    private void ReceiveMoveOrders()
+    {
+        foreach (MoveTroopModel moveTroopModel in MoveTroopSignalR.Instance.GetMoveTroopReceived())
+        {
+            ReceiveMoveOrder(moveTroopModel);
+        }
+    }
+
+    public void ReceiveMoveOrder(MoveTroopModel moveTroopModel)
+    {
+        AttackTroopModel currentAttackOrder;
+        MoveTroopModel currentMoveOrder;
+        bool haveAttackOrder;
+        bool haveMoveOrder;
+
+        try
+        {
+            haveAttackOrder = attackTroopOrders.TryGetValue(moveTroopModel.TroopName, out currentAttackOrder);
+            haveMoveOrder = moveTroopOrders.TryGetValue(moveTroopModel.TroopName, out currentMoveOrder);
+
+            if (haveAttackOrder)
+            {
+                if (currentAttackOrder.TimeSinceStart < moveTroopModel.TimeSinceStart)
+                {
+                    attackTroopOrders.Remove(moveTroopModel.TroopName);
+                    moveTroopOrders.Add(moveTroopModel.TroopName, moveTroopModel);
+                }
+            }
+            else if (haveMoveOrder)
+            {
+                if (currentMoveOrder.TimeSinceStart < moveTroopModel.TimeSinceStart)
+                {
+                    moveTroopOrders.Remove(moveTroopModel.TroopName);
+                    moveTroopOrders.Add(moveTroopModel.TroopName, moveTroopModel);
+                }
+            }
+            else
+            {
+                moveTroopOrders.Add(moveTroopModel.TroopName, moveTroopModel);
+            }
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+        }
+    }
+
+    private void ReceiveAttackOrders()
+    {
+        foreach (AttackTroopModel attackTroopModel in AttackTroopSignalR.Instance.GetAttackTroopReceived())
+        {
+            ReceiveAttackOrder(attackTroopModel);
+        }
+    }
+
+    public void ReceiveAttackOrder(AttackTroopModel attackTroopModel)
+    {
+        AttackTroopModel currentAttackOrder;
+        MoveTroopModel currentMoveOrder;
+        bool haveAttackOrder;
+        bool haveMoveOrder;
+
+        try
+        {
+            haveAttackOrder = attackTroopOrders.TryGetValue(attackTroopModel.Attacker, out currentAttackOrder);
+            haveMoveOrder = moveTroopOrders.TryGetValue(attackTroopModel.Attacker, out currentMoveOrder);
+
+            if (haveAttackOrder)
+            {
+                if (currentAttackOrder.TimeSinceStart < attackTroopModel.TimeSinceStart)
+                {
+                    attackTroopOrders.Remove(attackTroopModel.Attacker);
+                    attackTroopOrders.Add(attackTroopModel.Attacker, attackTroopModel);
+                }
+            }
+            else if (haveMoveOrder)
+            {
+                if (currentMoveOrder.TimeSinceStart < attackTroopModel.TimeSinceStart)
+                {
+                    moveTroopOrders.Remove(attackTroopModel.Attacker);
+                    attackTroopOrders.Add(attackTroopModel.Attacker, attackTroopModel);
+                }
+            }
+            else
+            {
+                attackTroopOrders.Add(attackTroopModel.Attacker, attackTroopModel);
+            }
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex);
+        }
+    }
+
+    public void SetTroopOrderInModel(
+        string troopName, 
+        TroopModel troopModel, 
+        GameObject emptyTargetsHolder,
+        TargetPositionMarkerController targetMarkerController)
+    {
+        AttackTroopModel attackedTroop;
+        MoveTroopModel moveTroopModel;
+
+        if (attackTroopOrders.TryGetValue(troopName, out attackedTroop))
+        {
+            //TODO: Buscar la forma de encontrar la tropa deseada.
+            //troopModel.SetTarget(newSelection.gameObject, globalLogic);
+            attackTroopOrders.Remove(troopName);
+        }
+        else if (moveTroopOrders.TryGetValue(troopName, out moveTroopModel))
+        {
+            Vector3 mouseClickPosition = VectorUtils.StringToVector3(moveTroopModel.Position);
+
+            troopModel.SetTarget(new GameObject(GlobalConstants.EmptyTargetName), globalLogic);
+            troopModel.Target.transform.position = mouseClickPosition;
+            troopModel.Target.transform.parent = emptyTargetsHolder.transform;
+            targetMarkerController.SetTargetPosition(mouseClickPosition, false);
+            moveTroopOrders.Remove(troopName);
+        }
     }
 }

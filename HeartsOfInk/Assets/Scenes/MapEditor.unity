@@ -6067,7 +6067,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 150, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1025666525
 MonoBehaviour:
@@ -8147,7 +8147,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b9e277c139b8e8345888f4dcf688975f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 646a3f14f21fc6940a87985099536aff, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9301,7 +9301,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 20, y: -20}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 100, y: 40}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1674541456
 GameObject:
@@ -13651,6 +13651,7 @@ MonoBehaviour:
   mainMenuButton: {fileID: 0}
   exitToMenuButton: {fileID: 6013825158646480014}
   startGame: {fileID: 0}
+  optionsButton: {fileID: 0}
   mapEditorButton: {fileID: 0}
 --- !u!4 &3141341241225791857
 Transform:
@@ -15013,8 +15014,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -508061201
+  m_SortingLayer: -2
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 5ceb546ed7b98044f81badf370052040, type: 3}
   m_Color: {r: 0.8773585, g: 0.87257034, b: 0.84011215, a: 1}
@@ -15117,8 +15118,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -508061201
+  m_SortingLayer: -2
   m_SortingOrder: -2
   m_Sprite: {fileID: 21300000, guid: 0239ce6472cab304c91011949d899d27, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

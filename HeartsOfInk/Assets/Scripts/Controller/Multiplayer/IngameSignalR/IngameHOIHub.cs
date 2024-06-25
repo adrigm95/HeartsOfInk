@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class IngameHOIHub
 {
+    private static string LastRoomConnected;
     // Singleton variables
     private static readonly Lazy<IngameHOIHub> _singletonReference = new Lazy<IngameHOIHub>(() => new IngameHOIHub());
     public static IngameHOIHub Instance => _singletonReference.Value;
@@ -21,7 +22,7 @@ public class IngameHOIHub
             .Build();
         connection.Closed += async (error) =>
         {
-            Debug.LogWarning($"Connection with SignalR closed, restarting; url {ApiConfig.IngameServerUrl}");
+            Debug.LogWarning($"Connection with SignalR closed, restarting; url {ApiConfig.IngameServerUrl}; error {error}");
             await Task.Delay(1000); // don't want to hammer the network
             await connection.StartAsync();
         };
@@ -50,6 +51,9 @@ public class IngameHOIHub
                 {
                     Debug.Log("Setting signalR connection.ON");
                     StartGameIngameSignalR.Instance.SusbcribeReceiver(this, connection);
+                    TroopDeadSignalR.Instance.SusbcribeReceiver(this, connection);
+                    AttackTroopSignalR.Instance.SusbcribeReceiver(this, connection);
+                    MoveTroopSignalR.Instance.SusbcribeReceiver(this, connection);
                     Debug.Log("Starting connection with signalR");
                     await connection.StartAsync();
                     return;
@@ -65,13 +69,14 @@ public class IngameHOIHub
         }
     }
 
-    public async void SuscribeToRoom(string room, string playerName)
+    public async void SuscribeToRoom(string room, byte playerId)
     {
         try
         {
+            LastRoomConnected = room;
             StartConnection();
 
-            await connection.InvokeAsync("AddToGroup", room, playerName);
+            await connection.InvokeAsync("AddToGroup", room, playerId);
         }
         catch (Exception ex)
         {

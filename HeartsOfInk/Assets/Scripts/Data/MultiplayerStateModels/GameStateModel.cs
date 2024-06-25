@@ -7,21 +7,21 @@ namespace Assets.Scripts.Data.MultiplayerStateModels
         /// <summary>
         /// Tiempo desde el inicio de la partida en el host.
         /// </summary>
-        public float timeSinceStart;
+        public float TimeSinceStart { get; set; }
 
         /// <summary>
         /// Clave de partida.
         /// </summary>
-        public string gamekey;
+        public string Gamekey { get; set; }
 
         /// <summary>
         /// Listado con el estado de las distintas ciudades
         /// </summary>
-        public Dictionary<string, CityStateModel> citiesStates;
+        public Dictionary<string, CityStateModel> CitiesStates { get; set; }
 
         /// <summary>
         /// Listado con el estado de las distintas troopsState
         /// </summary>
-        public Dictionary<string, TroopStateModel> troopsStates;
+        public Dictionary<string, TroopStateModel> TroopsStates { get; set; }
     }
 }

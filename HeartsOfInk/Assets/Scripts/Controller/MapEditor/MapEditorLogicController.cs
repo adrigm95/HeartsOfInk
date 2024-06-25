@@ -128,7 +128,7 @@ public class MapEditorLogicController : MonoBehaviour
     public void SetCityInCanvas(MapCityModel mapCityModel)
     {
         EditorCityController newObject;
-        MapPlayerModel player;
+        MapPlayerSlotModel player;
         SpriteRenderer spriteRenderer;
         Vector3 position = VectorUtils.FloatVectorToVector3(mapCityModel.Position);
         string resourceName = mapCityModel.Type == 1 ? PrefabCity : PrefabCapital;
@@ -143,16 +143,16 @@ public class MapEditorLogicController : MonoBehaviour
         spriteRenderer = newObject.GetComponent<SpriteRenderer>();
         newObject.name = mapCityModel.Name;
         newObject.isCapital = !Convert.ToBoolean(mapCityModel.Type);
-        newObject.ownerSocketId = mapCityModel.MapSocketId;
+        newObject.ownerSocketId = mapCityModel.MapPlayerSlotId;
         newObject.editorLogicController = this;
-        player = editorPanelController.MapModel.Players.Find(p => p.MapSocketId == mapCityModel.MapSocketId);
+        player = editorPanelController.MapModel.PlayerSlots.Find(p => p.Id == mapCityModel.MapPlayerSlotId);
         spriteRenderer.color = ColorUtils.GetColorByString(player.Color);
     }
 
     public void SetTroopInCanvas(MapTroopModel mapTroopModel)
     {
         EditorTroopController newObject;
-        MapPlayerModel player;
+        MapPlayerSlotModel player;
         TextMeshProUGUI unitsText;
         Vector3 position = VectorUtils.FloatVectorToVector3(mapTroopModel.Position);
 
@@ -165,9 +165,9 @@ public class MapEditorLogicController : MonoBehaviour
 
         unitsText = newObject.GetComponent<TextMeshProUGUI>();
         newObject.name = "Troop";
-        newObject.ownerSocketId = mapTroopModel.MapSocketId;
+        newObject.ownerSocketId = mapTroopModel.MapPlayerSlotId;
         newObject.editorLogicController = this;
-        player = editorPanelController.MapModel.Players.Find(p => p.MapSocketId == mapTroopModel.MapSocketId);
+        player = editorPanelController.MapModel.PlayerSlots.Find(p => p.Id == mapTroopModel.MapPlayerSlotId);
         unitsText.text = mapTroopModel.Units.ToString();
         unitsText.color = ColorUtils.GetColorByString(player.Color);
     }
@@ -225,10 +225,10 @@ public class MapEditorLogicController : MonoBehaviour
         selection.EndSelection();
     }
 
-    public MapPlayerModel GetSocketOwner(byte mapSocketId)
+    public MapPlayerSlotModel GetSocketOwner(byte playerSlotId)
     {
-        Debug.Log($"Getting owner for {mapSocketId}");
-        MapPlayerModel owner = editorPanelController.MapModel.Players.FirstOrDefault(player => player.MapSocketId == mapSocketId);
+        Debug.Log($"Getting owner for {playerSlotId}");
+        MapPlayerSlotModel owner = editorPanelController.MapModel.PlayerSlots.FirstOrDefault(player => player.Id == playerSlotId);
 
         if (owner != null)
         {
@@ -236,38 +236,38 @@ public class MapEditorLogicController : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"No owner getted for mapSocketId {mapSocketId}");
+            Debug.LogWarning($"No owner getted for mapPlayerSlotId {playerSlotId}");
         }
 
         return owner;
     }
 
-    public MapPlayerModel GetNextOwner(string ownerColor)
+    public MapPlayerSlotModel GetNextOwner(string ownerColor)
     {
-        MapPlayerModel currentOwner = editorPanelController.MapModel.Players.FirstOrDefault(player => player.Color == ownerColor);
-        byte nextSocketId = Convert.ToByte(currentOwner.MapSocketId + Convert.ToByte(1));
-        MapPlayerModel nextOwner = editorPanelController.MapModel.Players.FirstOrDefault(player => player.MapSocketId == nextSocketId);
+        MapPlayerSlotModel currentOwner = editorPanelController.MapModel.PlayerSlots.FirstOrDefault(playerSlot => playerSlot.Color == ownerColor);
+        byte nextPlayerSlotId = Convert.ToByte(currentOwner.Id + Convert.ToByte(1));
+        MapPlayerSlotModel nextOwner = editorPanelController.MapModel.PlayerSlots.FirstOrDefault(player => player.Id == nextPlayerSlotId);
 
         if (nextOwner == null)
         {
-            nextSocketId = 0;
-            nextOwner = editorPanelController.MapModel.Players.FirstOrDefault(player => player.MapSocketId == nextSocketId);
+            nextPlayerSlotId = 0;
+            nextOwner = editorPanelController.MapModel.PlayerSlots.FirstOrDefault(playerSlot => playerSlot.Id == nextPlayerSlotId);
         }
 
-        while (nextOwner == null && editorPanelController.MapModel.Players.Any())
+        while (nextOwner == null && editorPanelController.MapModel.PlayerSlots.Any())
         {
-            nextSocketId++;
-            nextOwner = editorPanelController.MapModel.Players.FirstOrDefault(player => player.MapSocketId == nextSocketId);
+            nextPlayerSlotId++;
+            nextOwner = editorPanelController.MapModel.PlayerSlots.FirstOrDefault(player => player.Id == nextPlayerSlotId);
         }
 
-        Debug.Log($"Total players {editorPanelController.MapModel.Players.Count}");
-        Debug.Log($"Getted owner {nextOwner.FactionId}");
+        Debug.Log($"Total players {editorPanelController.MapModel.PlayerSlots.Count}");
+        Debug.Log($"Getted owner {nextOwner.Id}");
         return nextOwner;
     }
 
-    public MapPlayerModel GetSocketOwner(string ownerColor)
+    public MapPlayerSlotModel GetSocketOwner(string ownerColor)
     {
-        return editorPanelController.MapModel.Players.FirstOrDefault(player => player.Color == ownerColor);
+        return editorPanelController.MapModel.PlayerSlots.FirstOrDefault(player => player.Color == ownerColor);
     }
 
     private void EndSelection()
@@ -354,7 +354,7 @@ public class MapEditorLogicController : MonoBehaviour
     {
         EditorCityController newObject;
         SpriteRenderer spriteRenderer;
-        MapPlayerModel player;
+        MapPlayerSlotModel playerSlot;
         Vector3 mouseClickPosition;
 
         mouseClickPosition = cameraController.ScreenToWorldPoint();
@@ -367,19 +367,19 @@ public class MapEditorLogicController : MonoBehaviour
                             ).GetComponent<EditorCityController>();
 
         spriteRenderer = newObject.GetComponent<SpriteRenderer>();
-        player = editorPanelController.MapModel.Players[0];
+        playerSlot = editorPanelController.MapModel.PlayerSlots[0];
         newObject.name = "New City";
         newObject.isCapital = false;
-        newObject.ownerSocketId = player.MapSocketId;
+        newObject.ownerSocketId = playerSlot.Id;
         newObject.editorLogicController = this;
-        spriteRenderer.color = ColorUtils.GetColorByString(player.Color);
+        spriteRenderer.color = ColorUtils.GetColorByString(playerSlot.Color);
     }
 
     private void CreateNewTroop()
     {
         EditorTroopController newObject;
         TextMeshProUGUI unitsText;
-        MapPlayerModel player;
+        MapPlayerSlotModel player;
         Vector3 mouseClickPosition;
 
         mouseClickPosition = cameraController.ScreenToWorldPoint();
@@ -392,9 +392,9 @@ public class MapEditorLogicController : MonoBehaviour
                             ).GetComponent<EditorTroopController>();
 
         unitsText = newObject.GetComponent<TextMeshProUGUI>();
-        player = editorPanelController.MapModel.Players[0];
+        player = editorPanelController.MapModel.PlayerSlots[0];
         newObject.name = "Troop";
-        newObject.ownerSocketId = player.MapSocketId;
+        newObject.ownerSocketId = player.Id;
         newObject.editorLogicController = this;
         unitsText.text = Convert.ToString(GlobalConstants.DefaultCompanySize);
         unitsText.color = ColorUtils.GetColorByString(player.Color);

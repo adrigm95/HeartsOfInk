@@ -9,6 +9,11 @@ using UnityEngine;
 
 namespace Rawgen.Unity.Editor.Logic
 {
+    /// <summary>
+    /// Script para el manejo de coliders.
+    /// 
+    /// Nota: No funciona en Android debido al uso de streamingAssets.
+    /// </summary>
     public class StaticCollidersLogic
     {
         public GameObject gameObject { get; set; }

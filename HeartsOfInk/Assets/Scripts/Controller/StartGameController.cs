@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Data;
+﻿using AnalyticsServer.Models;
+using Assets.Scripts.Data;
 using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.DataAccess;
@@ -8,6 +9,7 @@ using LobbyHOIServer.Models.Models;
 using NETCoreServer.Models;
 using System;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,7 +18,8 @@ public class StartGameController : MonoBehaviour
     private ConfigGameController configGameController;
     private GameOptionsController gameOptionsController;
     private SceneChangeController sceneChangeController;
-    private WebServiceCaller<Exception, bool> _logger = new WebServiceCaller<Exception, bool>();
+    private WebServiceCaller<LogDto, bool> logSender = new WebServiceCaller<LogDto, bool>();
+    private WebServiceCaller<Exception, bool> exceptionSender = new WebServiceCaller<Exception, bool>();
     private GameModel gameModel;
     public Transform factionDropdownsHolder;
     public GameModel GameModel { get { return gameModel; } }
@@ -32,6 +35,7 @@ public class StartGameController : MonoBehaviour
     {
         if (StartGameLobbySignalR.Instance.IsStartGameReceived())
         {
+            Debug.Log("StartGameController - Update - IsStartGameReceived = true");
             StartGame(false, true);
         }
     }
@@ -40,7 +44,7 @@ public class StartGameController : MonoBehaviour
     /// Realiza la lógica previa al comienzo de partida.
     /// </summary>
     /// <param name="sendStartToServer"> Solo es true si lo llama el host al darle a comenzar partida en multiplayer.</param>
-    public async void StartGame(bool sendStartToServer)
+    public void StartGame(bool sendStartToServer)
     {
         if (configGameController == null)
         {
@@ -53,35 +57,18 @@ public class StartGameController : MonoBehaviour
         }
         else
         {
-            
+            string warning = "Opción de método StartGame incorrecta: El client multiplayer no debería llamar a este método.";
+            LogManager.SendLog(logSender, warning);
+            Debug.LogWarning(warning);
         }
     }
 
-    public void UpdateGameModel(GameModel gameModel)
+    public void StartGameFromServer()
     {
-        if (GameModel == null)
-        {
-            this.gameModel = gameModel;
-        }
-        else
-        {
-            GameModel.MapId = StringUtils.ReplaceValueIfNotEmpty(gameModel.MapId, GameModel.MapId);
-            GameModel.GameKey = StringUtils.ReplaceValueIfNotEmpty(gameModel.GameKey, GameModel.GameKey);
-            GameModel.Name = StringUtils.ReplaceValueIfNotEmpty(gameModel.Name, GameModel.Name);
-            GameModel.Gametype = gameModel.Gametype;
-            GameModel.IsPublic = gameModel.IsPublic;
-            GameModel.Players = gameModel.Players;
-        }
-    }
-
-    public void SetMapId(string mapId)
-    {
-        if (GameModel == null)
-        {
-            this.gameModel = new GameModel();
-        }
-
-        this.gameModel.MapId = mapId;
+        string log = "Start received from server";
+        LogManager.SendLog(logSender, log);
+        Debug.Log(log);
+        StartGame(false, true);
     }
 
     private async void StartGame(bool sendStartToServer, bool startReceivedFromServer)
@@ -113,6 +100,33 @@ public class StartGameController : MonoBehaviour
         }
     }
 
+    public void UpdateGameModel(GameModel gameModel)
+    {
+        if (GameModel == null)
+        {
+            this.gameModel = gameModel;
+        }
+        else
+        {
+            GameModel.MapId = StringUtils.ReplaceValueIfNotEmpty(gameModel.MapId, GameModel.MapId);
+            GameModel.GameKey = StringUtils.ReplaceValueIfNotEmpty(gameModel.GameKey, GameModel.GameKey);
+            GameModel.Name = StringUtils.ReplaceValueIfNotEmpty(gameModel.Name, GameModel.Name);
+            GameModel.Gametype = gameModel.Gametype;
+            GameModel.IsPublic = gameModel.IsPublic;
+            GameModel.Players = gameModel.Players;
+        }
+    }
+
+    public void SetMapId(string mapId)
+    {
+        if (GameModel == null)
+        {
+            this.gameModel = new GameModel();
+        }
+
+        this.gameModel.MapId = mapId;
+    }
+
     private async Task<bool> StartGameInServer(GameModel gameModel)
     {
         WebServiceCaller<GameModel, bool> wsCaller = new WebServiceCaller<GameModel, bool>();
@@ -136,7 +150,7 @@ public class StartGameController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            await _logger.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/Log", ex);
+            await exceptionSender.GenericWebServiceCaller(ApiConfig.IngameServerUrl, Method.POST, "api/Log", ex);
             throw ex;
         }
         
@@ -144,10 +158,7 @@ public class StartGameController : MonoBehaviour
 
     private void GetSingleplayerOptions(GameModel gameModel)
     {
-        // Singleplayer: newObject.name = "factionLine" + faction.Names[0].Value + "_" + faction.Id + "_" + player.MapSocketId;
-
-        string globalInfoPath = Application.streamingAssetsPath + "/_GlobalInfo.json";
-        GlobalInfo globalInfo = JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
+        GlobalInfo globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
 
         foreach (Transform holderChild in factionDropdownsHolder)
         {
@@ -163,7 +174,7 @@ public class StartGameController : MonoBehaviour
 
                 player.Faction.Id = Convert.ToInt32(factionId);
                 player.Faction.Bonus = new Bonus((Bonus.Id) globalInfo.Factions.Find(item => item.Id == player.Faction.Id).BonusId);
-                player.MapSocketId = Convert.ToByte(mapSocketId);
+                player.MapPlayerSlotId = Convert.ToByte(mapSocketId);
                 player.IaId = (Player.IA)(Convert.ToInt32(iaSelector.value));
                 player.Color = ColorUtils.GetStringByColor(btnColorFaction.color);
                 player.Alliance = string.IsNullOrEmpty(txtBtnAlliance.text) ? (byte) 0 : Convert.ToByte(txtBtnAlliance.text);
@@ -186,8 +197,7 @@ public class StartGameController : MonoBehaviour
     private void GetMultiplayerOptions(GameModel gameModel)
     {
         // Multiplayer: string ObjetName = "factionLine" + "_" + configLine.MapSocketId;
-        string globalInfoPath = Application.streamingAssetsPath + "/_GlobalInfo.json";
-        GlobalInfo globalInfo = JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
+        GlobalInfo globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
 
         foreach (ConfigLineModel configLine in configGameController.GetConfigLinesForMultiplayer())
         {
@@ -195,7 +205,7 @@ public class StartGameController : MonoBehaviour
             player.Faction.Bonus = new Bonus((Bonus.Id)globalInfo.Factions.Find(item => item.Id == player.Faction.Id).BonusId);
 
             gameModel.Players.Add(player);
-            Debug.Log("GetMultiplayerOptions - player: " + player.Name);
+            Debug.Log("GetMultiplayerOptions - player: " + player.Name + " MapSocketId: " + player.MapPlayerSlotId + " color: " + player.Color);
         }
     }
 }

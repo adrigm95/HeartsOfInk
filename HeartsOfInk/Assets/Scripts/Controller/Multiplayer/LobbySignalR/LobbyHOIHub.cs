@@ -21,7 +21,7 @@ public class LobbyHOIHub
             .Build();
         connection.Closed += async (error) =>
         {
-            Debug.LogWarning("Connection with SignalR closed, restarting");
+            Debug.LogWarning("Connection with SignalR closed, restarting. Error: " + error);
             await Task.Delay(1000); // don't want to hammer the network
             await connection.StartAsync();
         };
