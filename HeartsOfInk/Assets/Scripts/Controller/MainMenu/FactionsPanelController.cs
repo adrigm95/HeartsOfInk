@@ -4,6 +4,8 @@ using Assets.Scripts.DataAccess;
 using Assets.Scripts.Utils;
 using HeartsOfInk.SharedLogic;
 using LobbyHOIServer.Models.MapModels;
+using LobbyHOIServer.Models.Models.In;
+using LobbyHOIServer.Models.Models;
 using NETCoreServer.Models;
 using System;
 using System.Collections.Generic;
@@ -13,15 +15,19 @@ using UnityEngine.UI;
 public class FactionsPanelController : MonoBehaviour
 {
     private const int PlayerOwnerValue = 0;
+    private const byte NoAlliance = 0;
+
     private MapModel mapModel;
     private GlobalInfo globalInfo;
     private List<Dropdown> factions;
     private List<MapModelHeader> availableMaps;
+    public List<ConfigLineModel> _configLinesState;
     [SerializeField]
     private StartGameController startGameController;
     public int startFactionLines;
     public int spacing;
     public Text factionDescription;
+    public Text txtGamekey;
     public Text bonusDescription;
     public Dropdown cbMaps;
 
@@ -77,28 +83,29 @@ public class FactionsPanelController : MonoBehaviour
         Vector3 position;
         Dropdown cbFaction;
         Text txtFaction;
-        Image btnColorFaction;
+        Image btnColorImage;
+        Button btnColorFaction;
         GlobalInfoFaction faction;
         Text txtAlliance;
 
         faction = globalInfo.Factions.Find(item => item.Id == playerSlot.FactionId);
         position = new Vector3(0, startFactionLines);
         position.y -= spacing * factions.Count;
-        newObject = ((GameObject) Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
+        newObject = ((GameObject)Instantiate(Resources.Load(prefabPath), position, transform.rotation)).transform;
         newObject.name = "factionLine" + faction.NameLiteral + "_" + faction.Id + "_" + playerSlot.Id;
         newObject.SetParent(this.transform, false);
         newObject.gameObject.SetActive(playerSlot.IsPlayable);
 
         cbFaction = newObject.Find("cbFaction").GetComponent<Dropdown>();
         txtFaction = newObject.Find("txtFaction").GetComponent<Text>();
-        btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Image>();
+        btnColorFaction = newObject.Find("btnColorFaction").GetComponent<Button>();
+        btnColorImage = newObject.Find("btnColorFaction").GetComponent<Image>();
         txtAlliance = newObject.Find("btnAlliance").GetComponentInChildren<Text>();
-
         Player.IA slotPlayerType = (Player.IA)playerSlot.IaId;
-        cbFaction.value = slotPlayerType == Player.IA.OTHER_PLAYER ? (int) Player.IA.IA : playerSlot.IaId;
+        cbFaction.value = slotPlayerType == Player.IA.OTHER_PLAYER ? (int)Player.IA.IA : playerSlot.IaId;
         cbFaction.onValueChanged.AddListener(delegate { CbFaction_OnValueChange(cbFaction); });
         txtFaction.text = faction.NameLiteral;
-        btnColorFaction.color = ColorUtils.GetColorByString(playerSlot.Color);
+        btnColorImage.color = ColorUtils.GetColorByString(playerSlot.Color);
         txtAlliance.text = AllianceUtils.ConvertToString(playerSlot.Alliance);
 
         factions.Add(cbFaction);
@@ -107,6 +114,60 @@ public class FactionsPanelController : MonoBehaviour
         {
             ChangeFactionDescriptions(faction);
         }
+        btnColorFaction.onClick.AddListener(delegate { OnClick_PlayerColor(btnColorImage); });
+    }
+    public void OnClick_PlayerColor(Image colorImage)
+    {
+        Debug.Log($"Color changed for image {colorImage.name}; color: {colorImage.color}");
+        Debug.Log($"Current global info {globalInfo}");
+        colorImage.color = ColorUtils.NextColor(colorImage.color, globalInfo.AvailableColors);
+        OnChangeConfigLine(colorImage.transform.parent);
+    }
+    public void OnChangeConfigLine(Transform factionLine)
+    {
+        ConfigLineIn configLineIn = new ConfigLineIn();
+        Dropdown cbPlayerType;
+        Text txtAlliance;
+        Text txtPlayerName;
+        Image colorFactionImage;
+        Dropdown cbFaction;
+        Toggle tglIsReady;
+
+        Debug.Log("OnChangeConfigLine - Start - Object modified: " + factionLine.name);
+
+        GetObjectLineReferences(ref factionLine, out cbPlayerType, out colorFactionImage, out _, out txtPlayerName, out _, out txtAlliance, out tglIsReady, null);
+        cbFaction = factionLine.Find("cbFaction").GetComponent<Dropdown>();
+
+        string[] splittedName = factionLine.name.Split('_');
+        int mapSocketId = Convert.ToInt32(splittedName[1]);
+        ConfigLineModel configLine = _configLinesState.Find(item => item.MapPlayerSlotId == mapSocketId);
+        Debug.Log("Pre-modified configLine || Playername: " + configLine.PlayerName);
+
+
+        configLine.FactionId = globalInfo.Factions.Find(item =>
+                item.NameLiteral == cbFaction.options[cbFaction.value].text).Id;
+        configLine.Alliance = string.IsNullOrWhiteSpace(txtAlliance.text) ? NoAlliance : Convert.ToByte(txtAlliance.text);
+        configLine.Color = ColorUtils.GetStringByColor(colorFactionImage.color);
+        configLine.PlayerType = (Player.IA)cbPlayerType.value;
+        configLine.PlayerName = txtPlayerName.text;
+        configLine.IsReady = tglIsReady.isOn;
+
+        configLineIn.configLineModel = configLine;
+        configLineIn.gameKey = txtGamekey.text;
+
+        Debug.Log("Post-modified configLine || Playername: " + configLine.PlayerName);
+        ConfigLinesUpdater.Instance.SendConfigLine(configLineIn);
+    }
+    private static void GetObjectLineReferences(ref Transform objectLine, out Dropdown cbPlayerType, out Image colorFactionImage, out Button btnColorFaction, out Text txtPlayerName, out Button btnAlliance, out Text txtAlliance, out Toggle tglIsReady, string objectLineName)
+    {
+        objectLine = objectLine != null ? objectLine : GameObject.Find(objectLineName).transform;
+        cbPlayerType = objectLine.Find("cbPlayerType").GetComponent<Dropdown>();
+        colorFactionImage = objectLine.Find("btnColorFaction").GetComponent<Image>();
+        btnColorFaction = objectLine.Find("btnColorFaction").GetComponent<Button>();
+        btnAlliance = objectLine.Find("btnAlliance").GetComponent<Button>();
+        txtAlliance = objectLine.Find("btnAlliance").GetComponentInChildren<Text>();
+        txtPlayerName = objectLine.Find("txtPlayerName").GetComponent<Text>();
+        tglIsReady = objectLine.Find("tglIsReady").GetComponent<Toggle>();
     }
 
     public void CbFaction_OnValueChange(Dropdown comboOrder)

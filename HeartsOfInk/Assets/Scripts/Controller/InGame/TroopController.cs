@@ -120,15 +120,21 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
                 }
             }
             else if (otherTroopController.troopModel.Units < troopModel.Units ||
-                 (otherTroopController.troopModel.Units == troopModel.Units 
+                 (otherTroopController.troopModel.Units == troopModel.Units
                  && otherTroopController.gameObject.name.CompareTo(gameObject.name) < 0))
             {
-                 if (troopModel.Units + otherTroopController.troopModel.Units <= MaxTroops)
-                 {
-                        troopModel.MergeTroop(otherTroopController.troopModel);
-                        unitsText.text = Convert.ToString(troopModel.Units);
-                        globalLogic.DestroyUnit(otherTroopController.gameObject, null);
-                 }
+                if (troopModel.Units + otherTroopController.troopModel.Units <= MaxTroops)
+                {
+                    troopModel.MergeTroop(otherTroopController.troopModel);
+                    unitsText.text = Convert.ToString(troopModel.Units);
+                    globalLogic.DestroyUnit(otherTroopController.gameObject, null);
+                }
+                if (troopModel.Units + otherTroopController.troopModel.Units <= MaxTroops)
+                {
+                    troopModel.MergeTroop(otherTroopController.troopModel);
+                    unitsText.text = Convert.ToString(troopModel.Units);
+                    globalLogic.DestroyUnit(otherTroopController.gameObject, null);
+                }
                 else
                 {
                     troopModel.MergeUntilMax(otherTroopController.troopModel);
@@ -196,7 +202,7 @@ public class TroopController : MonoBehaviour, IObjectAnimator, IObjectSelectable
     public bool IsPcPlayer()
     {
         return troopModel.Player.MapPlayerSlotId == globalLogic.thisPcPlayer.MapPlayerSlotId;
-  
+
     }
     public bool IsAllyTroop()
     {
