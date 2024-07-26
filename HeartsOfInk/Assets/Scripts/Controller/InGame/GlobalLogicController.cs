@@ -460,12 +460,21 @@ public class GlobalLogicController : MonoBehaviour
         try
         {
             firstOwner = cities[0].Owner;
-            firstOwnerAlliance = cities[0].Owner.Alliance;
+
+            if (cities[0].Owner == null)
+            {
+                // En algunos casos la ciudad no tiene owner y por lo tanto no tiene alianza.
+                firstOwnerAlliance = 255;
+            }
+            else
+            {
+                firstOwnerAlliance = cities[0].Owner.Alliance;
+            }
 
             //TODO: Terminar de adaptar condición de victoria a alianzas
             foreach (CityController city in cities)
             {
-                if (city.Owner != firstOwner)
+                if (city.Owner == null || city.Owner != firstOwner)
                 {
                     isGameFinished = false;
                     break;
@@ -480,6 +489,18 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
+            Debug.LogWarning($"Error debug: Cities length {cities.Count}");
+            if (cities.Count > 0)
+            {
+                if (cities[0].Owner == null)
+                {
+                    Debug.LogError(new Exception($"cities[0].Owner {cities[0].name} is null on {ex.StackTrace}"));
+                }
+                else
+                {
+                    Debug.LogWarning($"Error debug: Owner info: {cities[0]}");
+                }
+            }
             LogManager.SendException(exceptionSender, ex);
             Debug.LogException(ex);
         }
