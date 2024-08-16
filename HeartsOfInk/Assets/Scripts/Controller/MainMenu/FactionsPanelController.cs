@@ -116,58 +116,12 @@ public class FactionsPanelController : MonoBehaviour
         }
         btnColorFaction.onClick.AddListener(delegate { OnClick_PlayerColor(btnColorImage); });
     }
+
     public void OnClick_PlayerColor(Image colorImage)
     {
         Debug.Log($"Color changed for image {colorImage.name}; color: {colorImage.color}");
         Debug.Log($"Current global info {globalInfo}");
         colorImage.color = ColorUtils.NextColor(colorImage.color, globalInfo.AvailableColors);
-        OnChangeConfigLine(colorImage.transform.parent);
-    }
-    public void OnChangeConfigLine(Transform factionLine)
-    {
-        ConfigLineIn configLineIn = new ConfigLineIn();
-        Dropdown cbPlayerType;
-        Text txtAlliance;
-        Text txtPlayerName;
-        Image colorFactionImage;
-        Dropdown cbFaction;
-        Toggle tglIsReady;
-
-        Debug.Log("OnChangeConfigLine - Start - Object modified: " + factionLine.name);
-
-        GetObjectLineReferences(ref factionLine, out cbPlayerType, out colorFactionImage, out _, out txtPlayerName, out _, out txtAlliance, out tglIsReady, null);
-        cbFaction = factionLine.Find("cbFaction").GetComponent<Dropdown>();
-
-        string[] splittedName = factionLine.name.Split('_');
-        int mapSocketId = Convert.ToInt32(splittedName[1]);
-        ConfigLineModel configLine = _configLinesState.Find(item => item.MapPlayerSlotId == mapSocketId);
-        Debug.Log("Pre-modified configLine || Playername: " + configLine.PlayerName);
-
-
-        configLine.FactionId = globalInfo.Factions.Find(item =>
-                item.NameLiteral == cbFaction.options[cbFaction.value].text).Id;
-        configLine.Alliance = string.IsNullOrWhiteSpace(txtAlliance.text) ? NoAlliance : Convert.ToByte(txtAlliance.text);
-        configLine.Color = ColorUtils.GetStringByColor(colorFactionImage.color);
-        configLine.PlayerType = (Player.IA)cbPlayerType.value;
-        configLine.PlayerName = txtPlayerName.text;
-        configLine.IsReady = tglIsReady.isOn;
-
-        configLineIn.configLineModel = configLine;
-        configLineIn.gameKey = txtGamekey.text;
-
-        Debug.Log("Post-modified configLine || Playername: " + configLine.PlayerName);
-        ConfigLinesUpdater.Instance.SendConfigLine(configLineIn);
-    }
-    private static void GetObjectLineReferences(ref Transform objectLine, out Dropdown cbPlayerType, out Image colorFactionImage, out Button btnColorFaction, out Text txtPlayerName, out Button btnAlliance, out Text txtAlliance, out Toggle tglIsReady, string objectLineName)
-    {
-        objectLine = objectLine != null ? objectLine : GameObject.Find(objectLineName).transform;
-        cbPlayerType = objectLine.Find("cbPlayerType").GetComponent<Dropdown>();
-        colorFactionImage = objectLine.Find("btnColorFaction").GetComponent<Image>();
-        btnColorFaction = objectLine.Find("btnColorFaction").GetComponent<Button>();
-        btnAlliance = objectLine.Find("btnAlliance").GetComponent<Button>();
-        txtAlliance = objectLine.Find("btnAlliance").GetComponentInChildren<Text>();
-        txtPlayerName = objectLine.Find("txtPlayerName").GetComponent<Text>();
-        tglIsReady = objectLine.Find("tglIsReady").GetComponent<Toggle>();
     }
 
     public void CbFaction_OnValueChange(Dropdown comboOrder)
