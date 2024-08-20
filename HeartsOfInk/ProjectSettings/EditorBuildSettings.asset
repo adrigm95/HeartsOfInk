@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/RawgenGames.unity
+    path: Assets/Scenes/StartScene.unity
     guid: e5408e57f0adfd84db7fcd329af08518
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
@@ -35,4 +35,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/OptionsMenu.unity
     guid: e51fa60e1161a4a4295a582ffeb80b06
+  - enabled: 1
+    path: Assets/Scenes/GameUpdaterScene.unity
+    guid: 0a01dbb3d30941648b3048dcacc046a3
   m_configObjects: {}
