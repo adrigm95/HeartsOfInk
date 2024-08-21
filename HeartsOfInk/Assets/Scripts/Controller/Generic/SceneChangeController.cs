@@ -22,7 +22,8 @@ public class SceneChangeController : MonoBehaviour
         Multiplayer = 5,
         MapEditor = 6,
         AcceptPolicy = 7,
-        Options = 8
+        Options = 8,
+        GameUpdaterScene = 9
     }
 
     public void DirectChangeScene(Scenes scene)
