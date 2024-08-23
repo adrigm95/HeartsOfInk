@@ -78,7 +78,7 @@ public class CreateGameController : MonoBehaviour
 
     private void OnValueChange()
     {
-        MapController.Instance.UpdateMap(availableMaps.Find(item => item.DisplayName == cbMaps.options[cbMaps.value].text).SpritePath);
+        MapController.Instance.UpdateMap(availableMaps.Find(item => item.DisplayName == cbMaps.options[cbMaps.value].text).SpriteName);
     }
 
     public void EnableDisableCreateGame(bool enable)

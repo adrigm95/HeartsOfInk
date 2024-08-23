@@ -53,7 +53,7 @@ public class FactionsPanelController : MonoBehaviour
         {
             LoadFactionLine(playerSlot);
         }
-        MapController.Instance.UpdateMap(mapModel.SpritePath);
+        MapController.Instance.UpdateMap(mapModel.SpriteName);
     }
 
     private void CleanFactionLines()

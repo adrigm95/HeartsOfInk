@@ -42,28 +42,25 @@ public class LobbyHOIHub
     {
         bool retry = false;
 
-        while (true)
+        do
         {
-            do
+            try
             {
-                try
-                {
-                    Debug.Log("Setting signalR connection.ON");
-                    ConfigLinesUpdater.Instance.SusbcribeReceiver(this, connection);
-                    StartGameLobbySignalR.Instance.SusbcribeReceiver(this, connection);
-                    Debug.Log("Starting connection with signalR");
-                    await connection.StartAsync();
-                    return;
-                }
-                catch (Exception ex)
-                {
-                    await Task.Delay(1000);
-                    Debug.LogError("Connection to signalR failed, reconnecting in 1 second. Exception message: " + ex.Message);
-                    retry = true;
-                }
+                Debug.Log("Setting signalR connection.ON");
+                ConfigLinesUpdater.Instance.SusbcribeReceiver(this, connection);
+                StartGameLobbySignalR.Instance.SusbcribeReceiver(this, connection);
+                Debug.Log("Starting connection with signalR");
+                await connection.StartAsync();
+                return;
             }
-            while (retry);
+            catch (Exception ex)
+            {
+                await Task.Delay(1000);
+                Debug.LogError("Connection to signalR failed, reconnecting in 1 second. Exception message: " + ex.Message);
+                retry = true;
+            }
         }
+        while (retry);
     }
 
     public async void SuscribeToRoom(string room)

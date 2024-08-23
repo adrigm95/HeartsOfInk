@@ -90,6 +90,7 @@ public class GlobalLogicController : MonoBehaviour
             if (debugInfoPanel != null && Debug.isDebugBuild)
             {
                 debugInfoPanel.SetActive(true);
+                Debug.Log("Persistent data path: " + Application.persistentDataPath);
             }
 
             if (gameOptionsHolder == null)
@@ -337,8 +338,8 @@ public class GlobalLogicController : MonoBehaviour
         {
             Debug.Log($"Loading map id: {gameModel.MapId}");
             mapModel = MapDAC.LoadMapInfoById(gameModel.MapId, GlobalConstants.RootPath);
-            Debug.Log($"Map path: {mapModel.SpritePath}");
-            MapController.Instance.UpdateMap(mapModel.SpritePath);
+            Debug.Log($"Map path: {mapModel.SpriteName}");
+            MapController.Instance.UpdateMap(mapModel.SpriteName);
 
             for (index = 0; index < mapModel.Cities.Count; index++)
             {

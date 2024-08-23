@@ -14,7 +14,7 @@ namespace Assets.Scripts.DataAccess
             Vector2 pivot = new Vector2(0.5f, 0.5f);
             string fullPath;
 
-            fullPath = Application.streamingAssetsPath;
+            fullPath = Application.persistentDataPath;
             fullPath += spritePath.StartsWith("/") ? spritePath : "/" + spritePath;
             imageData = File.ReadAllBytes(fullPath);
             texture.LoadImage(imageData);

@@ -80,7 +80,7 @@ public class EditorPanelController : MonoBehaviour
         mapName.text = mapModel.DisplayName;
         isForMultiplayer.isOn = mapModel.AvailableForMultiplayer;
         isForSingleplayer.isOn = mapModel.AvailableForSingleplayer;
-        MapController.Instance.UpdateMap(mapModel.SpritePath);
+        MapController.Instance.UpdateMap(mapModel.SpriteName);
         UpdateCanvas();
     }
 
@@ -241,7 +241,7 @@ public class EditorPanelController : MonoBehaviour
 
         if (!string.IsNullOrWhiteSpace(image))
         {
-            mapModel.SpritePath = image;
+            mapModel.SpriteName = image;
         }
 
         mapModel.DisplayName = mapName.text;

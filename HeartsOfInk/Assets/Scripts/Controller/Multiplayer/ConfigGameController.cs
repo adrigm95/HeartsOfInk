@@ -179,10 +179,10 @@ public class ConfigGameController : MonoBehaviour
             {
                 GameKey = gameKey
             });
-            _mapModel = MapDAC.LoadMapInfoById(mapId, Application.streamingAssetsPath);
+            _mapModel = MapDAC.LoadMapInfoById(mapId, Application.persistentDataPath);
             globalInfo = GlobalInfoDAC.LoadGlobalMapInfo();
             LobbyHOIHub.Instance.SuscribeToRoom(txtGamekey.text);
-            MapController.Instance.UpdateMap(_mapModel.SpritePath);
+            MapController.Instance.UpdateMap(_mapModel.SpriteName);
 
             txtBtnReady.text = isGameHost ? "Comenzar" : "Listo";
 
