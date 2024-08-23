@@ -49,7 +49,11 @@ public class CreateMapPanelController : MonoBehaviour
         this.gameObject.SetActive(false);
         editorPanelController.gameObject.SetActive(true);
     }
-
+    public void UploadMap()
+    {
+        // just a debug method
+        Debug.Log("Ey, Funsionou");
+    }
     public void CreateMap()
     {
         string mapId = GenerateMapId();
@@ -121,4 +125,5 @@ public class CreateMapPanelController : MonoBehaviour
 
         return Convert.ToString(maxId);
     }
+    
 }
