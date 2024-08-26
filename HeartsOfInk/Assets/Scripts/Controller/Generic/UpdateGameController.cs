@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Assets.Scripts.Data.Constants;
 using Assets.Scripts.DataAccess;
 using LobbyHOIServer.Models.MapModels;
@@ -9,45 +9,84 @@ using UnityEngine;
 
 public class UpdateGameController : MonoBehaviour
 {
+    public enum UpdateGameState { GettingInfo = 1, DownloadingUpdates = 2}
+
+    [SerializeField]
+    private SceneChangeController sceneChangeController;
+
+    private Queue<MapModelHeader> mapModels;
+    private UpdateGameState state = UpdateGameState.GettingInfo;
+
     // Start is called before the first frame update
     void Start()
     {
-        UpdateGame();
+        GetPendingUpdates();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        UpdateGame();
     }
 
     private async void UpdateGame()
     {
-        List<String> mapList = new List<String>();
+        if (state == UpdateGameState.DownloadingUpdates)
+        {
+            if (mapModels.Count > 0)
+            {
+                MapModelHeader mapModelHeader = mapModels.Dequeue();
+                GetMapToUpdate(mapModelHeader);
+            }
+            else
+            {
+                sceneChangeController.DirectChangeScene(SceneChangeController.Scenes.AcceptPolicy);
+            }
+        }
+    }
+
+    private async void GetPendingUpdates()
+    {
+        List<MapModelHeader> mapModelsList;
+
+        try
+        {
+            mapModelsList = await GetMapsToUpdate();
+            if (mapModelsList.Count == 0)
+            {
+                Debug.LogWarning("No maps to update in server.");
+                sceneChangeController.DirectChangeScene(SceneChangeController.Scenes.AcceptPolicy);
+            }
+            else
+            {
+                Debug.Log($"Updating {mapModels.Count} maps from server.");
+                mapModels = new Queue<MapModelHeader>(mapModelsList);
+            }
+
+            state = UpdateGameState.DownloadingUpdates;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogException(ex);
+            sceneChangeController.DirectChangeScene(SceneChangeController.Scenes.AcceptPolicy);
+        }
+    }
+
+    private async Task<List<MapModelHeader>> GetMapsToUpdate()
+    {
+        Debug.Log("Trying to get maps to update");
         WebServiceCaller<List<string>, List<MapModelHeader>> wsCaller = new WebServiceCaller<List<string>, List<MapModelHeader>>();
         HOIResponseModel<List<MapModelHeader>> response;
 
-        response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.GET,"api/MapList", mapList);
+        //Todo: Send ids from downloaded non-official maps.
+        response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.POST, "api/MapList", new List<string>());
 
-        Debug.Log(response.internalResultCode);
+        return response.serviceResponse;
     }
-   /*  private async void LoadGames()
+
+    private async void GetMapToUpdate(MapModelHeader mapHeader)
     {
-        WebServiceCaller<List<BasicGameInfo>> wsCaller = new WebServiceCaller<List<BasicGameInfo>>();
-        HOIResponseModel<List<BasicGameInfo>> response;
-
-        response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.GET, LobbyHOIControllers.PublicGames);
-
-        switch (response.internalResultCode)
-        {
-            case InternalStatusCodes.OKCode:
-                PopulateList(response);
-                break;
-            case InternalStatusCodes.KOConnectionCode:
-                infoPanelController.DisplayMessage("Connection error", "Error when try to connect to server.");
-                break;
-        }
-    } */
-
-
+        Debug.Log($"Updating map {mapHeader.DisplayName} from server");
+        throw new NotImplementedException();
+    }
 }
