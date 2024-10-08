@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Assets.Scripts.Data;
 using Assets.Scripts.Data.Constants;
 using Assets.Scripts.DataAccess;
+using HeartsOfInk.SharedLogic;
 using LobbyHOIServer.Models.MapModels;
 using NETCoreServer.Models;
+using NETCoreServer.Models.Out;
 using UnityEngine;
 
 public class UpdateGameController : MonoBehaviour
@@ -35,8 +38,16 @@ public class UpdateGameController : MonoBehaviour
         {
             if (mapModels.Count > 0)
             {
-                MapModelHeader mapModelHeader = mapModels.Dequeue();
-                GetMapToUpdate(mapModelHeader);
+                MapModelHeader newMapModelHeader = mapModels.Dequeue();
+                MapModelHeader currentMapModelHeader = MapDAC.LoadMapHeader(newMapModelHeader.DefinitionName, GlobalConstants.RootPath);
+
+                if (currentMapModelHeader == null || currentMapModelHeader.Version == default || newMapModelHeader.Version > currentMapModelHeader.Version)
+                {
+                    MapModelOut newMapModel = await GetMapToUpdate(newMapModelHeader);
+                    MapDAC.SaveMapHeader(newMapModelHeader, GlobalConstants.RootPath);
+                    MapDAC.SaveMapDefinition(newMapModel.MapModel, GlobalConstants.RootPath);
+                    throw new NotImplementedException("Pending implement sprite saving");
+                }
             }
             else
             {
@@ -59,8 +70,8 @@ public class UpdateGameController : MonoBehaviour
             }
             else
             {
-                Debug.Log($"Updating {mapModels.Count} maps from server.");
                 mapModels = new Queue<MapModelHeader>(mapModelsList);
+                Debug.Log($"Updating {mapModels.Count} maps from server.");
             }
 
             state = UpdateGameState.DownloadingUpdates;
@@ -84,9 +95,14 @@ public class UpdateGameController : MonoBehaviour
         return response.serviceResponse;
     }
 
-    private async void GetMapToUpdate(MapModelHeader mapHeader)
+    private async Task<MapModelOut> GetMapToUpdate(MapModelHeader mapHeader)
     {
         Debug.Log($"Updating map {mapHeader.DisplayName} from server");
-        throw new NotImplementedException();
+        WebServiceCaller<string, MapModelOut> wsCaller = new WebServiceCaller<string, MapModelOut>();
+        HOIResponseModel<MapModelOut> response;
+
+        response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.GET, "api/Map", mapHeader.MapId);
+
+        return response.serviceResponse;
     }
 }
