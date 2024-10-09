@@ -30,10 +30,10 @@ public class MapController : MonoBehaviour
         }
     }
 
-    public void UpdateMap(string spritePath)
+    public void UpdateMap(string spriteName)
     {
         CleanMap();
-        spriteRenderer.sprite = MapSpriteDAC.LoadMapSprite(spritePath);
+        spriteRenderer.sprite = MapSpriteDAC.LoadMapSprite(spriteName);
     }
 
     void OnMouseOver()

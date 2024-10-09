@@ -41,12 +41,17 @@ public class UpdateGameController : MonoBehaviour
                 MapModelHeader newMapModelHeader = mapModels.Dequeue();
                 MapModelHeader currentMapModelHeader = MapDAC.LoadMapHeader(newMapModelHeader.DefinitionName, GlobalConstants.RootPath);
 
+                Debug.Log($"Checking map version.");
                 if (currentMapModelHeader == null || currentMapModelHeader.Version == default || newMapModelHeader.Version > currentMapModelHeader.Version)
                 {
                     MapModelOut newMapModel = await GetMapToUpdate(newMapModelHeader);
                     MapDAC.SaveMapHeader(newMapModelHeader, GlobalConstants.RootPath);
                     MapDAC.SaveMapDefinition(newMapModel.MapModel, GlobalConstants.RootPath);
-                    throw new NotImplementedException("Pending implement sprite saving");
+                    MapSpriteDAC.SaveMapSprite(GlobalConstants.RootPath, newMapModel.MapModel.SpriteName, newMapModel.BackgroundImage);
+                }
+                else
+                {
+                    Debug.Log("Map skipped, current version equal or greatter");
                 }
             }
             else
@@ -98,10 +103,10 @@ public class UpdateGameController : MonoBehaviour
     private async Task<MapModelOut> GetMapToUpdate(MapModelHeader mapHeader)
     {
         Debug.Log($"Updating map {mapHeader.DisplayName} from server");
-        WebServiceCaller<string, MapModelOut> wsCaller = new WebServiceCaller<string, MapModelOut>();
+        WebServiceCaller<MapModelOut> wsCaller = new WebServiceCaller<MapModelOut>();
         HOIResponseModel<MapModelOut> response;
 
-        response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.GET, "api/Map", mapHeader.MapId);
+        response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.GET, $"api/map/{mapHeader.MapId}");
 
         return response.serviceResponse;
     }
