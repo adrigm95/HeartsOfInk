@@ -1,7 +1,9 @@
 ﻿using NETCoreServer.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -42,6 +44,11 @@ namespace Assets.Scripts.DataAccess
             makingCall = false;
             client = new HttpClient();
             client.BaseAddress = new Uri(baseAddress);
+        }
+
+        public void AddAuthorizationToken(string bearerToken)
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
         }
 
         /// <summary>
@@ -137,6 +144,9 @@ namespace Assets.Scripts.DataAccess
                     break;
                 case System.Net.HttpStatusCode.BadRequest:
                     Debug.LogError("Bad request: 400");
+                    break;
+                case System.Net.HttpStatusCode.Unauthorized:
+                    Debug.LogError("Unauthorized: 401");
                     break;
                 default:
                     Debug.LogWarning("Non 200 http response: " + httpStatusCode.ToString());
