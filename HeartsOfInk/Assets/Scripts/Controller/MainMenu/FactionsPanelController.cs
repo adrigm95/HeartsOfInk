@@ -11,12 +11,19 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using AnalyticsServer.Models;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
+using System.Linq;
 
 public class FactionsPanelController : MonoBehaviour
 {
     private const int PlayerOwnerValue = 0;
-    private const byte NoAlliance = 0;
 
+    private WebServiceCaller<LogExceptionDto, bool> exceptionSender =
+        new WebServiceCaller<LogExceptionDto, bool>();
+    private WebServiceCaller<LogDto, bool> logSender =
+        new WebServiceCaller<LogDto, bool>();
     private MapModel mapModel;
     private GlobalInfo globalInfo;
     private List<Dropdown> factions;
@@ -33,12 +40,40 @@ public class FactionsPanelController : MonoBehaviour
 
     void Start()
     {
-        factions = new List<Dropdown>();
-        availableMaps = MapDAC.GetAvailableMaps(GlobalConstants.RootPath, false);
-        availableMaps.ForEach(map => cbMaps.options.Add(new Dropdown.OptionData(map.DisplayName)));
-        cbMaps.RefreshShownValue();
-        cbMaps.onValueChanged.AddListener(delegate { LoadMap(); });
-        LoadMap();
+        try
+        {
+            factions = new List<Dropdown>();
+            LogManager.SendLog(logSender, $"Searching maps in {GlobalConstants.RootPath}");
+            availableMaps = MapDAC.GetAvailableMaps(GlobalConstants.RootPath, false);
+
+            if (availableMaps == null || availableMaps.Count == 0)
+            {
+                string warning = $"No maps available for path {GlobalConstants.RootPath} on FactionsPanelController";
+                Debug.LogWarning(warning);
+                LogManager.SendLog(logSender, warning);
+            }
+            else
+            {
+                LogManager.SendLog(logSender, $"Local maps {availableMaps.Count}");
+            }
+
+            availableMaps.ForEach(map => cbMaps.options.Add(new Dropdown.OptionData(map.DisplayName)));
+            cbMaps.RefreshShownValue();
+            cbMaps.onValueChanged.AddListener(delegate { LoadMap(); });
+            LoadMap();
+        }
+        catch (Exception ex)
+        {
+            if (availableMaps != null)
+            {
+                LogManager.SendLog(logSender, $"AvailableMapsInfo: Count({availableMaps.Count})");
+            }
+            
+            LogManager.SendException(exceptionSender, ex, 
+                $"Message: {ex.Message}, StackTrace: {ex.StackTrace}, Objects: (ObjectName): {this.gameObject.name}, (availableMaps): {availableMaps}, (cbMaps): {cbMaps}, (factions): {factions}", 
+                SceneManager.GetActiveScene().name);
+            throw;
+        }
     }
 
     public void LoadMap()

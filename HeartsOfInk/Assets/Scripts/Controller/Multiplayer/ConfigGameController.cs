@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Data.Constants;
+﻿using AnalyticsServer.Models;
+using Assets.Scripts.Data.Constants;
 using Assets.Scripts.Data.GlobalInfo;
 using Assets.Scripts.Data.ServerModels.Constants;
 using Assets.Scripts.DataAccess;
@@ -11,6 +12,7 @@ using NETCoreServer.Models;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ConfigGameController : MonoBehaviour
@@ -30,6 +32,10 @@ public class ConfigGameController : MonoBehaviour
     [NonSerialized]
     public bool isGameHost;
 
+    private WebServiceCaller<LogExceptionDto, bool> exceptionSender =
+    new WebServiceCaller<LogExceptionDto, bool>();
+    private WebServiceCaller<LogDto, bool> logSender =
+        new WebServiceCaller<LogDto, bool>();
     private int ownLine;
     private MapModel _mapModel;
     private GlobalInfo globalInfo;
@@ -127,21 +133,30 @@ public class ConfigGameController : MonoBehaviour
             catch (Exception ex)
             {
                 Debug.LogException(ex);
+                LogManager.SendException(exceptionSender, ex, ex.Message, SceneManager.GetActiveScene().name);
                 throw;
             }
         }
     }
 
-    private static void GetObjectLineReferences(ref Transform objectLine, out Dropdown cbPlayerType, out Image colorFactionImage, out Button btnColorFaction, out Text txtPlayerName, out Button btnAlliance, out Text txtAlliance, out Toggle tglIsReady, string objectLineName)
+    private void GetObjectLineReferences(ref Transform objectLine, out Dropdown cbPlayerType, out Image colorFactionImage, out Button btnColorFaction, out Text txtPlayerName, out Button btnAlliance, out Text txtAlliance, out Toggle tglIsReady, string objectLineName)
     {
-        objectLine = objectLine != null ? objectLine : GameObject.Find(objectLineName).transform;
-        cbPlayerType = objectLine.Find("cbPlayerType").GetComponent<Dropdown>();
-        colorFactionImage = objectLine.Find("btnColorFaction").GetComponent<Image>();
-        btnColorFaction = objectLine.Find("btnColorFaction").GetComponent<Button>();
-        btnAlliance = objectLine.Find("btnAlliance").GetComponent<Button>();
-        txtAlliance = objectLine.Find("btnAlliance").GetComponentInChildren<Text>();
-        txtPlayerName = objectLine.Find("txtPlayerName").GetComponent<Text>();
-        tglIsReady = objectLine.Find("tglIsReady").GetComponent<Toggle>();
+        try
+        {
+            objectLine = objectLine != null ? objectLine : GameObject.Find(objectLineName).transform;
+            cbPlayerType = objectLine.Find("cbPlayerType").GetComponent<Dropdown>();
+            colorFactionImage = objectLine.Find("btnColorFaction").GetComponent<Image>();
+            btnColorFaction = objectLine.Find("btnColorFaction").GetComponent<Button>();
+            btnAlliance = objectLine.Find("btnAlliance").GetComponent<Button>();
+            txtAlliance = objectLine.Find("btnAlliance").GetComponentInChildren<Text>();
+            txtPlayerName = objectLine.Find("txtPlayerName").GetComponent<Text>();
+            tglIsReady = objectLine.Find("tglIsReady").GetComponent<Toggle>();
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex, ex.Message, SceneManager.GetActiveScene().name);
+            throw;
+        }
     }
 
     public void GameCreatedByHost(string gameKey, string mapId)
@@ -217,13 +232,15 @@ public class ConfigGameController : MonoBehaviour
         catch (Exception ex)
         {
             Debug.LogError("Error message: " + ex.Message);
-            Debug.LogError("Error StackTrace: " + ex.Message);
+            Debug.LogError("Error StackTrace: " + ex.StackTrace);
             Debug.LogError($"MethodImput... gameKey: {gameKey}, mapId: {mapId}, isGameHost: {isGameHost}");
 
             foreach (var configLine in configLines)
             {
                 Debug.LogError("Objects (configLine): " + configLine.ToString());
             }
+
+            LogManager.SendException(exceptionSender, ex, ex.Message, SceneManager.GetActiveScene().name);
         }
     }
 
@@ -231,25 +248,33 @@ public class ConfigGameController : MonoBehaviour
     {
         List<ConfigLineModel> allLines;
 
-        foreach (var configLine in _configLinesState)
+        try
         {
-            if (configLine.PlayerType == Player.IA.PLAYER)
+            foreach (var configLine in _configLinesState)
             {
-                if (string.IsNullOrEmpty(configLine.PlayerName))
+                if (configLine.PlayerType == Player.IA.PLAYER)
                 {
-                    configLine.PlayerType = Player.IA.IA;
-                }
-                else if (configLine.PlayerName != inpNick.text)
-                {
-                    Debug.Log("Player name different: configLine.PlayerName: " + configLine.PlayerName + " inpNick.name: " + inpNick.text);
-                    configLine.PlayerType = Player.IA.OTHER_PLAYER;
+                    if (string.IsNullOrEmpty(configLine.PlayerName))
+                    {
+                        configLine.PlayerType = Player.IA.IA;
+                    }
+                    else if (configLine.PlayerName != inpNick.text)
+                    {
+                        Debug.Log("Player name different: configLine.PlayerName: " + configLine.PlayerName + " inpNick.name: " + inpNick.text);
+                        configLine.PlayerType = Player.IA.OTHER_PLAYER;
+                    }
                 }
             }
-        }
 
-        // Cargamos las facciones no jugables (ciudades libres).
-        allLines = LoadConfigLinesFromMap(false);
-        allLines.AddRange(_configLinesState);
+            // Cargamos las facciones no jugables (ciudades libres).
+            allLines = LoadConfigLinesFromMap(false);
+            allLines.AddRange(_configLinesState);
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex, ex.Message, SceneManager.GetActiveScene().name);
+            throw;
+        }
 
         return allLines;
     }
@@ -259,25 +284,33 @@ public class ConfigGameController : MonoBehaviour
         List<ConfigLineModel> configLines = new List<ConfigLineModel>();
         List<MapPlayerSlotModel> loadedLines;
 
-        if (getPlayables)
+        try
         {
-            loadedLines = _mapModel.PlayerSlots.FindAll(p => p.IsPlayable);
-        }
-        else
-        {
-            loadedLines = _mapModel.PlayerSlots.FindAll(p => !p.IsPlayable);
-        }
-
-        foreach (MapPlayerSlotModel playerSlot in loadedLines)
-        {
-            configLines.Add(new ConfigLineModel()
+            if (getPlayables)
             {
-                Color = playerSlot.Color,
-                FactionId = playerSlot.FactionId,
-                MapPlayerSlotId = playerSlot.Id,
-                PlayerName = string.Empty,
-                PlayerType = (int) Player.IA.PLAYER
-            });
+                loadedLines = _mapModel.PlayerSlots.FindAll(p => p.IsPlayable);
+            }
+            else
+            {
+                loadedLines = _mapModel.PlayerSlots.FindAll(p => !p.IsPlayable);
+            }
+
+            foreach (MapPlayerSlotModel playerSlot in loadedLines)
+            {
+                configLines.Add(new ConfigLineModel()
+                {
+                    Color = playerSlot.Color,
+                    FactionId = playerSlot.FactionId,
+                    MapPlayerSlotId = playerSlot.Id,
+                    PlayerName = string.Empty,
+                    PlayerType = (int)Player.IA.PLAYER
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex, ex.Message, SceneManager.GetActiveScene().name);
+            throw;
         }
 
         return configLines;
@@ -399,6 +432,7 @@ public class ConfigGameController : MonoBehaviour
         catch (Exception ex)
         {
             Debug.LogException(ex);
+            LogManager.SendException(exceptionSender, ex, ex.Message, SceneManager.GetActiveScene().name);
             throw;
         }
     }

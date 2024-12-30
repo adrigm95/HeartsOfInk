@@ -38,7 +38,7 @@ public class LogManager
         }
     }
 
-    public static void SendException(WebServiceCaller<LogExceptionDto, bool> errorSender, Exception ex)
+    public static void SendException(WebServiceCaller<LogExceptionDto, bool> errorSender, Exception ex, string additionalInfo, string scene)
     {
         if (exceptionsSendedInSession < MaxExceptionsInSession)
         {
@@ -46,7 +46,7 @@ public class LogManager
 
             if (LogsEnabled)
             {
-                SendException(errorSender, ex, string.Empty);
+                SendException(errorSender, ex, $"Content: {additionalInfo}, Scene: {scene}");
             }
         }
     }
@@ -73,11 +73,18 @@ public class LogManager
         }
     }
 
-    public static void SendException(WebServiceCaller<LogExceptionDto, bool> errorSender, Exception ex, string addittionalInfo)
+    private static void SendException(WebServiceCaller<LogExceptionDto, bool> errorSender, Exception ex, string addittionalInfo)
     {
+        Exception innerException = ex;
+
+        while (innerException.InnerException != null)
+        {
+            innerException = innerException.InnerException;
+        }
+
         LogExceptionDto logExceptionDto = new LogExceptionDto()
         {
-            Exception = ex,
+            Exception = innerException,
             Content = addittionalInfo,
             Application = LogDto.ApplicationEnum.HeartsOfInk,
             SessionIdentifier = GetSessionId(),

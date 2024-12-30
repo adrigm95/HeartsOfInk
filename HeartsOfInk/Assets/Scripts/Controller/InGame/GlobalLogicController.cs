@@ -11,6 +11,7 @@ using HeartsOfInk.SharedLogic;
 using LobbyHOIServer.Models.MapModels;
 using NETCoreServer.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static SceneChangeController;
 
@@ -125,7 +126,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -144,7 +145,7 @@ public class GlobalLogicController : MonoBehaviour
         else
         {
             string errorMsg = "Unexpected type of game: " + gameModel.Gametype;
-            LogManager.SendException(exceptionSender, new Exception(errorMsg));
+            LogManager.SendException(exceptionSender, new Exception(errorMsg), string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogWarning(errorMsg);
         }
 
@@ -180,7 +181,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -242,7 +243,8 @@ public class GlobalLogicController : MonoBehaviour
             LogManager.SendException(
                 exceptionSender,
                 ex,
-                $"allTargetEquals: {allTargetEquals}, target: {target}, troopController: {troopController}"
+                $"allTargetEquals: {allTargetEquals}, target: {target}, troopController: {troopController}",
+                SceneManager.GetActiveScene().name
             );
             Debug.LogException(ex);
         }
@@ -409,7 +411,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -444,7 +446,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -502,7 +504,7 @@ public class GlobalLogicController : MonoBehaviour
                     Debug.LogWarning($"Error debug: Owner info: {cities[0]}");
                 }
             }
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -549,7 +551,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -578,7 +580,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -643,7 +645,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -679,7 +681,7 @@ public class GlobalLogicController : MonoBehaviour
         catch (Exception ex)
         {
             Debug.LogException(ex);
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
         }
     }
 
@@ -737,7 +739,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -778,7 +780,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -802,7 +804,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -843,7 +845,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -875,7 +877,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -897,7 +899,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -944,7 +946,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -963,7 +965,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -1010,7 +1012,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }
@@ -1024,7 +1026,7 @@ public class GlobalLogicController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
             Debug.LogException(ex);
         }
     }

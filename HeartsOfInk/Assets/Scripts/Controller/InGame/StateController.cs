@@ -11,6 +11,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -318,7 +319,7 @@ public class StateController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
         }
     }
 
@@ -365,7 +366,7 @@ public class StateController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
         }
     }
 

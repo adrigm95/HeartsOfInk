@@ -20,7 +20,7 @@ public class TutorialController : MonoBehaviour
     public void DisplayTutorial()
     {
         TutorialStep tutorialStep;
-        string tutorialPath = Application.streamingAssetsPath + "/tutorial.json";
+        string tutorialPath = Application.persistentDataPath + "/tutorial.json";
 
         step = 0;
         tutorialModel = JsonCustomUtils<TutorialModel>.ReadObjectFromFile(tutorialPath);

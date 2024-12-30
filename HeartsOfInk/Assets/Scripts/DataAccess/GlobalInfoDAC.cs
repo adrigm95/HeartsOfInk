@@ -10,7 +10,7 @@ namespace Assets.Scripts.DataAccess
 
         public static GlobalInfo LoadGlobalMapInfo()
         {
-            string globalInfoPath = Application.streamingAssetsPath + GlobalInfoFile;
+            string globalInfoPath = Application.persistentDataPath + GlobalInfoFile;
 
             return JsonCustomUtils<GlobalInfo>.ReadObjectFromFile(globalInfoPath);
         }
