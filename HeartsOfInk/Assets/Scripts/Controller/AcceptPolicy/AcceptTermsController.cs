@@ -10,7 +10,7 @@ public class AcceptTermsController : MonoBehaviour
 
         if (!string.IsNullOrWhiteSpace(acceptTermsDate))
         {
-            SceneChangeController.DirectChangeScene(SceneChangeController.Scenes.MainMenu);
+            SceneChangeController.ChangeScene(SceneChangeController.Scenes.MainMenu);
         }
     }
 

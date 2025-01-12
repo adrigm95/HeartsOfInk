@@ -73,7 +73,7 @@ public class UpdateGameController : MonoBehaviour
                 }
                 else
                 {
-                    sceneChangeController.DirectChangeScene(SceneChangeController.Scenes.AcceptPolicy);
+                    sceneChangeController.ChangeScene(SceneChangeController.Scenes.AcceptPolicy);
                 }
             }
         }
@@ -100,7 +100,7 @@ public class UpdateGameController : MonoBehaviour
                     LogManager.SendLog(logSender, "No maps to update in server.");
                 }
 
-                sceneChangeController.DirectChangeScene(SceneChangeController.Scenes.AcceptPolicy);
+                sceneChangeController.ChangeScene(SceneChangeController.Scenes.AcceptPolicy);
             }
             else
             {
@@ -118,7 +118,7 @@ public class UpdateGameController : MonoBehaviour
         catch (Exception ex)
         {
             Debug.LogException(ex);
-            sceneChangeController.DirectChangeScene(SceneChangeController.Scenes.AcceptPolicy);
+            sceneChangeController.ChangeScene(SceneChangeController.Scenes.AcceptPolicy);
         }
     }
 
