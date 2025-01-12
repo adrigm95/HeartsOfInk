@@ -539,13 +539,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: ChangeScene
-        m_Mode: 2
+      - m_Target: {fileID: 1507579232}
+        m_TargetAssemblyTypeName: LoginController, Assembly-CSharp
+        m_MethodName: Login
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 663508693}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -680,7 +680,7 @@ GameObject:
   - component: {fileID: 752748527}
   - component: {fileID: 752748526}
   m_Layer: 5
-  m_Name: subMenuMultiplayer
+  m_Name: loginPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1433,6 +1433,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1441962055}
   m_CullTransparentMesh: 0
+--- !u!1 &1507579231
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1507579233}
+  - component: {fileID: 1507579232}
+  m_Layer: 0
+  m_Name: LoginController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1507579232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1507579231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c64b78b8c0b82114eaaa6f1bf43e868f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneChangeController: {fileID: 1575692124}
+--- !u!4 &1507579233
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1507579231}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1512172079
 GameObject:
   m_ObjectHideFlags: 0
@@ -1669,7 +1714,7 @@ GameObject:
   - component: {fileID: 1575692123}
   - component: {fileID: 1575692124}
   m_Layer: 0
-  m_Name: LoadScene
+  m_Name: SceneChangeManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1699,9 +1744,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1575692121}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7518a8d065c99ef469b0d2516dfe7b0f, type: 3}
+  m_Script: {fileID: 11500000, guid: 00137d52e3d0eb148827b4649eda1830, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  multiplayerButton: {fileID: 0}
+  creditsButton: {fileID: 0}
+  mainMenuButton: {fileID: 0}
+  exitToMenuButton: {fileID: 0}
+  startGame: {fileID: 0}
+  optionsButton: {fileID: 0}
+  mapEditorButton: {fileID: 0}
+  loginButton: {fileID: 0}
 --- !u!1 &1888232420
 GameObject:
   m_ObjectHideFlags: 0
@@ -1795,7 +1848,7 @@ GameObject:
   - component: {fileID: 2081051887}
   - component: {fileID: 2081051890}
   m_Layer: 5
-  m_Name: btnReturnMainMenu
+  m_Name: btnReturnPreviousScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1866,7 +1919,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1575692124}
-        m_TargetAssemblyTypeName: ScenePlayerChange, Assembly-CSharp
+        m_TargetAssemblyTypeName: SceneChangeController, Assembly-CSharp
         m_MethodName: ChangeToPreviousScene
         m_Mode: 1
         m_Arguments:
@@ -2016,3 +2069,4 @@ SceneRoots:
   - {fileID: 278966821}
   - {fileID: 1294647498}
   - {fileID: 1575692123}
+  - {fileID: 1507579233}

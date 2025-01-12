@@ -74,6 +74,7 @@ public class GlobalLogicController : MonoBehaviour
     public Image playItem;
     public Image mediumSpeedItem;
     public Image fatestSpeedItem;
+    public Toggle attackToggle;
 
     private void Awake()
     {
@@ -854,25 +855,32 @@ public class GlobalLogicController : MonoBehaviour
     {
         try
         {
-            switch (mouseKeyPressed)
+            if (false)
             {
-                case KeyCode.Mouse0: // Left mouse button
-                    EndSelection();
-                    selection.StartMultiselect(
-                        cameraController.ScreenToWorldPoint(),
-                        typeof(TroopController)
-                    );
-                    targetMarkerController.RemoveTargetPosition();
-                    Debug.Log($"MultiselectOrigin assignated {selection.MultiselectOrigin}");
-                    break;
-                case KeyCode.Mouse1: // Right mouse button
-                    MoveSelectedTroops();
-                    break;
-                default:
-                    string log = $"Unexpected map click {mouseKeyPressed}";
-                    LogManager.SendLog(logSender, log);
-                    Debug.LogWarning(log);
-                    break;
+                //Todo: LÓGICA ALTERNATIVA PARA ANDROID
+            }
+            else
+            {
+                switch (mouseKeyPressed)
+                {
+                    case KeyCode.Mouse0: // Left mouse button
+                        EndSelection();
+                        selection.StartMultiselect(
+                            cameraController.ScreenToWorldPoint(),
+                            typeof(TroopController)
+                        );
+                        targetMarkerController.RemoveTargetPosition();
+                        Debug.Log($"MultiselectOrigin assignated {selection.MultiselectOrigin}");
+                        break;
+                    case KeyCode.Mouse1: // Right mouse button
+                        MoveSelectedTroops();
+                        break;
+                    default:
+                        string log = $"Unexpected map click {mouseKeyPressed}";
+                        LogManager.SendLog(logSender, log);
+                        Debug.LogWarning(log);
+                        break;
+                }
             }
         }
         catch (Exception ex)

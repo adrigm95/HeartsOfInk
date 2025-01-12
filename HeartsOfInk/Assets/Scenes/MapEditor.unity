@@ -7143,6 +7143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   panelController: {fileID: 2736418949753084025}
+  sceneChangeController: {fileID: 3141341241225791856}
 --- !u!1 &1195140332
 GameObject:
   m_ObjectHideFlags: 0
@@ -13679,6 +13680,7 @@ MonoBehaviour:
   startGame: {fileID: 0}
   optionsButton: {fileID: 0}
   mapEditorButton: {fileID: 0}
+  loginButton: {fileID: 0}
 --- !u!4 &3141341241225791857
 Transform:
   m_ObjectHideFlags: 0
