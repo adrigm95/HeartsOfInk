@@ -251,6 +251,7 @@ MonoBehaviour:
   startGame: {fileID: 0}
   optionsButton: {fileID: 0}
   mapEditorButton: {fileID: 0}
+  loginButton: {fileID: 0}
 --- !u!4 &343524254
 Transform:
   m_ObjectHideFlags: 0
@@ -779,7 +780,7 @@ MonoBehaviour:
     Garc\xEDa\r\nLuis Cebri\xE1n Mendui\xF1a\r\nRa\xFAl Garc\xEDa\r\nSara Garc\xEDa\r\n\r\nUI
     \r\nLaia Tugas Berrocal\r\nEsther Guerrero \r\nSara Garc\xEDa\r\nKenney assets
     (see Assets section)\r\n\r\nHearts of Ink logo\r\nLaia Tugas Berrocal\r\nSara
-    Garc\xEDa\r\n\r\nLevel Design\r\nPablo Ar\xE9valo\r\nSara Garc\xEDa\r\n\r\nIT\r\nMarina
+    Garc\xEDa\r\n\r\nLevel Design\r\nPablo Ar\xE9valo\r\nSara Garc\xEDa\r\n\r\nIT\r\nUmi
     Hekati\r\nLuis Cebri\xE1n Mendui\xF1a\r\nSara Garc\xEDa\r\n\r\nProduction\r\nSara
     Garc\xEDa\r\n\r\nTools\r\nRawgen Studio\r\nUnity 2022 (Unity Technologies)\r\n\r\nAssets\r\nKenney
     (www.kenney.nl)\r\n\r\nReferences for realistic maps\r\nOpenStreetMap (www.openstreetmap.org)\t\r\nIGN-CNIG
