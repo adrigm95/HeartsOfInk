@@ -118,6 +118,7 @@ public class UpdateGameController : MonoBehaviour
         catch (Exception ex)
         {
             Debug.LogException(ex);
+            LogManager.SendException(exceptionSender, ex, "UpdateGameController.GetPendingUpdates()", SceneManager.GetActiveScene().name);
             sceneChangeController.ChangeScene(SceneChangeController.Scenes.AcceptPolicy);
         }
     }
