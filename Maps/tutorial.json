@@ -1,0 +1,148 @@
+{
+	"Steps": [
+		{
+			"Number": 0,
+			"PauseGame": true,
+			"Title": [
+				{
+					"Language": "ES-es",
+					"Value": "¿Mostrar tutorial?"
+				},
+				{
+					"Language": "EN",
+					"Value": "See tutorial?"
+				}
+			],
+			"Content": [
+				{
+					"Language": "ES-es",
+					"Value": "Te recomendamos ver el tutorial básico antes de jugar, te ayudará a entender el juego y disfrutarlo más. \r\n\r\nSiempre puedes verlo más adelante en la partida tutorial"
+				},
+				{
+					"Language": "EN",
+					"Value": "We highly recommend make the tutorial before play the game. \r\n\r\nYou can see the tutorial later in tutorial game"
+				}
+			]
+		},
+		{
+			"Number": 1,
+			"PauseGame": true,
+			"Title": [
+				{
+					"Language": "ES-es",
+					"Value": "¿Como ganar?"
+				},
+				{
+					"Language": "EN",
+					"Value": "How to win?"
+				}
+			],
+			"Content": [
+				{
+					"Language": "ES-es",
+					"Value": "En el juego posees tropas que puedes mover, y ciudades que necesitas para reclutar más tropas. \r\n\r\nSi consigues dominar todas las ciudades del mapa habrás ganado la partida."
+				},
+				{
+					"Language": "EN",
+					"Value": "En el juego posees tropas que puedes mover, y ciudades que necesitas para reclutar más tropas. \r\n\r\nSi consigues dominar todas las ciudades del mapa habrás ganado la partida."
+				}
+			]
+		},
+		{
+			"Number": 2,
+			"PauseGame": true,
+			"Title": [
+				{
+					"Language": "ES-es",
+					"Value": "Pausa estrategica"
+				}
+			],
+			"Content": [
+				{
+					"Language": "ES-es",
+					"Value": "En la esquina superior derecha se muestra un simbolo que indica que el juego está parado\r\n\r\nPuedes quitar y poner la pausa con la tecla [E]\r\n\r\nCuando pulses aceptar quitaremos la pausa para continuar con el tutorial."
+				}
+			]
+		},
+		{
+			"Number": 3,
+			"PauseGame": true,
+			"Title": [
+				{
+					"Language": "ES-es",
+					"Value": "Mover tropas"
+				}
+			],
+			"Content": [
+				{
+					"Language": "ES-es",
+					"Value": "Para mover una tropa (Números) debes clicar sobre ella y después sobre el punto de destino.\r\n\r\nEl punto de destino puede ser una ciudad, un punto cualquiera del mapa, o una tropa propia o enemiga."
+				}
+			]
+		},
+		{
+			"Number": 4,
+			"PauseGame": true,
+			"Title": [
+				{
+					"Language": "ES-es",
+					"Value": "Seguir tropas"
+				}
+			],
+			"Content": [
+				{
+					"Language": "ES-es",
+					"Value": "Si mueves una tropa apuntando a otra tropa, la tropa que has movido la seguirá allá donde vaya. \r\n\r\nSi es una tropa propia al llegar junto a ella se fusionará, si es enemiga combatirá contra ella hasta la muerte."
+				}
+			]
+		},
+		{
+			"Number": 5,
+			"PauseGame": true,
+			"Title": [
+				{
+					"Language": "ES-es",
+					"Value": "Combate"
+				}
+			],
+			"Content": [
+				{
+					"Language": "ES-es",
+					"Value": "Cuando las tropas están cerca combate entre si, y no pueden moverse hasta que finalice el combate. \r\n\r\nPor lo general ganará la tropa que tenga más unidades, aunque algunas facciones tienen un bonus que vuelve más fuertes a sus tropas."
+				}
+			]
+		},
+		{
+			"Number": 6,
+			"PauseGame": true,
+			"Title": [
+				{
+					"Language": "ES-es",
+					"Value": "Ciudades"
+				}
+			],
+			"Content": [
+				{
+					"Language": "ES-es",
+					"Value": "Hay dos tipos de ciudades, las capitales (Torre con muralla) y las poblaciones (Torre sin muralla). \r\n\r\nTodas las ciudades dan refuerzos cada cierto tiempo después de haberlas tomado, pero las capitales tardan menos tiempo en dar esos refuerzos."
+				}
+			]
+		},
+		{
+			"Number": 7,
+			"PauseGame": true,
+			"Title": [
+				{
+					"Language": "ES-es",
+					"Value": "¡Preparado para la batalla!"
+				}
+			],
+			"Content": [
+				{
+					"Language": "ES-es",
+					"Value": "Ya sabes lo básico para jugar, si necesitas más tips los encontrarás en el Menú Principal, en la parte inferior de la pantalla.\r\n\r\nPulsa [Aceptar] para terminar el tutorial y continuar con la batalla."
+				}
+			]
+		}
+	]
+}
