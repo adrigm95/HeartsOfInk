@@ -84,7 +84,9 @@ public class LogManager
 
         LogExceptionDto logExceptionDto = new LogExceptionDto()
         {
-            Exception = innerException,
+            ExceptionType = innerException.GetType().ToString(),
+            Message = innerException.Message,
+            StackTrace = innerException.StackTrace,
             Content = addittionalInfo,
             Application = LogDto.ApplicationEnum.HeartsOfInk,
             SessionIdentifier = GetSessionId(),
