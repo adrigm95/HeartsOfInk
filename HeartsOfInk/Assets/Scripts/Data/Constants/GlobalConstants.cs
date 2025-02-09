@@ -9,7 +9,7 @@ namespace Assets.Scripts.Data
 {
     public static class GlobalConstants
     {
-        public static readonly string RootPath = Application.streamingAssetsPath;
+        public static readonly string RootPath = Application.persistentDataPath;
         public const string EmptyTargetName = "Unit target position";
         public const string FactionLineStart = "factionLine";
         public const int GuerrillaLimit = 100;

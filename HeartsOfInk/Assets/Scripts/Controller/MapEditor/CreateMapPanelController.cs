@@ -61,17 +61,18 @@ public class CreateMapPanelController : MonoBehaviour
             MapId = mapId,
             DisplayName = displayName,
             DefinitionName = mapName.text,
-            SpritePath = "MapSprites/" + background.options[background.value].text,
+            SpriteName = background.options[background.value].text,
             AvailableForMultiplayer = isForMultiplayer.isOn,
             AvailableForSingleplayer = isForSingleplayer.isOn
         };
 
         MapModel mapModel = new MapModel()
         {
+            IsOfficial = false,
             MapId = mapId,
             DisplayName = displayName,
             DefinitionName = mapName.text,
-            SpritePath = "MapSprites/" + background.options[background.value].text,
+            SpriteName = background.options[background.value].text,
             AvailableForMultiplayer = isForMultiplayer.isOn,
             AvailableForSingleplayer = isForSingleplayer.isOn,
             PlayerSlots = new List<MapPlayerSlotModel>(),
@@ -107,7 +108,7 @@ public class CreateMapPanelController : MonoBehaviour
 
     private void SetBackgroundPath()
     {
-        backgroundPath.text = Application.streamingAssetsPath + "/MapSprites/";
+        backgroundPath.text = Application.persistentDataPath + "/MapSprites/";
     }
 
     private string GenerateMapId()
@@ -120,4 +121,5 @@ public class CreateMapPanelController : MonoBehaviour
 
         return Convert.ToString(maxId);
     }
+    
 }

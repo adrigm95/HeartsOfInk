@@ -4780,7 +4780,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: v-2024-04-01_001
+  m_Text: v-2025-01-14_001
 --- !u!222 &1034939431
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7236,6 +7236,7 @@ MonoBehaviour:
   startGame: {fileID: 5135278583460072850}
   optionsButton: {fileID: 0}
   mapEditorButton: {fileID: 0}
+  loginButton: {fileID: 0}
 --- !u!4 &1893032737
 Transform:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ namespace Assets.Scripts.DataAccess
     {
         public static T LoadLiteralsFile(string filename)
         {
-            string filePath = Application.streamingAssetsPath + "/Literals/" + filename;
+            string filePath = Application.persistentDataPath + "/Literals/" + filename;
 
             return JsonCustomUtils<T>.ReadObjectFromFile(filePath);
         }

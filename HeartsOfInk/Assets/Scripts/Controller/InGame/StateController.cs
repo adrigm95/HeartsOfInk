@@ -11,6 +11,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -24,6 +25,7 @@ public class StateController : MonoBehaviour
     public int LastTroopAdded { get; set; }
 
     private WebServiceCaller<LogExceptionDto, bool> exceptionSender = new WebServiceCaller<LogExceptionDto, bool>();
+    private WebServiceCaller<LogDto, bool> logSender = new WebServiceCaller<LogDto, bool>();
 
     private GameStateModel GameStateModel { get; set; }
     private GlobalLogicController globalLogic { get; set; }
@@ -32,6 +34,7 @@ public class StateController : MonoBehaviour
     private WebServiceCallerReusable<GameStateModel> wsCallerReceive;
     private Dictionary<string, AttackTroopModel> attackTroopOrders;
     private Dictionary<string, MoveTroopModel> moveTroopOrders;
+    private bool waitingResponse = false;
     public Text txtIsMultiplayer;
 
     // Start is called before the first frame update
@@ -80,12 +83,21 @@ public class StateController : MonoBehaviour
             Debug.Log($"lastStateUpdate (as client): {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
             lastStateUpdate = Time.realtimeSinceStartup;
             serviceParameters = $"playername={globalLogic.thisPcPlayer.Name}&gamekey={GameStateModel.Gamekey}";
-            response = await wsCallerReceive.GenericWebServiceCaller(Method.GET, "api/StateGame?" + serviceParameters);
 
-            if (response.serviceResponse.TimeSinceStart > GameStateModel.TimeSinceStart)
+            waitingResponse = true;
+            response = await wsCallerReceive.GenericWebServiceCaller(Method.GET, "api/StateGame?" + serviceParameters);
+            waitingResponse = false;
+
+            if (response == null || response.serviceResponse == null)
             {
-                //UpdateStateModelV1(response);
-                UpdateStateModelV2(response);
+                string warningMsg = "GetStateGame - Failed, serviceResponse not received";
+                Debug.LogWarning(warningMsg);
+                LogManager.SendLog(logSender, warningMsg);
+
+            }
+            else if (response.serviceResponse.TimeSinceStart > GameStateModel.TimeSinceStart)
+            {
+                UpdateStateModel(response);
             }
             else
             {
@@ -94,7 +106,7 @@ public class StateController : MonoBehaviour
         }
     }
 
-    private void UpdateStateModelV2(HOIResponseModel<GameStateModel> response)
+    private void UpdateStateModel(HOIResponseModel<GameStateModel> response)
     {
         Dictionary<string, TroopStateModel> updatedTroops = new Dictionary<string, TroopStateModel>();
         GameStateModel = response.serviceResponse;
@@ -140,43 +152,6 @@ public class StateController : MonoBehaviour
         }
     }
 
-    [Obsolete("Obsoleto, comprobar si funciona el V2 y si es así borrar este método.")]
-    private void UpdateStateModelV1(HOIResponseModel<GameStateModel> response)
-    {
-        GameStateModel = response.serviceResponse;
-        Debug.Log("GetStateGame - updated state; cities: " + GameStateModel.CitiesStates.Count + "; troops:" + GameStateModel.TroopsStates.Count);
-
-        foreach (var city in GameStateModel.CitiesStates)
-        {
-            GameObject currentCity = GameObject.Find(city.Key);
-            if (currentCity == null)
-            {
-
-            }
-            else
-            {
-                CityController cityController = currentCity.GetComponent<CityController>();
-                cityController.Owner = globalLogic.GetPlayer(city.Value.MapPlayerSlotId);
-            }
-        }
-
-        foreach (var troop in GameStateModel.TroopsStates)
-        {
-            GameObject currentTroop = GameObject.Find(troop.Key);
-            if (currentTroop == null)
-            {
-                globalLogic.InstantiateTroopMultiplayer(troop.Key, troop.Value.Size, troop.Value.GetPositionAsVector3(), troop.Value.MapPlayerSlotId);
-            }
-            else
-            {
-                TroopController troopController = currentTroop.GetComponent<TroopController>();
-                troopController.troopModel.CurrentPosition = troop.Value.GetPositionAsVector3();
-                troopController.troopModel.Units = troop.Value.Size;
-                troopController.troopModel.Player = globalLogic.GetPlayer(troop.Value.MapPlayerSlotId);
-            }
-        }
-    }
-
     public void TroopDistroyed(TroopController troop)
     {
         GameStateModel.TroopsStates.Remove(troop.transform.name);
@@ -201,13 +176,16 @@ public class StateController : MonoBehaviour
 
             Debug.Log($"lastStateUpdate (as Host): {lastStateUpdate}; realTime: {Time.realtimeSinceStartup}");
             lastStateUpdate = Time.realtimeSinceStartup;
+
+            waitingResponse = true;
             await wsCallerSend.GenericWebServiceCaller(Method.POST, "api/StateGame", stateModel);
+            waitingResponse = false;
         }
     }
 
     private bool UpdateStateRequired()
     {
-        return lastStateUpdate + ApiConfig.DelayBetweenStateUpdates < Time.realtimeSinceStartup;
+        return !waitingResponse && lastStateUpdate + ApiConfig.DelayBetweenStateUpdates < Time.realtimeSinceStartup;
     }
 
     public void SetCityOwner(string cityName, Player owner)
@@ -318,7 +296,7 @@ public class StateController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
         }
     }
 
@@ -365,7 +343,7 @@ public class StateController : MonoBehaviour
         }
         catch (Exception ex)
         {
-            LogManager.SendException(exceptionSender, ex);
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
         }
     }
 

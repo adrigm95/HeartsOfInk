@@ -31,7 +31,7 @@ namespace Assets.Scripts.DataAccess
         {
             HOIResponseModel<S> serverResponse;
             HttpResponseMessage response = null;
-            HttpContent content;
+            HttpContent content = null;
             string json = string.Empty;
             string responseContent = string.Empty;
             long start;
@@ -40,13 +40,22 @@ namespace Assets.Scripts.DataAccess
 
             try
             {
-                if (requestBody != null)
+                if (requestBody == null)
+                {
+                    Debug.Log($"Calling to: {baseAdress + targetRequest}");
+                }
+                else if (method == Method.GET)
+                {
+                    targetRequest = targetRequest + "/" + requestBody;
+                    Debug.Log($"Calling to: {baseAdress + targetRequest}");
+                }
+                else
                 {
                     json = JsonConvert.SerializeObject(requestBody);
+                    content = new StringContent(json, Encoding.UTF8, "application/json");
 
                     Debug.Log($"Sending to: {baseAdress + targetRequest} json: {json}");
                 }
-                content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 start = DateTime.Now.Ticks;
                 using (HttpClient client = new HttpClient())

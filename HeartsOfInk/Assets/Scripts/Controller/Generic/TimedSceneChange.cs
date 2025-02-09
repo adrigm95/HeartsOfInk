@@ -24,7 +24,7 @@ public class TimedSceneChange : MonoBehaviour
         {
             Debug.Log("Changing scene");
             SceneChangeController sceneChangeController = this.GetComponent<SceneChangeController>();
-            sceneChangeController.DirectChangeScene(targetScene);
+            sceneChangeController.ChangeScene(targetScene);
         }
     }
 }
