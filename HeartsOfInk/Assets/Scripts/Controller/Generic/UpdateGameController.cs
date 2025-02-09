@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using AnalyticsServer.Models;
 using Assets.Scripts.Data;
@@ -7,6 +8,7 @@ using Assets.Scripts.Data.Constants;
 using Assets.Scripts.DataAccess;
 using HeartsOfInk.SharedLogic;
 using LobbyHOIServer.Models.MapModels;
+using LobbyHOIServer.Models.Models;
 using NETCoreServer.Models;
 using NETCoreServer.Models.Out;
 using UnityEngine;
@@ -24,6 +26,7 @@ public class UpdateGameController : MonoBehaviour
     private WebServiceCaller<LogDto, bool> logSender =
         new WebServiceCaller<LogDto, bool>();
     private Queue<MapModelHeader> mapModels;
+    private Queue<FileDto> instalationFilesQueue;
     private UpdateGameState state = UpdateGameState.GettingInfo;
 
     // Start is called before the first frame update
@@ -50,10 +53,7 @@ public class UpdateGameController : MonoBehaviour
                     MapModelHeader currentMapModelHeader = MapDAC.LoadMapHeader(newMapModelHeader.DefinitionName, GlobalConstants.RootPath);
 
                     Debug.Log($"Checking map version.");
-                    if (Application.platform == RuntimePlatform.Android)
-                    {
-                        LogManager.SendLog(logSender, $"Checking map version.");
-                    }
+                    LogManager.SendLog(logSender, $"Checking map version.");
 
                     if (currentMapModelHeader == null || currentMapModelHeader.Version == default || newMapModelHeader.Version > currentMapModelHeader.Version)
                     {
@@ -71,6 +71,16 @@ public class UpdateGameController : MonoBehaviour
                         }
                     }
                 }
+                else if (instalationFilesQueue.Count > 0)
+                {
+                    FileDto newFile = instalationFilesQueue.Dequeue();
+
+                    Debug.LogWarning($"Overwriting instalation file without verify current file version.");
+                    string fileContentbase64 = await GetFileContent(newFile);
+                    byte[] fileContentBytes = Convert.FromBase64String(fileContentbase64);
+
+                    File.WriteAllBytes(GlobalConstants.RootPath + "/" +  newFile.Path, fileContentBytes);
+                }
                 else
                 {
                     sceneChangeController.ChangeScene(SceneChangeController.Scenes.AcceptPolicy);
@@ -87,6 +97,7 @@ public class UpdateGameController : MonoBehaviour
     private async void GetPendingUpdates()
     {
         List<MapModelHeader> mapModelsList;
+        List<FileDto> instalationFiles;
 
         try
         {
@@ -94,23 +105,28 @@ public class UpdateGameController : MonoBehaviour
             if (mapModelsList.Count == 0)
             {
                 Debug.LogWarning("No maps to update in server.");
-
-                if (Application.platform == RuntimePlatform.Android)
-                {
-                    LogManager.SendLog(logSender, "No maps to update in server.");
-                }
-
+                LogManager.SendLog(logSender, "No maps to update in server.");
                 sceneChangeController.ChangeScene(SceneChangeController.Scenes.AcceptPolicy);
             }
             else
             {
                 mapModels = new Queue<MapModelHeader>(mapModelsList);
                 Debug.Log($"Updating {mapModels.Count} maps from server.");
+                LogManager.SendLog(logSender, $"Updating {mapModels.Count} maps from server.");
+            }
 
-                if (Application.platform == RuntimePlatform.Android)
-                {
-                    LogManager.SendLog(logSender, $"Updating {mapModels.Count} maps from server.");
-                }
+            instalationFiles = await GetFilesToUpdate();
+            if (instalationFiles.Count == 0)
+            {
+                Debug.LogWarning("No files to update in server.");
+                LogManager.SendLog(logSender, "No files to update in server.");
+                sceneChangeController.ChangeScene(SceneChangeController.Scenes.AcceptPolicy);
+            }
+            else
+            {
+                instalationFilesQueue = new Queue<FileDto>(instalationFiles);
+                Debug.Log($"Updating {instalationFiles.Count} files from server.");
+                LogManager.SendLog(logSender, $"Updating {instalationFiles.Count} files from server.");
             }
 
             state = UpdateGameState.DownloadingUpdates;
@@ -121,6 +137,24 @@ public class UpdateGameController : MonoBehaviour
             LogManager.SendException(exceptionSender, ex, "UpdateGameController.GetPendingUpdates()", SceneManager.GetActiveScene().name);
             sceneChangeController.ChangeScene(SceneChangeController.Scenes.AcceptPolicy);
         }
+    }
+
+    private async Task<List<FileDto>> GetFilesToUpdate()
+    {
+        WebServiceCaller<List<FileDto>> wsCaller = new WebServiceCaller<List<FileDto>>();
+        HOIResponseModel<List<FileDto>> response = null;
+
+        try
+        {
+            response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.GET, "api/Files");
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
+            Debug.LogException(ex);
+        }
+
+        return response.serviceResponse;
     }
 
     private async Task<List<MapModelHeader>> GetMapsToUpdate()
@@ -163,6 +197,25 @@ public class UpdateGameController : MonoBehaviour
             }
 
             response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.GET, $"api/map/{mapHeader.MapId}");
+        }
+        catch (Exception ex)
+        {
+            LogManager.SendException(exceptionSender, ex, string.Empty, SceneManager.GetActiveScene().name);
+            Debug.LogException(ex);
+        }
+
+        return response.serviceResponse;
+    }
+
+    private async Task<string> GetFileContent(FileDto fileDto)
+    {
+        WebServiceCaller<string> wsCaller = new WebServiceCaller<string>();
+        HOIResponseModel<string> response = null;
+
+        try
+        {
+            response = await wsCaller.GenericWebServiceCaller(ApiConfig.LobbyHOIServerUrl, Method.GET, $"api/File/{fileDto.Id}");
+            Debug.Log($"GetFileContentResponse[Code: {response.internalResultCode}, Response: {response.serviceResponse}, ServiceError: {response.ServiceError}");
         }
         catch (Exception ex)
         {
